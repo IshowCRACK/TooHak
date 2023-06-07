@@ -1,3 +1,6 @@
+function adminQuizDescriptionUpdate(authUserId, quizId, description) {
+    return {}
+}
 
 // implementation for the function adminQuizRemove given
 // Parameters and Return Object
