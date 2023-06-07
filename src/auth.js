@@ -1,5 +1,6 @@
+//implementation for the userdetails function given
+// parameters and return objects
 function adminUserDetails(authUserId) {
-
     return {
         user:  {   
             userId: 1,    
