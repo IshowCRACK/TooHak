@@ -28,3 +28,11 @@ function adminQuizList(authUserId) {
         ]
     }
 }
+
+// stub function for quiz description update, using given return values
+function adminQuizNameUpdate (authUserId, quizId, name) {
+    return {
+        
+    }
+}
+
