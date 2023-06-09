@@ -17,25 +17,24 @@
 let data = {
 
     User : {
-        1:
-        {
-            authUserId: 1
-            nameFirst: 'Ijlal', 
-            nameLast: 'idk',
-            email: 'something@gmail.com',
-            password: 'password',
-            createdQuizzes: [quizId1, ...]
-        }
+        1: {
+                authUserId: 1
+                nameFirst: 'Ijlal', 
+                nameLast: 'idk',
+                email: 'something@gmail.com',
+                password: 'password',
+                createdQuizzes: [quizId1, ...]
+            }
     },
 
     Quizes : {
-        {
-            quizId: 1,
-            name: 'My Quiz',
-            timeCreated: 1683125870,
-            timeLastEdited: 1683125871,
-            description: 'quiz about me'
-        }
+          1: {
+                quizId: 1,
+                name: 'My Quiz',
+                timeCreated: 1683125870,
+                timeLastEdited: 1683125871,
+                description: 'quiz about me'
+            }
   },
 }
 ```
