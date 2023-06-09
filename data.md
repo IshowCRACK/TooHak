@@ -6,7 +6,7 @@ let data = {
             AuthUserId: 1
             nameFirst: 'Ijlal', 
             nameLast: 'idk',
-            email: 'gmail',
+            email: 'something@gmail.com',
             password: 'password',
             createdQuizzes: [quizId1, ...]
         }
