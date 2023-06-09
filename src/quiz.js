@@ -1,25 +1,31 @@
+// implementation for the function adminQuizRemove given
+// Parameters: userId, quizId, description and Return: empty object
 function adminQuizDescriptionUpdate(authUserId, quizId, description) {
-    return {}
+    
+    return {
+
+    }
 }
 
 // implementation for the function adminQuizRemove given
-// Parameters and Return Object
+// Parameters: userID and quizID and Return: empty object
 function adminQuizRemove(authUserId, quizId) {
-        return {
+    
+    return {
 
-        }
+    }
 }
 
 // implementation for the function adminQuizCreate given
-// Parameters and Return Object
+// Parameters: userId, name, description and Return: quizId
 
 function adminQuizCreate(authUserId, name, description) {
-        return {
-                quizId: 2, 
-        }
+    return {
+        quizId: 2, 
+    }
 }
 //implementation for the adminQuizLists function given
-//parameters and return objects
+//parameters: userId and return and object containing: quizId and quiz name
 function adminQuizList(authUserId) {
 
     return {
