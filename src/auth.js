@@ -1,5 +1,7 @@
 //implementation for the userdetails function given
-// parameters and return objects
+// parameters: userId and 
+// return object containing: userId, name, email, num of successful logins & num of failed password
+
 function adminUserDetails(authUserId) {
     return {
         user:  {   
@@ -11,17 +13,18 @@ function adminUserDetails(authUserId) {
         }
     } 
 }  
-// implementation for the function adminAuthRegister given
-// Parameters and Return object
 
+// implementation for the function adminAuthRegister given
+// Parameters: email, password, first name and last name and Return: userId
 function adminAuthRegister(email, password, nameFirst, nameLast) {
 
     return {
         authUserId: 1
     }
 } 
+
 // implementation for the cuntion authLogin given
-// Parameters and Return Object
+// Parameters: email and password and Return: UserId
 function adminAuthLogin(email, password ) {
 
     return {
