@@ -3,8 +3,8 @@
 import { getData, setData } from 'dataStore.js';
 function clear() {
     const data = {
-    User = User[{}],
-    Quizes = Quizes[{}],
+    User = [{}],
+    Quizes = [{}],
     };
     setData(data)
     return {};
