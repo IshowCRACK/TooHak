@@ -17,3 +17,5 @@ test('Test successful adminAuthLogin', () => {
     //Password Wrong
     expect(adminAuthLogin('hayden.smith@unsw.edu.au','wrong_password')).toStrictEqual({ error: 'Wrong pasword' });
   });
+
+  
