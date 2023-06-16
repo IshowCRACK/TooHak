@@ -16,8 +16,8 @@
 
 let data = {
 
-    User : {
-        1: {
+    users : [
+             {
                 authUserId: 1
                 nameFirst: 'Ijlal', 
                 nameLast: 'idk',
@@ -25,17 +25,17 @@ let data = {
                 password: 'password',
                 createdQuizzes: [quizId1, ...]
             }
-    },
+    ],
 
-    Quizes : {
-          1: {
+    quizes : [
+                {
                 quizId: 1,
                 name: 'My Quiz',
                 timeCreated: 1683125870,
                 timeLastEdited: 1683125871,
                 description: 'quiz about me'
             }
-  },
+    ],
 }
 ```
 
