@@ -13,8 +13,8 @@ describe('1. Successful authID', () => {
 		let authUserId = adminAuthRegister('good.email@gmail.com','Password123','Joh nny-Bone',"Jo'nes");
 		expect(authUserId).any({authUserId: Number});
 	});
-});*/
-
+});
+*/
 describe('2. Unsuccessful Register - TESTING NAMES', () => {
 	test('1. Check unsuccessful FirstName - null input', () => {
 		let authUserId = adminAuthRegister('good.email@gmail.com','Password123','','Jones');
