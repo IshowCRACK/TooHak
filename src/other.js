@@ -1,13 +1,21 @@
-// Reset the state of the application back to the start
+// Reset module//the state of the application back to the start
 // takes no premeter and returns empty object
-// import { getData, setData } from 'dataStore.js';
-// function clear() {
-//     const data = {
-//         user = [{}],
-//         quizes = [{}],
-//     };
+import { getData, setData } from './dataStore.js';
+function clear() {
+	const data = getData();
+	data.users = [
+				{
 
-//     setData(data)
-//     return {};
-// }
-// module.export = clear;
+			}
+		];
+	data.quizes = [
+				{
+
+			}
+		];
+
+	setData(data)
+	return {};
+}
+export{clear};
+//module.export = clear;
