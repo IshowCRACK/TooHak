@@ -92,7 +92,8 @@ function adminUserDetails(authUserId) {
 // implementation for the cuntion authLogin given
 // Parameters: email and password and Return: UserId
 function adminAuthLogin(email, password ) {
-
+    const data = getData();
+    
     return {
         authUserId: 1
     }
