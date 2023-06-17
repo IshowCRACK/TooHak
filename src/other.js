@@ -18,4 +18,3 @@ function clear() {
 	return {};
 }
 export{clear};
-//module.export = clear;
