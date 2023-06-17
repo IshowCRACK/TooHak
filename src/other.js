@@ -17,4 +17,4 @@ function clear() {
 	setData(data)
 	return {};
 }
-export{clear};
+export{ clear };
