@@ -1,7 +1,7 @@
 import {getData, setData} from './dataStore.js';
 import validator from 'validator';
 
-/*
+
 // function looks at the characters used in first name/last name
 function checkName(name) {
     
@@ -75,7 +75,7 @@ function adminAuthRegister(email, password, nameFirst, nameLast) {
 //implementation for the userdetails function given
 // parameters: userId and 
 // return object containing: userId, name, email, num of successful logins & num of failed password
-*/
+
 function adminUserDetails(authUserId) {
     return {
         user:  {   
