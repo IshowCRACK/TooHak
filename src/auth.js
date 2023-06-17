@@ -1,5 +1,5 @@
 import {getData, setData} from './dataStore.js';
-import {isEmail} from './validator';
+import validator from 'validator';
 
 
 // function looks at the characters used in first name/last name
@@ -10,7 +10,7 @@ function checkName(name) {
 // function checks if it contains at least one number and letter
 function checkPassword(password) {
     
-    return /^(?=.*[a-zA-Z])(?=.*[0-9])/.test(string);
+    return /^(?=.*[a-zA-Z])(?=.*[0-9])/.test(password);
 }
 
 // implementation for the function adminAuthRegister given
@@ -19,49 +19,45 @@ function adminAuthRegister(email, password, nameFirst, nameLast) {
     
     let data = getData();
     // checking email hasnt been used
-    for (const users of data.users) {
-        if (data.email === email) {
+    for (const user of data.users) {
+        if (user.email === email) {
             return {
                 error: 'Email already used'
             }
         }
     }
     // check email is valid using validator
-    if (!isEmail(email)) {
+    if (!validator.isEmail(email)) {
         return {
             error: 'Email is not valid'
         }
     }
     // checking first name
-    if (checkName(nameFirst)) {
-        return {
-            error: 'First name can only contain upper/lower case letters, spaces, hyphens or apostrophes'
-        }
-    } else if (nameFirst.length > 20 || nameFirst.length < 2) {
+    if (nameFirst.length > 20 || nameFirst.length < 2) {
         return {
             error: 'first name has to be between 2 and 20 characters'
         }
+    } else if (!checkName(nameFirst)) {
+        return {
+            error: 'First name can only contain upper/lower case letters, spaces, hyphens or apostrophes'
+        }
     }
     // checking last name
-    if (checkName(nameLast)) {
-        return {
-            error: 'Last name can only contain upper/lower case letters, spaces, hyphens or apostrophes'
-        }
-    } else if (nameLast.length > 20 || nameLast.length < 2) {
+    if (nameLast.length > 20 || nameLast.length < 2) {
         return {
             error: 'Last name has to be between 2 and 20 characters'
         }
-    }
+    } else if (!checkName(nameLast)) {
+        return {
+            error: 'Last name can only contain upper/lower case letters, spaces, hyphens or apostrophes'
+        }
+    } 
     //checking password
-    if (password.length < 8) {
+    if (password.length < 8 || !checkPassword(password)) {
         return {
-            error: 'Password length has to be 8 characters'
+            error: 'Password length has to be 8 characters & needs to contain at least one number and at least one letter'
         }
-    } else if (checkPassword(password) === false) {
-        return {
-            error: 'Password needs to contain at least one number and at least one letter'
-        }
-    }
+    } 
     // else if every parameter is valid push into users database
     data.users.push ({
         email: email,
@@ -69,8 +65,7 @@ function adminAuthRegister(email, password, nameFirst, nameLast) {
         firstName: nameFirst,
         lastName: nameLast,
         authUserId: data.users.length,
-    })
-    
+    }) 
     setData(data);
     return {
         authUserId: data.users.length
