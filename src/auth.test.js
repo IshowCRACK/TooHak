@@ -1,4 +1,4 @@
-/*import { adminAuthLogin, adminAuthRegister, adminUserDetails } from './auth.js';
+import { adminAuthLogin, adminAuthRegister, adminUserDetails } from './auth.js';
 import { clear } from './other.js'
 
 beforeEach(() => {
@@ -14,7 +14,7 @@ describe('1. Successful authID', () => {
 		expect(authUserId).any({authUserId: Number});
 	});
 });
-
+*/
 describe('2. Unsuccessful Register - TESTING NAMES', () => {
 	test('1. Check unsuccessful FirstName - null input', () => {
 		let authUserId = adminAuthRegister('good.email@gmail.com','Password123','','Jones');
@@ -81,4 +81,3 @@ describe ('4. Unsuccessful Register - TESTING EMAIL', () => {
 	});
 
 });
-*/
