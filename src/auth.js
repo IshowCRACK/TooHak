@@ -68,6 +68,7 @@ function adminAuthRegister(email, password, nameFirst, nameLast) {
 		authUserId: userID,
 		numSuccessLogins: 1,
 		numFailedPasswordsSinceLastLogin: 0,
+		failNow: 0,
 	}); 
 	setData(data);
 	return {
@@ -93,30 +94,48 @@ function adminUserDetails(authUserId) {
 
 // implementation for the cuntion authLogin given
 // Parameters: email and password and Return: UserId
+// Need to fix numFailedPasswordsSinceLastLogin
 function adminAuthLogin( email, password ) {
 
 	const data = getData();	
+	/*
+	let previousFail = 0;
+	//data.users.failNow = 0;
+
+	// checks how many times it user failed to log in previously
 	for (const user of data.users) {
 		if (user.email === email) {
+			previousFail = user.numFailedPasswordsSinceLastLogin;
+		}
+	}
+	*/
+	for (const user of data.users) {
+		if (user.email === email) {						
 			if (user.password === password) {
+				// addd successful logins for all times
+				let total = user.numSuccessLogins + 1;
+				user.numSuccessLogins = total;
+				/*if (user.failNow > 0) {	
+					//console.log(previousFail);
+					let totalFail = user.failNow - previousFail;
+					user.numFailedPasswordsSinceLastLogin = totalFail;
+					user.failNow = 0;
+				} else if (user.failNow === 0) {
+					user.numFailedPasswordsSinceLastLogin = 0;
+				}*/
+				//delete user.failNow;
 				//console.log(user);
-				let total = user.numSuccessLogins;
-				user.numSuccessLogins = total++;
-				//user.numFailedPasswordsSinceLastLogin = 0;
 				setData(data);
-				console.log(user);
 				return {
 					authUserId: user.authUserId
 				}			
-			}
-
-			let failed = user.numFailedPasswordsSinceLastLogin + 1;
-			user.numFailedPasswordsSinceLastLogin = failed;
-			//console.log(user);
-			setData(data);	
+			}/* else {
+				user.failNow = user.numFailedPasswordsSinceLastLogin + 1;
+				//user.numFailedPasswordsSinceLastLogin = user.failNow;
+				setData(data);
+			}	*/
 		}		
 	}
-
 	return {
 			error: 'Username or Password is not valid'
 	}
