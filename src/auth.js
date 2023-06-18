@@ -79,61 +79,58 @@ function adminAuthRegister(email, password, nameFirst, nameLast) {
 //implementation for the userdetails function given
 // parameters: userId and 
 // return object containing: userId, name, email, num of successful logins & num of failed password
-
+/*
 function adminUserDetails(authUserId) {
-	return {
-			user:  {   
-					userId: 1,    
-					name: 'Hayden Smith',    
-					email: 'hayden.smith@unsw.edu.au',    
-					numSuccessfulLogins: 3,    
-					numFailedPasswordsSinceLastLogin: 1,
+	const data = getData();	
+	for (const user of data.users) {
+		console.log(user)
+		if (user.authUserId === authUserId) {
+			return {
+				user: {
+					userId: user.authUserId,    
+					name: `${user.nameFirst} ${user.nameLast}`,    
+					email: user.email,    
+					numSuccessfulLogins: user.numSuccessLogins,    
+					numFailedPasswordsSinceLastLogin: user.numFailedPasswordsSinceLastLogin,
+				}
 			}
+		}		
+	}
+	
+	return {
+		error: 'User does not exists'
 	} 
 }  
-
+*/
 // implementation for the cuntion authLogin given
 // Parameters: email and password and Return: UserId
 // Need to fix numFailedPasswordsSinceLastLogin
 function adminAuthLogin( email, password ) {
-
 	const data = getData();	
-	/*
-	let previousFail = 0;
-	//data.users.failNow = 0;
 
-	// checks how many times it user failed to log in previously
-	for (const user of data.users) {
-		if (user.email === email) {
-			previousFail = user.numFailedPasswordsSinceLastLogin;
-		}
-	}
-	*/
-	for (const user of data.users) {
+	for (const user of data.users) {	
 		if (user.email === email) {						
 			if (user.password === password) {
 				// addd successful logins for all times
 				let total = user.numSuccessLogins + 1;
 				user.numSuccessLogins = total;
-				/*if (user.failNow > 0) {	
-					//console.log(previousFail);
-					let totalFail = user.failNow - previousFail;
-					user.numFailedPasswordsSinceLastLogin = totalFail;
+				//user messed up in loggin in
+				if (user.failNow > 0) {	
+					user.numFailedPasswordsSinceLastLogin = user.failNow;
 					user.failNow = 0;
+				// this means user didnt fail to login this instance
 				} else if (user.failNow === 0) {
 					user.numFailedPasswordsSinceLastLogin = 0;
-				}*/
-				//delete user.failNow;
-				//console.log(user);
+				}
 				setData(data);
 				return {
 					authUserId: user.authUserId
 				}			
-			}/* else {
-				user.failNow = user.numFailedPasswordsSinceLastLogin + 1;
-				//user.numFailedPasswordsSinceLastLogin = user.failNow;
+			} 
+			else {				
+				user.failNow = user.failNow + 1;
 				setData(data);
-			}	*/
+			}
 		}		
 	}
 	return {
