@@ -7,16 +7,8 @@ test('Test successful clear', () => {
 	let person1_id = adminAuthRegister('good.l@gl.com','Password123','Joh nny-Bone',"Jo'nes");	
 	clear();
 	expect(getData()).toStrictEqual({
-		users: [
-					{
-
-				}
-			],
-		quizes: [
-					{
-
-				}
-			],
+		users: [],
+		quizes: [],
 	});
 });
   

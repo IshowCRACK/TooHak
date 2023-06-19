@@ -18,7 +18,14 @@ function checkPassword(password) {
 function adminAuthRegister(email, password, nameFirst, nameLast) {
 	
 	let data = getData();
+	//console.log(data);
 	// checking email hasnt been used
+	if (email === null || password === null || nameFirst === null || nameLast === null) {
+		return {
+			error: 'All sections should be filled'
+		}
+	}
+	
 	for (const user of data.users) {
 		if (user.email === email) {
 			return {
@@ -69,7 +76,8 @@ function adminAuthRegister(email, password, nameFirst, nameLast) {
 		numSuccessLogins: 1,
 		numFailedPasswordsSinceLastLogin: 0,
 		failNow: 0,
-	}); 
+	});
+	//console.log(data.users);
 	setData(data);
 	return {
 		authUserId: userID,
@@ -82,8 +90,9 @@ function adminAuthRegister(email, password, nameFirst, nameLast) {
 /*
 function adminUserDetails(authUserId) {
 	const data = getData();	
+	
 	for (const user of data.users) {
-		console.log(user)
+		//console.log(user)
 		if (user.authUserId === authUserId) {
 			return {
 				user: {
@@ -94,20 +103,20 @@ function adminUserDetails(authUserId) {
 					numFailedPasswordsSinceLastLogin: user.numFailedPasswordsSinceLastLogin,
 				}
 			}
-		}		
+		}
+		//console.log(user.authUserId);		
 	}
-	
+	//console.log(user);
 	return {
 		error: 'User does not exists'
 	} 
-}  
-*/
-// implementation for the cuntion authLogin given
-// Parameters: email and password and Return: UserId
-// Need to fix numFailedPasswordsSinceLastLogin
-function adminAuthLogin( email, password ) {
-	const data = getData();	
+}  */
 
+// implementation for the function authLogin given
+// Parameters: email and password and Return: UserId
+function adminAuthLogin( email, password ) {
+	
+	const data = getData();	
 	for (const user of data.users) {	
 		if (user.email === email) {						
 			if (user.password === password) {
