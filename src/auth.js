@@ -1,20 +1,44 @@
+// only need to fix comments now
 import {getData, setData} from './dataStore.js';
 import validator from 'validator';
 
-
-// function looks at the characters used in first name/last name
+/**
+  * <function looks at the characters used in first name/last name>
+  * 
+  * @param {string} name - string that contains letters, spaces, hyphens or apostrophes
+	* 
+  * @returns {boolean} - returns true or false if first name or last name satisfies the conditions
+  * 
+*/
 function checkName(name) {
 	
 	return /^[a-zA-Z\s\-']+$/.test(name);
 }
-// function checks if it contains at least one number and letter
+/**
+  * <function checks if password contains at least one number and letter>
+  * 
+  * @param {string} password - string that contains atleast 1 number and 1 letter and is 8 characters long
+	* 
+  * @returns {boolean} - returns true or false if password satisfies the conditions
+  * 
+*/
 function checkPassword(password) {
 	
 	return /^(?=.*[a-zA-Z])(?=.*[0-9])/.test(password);
 }
 
-// implementation for the function adminAuthRegister given
-// Parameters: email, password, first name and last name and Return: userId
+
+/**
+  * <Brief description of what the function does>
+  * 
+  * @param {string} email - it is a string that user inputs to create a unique account
+  * @param {string} password - string that contains atleast 1 number and 1 letter and is 8 characters long
+  * @param {string} nameFirst - Users first name
+  * @param {string} nameLast - Users last name
+	* 
+  * @returns {authUserId} - returns an integer that is unique to the user
+  * 
+*/
 function adminAuthRegister(email, password, nameFirst, nameLast) {
 	
 	let data = getData();
@@ -87,23 +111,51 @@ function adminAuthRegister(email, password, nameFirst, nameLast) {
 //implementation for the userdetails function given
 // parameters: userId and 
 // return object containing: userId, name, email, num of successful logins & num of failed password
-
+/**
+  * <Brief description of what the function does>
+  * 
+  * @param {integer} authUserId - Users last name
+	* 
+  * @returns {authUserId} - returns an integer that is unique to the user
+  * 
+*/
 function adminUserDetails(authUserId) {
-	return { user:
-		{
-		  userId: 1,
-		  name: 'Hayden Smith',
-		  email: 'hayden.smith@unsw.edu.au',
-		  numSuccessfulLogins: 3,
-		  numFailedPasswordsSinceLastLogin: 1,
-		}
-	  }
-}  
 
+	const data = getData();		
+	for (const user of data.users) {
+		
+		//console.log(authUserId)
+		//console.log(user.authUserId)
+	 
+		if (user.authUserId === authUserId) {
+			return {
+				user: {
+					userId: user.authUserId,    
+					name: `${user.firstName} ${user.lastName}`,    
+					email: user.email,    
+					numSuccessfulLogins: user.numSuccessLogins,    
+					numFailedPasswordsSinceLastLogin: user.numFailedPasswordsSinceLastLogin,
+				}
+			}
+		}
+	}
+	return {
+		error: 'User does not exists'
+	}
+}
 // implementation for the function authLogin given
 // Parameters: email and password and Return: UserId
+/**
+  * <Brief description of what the function does>
+  * 
+  * @param {string} email - it is a string that user inputs to create a unique account
+  * @param {string} password - string that contains atleast 1 number and 1 letter and is 8 characters long
+	* 
+  * @returns {authUserId} - returns an integer that is unique to the user
+  * 
+*/
 function adminAuthLogin( email, password ) {
-	
+	//console.log(email);
 	const data = getData();	
 	for (const user of data.users) {	
 		if (user.email === email) {						
