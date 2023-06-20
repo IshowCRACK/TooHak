@@ -68,7 +68,7 @@ function adminQuizInfo(authUserId, quizId) {
         quizId: 1,
         name: 'My Quiz',
         timeCreated: 1683125870,
-        timeLastEdited: 1683125871,
+        timeLastEdited: 1683125870,
         description: 'This is my quiz',
     }
 }
