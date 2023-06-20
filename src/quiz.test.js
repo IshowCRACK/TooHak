@@ -65,3 +65,71 @@ describe('adminQuizList function', () => {
     });
 
 });
+
+
+
+describe('adminQuizRemove function', () => {
+    describe('unsuccessful function', () => {
+    // when AuthUserId is not a valid user
+    test('1. Invalid authUserId', () => {
+        const authUserId = adminAuthRegister('JohnSmith@gmail.com', 'password123', 'John', 'Smith').authUserId;
+        const QuizId = adminQuizCreate(authUserId, "QuizaboutBarbie", 'Quiz on all flags').quizId;
+        expect(adminQuizRemove(-10,  QuizId)).toStrictEqual({error: 'Invalid authUserId'});
+            
+    });
+    
+        //Quiz ID does not refer to a valid quiz
+    test('2. Invalid QuizId', () => {
+        const authUserId = adminAuthRegister('JohnSmith@gmail.com', 'password123', 'John', 'Smith').authUserId;
+        const QuizId = adminQuizCreate(authUserId, "QuizaboutBarbie", 'Quiz on barbies').quizId;
+        expect(adminQuizRemove(authUserId, -10)).toStrictEqual({error: 'Invalid QuizId'});
+    });
+
+    //Quiz ID does not refer to a quiz that this user owns
+    test('3. Quiz ID does not refer to a quiz that this user owns', () => {
+        const authUserId = adminAuthRegister('JohnSmith@gmail.com', 'password123', 'John', 'Smith').authUserId;
+        const authUserId2 = adminAuthRegister('mimi@gmail.com', 'password123', 'mimi', 'rabbit').authUserId;
+        const QuizId = adminQuizCreate(authUserId, "QuizaboutBarbie", 'Quiz on barbies').quizId;
+        expect(adminQuizRemove(authUserId2, QuizId)).toStrictEqual({error: 'Quiz ID does not refer to a quiz that this user own'});
+    });
+    });
+
+    describe('successful functions', () => {
+        /*
+        1 quiz 1 user 
+        2 quiz 1 user, delete quiz1
+        2 quiz 1 user, delete quiz2
+
+        */ 
+        test('1. one user one quiz', () => {
+            const authUserId = adminAuthRegister('JohnSmith@gmail.com', 'password123', 'John', 'Smith').authUserId;
+            const QuizId = adminQuizCreate(authUserId, "QuizaboutBarbie", 'Quiz on barbies').quizId;
+            expect(adminQuizRemove(authUserId, QuizId)).toStrictEqual(
+                {
+                }
+            );  
+        });
+        test('2. one user two quiz, remove quiz1', () => {
+            const authUserId = adminAuthRegister('JohnSmith@gmail.com', 'password123', 'John', 'Smith').authUserId;
+            const QuizId1 = adminQuizCreate(authUserId, "QuizaboutBarbie", 'Quiz on barbies').quizId;
+            const QuizId2 = adminQuizCreate(authUserId, "QuizaboutBarbieMovies", 'Quiz on barbies').quizId;
+            expect(adminQuizRemove(authUserId, QuizId1)).toStrictEqual(
+                {
+                }
+            );  
+        });
+        test('3. one user two quiz, remove quiz2', () => {
+            const authUserId = adminAuthRegister('JohnSmith@gmail.com', 'password123', 'John', 'Smith').authUserId;
+            const QuizId1 = adminQuizCreate(authUserId, "QuizaboutBarbie", 'Quiz on barbies').quizId;
+            const QuizId2 = adminQuizCreate(authUserId, "QuizaboutBarbieMovies", 'Quiz on barbies').quizId;
+            expect(adminQuizRemove(authUserId, QuizId2)).toStrictEqual(
+                {
+                }
+            );  
+        });
+
+        });
+
+
+    });
+
