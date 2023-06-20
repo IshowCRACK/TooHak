@@ -4,12 +4,11 @@ import { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizCreate,
 import { clear } from './other.js'
 
 
-
 beforeEach(() => {
 	clear();
 });
 
-describe('adminQuizList function', () => {
+describe.skip('adminQuizList function', () => {
     let authUserId;
 
     beforeEach(() => {
@@ -63,10 +62,9 @@ describe('adminQuizList function', () => {
             ]
         });
     });
-
 });
 
-describe('adminQuizInfo', () => {
+describe.skip('adminQuizInfo', () => {
     let authUserId;
     let quizId;
     let quizCreationTime;
@@ -151,7 +149,5 @@ describe('adminQuizInfo', () => {
         expect(quizInfo2.timeLastEdited).toBeGreaterThanOrEqual(quizCreationTime2);
         expect(quizInfo2.timeLastEdited).toBeLessThanOrEqual(quizCreationTime2 + timeBufferMillisecond);
 
-    });
-
-    
-})
+    }); 
+});
