@@ -87,30 +87,18 @@ function adminAuthRegister(email, password, nameFirst, nameLast) {
 //implementation for the userdetails function given
 // parameters: userId and 
 // return object containing: userId, name, email, num of successful logins & num of failed password
-/*
+
 function adminUserDetails(authUserId) {
-	const data = getData();	
-	
-	for (const user of data.users) {
-		//console.log(user)
-		if (user.authUserId === authUserId) {
-			return {
-				user: {
-					userId: user.authUserId,    
-					name: `${user.nameFirst} ${user.nameLast}`,    
-					email: user.email,    
-					numSuccessfulLogins: user.numSuccessLogins,    
-					numFailedPasswordsSinceLastLogin: user.numFailedPasswordsSinceLastLogin,
-				}
-			}
+	return { user:
+		{
+		  userId: 1,
+		  name: 'Hayden Smith',
+		  email: 'hayden.smith@unsw.edu.au',
+		  numSuccessfulLogins: 3,
+		  numFailedPasswordsSinceLastLogin: 1,
 		}
-		//console.log(user.authUserId);		
-	}
-	//console.log(user);
-	return {
-		error: 'User does not exists'
-	} 
-}  */
+	  }
+}  
 
 // implementation for the function authLogin given
 // Parameters: email and password and Return: UserId
