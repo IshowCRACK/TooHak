@@ -9,6 +9,7 @@
     
     // Quizes
     // quizId: integer
+    // adminQuizId: integer
     // name: string
     // timeCreated: inter
     // timeLastEdited: integer
@@ -30,6 +31,7 @@ let data = {
     quizes : [
                 {
                 quizId: 1,
+                adminQuizId: 1,
                 name: 'My Quiz',
                 timeCreated: 1683125870,
                 timeLastEdited: 1683125871,

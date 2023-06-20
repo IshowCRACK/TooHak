@@ -142,8 +142,7 @@ function adminUserDetails(authUserId) {
 	return {
 		error: 'User does not exists'
 	}
-}  
-
+}
 // implementation for the function authLogin given
 // Parameters: email and password and Return: UserId
 /**
