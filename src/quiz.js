@@ -56,4 +56,4 @@ function adminQuizInfo(authUserId, quizId) {
     }
 }
     
-    
+export {adminQuizDescriptionUpdate, adminQuizRemove, adminQuizList, adminQuizCreate, adminQuizInfo};
