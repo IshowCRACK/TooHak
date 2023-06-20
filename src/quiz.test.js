@@ -1,4 +1,4 @@
-import { adminAuthLogin, adminAuthRegister } from './auth.js';
+import { adminAuthLogin, adminAuthRegister, adminUserDetails } from './auth.js';
 import { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizCreate,
   adminQuizList, adminQuizNameUpdate,adminQuizInfo} from './quiz.js';
 import { clear } from './other.js'
@@ -15,6 +15,7 @@ describe('adminQuizList function', () => {
     beforeEach(() => {
         authUserId = adminAuthRegister('JohnSmith@gmail.com', 'password123', 'John', 'Smith').authUserId;
     });
+    
 
     test('Invalid authUserId format', () => {
         expect(adminQuizList(' ')). toStrictEqual({
@@ -33,7 +34,7 @@ describe('adminQuizList function', () => {
     });
 
     test('User with one owned quiz', () => {
-        const adminQuiz1Name = 'Countries of the World';
+        const adminQuiz1Name = 'CountriesoftheWorld';
         const {adminQuizId1} = adminQuizCreate(authUserId, adminQuiz1Name, 'Quiz on all countries');
         expect(adminQuizList(authUserId)).toStrictEqual({
             quizzes: [
@@ -46,8 +47,8 @@ describe('adminQuizList function', () => {
     });
 
     test('User with multiple owned quiz', () => {
-        const adminQuiz1Name = 'Countries of the World';
-        const adminQuiz2Name = 'Flags of the World';
+        const adminQuiz1Name = 'CountriesoftheWorld';
+        const adminQuiz2Name = 'FlagsoftheWorld';
         const {adminQuizId1} = adminQuizCreate(authUserId, adminQuiz1Name, 'Quiz on all countries');
         const {adminQuizId2} = adminQuizCreate(authUserId, adminQuiz2Name, 'Quiz on all flags');
         expect(adminQuizList(authUserId)).toStrictEqual({
@@ -69,7 +70,7 @@ describe('adminQuizList function', () => {
 
 
 describe("adminQuizCreate tests", () => {
-    
+
   describe("unsuccessful tests", () => {
 
   test('1. user does not exists)', () => {
@@ -99,7 +100,7 @@ describe("adminQuizCreate tests", () => {
   test('6. name is alr used by another quiz from same user', () => {
     const user = adminAuthRegister('good.email@gmail.com','Password123','Joh nny-Bone','Jo\'nes');
     let quiz1 = adminQuizCreate(user.authUserId, 'comp1531it1', 'quiz');
-    let quiz2 = adminQuizCreate(user.authUserId, 'comp1531it1', 'quiz');
+    let quiz2 = adminQuizCreate(user.authUserId, 'comp1531it1', 'quiz2');
     expect(quiz2).toStrictEqual({ error: 'quiz name already in use'});
   });
   test('7. description more than 100 characters ', () => {
@@ -139,4 +140,4 @@ describe("adminQuizCreate tests", () => {
           });
     });
 
-});
+    });
