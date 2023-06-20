@@ -170,3 +170,6 @@ Thumbs.db
 
 # Ignore built ts files
 dist/**/*
+
+# Debugging file
+src/debugging.js

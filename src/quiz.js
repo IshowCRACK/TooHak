@@ -1,3 +1,5 @@
+import {getData, setData} from './dataStore.js';
+
 // implementation for the function adminQuizRemove given
 // Parameters: userId, quizId, description and Return: empty object
 function adminQuizDescriptionUpdate(authUserId, quizId, description) {
@@ -24,18 +26,33 @@ function adminQuizCreate(authUserId, name, description) {
         quizId: 2, 
     }
 }
-//implementation for the adminQuizLists function given
-//parameters: userId and return and object containing: quizId and quiz name
+/**
+  * Provides a list of all quizzes that are owned by the currently logged in user
+  * 
+  * @param {number} authUserId - the id of the registered user you are trying to look at the quizzes of
+  * 
+  * @returns {quizzes: Array<{quizId: number, name: string}>} - an array of quizzes and its details
+ */
 function adminQuizList(authUserId) {
+    let data = getData();
 
-    return {
-        quizzes: [    
-            {      
-                quizId: 1,      
-                name: 'My Quiz',    
-            }  
+    const output = {
+        quizzes: [
+
         ]
+    };
+    
+    // check all quizzes to see if its creater matches authUserId
+    for (const quiz of data.quizes) {
+        if (quiz.adminQuizId === authUserId) {
+            output.quizzes.push({
+                quizId: quiz.quizId,
+                name: quiz.name
+            });
+        }
     }
+    
+    return output
 }
 
 // stub function for quiz description update, using given return values
@@ -56,4 +73,4 @@ function adminQuizInfo(authUserId, quizId) {
     }
 }
     
-export {adminQuizDescriptionUpdate, adminQuizRemove, adminQuizList, adminQuizCreate, adminQuizInfo};
+export {adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo};
