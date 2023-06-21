@@ -376,7 +376,7 @@ describe('adminQuizNameUpdate Tests', () => {
   });
 
   describe('5. Unsuccessful name update - TESTING NAME LENGTH', () => {
-    test('1. returns an error when Description is more than 30 characters in length', () => {
+    test('1. returns an error when Name is more than 30 characters in length', () => {
       const authUserId = 0;
       const quizId = 0;
       const newName = '123456789abcdEFGHsakfshfd214345';
@@ -387,32 +387,31 @@ describe('adminQuizNameUpdate Tests', () => {
         error: 'Name must be between 3 and 30 characters long!',
       });
     });
-  });
 
-  test('2. returns an error when Description less than 3 characters in length', () => {
-    const authUserId = 0;
-    const quizId = 0;
-    const newName = 'A';
+    test('2. returns an error when Name less than 3 characters in length', () => {
+      const authUserId = 0;
+      const quizId = 0;
+      const newName = 'A';
 
-    const result = adminQuizNameUpdate(authUserId, quizId, newName);
+      const result = adminQuizNameUpdate(authUserId, quizId, newName);
 
-    expect(result).toEqual({
+      expect(result).toEqual({
       error: 'Name must be between 3 and 30 characters long!',
+      });
+    });
+  });
+
+  describe('6. Unsuccessful name update - TESTING NAME DUPLICATE', () => {
+    test('1. returns an error when Name has been used by current user', () => {
+      const authUserId = 0;
+      const quizId = 0;
+      const newName = 'Quiz 2';
+
+      const result = adminQuizNameUpdate(0,0,'Quiz 2')
+
+      expect(result).toEqual({
+        error: 'You have already used this name',
+      });
     });
   });
 });
-
-describe('6. Unsuccessful name update - TESTING NAME LENGTH', () => {
-  test('1. returns an error when Description less than 3 characters in length', () => {
-    const authUserId = 1;
-    const quizId = 1;
-    const newName = 'Quiz 2';
-
-    const result = adminQuizNameUpdate(authUserId, quizId, newName);
-
-    expect(result).toEqual({
-      error: 'You have already used this name',
-    });
-  });
-});
-

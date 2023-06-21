@@ -140,7 +140,6 @@ function adminQuizCreate( authUserId, name, description ) {
     });
 
     setData(data);
-    console.log(data.quizes)
 
     return {
         quizId: maxID,
@@ -188,6 +187,7 @@ function adminQuizNameUpdate (authUserId_target, quizId_target, name_updated) {
       }
     }
     if (!user) {
+        console.log('here')
         return { error: 'AuthUserId is not a valid user' };
       }
   
@@ -198,10 +198,10 @@ function adminQuizNameUpdate (authUserId_target, quizId_target, name_updated) {
         break;
       }
     }
-    
+
     if (!quiz) {
         return { error: 'Quiz ID does not refer to a valid quiz' };
-      }
+    }
       
     let userOwnsQuiz = false;
     for (let i = 0; i < store.quizes.length; i++) {
@@ -229,11 +229,11 @@ function adminQuizNameUpdate (authUserId_target, quizId_target, name_updated) {
             break;
         }
     }
-    if (!userSameQuizName) {
+    if (userSameQuizName === true) {
       return { error: 'You have already used this name' };
     }
 
-
+    quiz.name = name_updated;
     setData(store);
     return {};
 }
