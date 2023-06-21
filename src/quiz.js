@@ -27,8 +27,9 @@ function checkuserid(authUserId) {
         if (user.authUserId === authUserId) {
          return true;
         }
-        return false;
     }
+
+    return false;
 }
 
 function checkquizname(authUserId, quizname) {
@@ -44,28 +45,34 @@ function checkquizname(authUserId, quizname) {
 
 function adminQuizCreate( authUserId, name, description ) {
     let data = getData();
-      
+
     // check valid userID 
     if (checkuserid(authUserId) === false) {
         return { error: "User Does Not Exist"}
     }
+    
     // check name length 
     if ((name === null)||(name === '')) {
-        return { error: "must enter a name"}
-    } else if ((name.length < 3)||(name.length > 30)) {
-        return { error: "name must be between 3 and 30 characters"};
+        return { error: "A name must be entered"}
     }
+        
+    if ((name.length < 3)||(name.length > 30)) {
+        return { error: "Name must be between 3 and 30 characters"};
+    }
+    
     // check name composition (alphanumeric)
-    if (/^[a-zA-Z0-9]+$/.test(name) === false) {
-        return {error: "Must use only alphanumeric characters in name"};
+    if (/^[a-zA-Z0-9\s]+$/.test(name) === false) {
+        return {error: "Must use only alphanumeric characters or spaces in name"};
+           
     }
+
     // check description length
     if (description.length > 100) {
-       return { error: "description must be under 100 characters"};
+       return { error: "Description must be under 100 characters"};
     }
     // check if quiz name already in use by this user 
     if (checkquizname(authUserId, name) === true) {
-        return { error: 'quiz name already in use'};
+        return { error: 'Quiz name already in use'};
     }
 
    let maxID = 0;
@@ -78,8 +85,9 @@ function adminQuizCreate( authUserId, name, description ) {
         }
     }
     maxID = maxID+1;
-}
+    }
     
+
     data.quizes.push({
         quizId: maxID,
         adminQuizId: authUserId,
@@ -91,6 +99,7 @@ function adminQuizCreate( authUserId, name, description ) {
 
     setData(data);
     console.log(data.quizes)
+
     return {
         quizId: maxID,
     }
