@@ -233,13 +233,13 @@ describe.skip('adminQuizInfo', () => {
 //adminQuizDescriptionUpdate
 describe('adminQuizDescriptionUpdate Tests', () => {
     const timeBufferMillisecond = 1000;
-    let quizCreationTime;
+    let quizEditedTime;
     beforeEach(() => {
       adminAuthRegister('something@gmail.com', 'password1', 'Ijlal', 'Khan');
       adminAuthRegister('joemama@gmail.com', 'password2', 'joe mama', 'mama joe');
       adminQuizCreate(0, 'Quiz 1', 'Description 1');
       adminQuizCreate(1, 'Quiz 2', 'Description 2');
-      quizCreationTime = Date.now();
+      quizEditedTime = Math.round(Date.now()/ 1000);
     });
   
     describe('1. Successful description update', () => {
@@ -317,8 +317,8 @@ describe('adminQuizDescriptionUpdate Tests', () => {
         const newDescription = 'Updated description';
         const result = adminQuizDescriptionUpdate(authUserId, quizId, newDescription);
         const getQuizinfo = adminQuizInfo(authUserId,quizId);
-        expect(getQuizinfo.timeLastEdited).toBeGreaterThanOrEqual(quizCreationTime);
-        expect(getQuizinfo.timeLastEdited).toBeLessThanOrEqual(quizCreationTime + timeBufferMillisecond);
+        expect(getQuizinfo.timeLastEdited).toBeGreaterThanOrEqual(quizEditedTime);
+        expect(getQuizinfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime + timeBufferMillisecond);
         expect(result).toEqual({});
       });
     });
@@ -327,7 +327,7 @@ describe('adminQuizDescriptionUpdate Tests', () => {
 //adminQuizNameUpdate
 describe('adminQuizNameUpdate Tests', () => {
   const timeBufferMillisecond = 1000;
-  let quizCreationTime;
+  let quizEditedTime;
 
   beforeEach(() => {
     adminAuthRegister('something@gmail.com', 'password1', 'Ijlal', 'Khan');
@@ -335,7 +335,7 @@ describe('adminQuizNameUpdate Tests', () => {
     adminQuizCreate(0, 'Quiz 1', 'Description 1');
     adminQuizCreate(0, 'Quiz 2', 'Description 2');
     adminQuizCreate(1, 'Quiz 3', 'Description 3');
-    quizCreationTime = Date.now();
+    quizEditedTime = Math.round(Date.now()/ 1000);
 
 
   });
@@ -441,8 +441,8 @@ describe('adminQuizNameUpdate Tests', () => {
       const newName = 'Quiz 1 Updated';
       const result = adminQuizNameUpdate(authUserId, quizId, newName);
       const getQuizinfo = adminQuizInfo(authUserId,quizId);
-      expect(getQuizinfo.timeLastEdited).toBeGreaterThanOrEqual(quizCreationTime);
-      expect(getQuizinfo.timeLastEdited).toBeLessThanOrEqual(quizCreationTime + timeBufferMillisecond);
+      expect(getQuizinfo.timeLastEdited).toBeGreaterThanOrEqual(quizEditedTime);
+      expect(getQuizinfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime + timeBufferMillisecond);
       expect(result).toEqual({});
     });
   });
