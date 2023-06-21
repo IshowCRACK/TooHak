@@ -13,6 +13,9 @@ function adminQuizDescriptionUpdate(authUserId_target, quizId_target, descriptio
         break;
       }
     }
+    if (!user) {
+        return { error: 'AuthUserId is not a valid user' };
+      }
   
     let quiz = null;
     for (let i = 0; i < store.quizes.length; i++) {
@@ -21,18 +24,32 @@ function adminQuizDescriptionUpdate(authUserId_target, quizId_target, descriptio
         break;
       }
     }
-  
-    if (!user) {
-      return { error: 'AuthUserId is not a valid user' };
-    }
-  
+    
     if (!quiz) {
-      return { error: 'Quiz ID does not refer to a valid quiz' };
-    }
+        return { error: 'Quiz ID does not refer to a valid quiz' };
+      }
+      
   
-    if (!user.createdQuizzes.includes(quizId_target)) {
+    // if (!user) {
+    //   return { error: 'AuthUserId is not a valid user' };
+    // }
+  
+    // if (!quiz) {
+    //   return { error: 'Quiz ID does not refer to a valid quiz' };
+    // }
+
+
+    let userOwnsQuiz = false;
+    for (let i = 0; i < store.quizes.length; i++) {
+        if (store.quizes[i].quizId === quizId_target && store.quizes[i].adminQuizId === authUserId_target) {
+            userOwnsQuiz = true;
+            break;
+        }
+    }
+    if (!userOwnsQuiz) {
       return { error: 'Quiz ID does not refer to a quiz that this user owns' };
     }
+
   
     if (description_updated.length > 100) {
       return { error: 'Description is more than 100 characters in length' };
@@ -56,11 +73,90 @@ function adminQuizRemove(authUserId, quizId) {
 // implementation for the function adminQuizCreate given
 // Parameters: userId, name, description and Return: quizId
 
-function adminQuizCreate(authUserId, name, description) {
+function checkuserid(authUserId) {
+    let data = getData();
+    for (let user of data.users) {
+        if (user.authUserId === authUserId) {
+         return true;
+        }
+    }
+
+    return false;
+}
+
+function checkquizname(authUserId, quizname) {
+    let data = getData();
+    const list = adminQuizList(authUserId);
+    for (const quiz of list.quizzes) {
+        if (quizname === quiz.name) {
+         return true;
+        }
+    }
+    return false;
+}
+
+function adminQuizCreate( authUserId, name, description ) {
+    let data = getData();
+
+    // check valid userID 
+    if (checkuserid(authUserId) === false) {
+        return { error: "User Does Not Exist"}
+    }
+    
+    // check name length 
+    if ((name === null)||(name === '')) {
+        return { error: "A name must be entered"}
+    }
+        
+    if ((name.length < 3)||(name.length > 30)) {
+        return { error: "Name must be between 3 and 30 characters"};
+    }
+    
+    // check name composition (alphanumeric)
+    if (/^[a-zA-Z0-9\s]+$/.test(name) === false) {
+        return {error: "Must use only alphanumeric characters or spaces in name"};
+           
+    }
+
+    // check description length
+    if (description.length > 100) {
+       return { error: "Description must be under 100 characters"};
+    }
+    // check if quiz name already in use by this user 
+    if (checkquizname(authUserId, name) === true) {
+        return { error: 'Quiz name already in use'};
+    }
+
+   let maxID = 0;
+
+   if(data.quizes.length !== 0) {
+   for (let quiz of data.quizes) {
+        if (quiz.quizId > maxID) {
+            maxID = quiz.quizId;
+    
+        }
+    }
+    maxID = maxID+1;
+    }
+    
+
+    data.quizes.push({
+        quizId: maxID,
+        adminQuizId: authUserId,
+        name: name,
+        timeCreated: Math.round(Date.now()/ 1000),
+        timeLastEdited: Math.round(Date.now()/ 1000),
+        description: description,
+    });
+
+    setData(data);
+    console.log(data.quizes)
+
     return {
-        quizId: 2, 
+        quizId: maxID,
     }
 }
+
 /**
   * Provides a list of all quizzes that are owned by the currently logged in user
   * 
@@ -178,6 +274,11 @@ function checkQuizAndUserIdValid(quizId, authUserId) {
 
     return false;
 }
+
+//Helper
+//checkQuizID - checks if a quizID is the same as one that a user already owns
+//param: quizID
+//returns: boolean
 
 
 export {adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo};
