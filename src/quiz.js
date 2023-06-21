@@ -11,13 +11,68 @@ function adminQuizDescriptionUpdate(authUserId, quizId, description) {
 
 // implementation for the function adminQuizRemove given
 // Parameters: userID and quizID and Return: empty object
-function adminQuizRemove(authUserId, quizId) {
-    
-    return {
 
+function checkUserId(authUserId) {
+    let data = getData();
+    for (let user of data.users) {
+        if (user.authUserId === authUserId) {
+         return true;
+        }
+        return false;
+    }
+}
+function checkQuizId(quizId) {
+    let data = getData();
+    for (let quiz of data.quizes) {
+        if (quiz.quizId === quizId) {
+         return true;
+        }
+        return false;
     }
 }
 
+function checkQuizIdOwnership(authUserId, quizId) {
+    let data = getData();
+    const list = adminQuizList(authUserId);
+    for (const quiz of list.quizzes) {
+        if (quizId === quiz.quizId) {
+         return true;
+        }
+    }
+    return false;
+}
+
+function adminQuizRemove(authUserId, quizId) {
+    let data = getData();
+    console.log(data);
+    //AuthUserId is not a valid user
+        if (checkUserId(authUserId) === false) {
+            return { error: "User Does Not Exist"}
+        }
+    //Quiz ID does not refer to a valid quiz
+    if (checkQuizId(quizId) === false) {
+        return { error:  'Invalid QuizId'}
+    }
+    //Quiz ID does not refer to a quiz that this user owns
+    if (checkQuizIdOwnership(authUserId, quizId) === false) {
+        return { error: 'Quiz ID does not refer to a quiz that this user own'};
+    }
+
+    const length = data.quizes.length
+    for (let i=0; i < length; i++) {
+        if (data.quizes[i].quizId === quizId) {
+            data.quizes.splice(i,1);
+            break;
+        }
+    }
+    
+    setData();
+    console.log(data);
+    return {
+    
+    }
+    }
+    
 // implementation for the function adminQuizCreate given
 // Parameters: userId, name, description and Return: quizId
 
