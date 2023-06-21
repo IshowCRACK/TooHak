@@ -3,12 +3,63 @@ import { checkAuthUserIdValid } from './helper.js';
 
 // implementation for the function adminQuizRemove given
 // Parameters: userId, quizId, description and Return: empty object
-function adminQuizDescriptionUpdate(authUserId, quizId, description) {
-    
-    return {
-
+function adminQuizDescriptionUpdate(authUserId_target, quizId_target, description_updated) {
+    const store = getData();
+  
+    let user = null;
+    for (let i = 0; i < store.users.length; i++) {
+      if (store.users[i].authUserId === authUserId_target) {
+        user = store.users[i];
+        break;
+      }
     }
-}
+    if (!user) {
+        return { error: 'AuthUserId is not a valid user' };
+      }
+  
+    let quiz = null;
+    for (let i = 0; i < store.quizes.length; i++) {
+      if (store.quizes[i].quizId === quizId_target) {
+        quiz = store.quizes[i];
+        break;
+      }
+    }
+    
+    if (!quiz) {
+        return { error: 'Quiz ID does not refer to a valid quiz' };
+      }
+      
+  
+    // if (!user) {
+    //   return { error: 'AuthUserId is not a valid user' };
+    // }
+  
+    // if (!quiz) {
+    //   return { error: 'Quiz ID does not refer to a valid quiz' };
+    // }
+
+
+    let userOwnsQuiz = false;
+    for (let i = 0; i < store.quizes.length; i++) {
+        if (store.quizes[i].quizId === quizId_target && store.quizes[i].adminQuizId === authUserId_target) {
+            userOwnsQuiz = true;
+            break;
+        }
+    }
+    if (!userOwnsQuiz) {
+      return { error: 'Quiz ID does not refer to a quiz that this user owns' };
+    }
+
+  
+    if (description_updated.length > 100) {
+      return { error: 'Description is more than 100 characters in length' };
+    }
+  
+    quiz.description = description_updated;
+  
+    setData(store);
+    return {};
+  }
 
 // implementation for the function adminQuizRemove given
 // Parameters: userID and quizID and Return: empty object
@@ -223,6 +274,11 @@ function checkQuizAndUserIdValid(quizId, authUserId) {
 
     return false;
 }
+
+//Helper
+//checkQuizID - checks if a quizID is the same as one that a user already owns
+//param: quizID
+//returns: boolean
 
 
 export {adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo};
