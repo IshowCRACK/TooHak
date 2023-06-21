@@ -178,7 +178,7 @@ function adminQuizCreate( authUserId, name, description ) {
 	let data = getData();
 
 	// check valid userID 
-	if (checkuserid(authUserId) === false) {
+	if (checkUserId(authUserId) === false) {
 		return { error: "User Does Not Exist"}
 	}
 	// check name length 
