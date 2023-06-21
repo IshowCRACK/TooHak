@@ -328,7 +328,7 @@ describe('adminQuizNameUpdate Tests', () => {
       const newName = 'Quiz 1 Updated';
       const result = adminQuizNameUpdate(authUserId, quizId, newName);
       const getQuizinfo = adminQuizInfo(authUserId,quizId);
-      expect(getQuizinfo.description).toBe('Quiz 1 Updated');
+      expect(getQuizinfo.name).toBe('Quiz 1 Updated');
       expect(result).toEqual({});
     });
   });
@@ -411,7 +411,7 @@ describe('6. Unsuccessful name update - TESTING NAME LENGTH', () => {
     const result = adminQuizNameUpdate(authUserId, quizId, newName);
 
     expect(result).toEqual({
-      error: 'Name is already used by the current logged in user for another quiz',
+      error: 'You have already used this name',
     });
   });
 });

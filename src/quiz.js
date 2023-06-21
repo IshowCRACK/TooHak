@@ -29,16 +29,6 @@ function adminQuizDescriptionUpdate(authUserId_target, quizId_target, descriptio
         return { error: 'Quiz ID does not refer to a valid quiz' };
       }
       
-  
-    // if (!user) {
-    //   return { error: 'AuthUserId is not a valid user' };
-    // }
-  
-    // if (!quiz) {
-    //   return { error: 'Quiz ID does not refer to a valid quiz' };
-    // }
-
-
     let userOwnsQuiz = false;
     for (let i = 0; i < store.quizes.length; i++) {
         if (store.quizes[i].quizId === quizId_target && store.quizes[i].adminQuizId === authUserId_target) {
@@ -187,10 +177,65 @@ function adminQuizList(authUserId) {
 }
 
 // stub function for quiz description update, using given return values
-function adminQuizNameUpdate (authUserId, quizId, name) {
-    return {
-        
+function adminQuizNameUpdate (authUserId_target, quizId_target, name_updated) {
+    const store = getData();
+
+    let user = null;
+    for (let i = 0; i < store.users.length; i++) {
+      if (store.users[i].authUserId === authUserId_target) {
+        user = store.users[i];
+        break;
+      }
     }
+    if (!user) {
+        return { error: 'AuthUserId is not a valid user' };
+      }
+  
+    let quiz = null;
+    for (let i = 0; i < store.quizes.length; i++) {
+      if (store.quizes[i].quizId === quizId_target) {
+        quiz = store.quizes[i];
+        break;
+      }
+    }
+    
+    if (!quiz) {
+        return { error: 'Quiz ID does not refer to a valid quiz' };
+      }
+      
+    let userOwnsQuiz = false;
+    for (let i = 0; i < store.quizes.length; i++) {
+        if (store.quizes[i].quizId === quizId_target && store.quizes[i].adminQuizId === authUserId_target) {
+            userOwnsQuiz = true;
+            break;
+        }
+    }
+    if (!userOwnsQuiz) {
+      return { error: 'Quiz ID does not refer to a quiz that this user owns' };
+    }
+
+    if (/^[a-zA-Z0-9\s]+$/.test(name_updated) === false) {
+        return {error: 'Must use only alphanumeric characters or spaces in name'};
+    }
+
+    if (name_updated.length < 3 || name_updated.length > 30) {
+        return { error: 'Name must be between 3 and 30 characters long!' };
+    }
+    
+    let userSameQuizName = false;
+    for (let i = 0; i < store.quizes.length; i++) {
+        if (store.quizes[i].name === name_updated && store.quizes[i].adminQuizId === authUserId_target) {
+            userSameQuizName = true;
+            break;
+        }
+    }
+    if (!userSameQuizName) {
+      return { error: 'You have already used this name' };
+    }
+
+
+    setData(store);
+    return {};
 }
 
 /**
