@@ -8,7 +8,7 @@ beforeEach(() => {
 	clear();
 });
 
-describe.skip('adminQuizList function', () => {
+describe('adminQuizList function', () => {
     let authUserId;
 
     beforeEach(() => {
@@ -17,9 +17,7 @@ describe.skip('adminQuizList function', () => {
     
     test('Invalid authUserId format', () => {
         expect(adminQuizList(' ')). toStrictEqual({
-            quizzes: [
-
-            ]
+          error: 'User does not exist'
         });
     });
 
@@ -32,8 +30,8 @@ describe.skip('adminQuizList function', () => {
     });
 
     test('User with one owned quiz', () => {
-        const adminQuiz1Name = 'CountriesoftheWorld';
-        const {adminQuizId1} = adminQuizCreate(authUserId, adminQuiz1Name, 'Quiz on all countries');
+        const adminQuiz1Name = 'Countries of the World';
+        const adminQuizId1 = adminQuizCreate(authUserId, adminQuiz1Name, 'Quiz on all countries').quizId;
         expect(adminQuizList(authUserId)).toStrictEqual({
             quizzes: [
                 {
@@ -47,8 +45,8 @@ describe.skip('adminQuizList function', () => {
     test('User with multiple owned quiz', () => {
         const adminQuiz1Name = 'CountriesoftheWorld';
         const adminQuiz2Name = 'FlagsoftheWorld';
-        const {adminQuizId1} = adminQuizCreate(authUserId, adminQuiz1Name, 'Quiz on all countries');
-        const {adminQuizId2} = adminQuizCreate(authUserId, adminQuiz2Name, 'Quiz on all flags');
+        const adminQuizId1 = adminQuizCreate(authUserId, adminQuiz1Name, 'Quiz on all countries').quizId;
+        const adminQuizId2 = adminQuizCreate(authUserId, adminQuiz2Name, 'Quiz on all flags').quizId;
         expect(adminQuizList(authUserId)).toStrictEqual({
             quizzes: [
                 {
@@ -138,7 +136,6 @@ describe("adminQuizCreate tests", () => {
           );
       });
   });
-
 });
 
 

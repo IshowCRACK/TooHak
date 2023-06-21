@@ -99,7 +99,6 @@ function adminQuizCreate( authUserId, name, description ) {
     });
 
     setData(data);
-    console.log(data.quizes)
 
     return {
         quizId: maxID,
@@ -115,6 +114,10 @@ function adminQuizCreate( authUserId, name, description ) {
  */
 function adminQuizList(authUserId) {
     let data = getData();
+
+    if (!checkAuthUserIdValid(authUserId)) {
+        return {error: "User does not exist"};
+    }
 
     const output = {
         quizzes: [
