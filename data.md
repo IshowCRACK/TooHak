@@ -24,7 +24,6 @@ let data = {
                 nameLast: 'idk',
                 email: 'something@gmail.com',
                 password: 'password',
-                createdQuizzes: [quizId1, ...]
             }
     ],
 
