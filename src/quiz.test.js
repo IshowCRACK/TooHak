@@ -318,5 +318,189 @@ describe.skip('adminQuizInfo', () => {
         expect(quizInfo2.timeLastEdited).toBeLessThanOrEqual(quizCreationTime2 + timeBufferMillisecond);
 
     }); 
+});
 
+describe('adminQuizDescriptionUpdate Tests', () => {
+  
+    beforeEach(() => {
+      adminAuthRegister('something@gmail.com', 'password1', 'Ijlal', 'Khan');
+      adminAuthRegister('joemama@gmail.com', 'password2', 'joe mama', 'mama joe');
+      adminQuizCreate(0, 'Quiz 1', 'Description 1');
+      adminQuizCreate(1, 'Quiz 2', 'Description 2');
+    });
+  
+    describe('1. Successful description update', () => {
+      test('1. updates the description of an existing quiz', () => {
+        const authUserId = 0;
+        const quizId = 0;
+        const newDescription = 'Updated description';
+        const result = adminQuizDescriptionUpdate(authUserId, quizId, newDescription);
+        const getQuizinfo = adminQuizInfo(authUserId,quizId);
+        expect(getQuizinfo.description).toBe('Updated description');
+        expect(result).toEqual({});
+      });
+    });
+  
+    describe('2. Unsuccessful description update - TESTING QUIZID', () => {
+      test('1. returns an error when Quiz ID does not refer to a valid quiz', () => {
+        const authUserId = 0;
+        const quizId = 2;
+        const newDescription = 'Updated description';
+  
+        const result = adminQuizDescriptionUpdate(authUserId, quizId, newDescription);
+  
+        expect(result).toEqual({
+          error: 'Quiz ID does not refer to a valid quiz',
+        });
+      });
+    });
+  
+    describe('3. Unsuccessful description update - TESTING MISSMATCHED QUIZID', () => {
+      test('1. returns an error when Quiz ID does not refer to a quiz that this user owns', () => {
+        const authUserId = 0;
+        const quizId = 1;
+        const newDescription = 'Updated description';
+  
+        const result = adminQuizDescriptionUpdate(authUserId, quizId, newDescription);
+  
+        expect(result).toEqual({
+          error: 'Quiz ID does not refer to a quiz that this user owns',
+        });
+      });
+    });
+  
+    describe('4. Unsuccessful description update - TESTING USERID', () => {
+      test('1. returns an error when AuthUserId is not a valid user', () => {
+        const authUserId = -99;
+        const quizId = 0;
+        const newDescription = 'Updated description';
+  
+        const result = adminQuizDescriptionUpdate(authUserId, quizId, newDescription);
+  
+        expect(result).toEqual({
+          error: 'AuthUserId is not a valid user',
+        });
+      });
+    });
+  
+    describe('5. Unsuccessful description update - TESTING DESCRIPTION LENGTH', () => {
+      test('1. returns an error when Description is more than 100 characters in length', () => {
+        const authUserId = 0;
+        const quizId = 0;
+        const newDescription = 'This is a description that is more than 100 characters long. It should trigger an error. ?!@ #$& *%)_@ ;-))';
+  
+        const result = adminQuizDescriptionUpdate(authUserId, quizId, newDescription);
+  
+        expect(result).toEqual({
+          error: 'Description is more than 100 characters in length',
+        });
+      });
+    });
+});
+
+//adminQuizNameUpdate
+describe('adminQuizNameUpdate Tests', () => {
+  
+  beforeEach(() => {
+    adminAuthRegister('something@gmail.com', 'password1', 'Ijlal', 'Khan');
+    adminAuthRegister('joemama@gmail.com', 'password2', 'joe mama', 'mama joe');
+    adminQuizCreate(0, 'Quiz 1', 'Description 1');
+    adminQuizCreate(0, 'Quiz 2', 'Description 2');
+    adminQuizCreate(1, 'Quiz 3', 'Description 3');
+
+  });
+
+  describe('1. Successful Name update', () => {
+    test('1. updates the name of an existing quiz', () => {
+      const authUserId = 0;
+      const quizId = 0;
+      const newName = 'Quiz 1 Updated';
+      const result = adminQuizNameUpdate(authUserId, quizId, newName);
+      const getQuizinfo = adminQuizInfo(authUserId,quizId);
+      expect(getQuizinfo.name).toBe('Quiz 1 Updated');
+      expect(result).toEqual({});
+    });
+  });
+
+  describe('2. Unsuccessful Name update - TESTING QUIZID', () => {
+    test('1. returns an error when Quiz ID does not refer to a valid quiz', () => {
+      const authUserId = 0;
+      const quizId = -9;
+      const newName = 'Quiz 1 Updated';
+
+      const result = adminQuizNameUpdate(authUserId, quizId, newName);
+
+      expect(result).toEqual({
+        error: 'Quiz ID does not refer to a valid quiz',
+      });
+    });
+  });
+
+  describe('3. Unsuccessful name update - TESTING MISSMATCHED QUIZID', () => {
+    test('1. returns an error when Quiz ID does not refer to a quiz that this user owns', () => {
+      const authUserId = 0;
+      const quizId = 2;
+      const newName = 'Quiz 1 Updated';
+
+      const result = adminQuizNameUpdate(authUserId, quizId, newName);
+
+      expect(result).toEqual({
+        error: 'Quiz ID does not refer to a quiz that this user owns',
+      });
+    });
+  });
+
+  describe('4. Unsuccessful name update - TESTING USERID', () => {
+    test('1. returns an error when AuthUserId is not a valid user', () => {
+      const authUserId = -99;
+      const quizId = 0;
+      const newName = 'Quiz 1 Updated';
+
+      const result = adminQuizNameUpdate(authUserId, quizId, newName);
+
+      expect(result).toEqual({
+        error: 'AuthUserId is not a valid user',
+      });
+    });
+  });
+
+  describe('5. Unsuccessful name update - TESTING NAME LENGTH', () => {
+    test('1. returns an error when Name is more than 30 characters in length', () => {
+      const authUserId = 0;
+      const quizId = 0;
+      const newName = '123456789abcdEFGHsakfshfd214345';
+
+      const result = adminQuizNameUpdate(authUserId, quizId, newName);
+
+      expect(result).toEqual({
+        error: 'Name must be between 3 and 30 characters long!',
+      });
+    });
+
+    test('2. returns an error when Name less than 3 characters in length', () => {
+      const authUserId = 0;
+      const quizId = 0;
+      const newName = 'A';
+
+      const result = adminQuizNameUpdate(authUserId, quizId, newName);
+
+      expect(result).toEqual({
+      error: 'Name must be between 3 and 30 characters long!',
+      });
+    });
+  });
+
+  describe('6. Unsuccessful name update - TESTING NAME DUPLICATE', () => {
+    test('1. returns an error when Name has been used by current user', () => {
+      const authUserId = 0;
+      const quizId = 0;
+      const newName = 'Quiz 2';
+
+      const result = adminQuizNameUpdate(0,0,'Quiz 2')
+
+      expect(result).toEqual({
+        error: 'You have already used this name',
+      });
+    });
+  });
 });
