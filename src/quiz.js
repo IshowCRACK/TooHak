@@ -103,10 +103,8 @@ function adminQuizRemove (authUserId, quizId) {
   * @returns {{quizId: number} | {error: string}} - Returns an object containing the quizId
  */
 function adminQuizCreate (authUserId, name, description) {
-  const data = getData();
-
   // check valid userID
-  if (checkAuthUserId(authUserId) === false) {
+  if (!checkAuthUserId(authUserId)) {
     return { error: 'User Does Not Exist' };
   }
   // check name length
@@ -128,6 +126,8 @@ function adminQuizCreate (authUserId, name, description) {
   if (checkQuizNameUsed(authUserId, name) === true) {
     return { error: 'Quiz name already in use' };
   }
+
+  const data = getData();
 
   let maxID = 0;
 
@@ -160,11 +160,15 @@ function adminQuizCreate (authUserId, name, description) {
   *
   * @param {number} authUserId - The unique Id for the user who owns the quiz
   *
-  * @returns {{quizzes: Array<{quizId: number, name: string}>}} - An array of quizzes and its details
+  * @returns {{quizzes: Array<{quizId: number, name: string}>} | {error: string}} - An array of quizzes and its details
  */
 function adminQuizList (authUserId) {
-  const data = getData();
+  // check valid UserId
+  if (!checkAuthUserIdValid(authUserId)) {
+    return { error: 'User does not exist' };
+  }
 
+  const data = getData();
   const output = {
     quizzes: [
 
