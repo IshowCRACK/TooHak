@@ -1,24 +1,21 @@
-/**
-  * Function gets data from dataStore and resets them to an empty state
-	* Used mostly in testing
-  * 
-  * @param {} - take no input
-  * 
-  * @returns {} - returns no output
-*/
-
 import { getData, setData } from './dataStore.js';
 
+/**
+  * Reset the state of the application back to the start
+  * 
+  * @returns {{}} - Returns empty object
+*/
 function clear() {
-	
 	const data = getData();
 	
-	// Resets users and quizes array making them empty
+	// Reset user and quizzes array by making them empty
 	data.users = [];
 	data.quizes = [];
 
-	setData(data)
+	// Sets the new empty data object
+	setData(data);
+
 	return {};
 }
 
-export{ clear };
+export { clear };

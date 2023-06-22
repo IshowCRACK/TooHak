@@ -1,8 +1,16 @@
 import {getData, setData} from './dataStore.js';
 import { checkAuthUserIdValid } from './helper.js';
 
-// implementation for the function adminQuizRemove given
-// Parameters: userId, quizId, description and Return: empty object
+
+/**
+  * Update the description of the relevant quiz
+  * 
+  * @param {number} authUserId - A unique Id for the user who owns the quiz
+  * @param {number} quizId - A unique Id for the specified quiz
+  * @param {string} description - Quiz description
+  * 
+  * @returns {{} | {error: string}} - Returns an empty object if valid
+ */
 function adminQuizDescriptionUpdate(authUserId_target, quizId_target, description_updated) {
     const store = getData();
   
@@ -52,81 +60,26 @@ function adminQuizDescriptionUpdate(authUserId_target, quizId_target, descriptio
   }
 
 /**
-  * helper function to check if authUserId is valid
+  *	Given a particular quiz, permanently remove the quiz
   * 
-  * @param {number} authUserId - the specified authUserId
+ 	* @param {number} authUserId - A unique Id for the user who owns the quiz
+  * @param {number} quizId - A unique Id for the specified quiz
   * 
-  * @returns {boolean} - returns true if authUserId is valid , otherwise, false
+  * @returns {{} | {error: string}} - Returns empty object if valid 
  */
-function checkUserId(authUserId) {
-	let data = getData();
-	for (let user of data.users) {
-		if (user.authUserId === authUserId) {
-			return true;
-		}
-	}
-  return false;
-}
-
-/**
-  * helper function to check if quiz is valid
-  * 
-  * @param {number} quizId - the specified quizId
-  * 
-  * @returns {boolean} - returns true if quizId is valid , otherwise, false
- */
-
-function checkQuizId(quizId) {
-	let data = getData();
-	for (let quiz of data.quizes) {
-		if (quiz.quizId === quizId) {
-			return true;
-		}
-	}
-	return false;
-}
-
-/**
-  *	helper function to check if quiz is owned by this user
-  * 
- 	* @param {number} authUserId - the user 
-  * @param {number} quizId - the specified quizId
-  * 
-  * @returns {boolean} - returns true if quiz is owned by this user, otherwise, false
- */
-
-function checkQuizIdOwnership(authUserId, quizId) {
-	let data = getData();
-	const list = adminQuizList(authUserId);
-	for (const quiz of list.quizzes) {
-		if (quizId === quiz.quizId) {
-				return true;
-		}
-	}
-	return false;
-}
-/**
-  *	Removes quiz object from data 
-  * 
- 	* @param {number} authUserId - the user 
-  * @param {number} quizId - the specified quizId
-  * 
-  * @returns {object} - empty object 
- */
-
 function adminQuizRemove(authUserId, quizId) {
 	let data = getData();
 	console.log(data);
     //AuthUserId is not a valid user
-	if (checkUserId(authUserId) === false) {
+	if (checkAuthUserId(authUserId) === false) {
 		return { error: "User Does Not Exist"}
 	}
 	//Quiz ID does not refer to a valid quiz
-	if (checkQuizId(quizId) === false) {
+	if (checkQuizIdValid(quizId) === false) {
 		return { error:  'Invalid QuizId'}
 	}
 	//Quiz ID does not refer to a quiz that this user owns
-	if (checkQuizIdOwnership(authUserId, quizId) === false) {
+	if (checkQuizAndUserIdValid(quizId, authUserId) === false) {
 		return { error: 'Quiz ID does not refer to a quiz that this user own'};
 	}
 
@@ -142,43 +95,21 @@ function adminQuizRemove(authUserId, quizId) {
 	return {};
 }
     
-
 /**
-  *	helper function to check if quiz name is already used in another quiz by the same user
+  *	Given basic details about a new quiz, create one for the logged in user
   * 
- 	* @param {number} authUserId - the user 
-  * @param {number} quizname - the specified quiz name
+ 	* @param {number} authUserId -  The unique Id for the user who is creating the quiz
+  * @param {string} name - The name of new quiz
+	* @param {string} description - The description for the new quiz
+
   * 
-  * @returns {boolean} - returns true if quizname is already used, otherwise, false
+  * @returns {{quizId: number} | {error: string}} - Returns an object containing the quizId
  */
-
-function checkquizname(authUserId, quizname) {
-	let data = getData();
-	const list = adminQuizList(authUserId);
-	for (const quiz of list.quizzes) {
-		if (quizname === quiz.name) {
-			return true;
-		}
-	}
-	return false;
-}
-
-/**
-  *	Creates a new quiz object in the quizzes array 
-  * 
- 	* @param {number} authUserId - the user 
-  * @param {string} name - the name of new quiz
-	* @param {string} description - the description for the quiz
-
-  * 
-  * @returns {object} - returns an object containing the quizId
- */
-
 function adminQuizCreate( authUserId, name, description ) {
 	let data = getData();
 
 	// check valid userID 
-	if (checkUserId(authUserId) === false) {
+	if (checkAuthUserId(authUserId) === false) {
 		return { error: "User Does Not Exist"}
 	}
 	// check name length 
@@ -197,7 +128,7 @@ function adminQuizCreate( authUserId, name, description ) {
 		return { error: "Description must be under 100 characters"};
 	}
 	// check if quiz name already in use by this user 
-	if (checkquizname(authUserId, name) === true) {
+	if (checkQuizNameUsed(authUserId, name) === true) {
 		return { error: 'Quiz name already in use'};
 	}
 
@@ -212,7 +143,6 @@ function adminQuizCreate( authUserId, name, description ) {
 		maxID = maxID+1;
 	}
 	
-
 	data.quizes.push({
 		quizId: maxID,
 		adminQuizId: authUserId,
@@ -231,9 +161,9 @@ function adminQuizCreate( authUserId, name, description ) {
 /**
   * Provides a list of all quizzes that are owned by the currently logged in user
   * 
-  * @param {number} authUserId - the id of the registered user you are trying to look at the quizzes of
+  * @param {number} authUserId - The unique Id for the user who owns the quiz
   * 
-  * @returns {{quizzes: Array<{quizId: number, name: string}>}} - an array of quizzes and its details
+  * @returns {{quizzes: Array<{quizId: number, name: string}>}} - An array of quizzes and its details
  */
 function adminQuizList(authUserId) {
     let data = getData();
@@ -257,7 +187,15 @@ function adminQuizList(authUserId) {
     return output;
 }
 
-// stub function for quiz description update, using given return values
+/**
+  * Update the name of the relevant quiz
+  * 
+  * @param {number} authUserId - The unique Id for the user who owns the quiz
+  * @param {number} quizId - The unique Id for the specified quiz
+  * @param {string} name - The name that you want to change the quizzes name into
+  * 
+  * @returns {{} | {error: string}} - Returns an empty object if valid
+ */
 function adminQuizNameUpdate (authUserId_target, quizId_target, name_updated) {
     const store = getData();
 
@@ -323,10 +261,10 @@ function adminQuizNameUpdate (authUserId_target, quizId_target, name_updated) {
 /**
   * Get all of the relevant information about the current quiz
   * 
-  * @param {number} authUserId - the id of the registered user you are trying to look at the quizzes of
-  * @param {number} quizId - the id of the quiz you are trying to trying to get information of
+  * @param {number} authUserId - The unique id of the registered user you are trying to look at the quizzes of
+  * @param {number} quizId - The unique id of the quiz you are trying to trying to get information of
   * 
-  * @returns {{quizId: number, name: string, timeCreated: number, timeLastEdited: number, description: string}} - an array of quizzes and its details
+  * @returns {{quizId: number, name: string, timeCreated: number, timeLastEdited: number, description: string}} - An array of quizzes and its details
  */
 function adminQuizInfo(authUserId, quizId) {
     const data = getData();
@@ -362,14 +300,16 @@ function adminQuizInfo(authUserId, quizId) {
     }
 }
 
-// Helper functions specific to quiz functionality
+/**
+ * -------------------------------------- HELPERS FUNCTIONS-----------------------------------------------
+ */
 
 /**
   * Check if the quizId is valid and exists
   * 
-  * @param {number} quizId - the id you are checking is valid or not
+  * @param {number} quizId - The id you are checking is valid or not
   * 
-  * @returns {boolean} - returns true if userId is valid, false otherwise
+  * @returns {boolean} - Returns true if userId is valid, false otherwise
  */
 function checkQuizIdValid(quizId) {
     const data = getData();
@@ -384,12 +324,29 @@ function checkQuizIdValid(quizId) {
 }
 
 /**
+  *  Check if authUserId is valid and exists
+  * 
+  * @param {number} authUserId - The specified authUserId
+  * 
+  * @returns {boolean} - Returns true if authUserId is valid , otherwise, false
+ */
+function checkAuthUserId(authUserId) {
+	let data = getData();
+	for (let user of data.users) {
+		if (user.authUserId === authUserId) {
+			return true;
+		}
+	}
+  return false;
+}
+
+/**
   * Check if the user owns the specified quiz
   * 
-  * @param {number} quizId - the specified quiz
-  * @param {number} authUserId - the user who you seeing whether or not created the quiz
+  * @param {number} quizId - The specified quiz
+  * @param {number} authUserId - The user who you seeing whether or not created the quiz
   * 
-  * @returns {boolean} - returns true if user owns quiz, false otherwise
+  * @returns {boolean} - Returns true if user owns quiz, false otherwise
  */
 function checkQuizAndUserIdValid(quizId, authUserId) {
     const data = getData();
@@ -402,10 +359,23 @@ function checkQuizAndUserIdValid(quizId, authUserId) {
     return false;
 }
 
-//Helper
-//checkQuizID - checks if a quizID is the same as one that a user already owns
-//param: quizID
-//returns: boolean
-
+/**
+  *	Check if quiz name is already used in another quiz by the same user
+  * 
+ 	* @param {number} authUserId - A unique Id for the user who owns the quiz 
+  * @param {number} quizName - The specified quiz name
+  * 
+  * @returns {boolean} - Returns true if quizname is already used, otherwise, false
+ */
+   function checkQuizNameUsed(authUserId, quizName) {
+    let data = getData();
+    const list = adminQuizList(authUserId);
+    for (const quiz of list.quizzes) {
+      if (quizName === quiz.name) {
+        return true;
+      }
+    }
+    return false;
+  }
 
 export {adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo};

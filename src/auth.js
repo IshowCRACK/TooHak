@@ -2,43 +2,16 @@
 import {getData, setData} from './dataStore.js';
 import validator from 'validator';
 
-/**
-  * function looks at the characters used in first name/last name
-  * 
-  * @param {string} name - string that contains letters, spaces, hyphens or apostrophes
-	* 
-  * @returns {boolean} - returns true or false if first name or last name satisfies the conditions
-  * 
-*/
-function checkName(name) {
-	
-	return /^[a-zA-Z\s\-']+$/.test(name);
-}
-/**
-  * function checks if password contains at least one number and letter
-  * 
-  * @param {string} password - string that contains atleast 1 number and 1 letter and is 8 characters long
-	* 
-  * @returns {boolean} - returns true or false if password satisfies the conditions
-  * 
-*/
-function checkPassword(password) {
-	
-	return /^(?=.*[a-zA-Z])(?=.*[0-9])/.test(password);
-}
-
 
 /**
-  * Function takes in given parameters and creates a new user that has a unique ID
-	* The input is stored in dataStore under users array
+  * Register a user with an email, password, and names, then returns thier authUserId value
   * 
-  * @param {string} email - it is a string that user inputs to create a unique account
-  * @param {string} password - string that contains atleast 1 number and 1 letter and is 8 characters long
+  * @param {string} email - Users email
+  * @param {string} password - Users password with at least 1 number and 1 letter and is 8 characters long
   * @param {string} nameFirst - Users first name
   * @param {string} nameLast - Users last name
-	* 
-  * @returns {number} - returns an integer, authUserId that is unique to the user
   * 
+  * @returns {{authUserId: number} | {error: string}} - Returns an integer, authUserId that is unique to the user
 */
 function adminAuthRegister(email, password, nameFirst, nameLast) {
 	
@@ -110,15 +83,12 @@ function adminAuthRegister(email, password, nameFirst, nameLast) {
 	}
 } 
 
-//////////////////////////////////////////////////////////////
 /**
-  * Function takes the UserId and returns the users details
-	* If UserId is invalid it returns an error
+  * Given an admin user's authUserId, return details about the user
   * 
-  * @param {number} authUserId - integer that is unique to 1 user and helps to identify them
-	* 
-  * @returns {user} - returns an an object of User's details
+  * @param {number} authUserId - Unique Id for a user to help identify them
   * 
+  * @returns {{user: {userId: number, name: string, email: string, numSuccessfulLogins: number, numFailedPasswordsSinceLastLogin: number}} | {error: string}} - Returns an object of User details
 */
 function adminUserDetails(authUserId) {
 
@@ -146,14 +116,12 @@ function adminUserDetails(authUserId) {
 }
 
 /**
-  * Function looks through users dataStore and check if the email and password have been registered
-	* If user hasn't return error
+  * Given a registered user's email and password returns their authUserId value
   * 
-  * @param {string} email - string that user inputs to create a unique account
-  * @param {string} password - string that contains atleast 1 number and 1 letter and is 8 characters long
-	* 
-  * @returns {number} - returns an integer, authUserId that is unique to the user
+  * @param {string} email - Users email
+  * @param {string} password - Users password with at least 1 number and 1 letter and is 8 characters long
   * 
+  * @returns {{authUserId: number} | {error: string}} - returns an integer, authUserId that is unique to the user
 */
 function adminAuthLogin( email, password ) {
 	
@@ -193,5 +161,34 @@ function adminAuthLogin( email, password ) {
 			error: 'Username or Password is not valid'
 	}
 }
+
+/**
+ * -------------------------------------- HELPERS FUNCTIONS-----------------------------------------------
+ */
+
+
+/**
+  * Function looks at the characters used in first name/last name
+  * 
+  * @param {string} name - String that contains letters, spaces, hyphens or apostrophes
+  * 
+  * @returns {boolean} - Returns true or false if first name or last name satisfies the conditions
+*/
+function checkName(name) {
+	
+	return /^[a-zA-Z\s\-']+$/.test(name);
+}
+/**
+  * Function checks if password contains at least one number and letter
+  * 
+  * @param {string} password - String that contains atleast 1 number and 1 letter and is 8 characters long
+  * 
+  * @returns {boolean} - Returns true or false if password satisfies the conditions
+*/
+function checkPassword(password) {
+	
+	return /^(?=.*[a-zA-Z])(?=.*[0-9])/.test(password);
+}
+
 
 export { adminAuthLogin, adminAuthRegister, adminUserDetails };
