@@ -1,9 +1,9 @@
-// only need to fix comments now
+
 import {getData, setData} from './dataStore.js';
 import validator from 'validator';
 
 /**
-  * <function looks at the characters used in first name/last name>
+  * function looks at the characters used in first name/last name
   * 
   * @param {string} name - string that contains letters, spaces, hyphens or apostrophes
 	* 
@@ -15,7 +15,7 @@ function checkName(name) {
 	return /^[a-zA-Z\s\-']+$/.test(name);
 }
 /**
-  * <function checks if password contains at least one number and letter>
+  * function checks if password contains at least one number and letter
   * 
   * @param {string} password - string that contains atleast 1 number and 1 letter and is 8 characters long
 	* 
@@ -29,27 +29,28 @@ function checkPassword(password) {
 
 
 /**
-  * <Brief description of what the function does>
+  * Function takes in given parameters and creates a new user that has a unique ID
+	* The input is stored in dataStore under users array
   * 
   * @param {string} email - it is a string that user inputs to create a unique account
   * @param {string} password - string that contains atleast 1 number and 1 letter and is 8 characters long
   * @param {string} nameFirst - Users first name
   * @param {string} nameLast - Users last name
 	* 
-  * @returns {authUserId} - returns an integer that is unique to the user
+  * @returns {number} - returns an integer, authUserId that is unique to the user
   * 
 */
 function adminAuthRegister(email, password, nameFirst, nameLast) {
 	
 	let data = getData();
-	//console.log(data);
-	// checking email hasnt been used
+	
+	// checking if any parts are null
 	if (email === null || password === null || nameFirst === null || nameLast === null) {
 		return {
 			error: 'All sections should be filled'
 		}
 	}
-	
+	// checking email hasnt been used
 	for (const user of data.users) {
 		if (user.email === email) {
 			return {
@@ -101,32 +102,32 @@ function adminAuthRegister(email, password, nameFirst, nameLast) {
 		numFailedPasswordsSinceLastLogin: 0,
 		failNow: 0,
 	});
-	//console.log(data.users);
+	
 	setData(data);
+	
 	return {
 		authUserId: userID,
 	}
 } 
 
-//implementation for the userdetails function given
-// parameters: userId and 
-// return object containing: userId, name, email, num of successful logins & num of failed password
+//////////////////////////////////////////////////////////////
 /**
-  * <Brief description of what the function does>
+  * Function takes the UserId and returns the users details
+	* If UserId is invalid it returns an error
   * 
-  * @param {integer} authUserId - Users last name
+  * @param {number} authUserId - integer that is unique to 1 user and helps to identify them
 	* 
-  * @returns {authUserId} - returns an integer that is unique to the user
+  * @returns {user} - returns an an object of User's details
   * 
 */
 function adminUserDetails(authUserId) {
 
 	const data = getData();		
+	
+	// Loop through users dataStore
 	for (const user of data.users) {
 		
-		//console.log(authUserId)
-		//console.log(user.authUserId)
-	 
+		// if ID matched return the users ID
 		if (user.authUserId === authUserId) {
 			return {
 				user: {
@@ -143,31 +144,36 @@ function adminUserDetails(authUserId) {
 		error: 'User does not exists'
 	}
 }
-// implementation for the function authLogin given
-// Parameters: email and password and Return: UserId
+
 /**
-  * <Brief description of what the function does>
+  * Function looks through users dataStore and check if the email and password have been registered
+	* If user hasn't return error
   * 
-  * @param {string} email - it is a string that user inputs to create a unique account
+  * @param {string} email - string that user inputs to create a unique account
   * @param {string} password - string that contains atleast 1 number and 1 letter and is 8 characters long
 	* 
-  * @returns {authUserId} - returns an integer that is unique to the user
+  * @returns {number} - returns an integer, authUserId that is unique to the user
   * 
 */
 function adminAuthLogin( email, password ) {
-	//console.log(email);
+	
 	const data = getData();	
+	
+	// loop through users array from dataStore
 	for (const user of data.users) {	
-		if (user.email === email) {						
+		if (user.email === email) {								
 			if (user.password === password) {
-				// addd successful logins for all times
+				
+				// add successful logins for all times
 				let total = user.numSuccessLogins + 1;
 				user.numSuccessLogins = total;
-				//user messed up in loggin in
+				
+				// If user messed up in log in prior to successful login
 				if (user.failNow > 0) {	
 					user.numFailedPasswordsSinceLastLogin = user.failNow;
 					user.failNow = 0;
-				// this means user didnt fail to login this instance
+				
+					// User didnt fail to login this instance
 				} else if (user.failNow === 0) {
 					user.numFailedPasswordsSinceLastLogin = 0;
 				}
@@ -175,7 +181,8 @@ function adminAuthLogin( email, password ) {
 				return {
 					authUserId: user.authUserId
 				}			
-			} 
+			}
+			// Add on to how many times user has failed before a successful login 
 			else {				
 				user.failNow = user.failNow + 1;
 				setData(data);
