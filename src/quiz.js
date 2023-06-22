@@ -21,7 +21,7 @@ function adminQuizDescriptionUpdate (authUserId, quizId, description) {
     }
   }
   if (!user) {
-    return { error: 'AuthUserId is not a valid user' };
+    return { error: 'authUserId is not a valid user' };
   }
 
   let quiz;
@@ -33,7 +33,7 @@ function adminQuizDescriptionUpdate (authUserId, quizId, description) {
   }
 
   if (!quiz) {
-    return { error: 'Quiz ID does not refer to a valid quiz' };
+    return { error: 'quiz ID does not refer to a valid quiz' };
   }
 
   let userOwnsQuiz = false;
@@ -44,7 +44,7 @@ function adminQuizDescriptionUpdate (authUserId, quizId, description) {
     }
   }
   if (!userOwnsQuiz) {
-    return { error: 'Quiz ID does not refer to a quiz that this user owns' };
+    return { error: 'quiz ID does not refer to a quiz that this user owns' };
   }
 
   if (description.length > 100) {
@@ -250,7 +250,7 @@ function adminQuizNameUpdate (authUserId, quizId, name) {
     }
   }
   if (userSameQuizName === true) {
-    return { error: 'Quiz name already in use' };
+    return { error: 'Quiz name is already in use' };
   }
 
   quiz.name = name;

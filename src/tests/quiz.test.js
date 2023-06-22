@@ -19,7 +19,7 @@ describe('adminQuizList tests', () => {
   describe('Unsuccessful tests', () => {
     test('Invalid authUserId format', () => {
       expect(adminQuizList(1)).toStrictEqual({
-        error: 'User does not exist'
+        error: 'authUserId is not a valid user'
       });
     });
   });
@@ -75,8 +75,8 @@ describe('adminQuizCreate tests', () => {
   });
 
   describe('Unsuccessful tests', () => {
-    test('User does not exist', () => {
-      expect(adminQuizCreate(-5, 'John', 'Smith')).toStrictEqual({ error: 'User Does Not Exist' });
+    test('authUserId is not a valid user', () => {
+      expect(adminQuizCreate(-5, 'John', 'Smith')).toStrictEqual({ error: 'authUserId is not a valid user' });
     });
 
     test('No name error', () => {
@@ -99,7 +99,7 @@ describe('adminQuizCreate tests', () => {
     test('Name is already used by another quiz from same user', () => {
       adminQuizCreate(authUserId, 'comp1531it1', 'quiz');
       const quiz = adminQuizCreate(authUserId, 'comp1531it1', 'quiz2');
-      expect(quiz).toStrictEqual({ error: 'Quiz name already in use' });
+      expect(quiz).toStrictEqual({ error: 'Quiz name is already in use' });
     });
 
     test('Description more than 100 characters ', () => {
@@ -123,7 +123,13 @@ describe('adminQuizCreate tests', () => {
       ).toStrictEqual({ quizId: 0 });
     });
 
-    // TODO: create more tests for creating multiple quizzes
+    test('Sucessful Quiz Creation with 2 quizzes', () => {
+      expect(adminQuizCreate(authUserId, 'Sci3nce Qu1z', '123ABCD')
+      ).toStrictEqual({ quizId: 0 });
+      expect(adminQuizCreate(authUserId, 'P7sics Qu1z', '123ABCD')
+      ).toStrictEqual({ quizId: 1 });
+    });
+
   });
 });
 
@@ -135,53 +141,45 @@ describe('adminQuizRemove tests', () => {
   });
 
   describe('Unsuccessful tests', () => {
-    // TODO: AuthUserId is not a valid user
-
+    
     test('Invalid authUserId', () => {
       const quizId = adminQuizCreate(authUserId, 'QuizaboutBarbie', 'Quiz on all flags').quizId;
-      expect(adminQuizRemove(-10, quizId)).toStrictEqual({ error: 'User Does Not Exist' });
-      expect(adminQuizRemove(1, quizId)).toStrictEqual({ error: 'User Does Not Exist' });
+      expect(adminQuizRemove(-10, quizId)).toStrictEqual({ error: 'authUserId is not a valid user' });
+      expect(adminQuizRemove(1, quizId)).toStrictEqual({ error: 'authUserId is not a valid user' });
     });
 
     test('Invalid quizId', () => {
       adminQuizCreate(authUserId, 'QuizaboutBarbie', 'Quiz on barbies');
-      expect(adminQuizRemove(authUserId, -10)).toStrictEqual({ error: 'Invalid QuizId' });
+      expect(adminQuizRemove(authUserId, -10)).toStrictEqual({ error: 'quiz ID does not refer to a valid quiz' });
     });
 
     test('quizId does not refer to a quiz that this user owns', () => {
       const authUserId2 = adminAuthRegister('mimi@gmail.com', 'password123', 'mimi', 'rabbit').authUserId;
       const quizId = adminQuizCreate(authUserId, 'QuizaboutBarbie', 'Quiz on barbies').quizId;
-      expect(adminQuizRemove(authUserId2, quizId)).toStrictEqual({ error: 'Quiz ID does not refer to a quiz that this user own' });
+      expect(adminQuizRemove(authUserId2, quizId)).toStrictEqual({ error: 'quiz ID does not refer to a quiz that this user owns' });
     });
   });
 
-  // not working atm cause no createquiz
-  // TODO: make QuizId quizId. don't capitalise it
-  describe('Successful functions', () => {
-    /*
-        1 quiz 1 user
-        2 quiz 1 user, delete quiz1
-        2 quiz 1 user, delete quiz2
-        3 quiz 1 user, delete quiz2
-        2 quiz 2 users, delete 1 quiz from user1
-        */
 
+  describe('Successful functions', () => {
+    
+    
     test('Removing one quiz from one user', () => {
-      const QuizId = adminQuizCreate(authUserId, 'QuizaboutBarbie', 'Quiz on barbies').quizId;
-      expect(adminQuizRemove(authUserId, QuizId)).toStrictEqual(
+      const quizId = adminQuizCreate(authUserId, 'QuizaboutBarbie', 'Quiz on barbies').quizId;
+      expect(adminQuizRemove(authUserId, quizId)).toStrictEqual(
         {
         }
       );
     });
     test('Removing multiple quizzes from one user', () => {
-      const QuizId1 = adminQuizCreate(authUserId, 'QuizaboutBarbie', 'Quiz on barbies').quizId;
-      const QuizId2 = adminQuizCreate(authUserId, 'QuizaboutBarbieMovies', 'Quiz on barbies').quizId;
-      expect(adminQuizRemove(authUserId, QuizId1)).toStrictEqual(
+      const quizId1 = adminQuizCreate(authUserId, 'QuizaboutBarbie', 'Quiz on barbies').quizId;
+      const quizId2 = adminQuizCreate(authUserId, 'QuizaboutBarbieMovies', 'Quiz on barbies').quizId;
+      expect(adminQuizRemove(authUserId, quizId1)).toStrictEqual(
         {
         }
       );
 
-      expect(adminQuizRemove(authUserId, QuizId2)).toStrictEqual(
+      expect(adminQuizRemove(authUserId, quizId2)).toStrictEqual(
         {
         }
       );
@@ -198,16 +196,73 @@ describe('adminQuizRemove tests', () => {
     });
 
     test('Removing multiple quizzes from multiple users  ', () => {
-      // TODO: continue this part with multiple
+
       const authUserId2 = adminAuthRegister('hello@gmail.com', 'passrd123', 'hello', 'guys').authUserId;
-      const QuizId1 = adminQuizCreate(authUserId, 'QuizaboutBarbie', 'Quiz on barbies').quizId;
-      adminQuizCreate(authUserId2, 'QuizaboutBarbieMovies', 'Quiz on barbies');
-      adminQuizCreate(authUserId, 'QuizaboutBarbietoys', 'Quiz on barbies toys');
-      expect(adminQuizRemove(authUserId, QuizId1)).toStrictEqual(
+      const quizId1 = adminQuizCreate(authUserId, 'QuizaboutBarbie', 'Quiz on barbies').quizId;
+      const quizId2 = adminQuizCreate(authUserId, 'QuizaboutBarbieMovies', 'Quiz on barbies').quizId;
+
+      const quizId3 = adminQuizCreate(authUserId2, 'QuizaboutMovies', 'Quiz on movies').quizId;
+      const quizId4 = adminQuizCreate(authUserId2, 'Quizabouttoys', 'Quiz on  toys').quizId;
+      expect(adminQuizList(authUserId)).toStrictEqual({
+        quizzes: [
+          {
+            quizId: quizId1,
+            name: "QuizaboutBarbie"
+          },
+          {
+            quizId: quizId2,
+            name: "QuizaboutBarbieMovies"
+          }
+        ]
+
+      }
+      );
+      expect(adminQuizRemove(authUserId, quizId1)).toStrictEqual(
         {
         }
       );
+      expect(adminQuizList (authUserId)).toStrictEqual({
+        quizzes: [
+          {
+            quizId: quizId2,
+            name: "QuizaboutBarbieMovies"
+          }
+        ]
+
+      }
+      );
+      expect(adminQuizList (authUserId2)).toStrictEqual({
+        quizzes: [
+          {
+            quizId: quizId3,
+            name: "QuizaboutMovies"
+          },
+          {
+            quizId: quizId4,
+            name: "Quizabouttoys"
+          }
+        ]
+
+      }
+      );
+
+      expect(adminQuizRemove(authUserId2, quizId4)).toStrictEqual(
+        {
+        }
+      );
+      expect(adminQuizList (authUserId2)).toStrictEqual({
+        quizzes: [
+          {
+            quizId: quizId3,
+            name: "QuizaboutMovies"
+          }
+        ]
+
+      }
+      );
+
     });
+
   });
 });
 
@@ -328,7 +383,7 @@ describe('adminQuizDescriptionUpdate Tests', () => {
   });
 
   describe('2. Unsuccessful description update - TESTING QUIZID', () => {
-    test('1. returns an error when Quiz ID does not refer to a valid quiz', () => {
+    test('1. returns an error when quiz ID does not refer to a valid quiz', () => {
       const authUserId = 0;
       const quizId = 2;
       const newDescription = 'Updated description';
@@ -336,13 +391,13 @@ describe('adminQuizDescriptionUpdate Tests', () => {
       const result = adminQuizDescriptionUpdate(authUserId, quizId, newDescription);
 
       expect(result).toEqual({
-        error: 'Quiz ID does not refer to a valid quiz'
+        error: 'quiz ID does not refer to a valid quiz'
       });
     });
   });
 
   describe('3. Unsuccessful description update - TESTING MISSMATCHED QUIZID', () => {
-    test('1. returns an error when Quiz ID does not refer to a quiz that this user owns', () => {
+    test('1. returns an error when quiz ID does not refer to a quiz that this user owns', () => {
       const authUserId = 0;
       const quizId = 1;
       const newDescription = 'Updated description';
@@ -350,7 +405,7 @@ describe('adminQuizDescriptionUpdate Tests', () => {
       const result = adminQuizDescriptionUpdate(authUserId, quizId, newDescription);
 
       expect(result).toEqual({
-        error: 'Quiz ID does not refer to a quiz that this user owns'
+        error: 'quiz ID does not refer to a quiz that this user owns'
       });
     });
   });
@@ -364,13 +419,13 @@ describe('adminQuizDescriptionUpdate Tests', () => {
       const result = adminQuizDescriptionUpdate(authUserId, quizId, newDescription);
 
       expect(result).toEqual({
-        error: 'AuthUserId is not a valid user'
+        error: 'authUserId is not a valid user'
       });
     });
   });
 
   describe('5. Unsuccessful description update - TESTING DESCRIPTION LENGTH', () => {
-    test('1. returns an error when Description is more than 100 characters in length', () => {
+    test('1. returns an error when Description must be under 100 characters', () => {
       const authUserId = 0;
       const quizId = 0;
       const newDescription = 'This is a description that is more than 100 characters long. It should trigger an error. ?!@ #$& *%)_@ ;-))';
@@ -378,13 +433,13 @@ describe('adminQuizDescriptionUpdate Tests', () => {
       const result = adminQuizDescriptionUpdate(authUserId, quizId, newDescription);
 
       expect(result).toEqual({
-        error: 'Description is more than 100 characters in length'
+        error: 'Description must be under 100 characters'
       });
     });
   });
 
   describe('6. Successful timeLastEdited description update - TESTING TIME LAST UPDATED', () => {
-    test('1. returns an error when Description is more than 100 characters in length', () => {
+    test('1. returns an error when Description must be under 100 characters', () => {
       const authUserId = 0;
       const quizId = 0;
       const newDescription = 'Updated description';
@@ -424,7 +479,7 @@ describe('adminQuizNameUpdate Tests', () => {
   });
 
   describe('2. Unsuccessful Name update - TESTING QUIZID', () => {
-    test('1. returns an error when Quiz ID does not refer to a valid quiz', () => {
+    test('1. returns an error when quiz ID does not refer to a valid quiz', () => {
       const authUserId = 0;
       const quizId = -9;
       const newName = 'Quiz 1 Updated';
@@ -432,13 +487,13 @@ describe('adminQuizNameUpdate Tests', () => {
       const result = adminQuizNameUpdate(authUserId, quizId, newName);
 
       expect(result).toEqual({
-        error: 'Quiz ID does not refer to a valid quiz'
+        error: 'quiz ID does not refer to a valid quiz'
       });
     });
   });
 
   describe('3. Unsuccessful name update - TESTING MISSMATCHED QUIZID', () => {
-    test('1. returns an error when Quiz ID does not refer to a quiz that this user owns', () => {
+    test('1. returns an error when quiz ID does not refer to a quiz that this user owns', () => {
       const authUserId = 0;
       const quizId = 2;
       const newName = 'Quiz 1 Updated';
@@ -446,7 +501,7 @@ describe('adminQuizNameUpdate Tests', () => {
       const result = adminQuizNameUpdate(authUserId, quizId, newName);
 
       expect(result).toEqual({
-        error: 'Quiz ID does not refer to a quiz that this user owns'
+        error: 'quiz ID does not refer to a quiz that this user owns'
       });
     });
   });
@@ -460,7 +515,7 @@ describe('adminQuizNameUpdate Tests', () => {
       const result = adminQuizNameUpdate(authUserId, quizId, newName);
 
       expect(result).toEqual({
-        error: 'AuthUserId is not a valid user'
+        error: 'authUserId is not a valid user'
       });
     });
   });
@@ -496,7 +551,7 @@ describe('adminQuizNameUpdate Tests', () => {
       const result = adminQuizNameUpdate(0, 0, 'Quiz 2');
 
       expect(result).toEqual({
-        error: 'You have already used this name'
+        error: 'Quiz name is already in use'
       });
     });
   });
@@ -514,3 +569,13 @@ describe('adminQuizNameUpdate Tests', () => {
     });
   });
 });
+
+/* kelly will do soon
+describe('General tests of all functions interactions', () => {
+  beforeEach(() => {
+    authUserId = adminAuthRegister('JohnSmith@gmail.com', 'password123', 'John', 'Smith').authUserId;
+  });
+
+  
+});
+*/
