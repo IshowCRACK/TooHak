@@ -8,7 +8,7 @@ test('Test successful clear', () => {
 	clear();
 	expect(getData()).toStrictEqual({
 		users: [],
-		quizes: [],
+		quizzes: [],
 	});
 });
   

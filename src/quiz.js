@@ -26,9 +26,9 @@ function adminQuizDescriptionUpdate(authUserId_target, quizId_target, descriptio
       }
   
     let quiz = null;
-    for (let i = 0; i < store.quizes.length; i++) {
-      if (store.quizes[i].quizId === quizId_target) {
-        quiz = store.quizes[i];
+    for (let i = 0; i < store.quizzes.length; i++) {
+      if (store.quizzes[i].quizId === quizId_target) {
+        quiz = store.quizzes[i];
         break;
       }
     }
@@ -38,8 +38,8 @@ function adminQuizDescriptionUpdate(authUserId_target, quizId_target, descriptio
       }
       
     let userOwnsQuiz = false;
-    for (let i = 0; i < store.quizes.length; i++) {
-        if (store.quizes[i].quizId === quizId_target && store.quizes[i].adminQuizId === authUserId_target) {
+    for (let i = 0; i < store.quizzes.length; i++) {
+        if (store.quizzes[i].quizId === quizId_target && store.quizzes[i].adminQuizId === authUserId_target) {
             userOwnsQuiz = true;
             break;
         }
@@ -83,10 +83,10 @@ function adminQuizRemove(authUserId, quizId) {
 		return { error: 'Quiz ID does not refer to a quiz that this user own'};
 	}
 
-  const length = data.quizes.length
+  const length = data.quizzes.length
   for (let i = 0; i < length; i++) {
-    if (data.quizes[i].quizId === quizId) {
-      data.quizes.splice(i,1);
+    if (data.quizzes[i].quizId === quizId) {
+      data.quizzes.splice(i,1);
       break;
     }
   }
@@ -134,8 +134,8 @@ function adminQuizCreate( authUserId, name, description ) {
 
 	let maxID = 0;
 
-	if(data.quizes.length !== 0) {
-		for (let quiz of data.quizes) {
+	if(data.quizzes.length !== 0) {
+		for (let quiz of data.quizzes) {
 			if (quiz.quizId > maxID) {
 				maxID = quiz.quizId;
 			}
@@ -143,7 +143,7 @@ function adminQuizCreate( authUserId, name, description ) {
 		maxID = maxID+1;
 	}
 	
-	data.quizes.push({
+	data.quizzes.push({
 		quizId: maxID,
 		adminQuizId: authUserId,
 		name: name,
@@ -175,7 +175,7 @@ function adminQuizList(authUserId) {
     };
     
     // check all quizzes to see if its creater matches authUserId
-    for (const quiz of data.quizes) {
+    for (const quiz of data.quizzes) {
         if (quiz.adminQuizId === authUserId) {
             output.quizzes.push({
                 quizId: quiz.quizId,
@@ -211,9 +211,9 @@ function adminQuizNameUpdate (authUserId_target, quizId_target, name_updated) {
       }
   
     let quiz = null;
-    for (let i = 0; i < store.quizes.length; i++) {
-      if (store.quizes[i].quizId === quizId_target) {
-        quiz = store.quizes[i];
+    for (let i = 0; i < store.quizzes.length; i++) {
+      if (store.quizzes[i].quizId === quizId_target) {
+        quiz = store.quizzes[i];
         break;
       }
     }
@@ -223,8 +223,8 @@ function adminQuizNameUpdate (authUserId_target, quizId_target, name_updated) {
     }
       
     let userOwnsQuiz = false;
-    for (let i = 0; i < store.quizes.length; i++) {
-        if (store.quizes[i].quizId === quizId_target && store.quizes[i].adminQuizId === authUserId_target) {
+    for (let i = 0; i < store.quizzes.length; i++) {
+        if (store.quizzes[i].quizId === quizId_target && store.quizzes[i].adminQuizId === authUserId_target) {
             userOwnsQuiz = true;
             break;
         }
@@ -242,8 +242,8 @@ function adminQuizNameUpdate (authUserId_target, quizId_target, name_updated) {
     }
     
     let userSameQuizName = false;
-    for (let i = 0; i < store.quizes.length; i++) {
-        if (store.quizes[i].name === name_updated && store.quizes[i].adminQuizId === authUserId_target) {
+    for (let i = 0; i < store.quizzes.length; i++) {
+        if (store.quizzes[i].name === name_updated && store.quizzes[i].adminQuizId === authUserId_target) {
             userSameQuizName = true;
             break;
         }
@@ -282,7 +282,7 @@ function adminQuizInfo(authUserId, quizId) {
     }
 
     // If no errors
-    for (const quiz of data.quizes) {
+    for (const quiz of data.quizzes) {
         if (quiz.quizId === quizId) {
             return {
                 quizId: quiz.quizId,
@@ -314,7 +314,7 @@ function adminQuizInfo(authUserId, quizId) {
 function checkQuizIdValid(quizId) {
     const data = getData();
 
-    for (const quiz of data.quizes) {
+    for (const quiz of data.quizzes) {
         if (quiz.quizId === quizId) {
             return true;
         }
@@ -350,7 +350,7 @@ function checkAuthUserId(authUserId) {
  */
 function checkQuizAndUserIdValid(quizId, authUserId) {
     const data = getData();
-    for (const quiz of data.quizes) {
+    for (const quiz of data.quizzes) {
         if (quiz.quizId === quizId && quiz.adminQuizId === authUserId) {
             return true;
         }

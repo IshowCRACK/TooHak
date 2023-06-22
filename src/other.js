@@ -10,7 +10,7 @@ function clear() {
 	
 	// Reset user and quizzes array by making them empty
 	data.users = [];
-	data.quizes = [];
+	data.quizzes = [];
 
 	// Sets the new empty data object
 	setData(data);
