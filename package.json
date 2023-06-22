@@ -10,6 +10,11 @@
         "@babel/cli": "^7.22.5",
         "@babel/core": "^7.22.5",
         "@babel/preset-env": "^7.22.5",
+        "eslint": "^8.43.0",
+        "eslint-config-standard": "^17.1.0",
+        "eslint-plugin-import": "^2.27.5",
+        "eslint-plugin-n": "^16.0.0",
+        "eslint-plugin-promise": "^6.1.1",
         "jest": "^28.1.0"
     },
     "type": "module",
