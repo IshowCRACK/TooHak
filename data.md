@@ -8,7 +8,6 @@
         password: string
         numSuccessLogins: integer
         numFailedPasswordsSinceLastLogin: integer
-        failNow: integer
     
     Quizzes
         quizId: integer
@@ -22,28 +21,23 @@
 let data = {
     users: 
         [
-            {
-                authUserId: 1
-                nameFirst: 'Ijlal', 
-                nameLast: 'idk',
-                email: 'something@gmail.com',
-                password: 'password',
-                numSuccessLogins: 1,
-                numFailedPasswordsSinceLastLogin: 0,
-                failNow: 0
-            }
+            authUserId: 1
+            nameFirst: 'Ijlal', 
+            nameLast: 'idk',
+            email: 'something@gmail.com',
+            password: 'password',
+            numSuccessLogins: 1,
+            numFailedPasswordsSinceLastLogin: 0,
         ],
 
     quizzes: 
         [
-            {
-                quizId: 1,
-                adminQuizId: 1,
-                name: 'My Quiz',
-                timeCreated: 1683125870,
-                timeLastEdited: 1683125871,
-                description: 'quiz about me'
-            }
+            quizId: 1,
+            adminQuizId: 1,
+            name: 'My Quiz',
+            timeCreated: 1683125870,
+            timeLastEdited: 1683125871,
+            description: 'quiz about me'
         ]
 }
 ```
