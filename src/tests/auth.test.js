@@ -166,7 +166,7 @@ describe('adminUserDetails test', () => {
           name: 'Pop Smoke',
           email: 'g1oofy.email@gmail.com',
           numSuccessfulLogins: 2,
-          numFailedPasswordsSinceLastLogin: 3
+          numFailedPasswordsSinceLastLogin: 0,
         }
       });
     });
@@ -189,7 +189,7 @@ describe('adminUserDetails test', () => {
           name: 'Joh nny-Bone Jo\'nes',
           email: 'good.ail@gmail.com',
           numSuccessfulLogins: 2,
-          numFailedPasswordsSinceLastLogin: 5
+          numFailedPasswordsSinceLastLogin: 0
         }
       });
 
@@ -203,7 +203,7 @@ describe('adminUserDetails test', () => {
           name: 'Joh nny-Bone Jo\'nes',
           email: 'gooemail@gmail.com',
           numSuccessfulLogins: 2,
-          numFailedPasswordsSinceLastLogin: 2
+          numFailedPasswordsSinceLastLogin: 0
         }
       });
 
@@ -223,4 +223,22 @@ describe('adminUserDetails test', () => {
       });
     });
   });
+  test('User successfully registers but unable to login', () => {
+    const authUserId = adminAuthRegister('goo4email@gmail.com','Password121233','Joh nny-Bone','Jo\'nes').authUserId;
+    adminAuthLogin('goo4email@gmail.com','Passsword123');
+    adminAuthLogin('goo4email@gmail.com','Passsword123');
+    adminAuthLogin('goo4email@gmail.com','Passsword123');
+    adminAuthLogin('goo4email@gmail.com','Passsword123');
+    let userDetails = adminUserDetails(authUserId);
+    expect(userDetails).toMatchObject({
+      user: {
+        userId: 0,    
+        name: `Joh nny-Bone Jo\'nes`,    
+        email: `goo4email@gmail.com`,    
+        numSuccessfulLogins: 1,    
+        numFailedPasswordsSinceLastLogin: 4,
+      }
+    });
+  });
+
 });
