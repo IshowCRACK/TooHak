@@ -1,11 +1,11 @@
 let data = {
   users: [],
-  quizzes: [],  
+  quizzes: []
 };
 
 /**
   * Getter function to retrieve the data store object
-  * 
+  *
   * @returns {{data: {
   *   users: Array<{
   *     authUserId: integer,
@@ -16,7 +16,7 @@ let data = {
   *     numSuccessLogins: integer,
   *     numFailedPasswordsSinceLastLogin: integer,
   *     failNow: integer
-  *   }>, 
+  *   }>,
   *   quizzes: Array<{
   *     quizId: number,
   *     adminQuizId: number,
@@ -26,13 +26,13 @@ let data = {
   *   }>
   * }}}
 */
-function getData() {
+function getData () {
   return data;
 }
 
 /**
   * Setter function to retrieve the data store object
-  * 
+  *
   * @param {{data: {
   *   users: Array<{
   *     authUserId: integer,
@@ -43,7 +43,7 @@ function getData() {
   *     numSuccessLogins: integer,
   *     numFailedPasswordsSinceLastLogin: integer,
   *     failNow: integer
-  *   }>, 
+  *   }>,
   *   quizzes: Array<{
   *     quizId: number,
   *     adminQuizId: number,
@@ -53,7 +53,7 @@ function getData() {
   *   }>
   * }}} newData
 */
-function setData(newData) {
+function setData (newData) {
   data = newData;
 }
 
