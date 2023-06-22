@@ -8,7 +8,6 @@
     // createdQuizzes: array of integers
     // numSuccessLogins: integer,
     // numFailedPasswordsSinceLastLogin: integer,
-    // failNow: integer,
     
     // Quizes
     // quizId: integer
@@ -30,7 +29,8 @@ let data = {
                 nameLast: 'idk',
                 email: 'something@gmail.com',
                 password: 'password',
-            }
+                numSuccessLogins: 1,
+		        numFailedPasswordsSinceLastLogin: 0,
     ],
 
     quizes : [
