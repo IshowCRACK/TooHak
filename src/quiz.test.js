@@ -321,12 +321,14 @@ describe.skip('adminQuizInfo', () => {
 });
 
 describe('adminQuizDescriptionUpdate Tests', () => {
-  
+    const timeBufferMillisecond = 1000;
+    let quizEditedTime;
     beforeEach(() => {
       adminAuthRegister('something@gmail.com', 'password1', 'Ijlal', 'Khan');
       adminAuthRegister('joemama@gmail.com', 'password2', 'joe mama', 'mama joe');
       adminQuizCreate(0, 'Quiz 1', 'Description 1');
       adminQuizCreate(1, 'Quiz 2', 'Description 2');
+      quizEditedTime = Math.round(Date.now()/ 1000);
     });
   
     describe('1. Successful description update', () => {
@@ -396,17 +398,34 @@ describe('adminQuizDescriptionUpdate Tests', () => {
         });
       });
     });
+
+    describe('6. Successful timeLastEdited description update - TESTING TIME LAST UPDATED', () => {
+      test('1. returns an error when Description is more than 100 characters in length', () => {
+        const authUserId = 0;
+        const quizId = 0;
+        const newDescription = 'Updated description';
+        const result = adminQuizDescriptionUpdate(authUserId, quizId, newDescription);
+        const getQuizinfo = adminQuizInfo(authUserId,quizId);
+        expect(getQuizinfo.timeLastEdited).toBeGreaterThanOrEqual(quizEditedTime);
+        expect(getQuizinfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime + timeBufferMillisecond);
+        expect(result).toEqual({});
+      });
+    });
 });
 
 //adminQuizNameUpdate
 describe('adminQuizNameUpdate Tests', () => {
-  
+  const timeBufferMillisecond = 1000;
+  let quizEditedTime;
+
   beforeEach(() => {
     adminAuthRegister('something@gmail.com', 'password1', 'Ijlal', 'Khan');
     adminAuthRegister('joemama@gmail.com', 'password2', 'joe mama', 'mama joe');
     adminQuizCreate(0, 'Quiz 1', 'Description 1');
     adminQuizCreate(0, 'Quiz 2', 'Description 2');
     adminQuizCreate(1, 'Quiz 3', 'Description 3');
+    quizEditedTime = Math.round(Date.now()/ 1000);
+
 
   });
 
@@ -501,6 +520,19 @@ describe('adminQuizNameUpdate Tests', () => {
       expect(result).toEqual({
         error: 'You have already used this name',
       });
+    });
+  });
+
+  describe('1. Successful timeLastEdited Name update', () => {
+    test('1. updates the name of an existing quiz', () => {
+      const authUserId = 0;
+      const quizId = 0;
+      const newName = 'Quiz 1 Updated';
+      const result = adminQuizNameUpdate(authUserId, quizId, newName);
+      const getQuizinfo = adminQuizInfo(authUserId,quizId);
+      expect(getQuizinfo.timeLastEdited).toBeGreaterThanOrEqual(quizEditedTime);
+      expect(getQuizinfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime + timeBufferMillisecond);
+      expect(result).toEqual({});
     });
   });
 });

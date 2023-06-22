@@ -46,7 +46,7 @@ function adminQuizDescriptionUpdate(authUserId_target, quizId_target, descriptio
     }
   
     quiz.description = description_updated;
-  
+    quiz.timeLastEdited = Math.round(Date.now()/ 1000);
     setData(store);
     return {};
   }
@@ -269,7 +269,6 @@ function adminQuizNameUpdate (authUserId_target, quizId_target, name_updated) {
       }
     }
     if (!user) {
-        console.log('here')
         return { error: 'AuthUserId is not a valid user' };
       }
   
@@ -316,6 +315,7 @@ function adminQuizNameUpdate (authUserId_target, quizId_target, name_updated) {
     }
 
     quiz.name = name_updated;
+    quiz.timeLastEdited = Math.round(Date.now()/ 1000);
     setData(store);
     return {};
 }

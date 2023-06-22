@@ -30,10 +30,7 @@ let data = {
                 nameLast: 'idk',
                 email: 'something@gmail.com',
                 password: 'password',
-                numSuccessLogins: 1,
-		        numFailedPasswordsSinceLastLogin: 0,
-		        failNow: 0,
-                createdQuizzes: [quizId1, ...]
+            }
     ],
 
     quizes : [
