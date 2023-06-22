@@ -58,37 +58,41 @@ function adminQuizDescriptionUpdate (authUserId, quizId, description) {
 }
 
 /**
-  *Given a particular quiz, permanently remove the quiz
+  * Given a particular quiz, permanently remove the quiz
   *
-  *@param {number} authUserId - A unique Id for the user who owns the quiz
+  * @param {number} authUserId - A unique Id for the user who owns the quiz
   * @param {number} quizId - A unique Id for the specified quiz
   *
   * @returns {{} | {error: string}} - Returns empty object if valid
  */
 function adminQuizRemove (authUserId, quizId) {
   const data = getData();
+
   // AuthUserId is not a valid user
-  if (checkAuthUserId(authUserId) === false) {
+  if (!checkAuthUserId(authUserId)) {
     return { error: 'authUserId is not a valid user' };
   }
+  
   // Quiz ID does not refer to a valid quiz
-  if (checkQuizIdValid(quizId) === false) {
+  if (!checkQuizIdValid(quizId)) {
     return { error: 'quiz ID does not refer to a valid quiz' };
   }
+
   // Quiz ID does not refer to a quiz that this user owns
-  if (checkQuizAndUserIdValid(quizId, authUserId) === false) {
-    return { error: 'quiz ID does not refer to a quiz that this user owns' };
+  if (!checkQuizAndUserIdValid(quizId, authUserId)) {
+    return { error: 'quiz ID does not refer to a quiz that this user own' };
   }
 
   const length = data.quizzes.length;
-  for (let i = 0; i < length; i++) {
-    if (data.quizzes[i].quizId === quizId) {
-      data.quizzes.splice(i, 1);
+  for (let index = 0; index < length; index++) {
+    if (data.quizzes[index].quizId === quizId) {
+      data.quizzes.splice(index, 1);
       break;
     }
   }
 
   setData(data);
+  
   return {};
 }
 
@@ -103,27 +107,34 @@ function adminQuizRemove (authUserId, quizId) {
   * @returns {{quizId: number} | {error: string}} - Returns an object containing the quizId
  */
 function adminQuizCreate (authUserId, name, description) {
+
   // check valid userID
   if (!checkAuthUserId(authUserId)) {
     return { error: 'authUserId is not a valid user' };
   }
+
   // check name length
-  if ((name === null) || (name === '')) {
+  if (name === null || name === '') {
     return { error: 'A name must be entered' };
   }
-  if ((name.length < 3) || (name.length > 30)) {
+
+  if (name.length < 3 || name.length > 30) {
     return { error: 'Name must be between 3 and 30 characters' };
   }
+
   // check name composition (alphanumeric and spaces)
-  if (/^[a-zA-Z0-9\s]+$/.test(name) === false) {
+  if (!checkAlphanumeric(name)) {
     return { error: 'Must use only alphanumeric characters or spaces in name' };
-  }
+  };
+   
+
   // check description length
   if (description.length > 100) {
     return { error: 'Description must be under 100 characters' };
   }
+
   // check if quiz name already in use by this user
-  if (checkQuizNameUsed(authUserId, name) === true) {
+  if (checkQuizNameUsed(authUserId, name)) {
     return { error: 'Quiz name is already in use' };
   }
 
@@ -143,13 +154,14 @@ function adminQuizCreate (authUserId, name, description) {
   data.quizzes.push({
     quizId: maxID,
     adminQuizId: authUserId,
-    name,
+    name: name,
     timeCreated: Math.round(Date.now() / 1000),
     timeLastEdited: Math.round(Date.now() / 1000),
-    description
+    description: description
   });
 
   setData(data);
+
   return {
     quizId: maxID
   };
@@ -376,6 +388,21 @@ function checkQuizNameUsed (authUserId, quizName) {
     }
   }
   return false;
+}
+
+/**
+  * Check if the name is only made up of alphanumbers and spaces
+  *
+  * @param {string} name - The name u are checking
+  *
+  * @returns {boolean} - Returns false if not made up of alphanumbers and spaces, else true
+ */
+
+function checkAlphanumeric(name) {
+  if (!/^[a-zA-Z0-9\s]+$/.test(name)) {
+    return false;
+  }
+  return true;
 }
 
 export { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo };
