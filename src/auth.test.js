@@ -125,10 +125,10 @@ describe ('authLogin Test', () => {
 		});
 	});
 });
-/*
+
 describe ('authAdminDetails Test', () => {
 	
-*/	describe ('1. Successful details', () => {
+	describe ('1. Successful details', () => {
 		test('1. 1 user who has logged in without fail, (register counts as 1 successful login)', () => {
 			let authUserId = adminAuthRegister('goofy.email@gmail.com','Password123','Pop','Smoke');
 			let login1 = adminAuthLogin('goofy.email@gmail.com','Password123');
@@ -157,7 +157,7 @@ describe ('authAdminDetails Test', () => {
 					name: `Pop Smoke`,    
 					email: `g1oofy.email@gmail.com`,    
 					numSuccessfulLogins: 2,    
-					numFailedPasswordsSinceLastLogin: 3,
+					numFailedPasswordsSinceLastLogin: 0,
 				}
 			});
 		});
@@ -167,12 +167,12 @@ describe ('authAdminDetails Test', () => {
 			let authUserId2 = adminAuthRegister('gooemail@gmail.com','Password121233','Joh nny-Bone','Jo\'nes');
 			let authUserId3 = adminAuthRegister('gdemail@gmail.com','Password112315g23','Joh nny-Bone','Jo\'nes');
 
-			let login1_user1 = adminAuthLogin('good.ail@gmail.com','Pas13ord123','Joh nny-Bone','Jo\'nes');
-			let login2_user1 = adminAuthLogin('good.ail@gmail.com','Pas13ord123','Joh nny-Bone','Jo\'nes');
-			let login3_user1 = adminAuthLogin('good.ail@gmail.com','Pas13ord123','Joh nny-Bone','Jo\'nes');
-			let login4_user1 = adminAuthLogin('good.ail@gmail.com','Pas13ord123','Joh nny-Bone','Jo\'nes');
-			let login5_user1 = adminAuthLogin('good.ail@gmail.com','Pas13ord123','Joh nny-Bone','Jo\'nes');
-			let login6_user1 = adminAuthLogin('good.ail@gmail.com','Password123','Joh nny-Bone','Jo\'nes');
+			let login1_user1 = adminAuthLogin('good.ail@gmail.com','Pas13ord123');
+			let login2_user1 = adminAuthLogin('good.ail@gmail.com','Pas13ord123');
+			let login3_user1 = adminAuthLogin('good.ail@gmail.com','Pas13ord123');
+			let login4_user1 = adminAuthLogin('good.ail@gmail.com','Pas13ord123');
+			let login5_user1 = adminAuthLogin('good.ail@gmail.com','Pas13ord123');
+			let login6_user1 = adminAuthLogin('good.ail@gmail.com','Password123');
 			let userDetails = adminUserDetails(login6_user1.authUserId);
 			expect(userDetails).toMatchObject({
 				user: {
@@ -180,12 +180,12 @@ describe ('authAdminDetails Test', () => {
 					name: `Joh nny-Bone Jo\'nes`,    
 					email: `good.ail@gmail.com`,    
 					numSuccessfulLogins: 2,    
-					numFailedPasswordsSinceLastLogin: 5,
+					numFailedPasswordsSinceLastLogin: 0,
 				}
 			});
-			let login1_user2 = adminAuthLogin('gooemail@gmail.com','Passsword121233','Joh nny-Bone','Jo\'nes');
-			let login2_user2 = adminAuthLogin('gooemail@gmail.com','Passwosrd121233','Joh nny-Bone','Jo\'nes');
-			let login3_user2 = adminAuthLogin('gooemail@gmail.com','Password121233','Joh nny-Bone','Jo\'nes');
+			let login1_user2 = adminAuthLogin('gooemail@gmail.com','Passsword121233');
+			let login2_user2 = adminAuthLogin('gooemail@gmail.com','Passwosrd121233');
+			let login3_user2 = adminAuthLogin('gooemail@gmail.com','Password121233');
 			let userDetails2 = adminUserDetails(login3_user2.authUserId);
 			expect(userDetails2).toMatchObject({
 				user: {
@@ -193,13 +193,13 @@ describe ('authAdminDetails Test', () => {
 					name: `Joh nny-Bone Jo\'nes`,    
 					email: `gooemail@gmail.com`,    
 					numSuccessfulLogins: 2,    
-					numFailedPasswordsSinceLastLogin: 2,
+					numFailedPasswordsSinceLastLogin: 0,
 				}
 			});
-			let login1_user3 = adminAuthLogin('gdemail@gmail.com','Passwrd112315g23','Joh nny-Bone','Jo\'nes');
-			let login2_user3 = adminAuthLogin('gdemail@gmail.com','Password112315g23','Joh nny-Bone','Jo\'nes');
-			let login3_user3 = adminAuthLogin('gdemail@gmail.com','Password112315g23','Joh nny-Bone','Jo\'nes');
-			let login4_user3 = adminAuthLogin('gdemail@gmail.com','Password112315g23','Joh nny-Bone','Jo\'nes');
+			let login1_user3 = adminAuthLogin('gdemail@gmail.com','Passwrd112315g23');
+			let login2_user3 = adminAuthLogin('gdemail@gmail.com','Password112315g23');
+			let login3_user3 = adminAuthLogin('gdemail@gmail.com','Password112315g23');
+			let login4_user3 = adminAuthLogin('gdemail@gmail.com','Password112315g23');
 			let userDetails3 = adminUserDetails(login2_user3.authUserId);
 			expect(userDetails3).toMatchObject({
 				user: {
@@ -211,6 +211,23 @@ describe ('authAdminDetails Test', () => {
 				}
 			});
 		});
+		test('4. User successfully registers but unable to login', () => {
+			let authUserId = adminAuthRegister('goo4email@gmail.com','Password121233','Joh nny-Bone','Jo\'nes');
+			let login1_user1 = adminAuthLogin('goo4email@gmail.com','Passsword123');
+			let login2_user1 = adminAuthLogin('goo4email@gmail.com','Passsword123');
+			let login3_user1 = adminAuthLogin('goo4email@gmail.com','Passsword123');
+			let login4_user1 = adminAuthLogin('goo4email@gmail.com','Passsword123');
+			let userDetails = adminUserDetails(authUserId.authUserId);
+			expect(userDetails).toMatchObject({
+				user: {
+					userId: 0,    
+					name: `Joh nny-Bone Jo\'nes`,    
+					email: `goo4email@gmail.com`,    
+					numSuccessfulLogins: 1,    
+					numFailedPasswordsSinceLastLogin: 4,
+				}
+			});
+		});
 	});
 	describe ('2. Unsuccessful details', () => {
 		test('1. user does not exists)', () => {
@@ -219,7 +236,6 @@ describe ('authAdminDetails Test', () => {
 			expect(adminUserDetails(3)).toStrictEqual({ error: 'User does not exists'});		
 		});
 	});
-
-
+});
 
 
