@@ -106,27 +106,34 @@ function adminQuizRemove (authUserId, quizId) {
   * @returns {{quizId: number} | {error: string}} - Returns an object containing the quizId
  */
 function adminQuizCreate (authUserId, name, description) {
+
   // check valid userID
   if (!checkAuthUserId(authUserId)) {
     return { error: 'User Does Not Exist' };
   }
+
   // check name length
-  if ((name === null) || (name === '')) {
+  if (name === null || name === '') {
     return { error: 'A name must be entered' };
   }
-  if ((name.length < 3) || (name.length > 30)) {
+
+  if (name.length < 3 || name.length > 30) {
     return { error: 'Name must be between 3 and 30 characters' };
   }
+
   // check name composition (alphanumeric and spaces)
-  if (/^[a-zA-Z0-9\s]+$/.test(name) === false) {
+  if (!checkAlphanumeric(name)) {
     return { error: 'Must use only alphanumeric characters or spaces in name' };
-  }
+  };
+   
+
   // check description length
   if (description.length > 100) {
     return { error: 'Description must be under 100 characters' };
   }
+
   // check if quiz name already in use by this user
-  if (checkQuizNameUsed(authUserId, name) === true) {
+  if (checkQuizNameUsed(authUserId, name)) {
     return { error: 'Quiz name already in use' };
   }
 
@@ -146,13 +153,14 @@ function adminQuizCreate (authUserId, name, description) {
   data.quizzes.push({
     quizId: maxID,
     adminQuizId: authUserId,
-    name,
+    name: name,
     timeCreated: Math.round(Date.now() / 1000),
     timeLastEdited: Math.round(Date.now() / 1000),
-    description
+    description: description
   });
 
   setData(data);
+
   return {
     quizId: maxID
   };
@@ -379,6 +387,21 @@ function checkQuizNameUsed (authUserId, quizName) {
     }
   }
   return false;
+}
+
+/**
+  * Check if the name is only made up of alphanumbers and spaces
+  *
+  * @param {string} name - The name u are checking
+  *
+  * @returns {boolean} - Returns false if not made up of alphanumbers and spaces, else true
+ */
+
+function checkAlphanumeric(name) {
+  if (!/^[a-zA-Z0-9\s]+$/.test(name)) {
+    return false;
+  }
+  return true;
 }
 
 export { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo };
