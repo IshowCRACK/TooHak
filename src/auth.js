@@ -100,7 +100,6 @@ function adminAuthRegister(email, password, nameFirst, nameLast) {
 		authUserId: userID,
 		numSuccessLogins: 1,
 		numFailedPasswordsSinceLastLogin: 0,
-		failNow: 0,
 	});
 	
 	setData(data);
@@ -166,16 +165,9 @@ function adminAuthLogin( email, password ) {
 				// add successful logins for all times
 				let total = user.numSuccessLogins + 1;
 				user.numSuccessLogins = total;
-				
-				// If user messed up in log in prior to successful login
-				if (user.failNow > 0) {	
-					user.numFailedPasswordsSinceLastLogin = user.failNow;
-					user.failNow = 0;
-				
-					// User didnt fail to login this instance
-				} else if (user.failNow === 0) {
-					user.numFailedPasswordsSinceLastLogin = 0;
-				}
+
+				// If user successfully logs in
+				user.numFailedPasswordsSinceLastLogin = 0; 
 				setData(data);
 				return {
 					authUserId: user.authUserId
@@ -183,7 +175,7 @@ function adminAuthLogin( email, password ) {
 			}
 			// Add on to how many times user has failed before a successful login 
 			else {				
-				user.failNow = user.failNow + 1;
+				user.numFailedPasswordsSinceLastLogin++;
 				setData(data);
 			}
 		}		
