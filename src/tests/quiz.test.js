@@ -1,7 +1,7 @@
-import { adminAuthLogin, adminAuthRegister, adminUserDetails } from './auth.js';
+import { adminAuthLogin, adminAuthRegister, adminUserDetails } from '../auth.js';
 import { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizCreate,
-  adminQuizList, adminQuizNameUpdate,adminQuizInfo} from './quiz.js';
-import { clear } from './other.js'
+  adminQuizList, adminQuizNameUpdate,adminQuizInfo} from '../quiz.js';
+import { clear } from '../other.js'
 
 
 beforeEach(() => {
