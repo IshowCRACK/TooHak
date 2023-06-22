@@ -58,9 +58,9 @@ function adminQuizDescriptionUpdate (authUserId, quizId, description) {
 }
 
 /**
-  * Given a particular quiz, permanently remove the quiz
+  *Given a particular quiz, permanently remove the quiz
   *
-  * @param {number} authUserId - A unique Id for the user who owns the quiz
+  *@param {number} authUserId - A unique Id for the user who owns the quiz
   * @param {number} quizId - A unique Id for the specified quiz
   *
   * @returns {{} | {error: string}} - Returns empty object if valid
@@ -68,30 +68,27 @@ function adminQuizDescriptionUpdate (authUserId, quizId, description) {
 function adminQuizRemove (authUserId, quizId) {
   const data = getData();
   // AuthUserId is not a valid user
-  if (!checkAuthUserId(authUserId)) {
+  if (checkAuthUserId(authUserId) === false) {
     return { error: 'User Does Not Exist' };
   }
-
   // Quiz ID does not refer to a valid quiz
-  if (!checkQuizIdValid(quizId)) {
+  if (checkQuizIdValid(quizId) === false) {
     return { error: 'Invalid QuizId' };
   }
-
   // Quiz ID does not refer to a quiz that this user owns
-  if (!checkQuizAndUserIdValid(quizId, authUserId)) {
+  if (checkQuizAndUserIdValid(quizId, authUserId) === false) {
     return { error: 'Quiz ID does not refer to a quiz that this user own' };
   }
 
   const length = data.quizzes.length;
-  for (let index = 0; index < length; index++) {
-    if (data.quizzes[index].quizId === quizId) {
-      data.quizzes.splice(index, 1);
+  for (let i = 0; i < length; i++) {
+    if (data.quizzes[i].quizId === quizId) {
+      data.quizzes.splice(i, 1);
       break;
     }
   }
 
   setData(data);
-  
   return {};
 }
 
