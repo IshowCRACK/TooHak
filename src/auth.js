@@ -1,5 +1,5 @@
 
-import {getData, setData} from './dataStore.js';
+import { getData, setData } from './dataStore.js';
 import validator from 'validator';
 
 /**
@@ -110,7 +110,6 @@ function adminAuthRegister(email, password, nameFirst, nameLast) {
 	}
 } 
 
-//////////////////////////////////////////////////////////////
 /**
   * Function takes the UserId and returns the users details
 	* If UserId is invalid it returns an error
