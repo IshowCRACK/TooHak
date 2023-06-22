@@ -6,6 +6,9 @@
     // email: string
     // password: string
     // createdQuizzes: array of integers
+    // numSuccessLogins: integer,
+    // numFailedPasswordsSinceLastLogin: integer,
+    // failNow: integer,
     
     // Quizes
     // quizId: integer
@@ -15,10 +18,13 @@
     // timeLastEdited: integer
     // description: string
 
-let data = {
+    // users & quizes are no longer arrays of objects and now are only 
+    // arrays, since it was causing problems storing data initally.
 
+
+let data = {
+    
     users : [
-             {
                 authUserId: 1
                 nameFirst: 'Ijlal', 
                 nameLast: 'idk',
@@ -28,14 +34,12 @@ let data = {
     ],
 
     quizes : [
-                {
                 quizId: 1,
                 adminQuizId: 1,
                 name: 'My Quiz',
                 timeCreated: 1683125870,
                 timeLastEdited: 1683125871,
                 description: 'quiz about me'
-            }
     ],
 }
 ```
