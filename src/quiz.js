@@ -72,7 +72,7 @@ function adminQuizRemove (authUserId, quizId) {
   if (!checkAuthUserId(authUserId)) {
     return { error: 'authUserId is not a valid user' };
   }
-  
+
   // Quiz ID does not refer to a valid quiz
   if (!checkQuizIdValid(quizId)) {
     return { error: 'quiz ID does not refer to a valid quiz' };
@@ -80,7 +80,7 @@ function adminQuizRemove (authUserId, quizId) {
 
   // Quiz ID does not refer to a quiz that this user owns
   if (!checkQuizAndUserIdValid(quizId, authUserId)) {
-    return { error: 'quiz ID does not refer to a quiz that this user own' };
+    return { error: 'quiz ID does not refer to a quiz that this user owns' };
   }
 
   const length = data.quizzes.length;
