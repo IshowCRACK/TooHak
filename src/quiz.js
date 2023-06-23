@@ -1,5 +1,8 @@
 import { getData, setData } from './dataStore.js';
-import { checkAuthUserIdValid } from './helper.js';
+import {
+  checkAlphanumeric, checkAuthUserIdValid, checkQuizAndUserIdValid,
+  checkQuizIdValid, checkQuizNameUsed
+} from './helper.js';
 
 /**
   * Update the description of the relevant quiz
@@ -13,7 +16,7 @@ import { checkAuthUserIdValid } from './helper.js';
 function adminQuizDescriptionUpdate (authUserId, quizId, description) {
   const data = getData();
   // AuthUserId is not a valid user
-  if (!checkAuthUserId(authUserId)) {
+  if (!checkAuthUserIdValid(authUserId)) {
     return { error: 'AuthUserId is not a valid user' };
   }
 
@@ -30,6 +33,7 @@ function adminQuizDescriptionUpdate (authUserId, quizId, description) {
   if (description.length > 100) {
     return { error: 'Description must be under 100 characters' };
   }
+
   for (const quiz of data.quizzes) {
     if (quiz.quizId === quizId) {
       quiz.description = description;
@@ -54,7 +58,7 @@ function adminQuizRemove (authUserId, quizId) {
   const data = getData();
 
   // AuthUserId is not a valid user
-  if (!checkAuthUserId(authUserId)) {
+  if (!checkAuthUserIdValid(authUserId)) {
     return { error: 'AuthUserId is not a valid user' };
   }
 
@@ -93,7 +97,7 @@ function adminQuizRemove (authUserId, quizId) {
  */
 function adminQuizCreate (authUserId, name, description) {
   // check valid userID
-  if (!checkAuthUserId(authUserId)) {
+  if (!checkAuthUserIdValid(authUserId)) {
     return { error: 'AuthUserId is not a valid user' };
   }
 
@@ -272,103 +276,6 @@ function adminQuizInfo (authUserId, quizId) {
       };
     }
   }
-
-  // This block should not logically run
-  return {
-    error: ''
-  };
-}
-
-/**
- * -------------------------------------- HELPERS FUNCTIONS-----------------------------------------------
- */
-
-/**
-  * Check if the quizId is valid and exists
-  *
-  * @param {number} quizId - The id you are checking is valid or not
-  *
-  * @returns {boolean} - Returns true if userId is valid, false otherwise
- */
-function checkQuizIdValid (quizId) {
-  const data = getData();
-
-  for (const quiz of data.quizzes) {
-    if (quiz.quizId === quizId) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-/**
-  *  Check if authUserId is valid and exists
-  *
-  * @param {number} authUserId - The specified authUserId
-  *
-  * @returns {boolean} - Returns true if authUserId is valid , otherwise, false
- */
-function checkAuthUserId (authUserId) {
-  const data = getData();
-  for (const user of data.users) {
-    if (user.authUserId === authUserId) {
-      return true;
-    }
-  }
-  return false;
-}
-
-/**
-  * Check if the user owns the specified quiz
-  *
-  * @param {number} quizId - The specified quiz
-  * @param {number} authUserId - The user who you seeing whether or not created the quiz
-  *
-  * @returns {boolean} - Returns true if user owns quiz, false otherwise
- */
-function checkQuizAndUserIdValid (quizId, authUserId) {
-  const data = getData();
-  for (const quiz of data.quizzes) {
-    if (quiz.quizId === quizId && quiz.adminQuizId === authUserId) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-/**
-  * Check if quiz name is already used in another quiz by the same user
-  *
-  * @param {number} authUserId - A unique Id for the user who owns the quiz
-  * @param {number} quizName - The specified quiz name
-  *
-  * @returns {boolean} - Returns true if quizname is already used, otherwise, false
- */
-function checkQuizNameUsed (authUserId, quizName) {
-  const list = adminQuizList(authUserId);
-  for (const quiz of list.quizzes) {
-    if (quizName === quiz.name) {
-      return true;
-    }
-  }
-  return false;
-}
-
-/**
-  * Check if the name is only made up of alphanumbers and spaces
-  *
-  * @param {string} name - The name u are checking
-  *
-  * @returns {boolean} - Returns false if not made up of alphanumbers and spaces, else true
- */
-
-function checkAlphanumeric(name) {
-  if (!/^[a-zA-Z0-9\s]+$/.test(name)) {
-    return false;
-  }
-  return true;
 }
 
 export { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo };

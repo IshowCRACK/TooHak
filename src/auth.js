@@ -1,4 +1,5 @@
 import { getData, setData } from './dataStore.js';
+import { checkName, checkPassword } from './helper.js';
 import validator from 'validator';
 
 /**
@@ -20,6 +21,7 @@ function adminAuthRegister (email, password, nameFirst, nameLast) {
       error: 'All sections should be filled'
     };
   }
+
   // checking email hasnt been used
   for (const user of data.users) {
     if (user.email === email) {
@@ -28,38 +30,47 @@ function adminAuthRegister (email, password, nameFirst, nameLast) {
       };
     }
   }
+
   // check email is valid using validator
   if (!validator.isEmail(email)) {
     return {
       error: 'Email is not valid'
     };
   }
+
   // checking first name
   if (nameFirst.length > 20 || nameFirst.length < 2) {
     return {
-      error: 'first name has to be between 2 and 20 characters'
+      error: 'First name has to be between 2 and 20 characters'
     };
-  } else if (!checkName(nameFirst)) {
+  } 
+  
+  if (!checkName(nameFirst)) {
     return {
       error: 'First name can only contain upper/lower case letters, spaces, hyphens or apostrophes'
     };
   }
+
   // checking last name
   if (nameLast.length > 20 || nameLast.length < 2) {
     return {
       error: 'Last name has to be between 2 and 20 characters'
     };
-  } else if (!checkName(nameLast)) {
+  } 
+  
+  if (!checkName(nameLast)) {
     return {
       error: 'Last name can only contain upper/lower case letters, spaces, hyphens or apostrophes'
     };
   }
+
   // checking password
   if (password.length < 8 || !checkPassword(password)) {
     return {
       error: 'Password length has to be 8 characters & needs to contain at least one number and at least one letter'
     };
   }
+
   // else if every parameter is valid push into users database
   const userID = data.users.length;
   data.users.push({
@@ -104,6 +115,7 @@ function adminUserDetails (authUserId) {
       };
     }
   }
+
   return {
     error: 'User does not exists'
   };
@@ -122,52 +134,18 @@ function adminAuthLogin (email, password) {
 
   // loop through users array from dataStore
   for (const user of data.users) {
-    if (user.email === email) {
-      if (user.password === password) {
-        // add successful logins for all times & change failed password
-        user.numSuccessLogins++;
-        user.numFailedPasswordsSinceLastLogin = 0;
-
-        setData(data);
-        return {
-          authUserId: user.authUserId
-        };
-      } else {
+    if (user.email === email && user.password === password) {
+      // add successful logins for all times & change failed password
+      user.numSuccessLogins++;
+      user.numFailedPasswordsSinceLastLogin = 0;
+      return { authUserId: user.authUserId }
+    } else {
         // Add on to how many times user has failed before a successful login
         user.numFailedPasswordsSinceLastLogin++;
-        setData(data);
-      }
     }
   }
-  return {
-    error: 'Username or Password is not valid'
-  };
-}
 
-/**
- * -------------------------------------- HELPERS FUNCTIONS-----------------------------------------------
- */
-
-/**
-  * Function looks at the characters used in first name/last name
-  *
-  * @param {string} name - String that contains letters, spaces, hyphens or apostrophes
-  *
-  * @returns {boolean} - Returns true or false if first name or last name satisfies the conditions
-*/
-function checkName (name) {
-  return /^[a-zA-Z\s\-']+$/.test(name);
-}
-
-/**
-  * Function checks if password contains at least one number and letter
-  *
-  * @param {string} password - String that contains atleast 1 number and 1 letter and is 8 characters long
-  *
-  * @returns {boolean} - Returns true or false if password satisfies the conditions
-*/
-function checkPassword (password) {
-  return /^(?=.*[a-zA-Z])(?=.*[0-9])/.test(password);
+  return { error: 'Username or Password is not valid' }
 }
 
 export { adminAuthLogin, adminAuthRegister, adminUserDetails };
