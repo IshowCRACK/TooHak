@@ -124,11 +124,10 @@ function adminAuthLogin (email, password) {
   for (const user of data.users) {
     if (user.email === email) {
       if (user.password === password) {
-        
         // add successful logins for all times & change failed password
-        user.numSuccessLogins++;      
+        user.numSuccessLogins++;
         user.numFailedPasswordsSinceLastLogin = 0;
-        
+
         setData(data);
         return {
           authUserId: user.authUserId

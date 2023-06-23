@@ -224,21 +224,20 @@ describe('adminUserDetails test', () => {
     });
   });
   test('User successfully registers but unable to login', () => {
-    const authUserId = adminAuthRegister('goo4email@gmail.com','Password121233','Joh nny-Bone','Jo\'nes').authUserId;
-    adminAuthLogin('goo4email@gmail.com','Passsword123');
-    adminAuthLogin('goo4email@gmail.com','Passsword123');
-    adminAuthLogin('goo4email@gmail.com','Passsword123');
-    adminAuthLogin('goo4email@gmail.com','Passsword123');
-    let userDetails = adminUserDetails(authUserId);
+    const authUserId = adminAuthRegister('goo4email@gmail.com', 'Password121233', 'Joh nny-Bone', 'Jo\'nes').authUserId;
+    adminAuthLogin('goo4email@gmail.com', 'Passsword123');
+    adminAuthLogin('goo4email@gmail.com', 'Passsword123');
+    adminAuthLogin('goo4email@gmail.com', 'Passsword123');
+    adminAuthLogin('goo4email@gmail.com', 'Passsword123');
+    const userDetails = adminUserDetails(authUserId);
     expect(userDetails).toMatchObject({
       user: {
-        userId: 0,    
-        name: `Joh nny-Bone Jo\'nes`,    
-        email: `goo4email@gmail.com`,    
-        numSuccessfulLogins: 1,    
+        userId: 0,
+        name: 'Joh nny-Bone Jo\'nes',
+        email: 'goo4email@gmail.com',
+        numSuccessfulLogins: 1,
         numFailedPasswordsSinceLastLogin: 4,
       }
     });
   });
-
 });
