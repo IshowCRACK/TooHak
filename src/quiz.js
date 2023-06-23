@@ -12,48 +12,35 @@ import { checkAuthUserIdValid } from './helper.js';
  */
 function adminQuizDescriptionUpdate (authUserId, quizId, description) {
   const data = getData();
-
-  let user;
-  for (let i = 0; i < data.users.length; i++) {
-    if (data.users[i].authUserId === authUserId) {
-      user = data.users[i];
-      break;
-    }
-  }
-  if (!user) {
-    return { error: 'authUserId is not a valid user' };
+  // AuthUserId is not a valid user
+  if (!checkAuthUserId(authUserId)) {
+    return { error: 'User Does Not Exist' };
   }
 
-  let quiz;
-  for (let i = 0; i < data.quizzes.length; i++) {
-    if (data.quizzes[i].quizId === quizId) {
-      quiz = data.quizzes[i];
-      break;
-    }
+  // Quiz ID does not refer to a valid quiz
+  if (!checkQuizIdValid(quizId)) {
+    return { error: 'Invalid QuizId' };
   }
 
-  if (!quiz) {
-    return { error: 'quiz ID does not refer to a valid quiz' };
-  }
-
-  let userOwnsQuiz = false;
-  for (let i = 0; i < data.quizzes.length; i++) {
-    if (data.quizzes[i].quizId === quizId && data.quizzes[i].adminQuizId === authUserId) {
-      userOwnsQuiz = true;
-      break;
-    }
-  }
-  if (!userOwnsQuiz) {
-    return { error: 'quiz ID does not refer to a quiz that this user owns' };
+  // Quiz ID does not refer to a quiz that this user owns
+  if (!checkQuizAndUserIdValid(quizId, authUserId)) {
+    return { error: 'Quiz ID does not refer to a quiz that this user owns' };
   }
 
   if (description.length > 100) {
     return { error: 'Description must be under 100 characters' };
   }
 
-  quiz.description = description;
-  quiz.timeLastEdited = Math.round(Date.now() / 1000);
+  for (let i = 0; i < data.quizzes.length; i++) {
+    if (data.quizzes[i].quizId === quizId) {
+      data.quizzes[i].description = description;
+      data.quizzes[i].timeLastEdited = Math.round(Date.now() / 1000);
+      break;
+    }
+  }
+  
   setData(data);
+
   return {};
 }
 
@@ -80,7 +67,7 @@ function adminQuizRemove (authUserId, quizId) {
 
   // Quiz ID does not refer to a quiz that this user owns
   if (!checkQuizAndUserIdValid(quizId, authUserId)) {
-    return { error: 'quiz ID does not refer to a quiz that this user owns' };
+    return { error: 'Quiz ID does not refer to a quiz that this user owns' };
   }
 
   const length = data.quizzes.length;
@@ -212,62 +199,40 @@ function adminQuizList (authUserId) {
 function adminQuizNameUpdate (authUserId, quizId, name) {
   const data = getData();
 
-  let user;
-  for (let i = 0; i < data.users.length; i++) {
-    if (data.users[i].authUserId === authUserId) {
-      user = data.users[i];
-      break;
-    }
-  }
-  if (!user) {
-    return { error: 'authUserId is not a valid user' };
+  if (!checkAuthUserIdValid(authUserId)) {
+    return { error: 'User Does Not Exist' };
   }
 
-  let quiz = null;
-  for (let i = 0; i < data.quizzes.length; i++) {
-    if (data.quizzes[i].quizId === quizId) {
-      quiz = data.quizzes[i];
-      break;
-    }
+  if (!checkQuizIdValid(quizId)) {
+    return { error: 'Quiz ID does not refer to a valid quiz' };
   }
 
-  if (!quiz) {
-    return { error: 'quiz ID does not refer to a valid quiz' };
+  if (!checkQuizAndUserIdValid(quizId, authUserId)) {
+    return { error: 'Quiz ID does not refer to a quiz that this user owns' };
   }
 
-  let userOwnsQuiz = false;
-  for (let i = 0; i < data.quizzes.length; i++) {
-    if (data.quizzes[i].quizId === quizId && data.quizzes[i].adminQuizId === authUserId) {
-      userOwnsQuiz = true;
-      break;
-    }
-  }
-  if (!userOwnsQuiz) {
-    return { error: 'quiz ID does not refer to a quiz that this user owns' };
-  }
-
-  if (/^[a-zA-Z0-9\s]+$/.test(name) === false) {
+  if (!checkAlphanumeric(name)) {
     return { error: 'Must use only alphanumeric characters or spaces in name' };
-  }
+  };
 
   if (name.length < 3 || name.length > 30) {
     return { error: 'Name must be between 3 and 30 characters long!' };
   }
 
-  let userSameQuizName = false;
+  if (checkQuizNameUsed(authUserId, name)) {
+    return { error: 'Quiz name already in use' };
+  }
+
   for (let i = 0; i < data.quizzes.length; i++) {
-    if (data.quizzes[i].name === name && data.quizzes[i].adminQuizId === authUserId) {
-      userSameQuizName = true;
+    if (data.quizzes[i].quizId === quizId) {
+      data.quizzes[i].name = name;
+      data.quizzes[i].timeLastEdited = Math.round(Date.now() / 1000);
       break;
     }
   }
-  if (userSameQuizName === true) {
-    return { error: 'Quiz name is already in use' };
-  }
 
-  quiz.name = name;
-  quiz.timeLastEdited = Math.round(Date.now() / 1000);
   setData(data);
+
   return {};
 }
 
@@ -406,3 +371,4 @@ function checkAlphanumeric(name) {
 }
 
 export { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo };
+
