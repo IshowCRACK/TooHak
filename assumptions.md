@@ -1,14 +1,14 @@
+# Iteration 1 Assumptions
 
-Iteration 1:
+1. Assume user does not input emoji's or any other unidentifiable characters that have not been specified in the specs.
 
-1. Assume user does not input Emoji's or any other unidentifiable characters that has not been specified in the specs in the inputs
+2. Assume the structure of a valid email is of form 'string@string.domain', and can be accurately validated by the imported isEmail function from 'validator' package.
 
-2. Assume the structure of a valid email is of form 'string@string.domain', and can be accurately validated by the imported isEmail function from 'validator' package
+3. Assume once the user has registered they will automatically login.
 
-3. According to itr 1 a strong password is a string that is considered to be more then 8 characters in length and consists at least 1 number and 1 letter. Thus assume if the string contains symbols or anything else that that is not a letter or number, the password is not valid even if the length is greater then 8.
+4. Assume that quiz name with just an empty space ' ' is allowed. 
 
-4. Assume once the user has registered they will automatically login, thus there is no need to test for adminAuthLogin in the testing files for auth Register. 
+5. Assume that email is not case-sensitive.
 
-5.
+6. Assume that users can not remove/delete their accounts and users can only be cleared with clear.
 
-6.
