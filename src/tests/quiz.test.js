@@ -207,11 +207,11 @@ describe('adminQuizRemove tests', () => {
         quizzes: [
           {
             quizId: quizId1,
-            name: "QuizaboutBarbie"
+            name: 'QuizaboutBarbie'
           },
           {
             quizId: quizId2,
-            name: "QuizaboutBarbieMovies"
+            name: 'QuizaboutBarbieMovies'
           }
         ]
 
@@ -225,7 +225,7 @@ describe('adminQuizRemove tests', () => {
         quizzes: [
           {
             quizId: quizId2,
-            name: "QuizaboutBarbieMovies"
+            name: 'QuizaboutBarbieMovies'
           }
         ]
 
@@ -235,11 +235,11 @@ describe('adminQuizRemove tests', () => {
         quizzes: [
           {
             quizId: quizId3,
-            name: "QuizaboutMovies"
+            name: 'QuizaboutMovies'
           },
           {
             quizId: quizId4,
-            name: "Quizabouttoys"
+            name: 'Quizabouttoys'
           }
         ]
 
@@ -254,7 +254,7 @@ describe('adminQuizRemove tests', () => {
         quizzes: [
           {
             quizId: quizId3,
-            name: "QuizaboutMovies"
+            name: 'QuizaboutMovies'
           }
         ]
 
@@ -514,12 +514,98 @@ describe('adminQuizNameUpdate Tests', () => {
   });
 });
 
-/* kelly will do soon
-describe('General tests of all functions interactions', () => {
-  beforeEach(() => {
-    authUserId = adminAuthRegister('JohnSmith@gmail.com', 'password123', 'John', 'Smith').authUserId;
+
+test('Full implementation of all functions and its interactions', () => {
+  const authUserId1 = adminAuthRegister('JohnSmith@gmail.com', 'password123', 'John', 'Smith').authUserId;
+  const authUserId2 = adminAuthRegister('JaneAusten@gmail.com', 'password123', 'Jane', 'Austen').authUserId;
+  const authUserId3 = adminAuthRegister('SteveRichards@gmail.com', 'password123', 'Steve', 'Richards').authUserId;
+  const quizId1 = adminQuizCreate(authUserId2, 'Quiz 1', 'Description 1').quizId;
+  const quizId2 = adminQuizCreate(authUserId3, 'Quiz 2', 'Description 2').quizId;
+  const quizId3 = adminQuizCreate(authUserId3, 'Quiz 3', 'Description 3').quizId;
+
+  // Testing if Quiz Creation, Removal and List works
+  expect(adminQuizList(authUserId1)).toStrictEqual({
+    quizzes: [
+
+    ]
   });
 
-  
+  const quizId4 =  adminQuizCreate(authUserId1, 'Quiz 4', 'Description 4').quizId;
+  expect(adminQuizList(authUserId1)).toStrictEqual({
+    quizzes: [
+      {
+        quizId: quizId4,
+        name: 'Quiz 4',
+      }
+    ]
+  });
+
+  expect(adminQuizList(authUserId3)).toStrictEqual({
+    quizzes: [
+      {
+        quizId: quizId2,
+        name: 'Quiz 2',
+      }, {
+        quizId: quizId3,
+        name: 'Quiz 3',
+      }
+    ]
+  });
+
+  expect(adminQuizRemove(authUserId3, quizId2)).toStrictEqual(
+    {
+    }
+  );
+
+  expect(adminQuizList(authUserId3)).toStrictEqual({
+    quizzes: [
+      {
+        quizId: quizId3,
+        name: 'Quiz 3',
+      }
+    ]
+  });
+
+  // Testing if QuizInfo works along with description and name updates
+  const timeBufferSeconds = 10;
+  let quizEditedTime = Math.round(Date.now() / 1000);
+  let getQuizInfo = adminQuizInfo(authUserId3, quizId3);
+  expect(getQuizInfo).toEqual(
+    expect.objectContaining({
+      quizId: quizId3,
+      name: 'Quiz 3',
+      description: 'Description 3'
+    })
+  );
+  expect(getQuizInfo.timeLastEdited).toBeGreaterThanOrEqual(quizEditedTime);
+  expect(getQuizInfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime + timeBufferSeconds);
+
+
+  adminQuizDescriptionUpdate(authUserId3, quizId3, 'Updated description');
+
+  quizEditedTime = Math.round(Date.now() / 1000);
+  getQuizInfo = adminQuizInfo(authUserId3, quizId3);
+  expect(getQuizInfo).toEqual(
+    expect.objectContaining({
+      quizId: quizId3,
+      name: 'Quiz 3',
+      description: 'Updated description'
+    })
+  );
+  expect(getQuizInfo.timeLastEdited).toBeGreaterThanOrEqual(quizEditedTime);
+  expect(getQuizInfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime + timeBufferSeconds);
+
+
+  adminQuizNameUpdate(authUserId3, quizId3, 'Quiz 3 Updated');
+  quizEditedTime = Math.round(Date.now() / 1000);
+  getQuizInfo = adminQuizInfo(authUserId3, quizId3);
+  expect(getQuizInfo).toEqual(
+    expect.objectContaining({
+      quizId: quizId3,
+      name: 'Quiz 3 Updated',
+      description: 'Updated description'
+    })
+  );
+  expect(getQuizInfo.timeLastEdited).toBeGreaterThanOrEqual(quizEditedTime);
+  expect(getQuizInfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime + timeBufferSeconds);
 });
-*/
