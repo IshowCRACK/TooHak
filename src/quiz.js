@@ -14,12 +14,12 @@ function adminQuizDescriptionUpdate (authUserId, quizId, description) {
   const data = getData();
   // AuthUserId is not a valid user
   if (!checkAuthUserId(authUserId)) {
-    return { error: 'User Does Not Exist' };
+    return { error: 'AuthUserId is not a valid user' };
   }
 
   // Quiz ID does not refer to a valid quiz
   if (!checkQuizIdValid(quizId)) {
-    return { error: 'Invalid QuizId' };
+    return { error: 'Quiz ID does not refer to a valid quiz' };
   }
 
   // Quiz ID does not refer to a quiz that this user owns
@@ -30,12 +30,10 @@ function adminQuizDescriptionUpdate (authUserId, quizId, description) {
   if (description.length > 100) {
     return { error: 'Description must be under 100 characters' };
   }
-
-  for (let i = 0; i < data.quizzes.length; i++) {
-    if (data.quizzes[i].quizId === quizId) {
-      data.quizzes[i].description = description;
-      data.quizzes[i].timeLastEdited = Math.round(Date.now() / 1000);
-      break;
+  for (const quiz of data.quizzes) {
+    if (quiz.quizId === quizId) {
+      quiz.description = description;
+      quiz.timeLastEdited = Math.round(Date.now() / 1000);
     }
   }
   
@@ -199,38 +197,43 @@ function adminQuizList (authUserId) {
 function adminQuizNameUpdate (authUserId, quizId, name) {
   const data = getData();
 
+  // AuthUserId is not a valid user
   if (!checkAuthUserIdValid(authUserId)) {
-    return { error: 'User Does Not Exist' };
+    return { error: 'AuthUserId is not a valid user' };
   }
 
+  // Quiz ID does not refer to a valid quiz
   if (!checkQuizIdValid(quizId)) {
     return { error: 'Quiz ID does not refer to a valid quiz' };
   }
 
+  // Quiz ID does not refer to a valid quizthat this user owns
   if (!checkQuizAndUserIdValid(quizId, authUserId)) {
     return { error: 'Quiz ID does not refer to a quiz that this user owns' };
   }
 
+  // Check name composition (alphanumeric and spaces)
   if (!checkAlphanumeric(name)) {
     return { error: 'Must use only alphanumeric characters or spaces in name' };
   };
 
+  // Check name length
   if (name.length < 3 || name.length > 30) {
     return { error: 'Name must be between 3 and 30 characters long!' };
   }
 
+  // Check if quiz name is already used by user
   if (checkQuizNameUsed(authUserId, name)) {
     return { error: 'Quiz name already in use' };
   }
 
-  for (let i = 0; i < data.quizzes.length; i++) {
-    if (data.quizzes[i].quizId === quizId) {
-      data.quizzes[i].name = name;
-      data.quizzes[i].timeLastEdited = Math.round(Date.now() / 1000);
-      break;
+  for (const quiz of data.quizzes) {
+    if (quiz.quizId === quizId) {
+      quiz.name = name;
+      quiz.timeLastEdited = Math.round(Date.now() / 1000);
     }
   }
-
+  
   setData(data);
 
   return {};

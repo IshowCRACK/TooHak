@@ -378,7 +378,7 @@ describe('adminQuizDescriptionUpdate Tests', () => {
       expect(result).toEqual({});
     });
 
-    test('Checks that time edited is updated', () => {
+    test('Updates Time edited', () => {
     
       const result = adminQuizDescriptionUpdate(0, 0, 'Updated description');
       const getQuizinfo = adminQuizInfo(0, 0);
@@ -394,7 +394,7 @@ describe('adminQuizDescriptionUpdate Tests', () => {
       const result = adminQuizDescriptionUpdate(0, 2, 'Updated description');
 
       expect(result).toEqual({
-        error: 'Invalid QuizId'
+        error: 'Quiz ID does not refer to a valid quiz'
       });
     });
   });
@@ -413,7 +413,7 @@ describe('adminQuizDescriptionUpdate Tests', () => {
       const result = adminQuizDescriptionUpdate(-99, 0, 'Updated description');
 
       expect(result).toEqual({
-        error: 'User Does Not Exist'
+        error: 'AuthUserId is not a valid user'
       });
     });
 
@@ -482,7 +482,7 @@ describe('adminQuizNameUpdate Tests', () => {
       const result = adminQuizNameUpdate(-99, 0, 'Quiz 1 Updated');
 
       expect(result).toEqual({
-        error: 'User Does Not Exist'
+        error: 'AuthUserId is not a valid user'
       });
     });
 
