@@ -36,7 +36,7 @@ function adminQuizDescriptionUpdate (authUserId, quizId, description) {
       quiz.timeLastEdited = Math.round(Date.now() / 1000);
     }
   }
-  
+
   setData(data);
 
   return {};
@@ -55,12 +55,12 @@ function adminQuizRemove (authUserId, quizId) {
 
   // AuthUserId is not a valid user
   if (!checkAuthUserId(authUserId)) {
-    return { error: 'authUserId is not a valid user' };
+    return { error: 'AuthUserId is not a valid user' };
   }
 
   // Quiz ID does not refer to a valid quiz
   if (!checkQuizIdValid(quizId)) {
-    return { error: 'quiz ID does not refer to a valid quiz' };
+    return { error: 'Quiz ID does not refer to a valid quiz' };
   }
 
   // Quiz ID does not refer to a quiz that this user owns
@@ -77,7 +77,7 @@ function adminQuizRemove (authUserId, quizId) {
   }
 
   setData(data);
-  
+
   return {};
 }
 
@@ -92,10 +92,9 @@ function adminQuizRemove (authUserId, quizId) {
   * @returns {{quizId: number} | {error: string}} - Returns an object containing the quizId
  */
 function adminQuizCreate (authUserId, name, description) {
-
   // check valid userID
   if (!checkAuthUserId(authUserId)) {
-    return { error: 'authUserId is not a valid user' };
+    return { error: 'AuthUserId is not a valid user' };
   }
 
   // check name length
@@ -111,7 +110,6 @@ function adminQuizCreate (authUserId, name, description) {
   if (!checkAlphanumeric(name)) {
     return { error: 'Must use only alphanumeric characters or spaces in name' };
   };
-   
 
   // check description length
   if (description.length > 100) {
@@ -162,7 +160,7 @@ function adminQuizCreate (authUserId, name, description) {
 function adminQuizList (authUserId) {
   // check valid UserId
   if (!checkAuthUserIdValid(authUserId)) {
-    return { error: 'authUserId is not a valid user' };
+    return { error: 'AuthUserId is not a valid user' };
   }
 
   const data = getData();
@@ -233,7 +231,7 @@ function adminQuizNameUpdate (authUserId, quizId, name) {
       quiz.timeLastEdited = Math.round(Date.now() / 1000);
     }
   }
-  
+
   setData(data);
 
   return {};
@@ -251,15 +249,15 @@ function adminQuizInfo (authUserId, quizId) {
   const data = getData();
 
   if (!checkAuthUserIdValid(authUserId)) {
-    return { error: 'authUserId is not a valid user' };
+    return { error: 'AuthUserId is not a valid user' };
   }
 
   if (!checkQuizIdValid(quizId)) {
-    return { error: 'quiz ID does not refer to a valid quiz' };
+    return { error: 'Quiz ID does not refer to a valid quiz' };
   }
 
   if (!checkQuizAndUserIdValid(quizId, authUserId)) {
-    return { error: 'quiz ID does not refer to a quiz that this user owns' };
+    return { error: 'Quiz ID does not refer to a quiz that this user owns' };
   }
 
   // If no errors
@@ -374,4 +372,3 @@ function checkAlphanumeric(name) {
 }
 
 export { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo };
-
