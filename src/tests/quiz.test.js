@@ -468,10 +468,7 @@ describe('adminQuizNameUpdate Tests', () => {
 
   describe('1. Successful Name update', () => {
     test('1. updates the name of an existing quiz', () => {
-      const authUserId = 0;
-      const quizId = 0;
-      const newName = 'Quiz 1 Updated';
-      const result = adminQuizNameUpdate(authUserId, quizId, newName);
+      const result = adminQuizNameUpdate(0, 0, 'Quiz 1 Updated');
       const getQuizinfo = adminQuizInfo(authUserId, quizId);
       expect(getQuizinfo.name).toBe('Quiz 1 Updated');
       expect(result).toEqual({});
@@ -480,11 +477,8 @@ describe('adminQuizNameUpdate Tests', () => {
 
   describe('2. Unsuccessful Name update - TESTING QUIZID', () => {
     test('1. returns an error when quiz ID does not refer to a valid quiz', () => {
-      const authUserId = 0;
-      const quizId = -9;
-      const newName = 'Quiz 1 Updated';
 
-      const result = adminQuizNameUpdate(authUserId, quizId, newName);
+      const result = adminQuizNameUpdate(0, -9, 'Quiz 1 Updated');
 
       expect(result).toEqual({
         error: 'quiz ID does not refer to a valid quiz'
@@ -494,11 +488,8 @@ describe('adminQuizNameUpdate Tests', () => {
 
   describe('3. Unsuccessful name update - TESTING MISSMATCHED QUIZID', () => {
     test('1. returns an error when quiz ID does not refer to a quiz that this user owns', () => {
-      const authUserId = 0;
-      const quizId = 2;
-      const newName = 'Quiz 1 Updated';
 
-      const result = adminQuizNameUpdate(authUserId, quizId, newName);
+      const result = adminQuizNameUpdate(0, 2, 'Quiz 1 Updated');
 
       expect(result).toEqual({
         error: 'quiz ID does not refer to a quiz that this user owns'
@@ -508,11 +499,8 @@ describe('adminQuizNameUpdate Tests', () => {
 
   describe('4. Unsuccessful name update - TESTING USERID', () => {
     test('1. returns an error when AuthUserId is not a valid user', () => {
-      const authUserId = -99;
-      const quizId = 0;
-      const newName = 'Quiz 1 Updated';
 
-      const result = adminQuizNameUpdate(authUserId, quizId, newName);
+      const result = adminQuizNameUpdate(-99, 0, 'Quiz 1 Updated');
 
       expect(result).toEqual({
         error: 'authUserId is not a valid user'
@@ -522,11 +510,8 @@ describe('adminQuizNameUpdate Tests', () => {
 
   describe('5. Unsuccessful name update - TESTING NAME LENGTH', () => {
     test('1. returns an error when Name is more than 30 characters in length', () => {
-      const authUserId = 0;
-      const quizId = 0;
-      const newName = '123456789abcdEFGHsakfshfd214345';
-
-      const result = adminQuizNameUpdate(authUserId, quizId, newName);
+   
+      const result = adminQuizNameUpdate(0, 0, '123456789abcdEFGHsakfshfd214345');
 
       expect(result).toEqual({
         error: 'Name must be between 3 and 30 characters long!'
@@ -534,11 +519,7 @@ describe('adminQuizNameUpdate Tests', () => {
     });
 
     test('2. returns an error when Name less than 3 characters in length', () => {
-      const authUserId = 0;
-      const quizId = 0;
-      const newName = 'A';
-
-      const result = adminQuizNameUpdate(authUserId, quizId, newName);
+      const result = adminQuizNameUpdate(0, 0, 'A');
 
       expect(result).toEqual({
         error: 'Name must be between 3 and 30 characters long!'
@@ -558,11 +539,8 @@ describe('adminQuizNameUpdate Tests', () => {
 
   describe('1. Successful timeLastEdited Name update', () => {
     test('1. updates the name of an existing quiz', () => {
-      const authUserId = 0;
-      const quizId = 0;
-      const newName = 'Quiz 1 Updated';
-      const result = adminQuizNameUpdate(authUserId, quizId, newName);
-      const getQuizinfo = adminQuizInfo(authUserId, quizId);
+      const result = adminQuizNameUpdate(0, 0, 'Quiz 1 Updated');
+      const getQuizinfo = adminQuizInfo(0, 0);
       expect(getQuizinfo.timeLastEdited).toBeGreaterThanOrEqual(quizEditedTime);
       expect(getQuizinfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime + timeBufferSeconds);
       expect(result).toEqual({});
