@@ -16,7 +16,7 @@ describe('adminAuthLogin tests', () => {
   describe('Unsuccessful register - names', () => {
     test('Check unsuccessful first name - null input', () => {
       const authUserId = adminAuthRegister('good.email@gmail.com', 'Password123', '', 'Jones');
-      expect(authUserId).toStrictEqual({ error: 'first name has to be between 2 and 20 characters' });
+      expect(authUserId).toStrictEqual({ error: 'First name has to be between 2 and 20 characters' });
     });
 
     test('Check unsuccessful first name - using wrong characters', () => {
@@ -26,12 +26,12 @@ describe('adminAuthLogin tests', () => {
 
     test('Check unsuccessful first name - Wrong Size', () => {
       const authUserId = adminAuthRegister('good.email@gmail.com', 'Password123', 'J', 'Jones');
-      expect(authUserId).toStrictEqual({ error: 'first name has to be between 2 and 20 characters' });
+      expect(authUserId).toStrictEqual({ error: 'First name has to be between 2 and 20 characters' });
     });
 
     test('Check unsuccessful first name - Wrong Size', () => {
       const authUserId = adminAuthRegister('good.email@gmail.com', 'Password123', 'Jooooooooooooooooooooooooooonnnnnnnnyyyyyyy', 'Jones');
-      expect(authUserId).toStrictEqual({ error: 'first name has to be between 2 and 20 characters' });
+      expect(authUserId).toStrictEqual({ error: 'First name has to be between 2 and 20 characters' });
     });
 
     test('Check unsuccessful last name - null input', () => {
