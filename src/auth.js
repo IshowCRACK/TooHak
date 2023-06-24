@@ -43,8 +43,8 @@ function adminAuthRegister (email, password, nameFirst, nameLast) {
     return {
       error: 'First name has to be between 2 and 20 characters'
     };
-  } 
-  
+  }
+
   if (!checkName(nameFirst)) {
     return {
       error: 'First name can only contain upper/lower case letters, spaces, hyphens or apostrophes'
@@ -56,8 +56,8 @@ function adminAuthRegister (email, password, nameFirst, nameLast) {
     return {
       error: 'Last name has to be between 2 and 20 characters'
     };
-  } 
-  
+  }
+
   if (!checkName(nameLast)) {
     return {
       error: 'Last name can only contain upper/lower case letters, spaces, hyphens or apostrophes'
@@ -138,14 +138,14 @@ function adminAuthLogin (email, password) {
       // add successful logins for all times & change failed password
       user.numSuccessLogins++;
       user.numFailedPasswordsSinceLastLogin = 0;
-      return { authUserId: user.authUserId }
+      return { authUserId: user.authUserId };
     } else {
-        // Add on to how many times user has failed before a successful login
-        user.numFailedPasswordsSinceLastLogin++;
+      // Add on to how many times user has failed before a successful login
+      user.numFailedPasswordsSinceLastLogin++;
     }
   }
 
-  return { error: 'Username or Password is not valid' }
+  return { error: 'Username or Password is not valid' };
 }
 
 export { adminAuthLogin, adminAuthRegister, adminUserDetails };
