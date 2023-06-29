@@ -501,14 +501,14 @@ describe('Additional tests', () => {
     adminQuizCreate(authUserId2, 'Quiz 1', 'Description 1');
     const quizId2 = adminQuizCreate(authUserId3, 'Quiz 2', 'Description 2').quizId;
     const quizId3 = adminQuizCreate(authUserId3, 'Quiz 3', 'Description 3').quizId;
-  
+
     // Testing if Quiz Creation, Removal and List works
     expect(adminQuizList(authUserId1)).toStrictEqual({
       quizzes: [
-  
+
       ]
     });
-  
+
     const quizId4 = adminQuizCreate(authUserId1, 'Quiz 4', 'Description 4').quizId;
     expect(adminQuizList(authUserId1)).toStrictEqual({
       quizzes: [
@@ -518,7 +518,7 @@ describe('Additional tests', () => {
         }
       ]
     });
-  
+
     expect(adminQuizList(authUserId3)).toStrictEqual({
       quizzes: [
         {
@@ -530,12 +530,12 @@ describe('Additional tests', () => {
         }
       ]
     });
-  
+
     expect(adminQuizRemove(authUserId3, quizId2)).toStrictEqual(
       {
       }
     );
-  
+
     expect(adminQuizList(authUserId3)).toStrictEqual({
       quizzes: [
         {
@@ -544,7 +544,7 @@ describe('Additional tests', () => {
         }
       ]
     });
-  
+
     // Testing if QuizInfo works along with description and name updates
     const timeBufferSeconds = 10;
     let quizEditedTime = Math.round(Date.now() / 1000);
@@ -558,9 +558,9 @@ describe('Additional tests', () => {
     );
     expect(getQuizInfo.timeLastEdited).toBeGreaterThanOrEqual(quizEditedTime);
     expect(getQuizInfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime + timeBufferSeconds);
-  
+
     adminQuizDescriptionUpdate(authUserId3, quizId3, 'Updated description');
-  
+
     quizEditedTime = Math.round(Date.now() / 1000);
     getQuizInfo = adminQuizInfo(authUserId3, quizId3);
     expect(getQuizInfo).toEqual(
@@ -572,7 +572,7 @@ describe('Additional tests', () => {
     );
     expect(getQuizInfo.timeLastEdited).toBeGreaterThanOrEqual(quizEditedTime);
     expect(getQuizInfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime + timeBufferSeconds);
-  
+
     adminQuizNameUpdate(authUserId3, quizId3, 'Quiz 3 Updated');
     quizEditedTime = Math.round(Date.now() / 1000);
     getQuizInfo = adminQuizInfo(authUserId3, quizId3);
@@ -585,5 +585,5 @@ describe('Additional tests', () => {
     );
     expect(getQuizInfo.timeLastEdited).toBeGreaterThanOrEqual(quizEditedTime);
     expect(getQuizInfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime + timeBufferSeconds);
-  });  
+  });
 });

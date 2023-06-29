@@ -113,7 +113,7 @@ function adminQuizCreate (authUserId, name, description) {
   // check name composition (alphanumeric and spaces)
   if (!checkAlphanumeric(name)) {
     return { error: 'Must use only alphanumeric characters or spaces in name' };
-  };
+  }
 
   // check description length
   if (description.length > 100) {
@@ -217,7 +217,7 @@ function adminQuizNameUpdate (authUserId, quizId, name) {
   // Check name composition (alphanumeric and spaces)
   if (!checkAlphanumeric(name)) {
     return { error: 'Must use only alphanumeric characters or spaces in name' };
-  };
+  }
 
   // Check name length
   if (name.length < 3 || name.length > 30) {
