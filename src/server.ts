@@ -16,9 +16,9 @@ app.use(cors());
 // for logging errors (print to terminal)
 app.use(morgan('dev'));
 // for producing the docs that define the API
-const file = fs.readFileSync('./swagger.yaml', 'utf8')
+const file = fs.readFileSync('./swagger.yaml', 'utf8');
 app.get('/', (req: Request, res: Response) => res.redirect('/docs'));
-app.use('/docs', sui.serve, sui.setup(YAML.parse(file), { swaggerOptions: { docExpansion: config.expandDocs ? "full" : "list" }}));
+app.use('/docs', sui.serve, sui.setup(YAML.parse(file), { swaggerOptions: { docExpansion: config.expandDocs ? 'full' : 'list' } }));
 
 const PORT: number = parseInt(process.env.PORT || config.port);
 const HOST: string = process.env.IP || 'localhost';
@@ -30,9 +30,12 @@ const HOST: string = process.env.IP || 'localhost';
 // Example get request
 app.get('/echo', (req: Request, res: Response) => {
   const data = req.query.echo as string;
-  return res.json(echo(data));
+  const ret = echo(data);
+  if ('error' in ret) {
+    res.status(400);
+  }
+  return res.json(ret);
 });
-
 
 // ====================================================================
 //  ================= WORK IS DONE ABOVE THIS LINE ===================
