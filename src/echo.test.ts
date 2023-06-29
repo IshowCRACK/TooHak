@@ -40,7 +40,6 @@ describe('HTTP tests using Jest', () => {
     );
     const bodyObj = JSON.parse(res.body as string);
     expect(res.statusCode).toBe(INPUT_ERROR);
-    expect(bodyObj.error).toStrictEqual({ message: expect.any(String) });
+    expect(bodyObj.error).toStrictEqual(expect.any(String));
   });
 });
-
