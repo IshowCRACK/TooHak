@@ -1,5 +1,3 @@
-import HTTPError from 'http-errors';
-
 type ErrorMsg = {
   error: string;
 };

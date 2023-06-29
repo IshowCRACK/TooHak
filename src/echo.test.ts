@@ -25,7 +25,7 @@ describe('HTTP tests using Jest', () => {
     );
     const bodyObj = JSON.parse(res.body as string);
     expect(res.statusCode).toBe(OK);
-    expect(bodyObj).toEqual('Hello');
+    expect(bodyObj.value).toEqual('Hello');
   });
   test('Test invalid echo', () => {
     const res = request(

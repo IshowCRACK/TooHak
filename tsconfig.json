@@ -4,8 +4,7 @@
     "noImplicitAny": true,
     "noEmit": true,
     "resolveJsonModule": true,
-    "allowJs": true,
-    "ignoreDeprecations": "5.0"
+    "allowJs": true
   },
   "exclude": [
     "**/**_broken.ts"
