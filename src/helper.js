@@ -141,7 +141,49 @@ function emailAlreadyUsed(email, authUserId) {
 }
 
 
+/**
+  * Gets ALL the user details, as 'adminUserDetails' does not return all properties of 'User'
+  * @param {number} authUserId - A unique Id for the user who owns the quiz
+  *
+  * @returns {users: Array<{
+  *     authUserId: integer,
+  *     nameFirst: string,
+  *     nameLast: string,
+  *     email: string,
+  *     password: string,
+  *     numSuccessLogins: integer,
+  *     numFailedPasswordsSinceLastLogin: integer,
+  *   }>} - Array of objects
+ */
+function adminUserALLDetails (authUserId) {
+  const data = getData();
+
+  // Loop through users dataStore
+  for (const user of data.users) {
+    // if ID matched return the users ID
+    if (user.authUserId === authUserId) {
+      return {
+        user: {
+          userId: user.authUserId,
+          firstName:`${user.firstName}`,
+          lastName:`${user.lastName}`,
+          email: user.email,
+          password:user.password,
+          numSuccessfulLogins: user.numSuccessLogins,
+          numFailedPasswordsSinceLastLogin: user.numFailedPasswordsSinceLastLogin
+        }
+      };
+    }
+  }
+
+  return {
+    error: 'User does not exists'
+  };
+}
+
+
+
 export {
   checkName, checkPassword, checkAlphanumeric, checkAuthUserIdValid,
-  checkQuizIdValid, checkQuizAndUserIdValid, checkQuizNameUsed, emailAlreadyUsed,
+  checkQuizIdValid, checkQuizAndUserIdValid, checkQuizNameUsed, emailAlreadyUsed, adminUserALLDetails,
 };

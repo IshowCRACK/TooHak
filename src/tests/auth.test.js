@@ -1,4 +1,5 @@
-import { adminAuthLogin, adminAuthRegister, adminUserDetails, adminUpdateUserDetails } from '../auth.js';
+import { adminAuthLogin, adminAuthRegister, adminUserDetails, adminUpdateUserDetails, adminUpdateUserPassword,  } from '../auth.js';
+import { adminUserALLDetails, } from '../helper.js';
 import { clear } from '../other.js';
 
 beforeEach(() => {
@@ -325,38 +326,38 @@ describe('AdminUpdateUserPassword tests', ()=> {
 
   describe('Unsuccessful User detail update', ()=> {
     test('Old Password is not the correct old password', () => {
-      const result = AdminUpdateUserPassword(0,'wrongPassword0','newPassword0');
+      const result = adminUpdateUserPassword(0,'wrongPassword0','newPassword0');
       expect(result).toStrictEqual({ error: 'Old password is not correct' });
     });
     test('New Password has already been used before by this user', () => {
-      const result = AdminUpdateUserPassword(0,'password0','password0');
+      const result = adminUpdateUserPassword(0,'password0','password0');
       expect(result).toStrictEqual({ error: 'New password cannot be the same as the old password' });
     });
     test('New Password is less than 8 characters', () => {
-      const result = AdminUpdateUserPassword(0,'password0','abc1234');
+      const result = adminUpdateUserPassword(0,'password0','abc1234');
       expect(result).toStrictEqual({ error: 'New password must be at least 8 characters long and contain at least one number and one letter' });
     });
     test('New Password does not contain at least one number and at least one letter', () => {
-      const result = AdminUpdateUserPassword(0,'password0','12345678');
+      const result = adminUpdateUserPassword(0,'password0','12345678');
       expect(result).toStrictEqual({ error: 'New password must be at least 8 characters long and contain at least one number and one letter' });
     });
     test('New Password does not contain at least one number and at least one letter', () => {
-      const result = AdminUpdateUserPassword(0,'password0','abcdefghijk');
+      const result = adminUpdateUserPassword(0,'password0','abcdefghijk');
       expect(result).toStrictEqual({ error: 'New password must be at least 8 characters long and contain at least one number and one letter' });
     });
   });
 
   describe('Successful User password update', ()=> {
     test('Updating password', () => {
-      AdminUpdateUserPassword(0,'password0','newPassword0');
-      const getAdminInfo = adminUserDetails(0)
-      expect(getAdminInfo.user.email).toStrictEqual('updated@gmail.com');
+      adminUpdateUserPassword(0,'password0','newPassword0');
+      const getAdminInfo = adminUserALLDetails(0)
+      expect(getAdminInfo.user.password).toStrictEqual('newPassword0');
     });
     test('Updating password, multiple users', () => {
-      AdminUpdateUserPassword(0,'password0','newPassword0');
-      AdminUpdateUserPassword(1,'password1','newPassword1');
-      const getAdminInfo0 = adminUserDetails(0)
-      const getAdminInfo1 = adminUserDetails(1)
+      adminUpdateUserPassword(0,'password0','newPassword0');
+      adminUpdateUserPassword(1,'password1','newPassword1');
+      const getAdminInfo0 = adminUserALLDetails(0)
+      const getAdminInfo1 = adminUserALLDetails(1)
 
       expect(getAdminInfo0.user.password).toStrictEqual('newPassword0');
       expect(getAdminInfo1.user.password).toStrictEqual('newPassword1');

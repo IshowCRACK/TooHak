@@ -218,7 +218,46 @@ function adminUpdateUserDetails(authUserId, email, nameFirst, nameLast) {
   *
   * @returns {{}} - Returns empty object
 */
+function adminUpdateUserPassword(authUserId, oldPassword, newPassword) {
+  const data = getData();
+
+  // Find the user by authUserId
+  const user = data.users.find((user) => user.authUserId === authUserId);
+
+  if (user) {
+    // Check if the old password matches the user's current password
+    if (user.password !== oldPassword) {
+      return {
+        error: 'Old password is not correct'
+      };
+    }
+
+    // Check if the new password has been used before by this user
+    if (user.password === newPassword) {
+      return {
+        error: 'New password cannot be the same as the old password'
+      };
+    }
+
+    // Check if the new password meets the requirements
+    if (newPassword.length < 8 || !checkPassword(newPassword)) {
+      return {
+        error: 'New password must be at least 8 characters long and contain at least one number and one letter'
+      };
+    }
+
+    // Update the user's password
+    user.password = newPassword;
+
+    setData(data);
+  } else {
+    return {
+      error: 'User not found'
+    };
+  }
+
+  return {};
+}
 
 
-
-export { adminAuthLogin, adminAuthRegister, adminUserDetails, adminUpdateUserDetails };
+export { adminAuthLogin, adminAuthRegister, adminUserDetails, adminUpdateUserDetails, adminUpdateUserPassword };
