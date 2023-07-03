@@ -1,5 +1,5 @@
 import { getData, setData } from './dataStore.js';
-import { checkName, checkPassword, checkEmail, checkAuthUserIdValid, emailAlreadyUsed } from './helper.js';
+import { checkName, checkPassword, checkEmail, checkAuthUserIdValid, emailAlreadyUsed, adminUserALLDetails } from './helper.js';
 import validator from 'validator';
 
 /**

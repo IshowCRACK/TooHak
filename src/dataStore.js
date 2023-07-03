@@ -1,6 +1,6 @@
 let data = {
   users: [],
-  quizzes: []
+  quizzes: [],
 };
 
 /**
@@ -15,6 +15,7 @@ let data = {
   *     password: string,
   *     numSuccessLogins: integer,
   *     numFailedPasswordsSinceLastLogin: integer,
+  *     deletedQuizzes: Array,
   *   }>,
   *   quizzes: Array<{
   *     quizId: number,
@@ -41,6 +42,7 @@ function getData () {
   *     password: string,
   *     numSuccessLogins: integer,
   *     numFailedPasswordsSinceLastLogin: integer,
+  *     deletedQuizzes: Array,
   *   }>,
   *   quizzes: Array<{
   *     quizId: number,

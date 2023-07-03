@@ -1,8 +1,9 @@
 import { adminAuthRegister } from '../auth.js';
 import {
   adminQuizDescriptionUpdate, adminQuizRemove, adminQuizCreate,
-  adminQuizList, adminQuizNameUpdate, adminQuizInfo
+  adminQuizList, adminQuizNameUpdate, adminQuizInfo, viewUserDeletedQuizzes
 } from '../quiz.js';
+import { adminUserALLDetails } from '../helper.js';
 import { clear } from '../other.js';
 
 beforeEach(() => {
@@ -131,7 +132,7 @@ describe('adminQuizCreate tests', () => {
     });
   });
 });
-
+//Quiz remove -> made changes to test the storage of deleted quizes
 describe('adminQuizRemove tests', () => {
   let authUserId;
 
@@ -165,10 +166,13 @@ describe('adminQuizRemove tests', () => {
         {
         }
       );
+      //check if deleted quiz is added to 'deletedQuizzes' array.
+      expect(adminUserALLDetails(authUserId).user.deletedQuizzes[0].quizId).toEqual(quizId);
     });
     test('Removing multiple quizzes from one user', () => {
       const quizId1 = adminQuizCreate(authUserId, 'QuizaboutBarbie', 'Quiz on barbies').quizId;
       const quizId2 = adminQuizCreate(authUserId, 'QuizaboutBarbieMovies', 'Quiz on barbies').quizId;
+      console.log(adminUserALLDetails);
       expect(adminQuizRemove(authUserId, quizId1)).toStrictEqual(
         {
         }
@@ -178,6 +182,10 @@ describe('adminQuizRemove tests', () => {
         {
         }
       );
+      //check if deleted quiz is added to 'deletedQuizzes' array.
+      expect(adminUserALLDetails(authUserId).user.deletedQuizzes[0].quizId).toEqual(quizId1);
+      expect(adminUserALLDetails(authUserId).user.deletedQuizzes[1].quizId).toEqual(quizId2);
+
     });
 
     test('Removing one quiz out of multiple from one user ', () => {
@@ -188,6 +196,8 @@ describe('adminQuizRemove tests', () => {
         {
         }
       );
+      //check if deleted quiz is added to 'deletedQuizzes' array.
+      expect(adminUserALLDetails(authUserId).user.deletedQuizzes[0].quizId).toEqual(quizId);
     });
 
     test('Removing multiple quizzes from multiple users  ', () => {
@@ -587,3 +597,5 @@ describe('Additional tests', () => {
     expect(getQuizInfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime + timeBufferSeconds);
   });
 });
+
+// Testing if deleted quizes
