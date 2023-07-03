@@ -10,7 +10,7 @@ describe('adminAuthLogin tests', () => {
   test('Check successful Register', () => {
     const res = request(
       'POST',
-      'http://localhost:3000/auth/register',
+      'http://localhost:3200/v1/admin/auth/register',
       {
         json: {
           email: 'example@email.com',
@@ -20,18 +20,18 @@ describe('adminAuthLogin tests', () => {
         }
       }
     )
-    const bodyobj = JSON.parse(String(res.getBody()));
+    const bodyobj = JSON.parse(res.body.toString());
     const expectedResult = {
-      userId: 0,
+      authUserId: 0,
     }
-    expect(bodyobj).toBe(expectedResult);
+    expect(bodyobj).toStrictEqual(expectedResult);
   });
 
   describe('Unsuccessful register - names', () => {
     test('Check unsuccessful first name - null input', () => {
       const res = request(
         'POST',
-        'http://localhost:3000/auth/register',
+        'http://localhost:3200/v1/admin/auth/register',
         {
           json: {
             email: 'good.email@gmail.com',
@@ -41,17 +41,17 @@ describe('adminAuthLogin tests', () => {
           }
         }
       )
-      const bodyobj = JSON.parse(String(res.getBody()));
+      const bodyobj = JSON.parse(res.body.toString());
       const expectedResult = {
         error: 'First name has to be between 2 and 20 characters',
       }
-      expect(bodyobj).toBe(expectedResult);
+      expect(bodyobj).toStrictEqual(expectedResult);
     });
 
     test('Check unsuccessful first name - using wrong characters', () => {
       const res = request(
         'POST',
-        'http://localhost:3000/auth/register',
+        'http://localhost:3200/v1/admin/auth/register',
         {
           json: {
             email: 'good.email@gmail.com',
@@ -61,17 +61,17 @@ describe('adminAuthLogin tests', () => {
           }
         }
       )
-      const bodyobj = JSON.parse(String(res.getBody()));
+      const bodyobj = JSON.parse(res.body.toString());
       const expectedResult = {
         error: 'First name can only contain upper/lower case letters, spaces, hyphens or apostrophes',
       }
-      expect(bodyobj).toBe(expectedResult);
+      expect(bodyobj).toStrictEqual(expectedResult);
     });
 
     test('Check unsuccessful first name - wrong size', () => {
       const res = request(
         'POST',
-        'http://localhost:3000/auth/register',
+        'http://localhost:3200/v1/admin/auth/register',
         {
           json: {
             email: 'good.email@gmail.com',
@@ -81,17 +81,17 @@ describe('adminAuthLogin tests', () => {
           }
         }
       )
-      const bodyobj = JSON.parse(String(res.getBody()));
+      const bodyobj = JSON.parse(res.body.toString());
       const expectedResult = {
         error: 'First name has to be between 2 and 20 characters',
       }
-      expect(bodyobj).toBe(expectedResult);
+      expect(bodyobj).toStrictEqual(expectedResult);
     });
 
     test('Check unsuccessful first name - wrong size', () => {
       const res = request(
         'POST',
-        'http://localhost:3000/auth/register',
+        'http://localhost:3200/v1/admin/auth/register',
         {
           json: {
             email: 'good.email@gmail.com',
@@ -101,17 +101,17 @@ describe('adminAuthLogin tests', () => {
           }
         }
       )
-      const bodyobj = JSON.parse(String(res.getBody()));
+      const bodyobj = JSON.parse(res.body.toString());
       const expectedResult = {
         error: 'First name has to be between 2 and 20 characters',
       }
-      expect(bodyobj).toBe(expectedResult);
+      expect(bodyobj).toStrictEqual(expectedResult);
     });
 
     test('Check unsuccessful last name - null input', () => {
       const res = request(
         'POST',
-        'http://localhost:3000/auth/register',
+        'http://localhost:3200/v1/admin/auth/register',
         {
           json: {
             email: 'good.email@gmail.com',
@@ -121,17 +121,17 @@ describe('adminAuthLogin tests', () => {
           }
         }
       )
-      const bodyobj = JSON.parse(String(res.getBody()));
+      const bodyobj = JSON.parse(res.body.toString());
       const expectedResult = {
         error: 'Last name has to be between 2 and 20 characters',
       }
-      expect(bodyobj).toBe(expectedResult);
+      expect(bodyobj).toStrictEqual(expectedResult);
     });
 
     test('Check unsuccessful last name - using wrong', () => {
       const res = request(
         'POST',
-        'http://localhost:3000/auth/register',
+        'http://localhost:3200/v1/admin/auth/register',
         {
           json: {
             email: 'good.email@gmail.com',
@@ -141,17 +141,17 @@ describe('adminAuthLogin tests', () => {
           }
         }
       )
-      const bodyobj = JSON.parse(String(res.getBody()));
+      const bodyobj = JSON.parse(res.body.toString());
       const expectedResult = {
         error: 'Last name can only contain upper/lower case letters, spaces, hyphens or apostrophes',
       }
-      expect(bodyobj).toBe(expectedResult);
+      expect(bodyobj).toStrictEqual(expectedResult);
     });
 
     test('Check unsuccessful last name - Wrong size', () => {
       const res = request(
         'POST',
-        'http://localhost:3000/auth/register',
+        'http://localhost:3200/v1/admin/auth/register',
         {
           json: {
             email: 'good.email@gmail.com',
@@ -161,17 +161,17 @@ describe('adminAuthLogin tests', () => {
           }
         }
       )
-      const bodyobj = JSON.parse(String(res.getBody()));
+      const bodyobj = JSON.parse(res.body.toString());
       const expectedResult = {
         error: 'Last name has to be between 2 and 20 characters',
       }
-      expect(bodyobj).toBe(expectedResult);
+      expect(bodyobj).toStrictEqual(expectedResult);
     });
 
     test('Check unsuccessful last name - Wrong size', () => {
       const res = request(
         'POST',
-        'http://localhost:3000/auth/register',
+        'http://localhost:3200/v1/admin/auth/register',
         {
           json: {
             email: 'good.email@gmail.com',
@@ -181,11 +181,11 @@ describe('adminAuthLogin tests', () => {
           }
         }
       )
-      const bodyobj = JSON.parse(String(res.getBody()));
+      const bodyobj = JSON.parse(res.body.toString());
       const expectedResult = {
         error: 'Last name has to be between 2 and 20 characters',
       }
-      expect(bodyobj).toBe(expectedResult);
+      expect(bodyobj).toStrictEqual(expectedResult);
     });
   });
 
@@ -193,7 +193,7 @@ describe('adminAuthLogin tests', () => {
     test('Check unsuccessful password - less then 8 characters', () => {
       const res = request(
         'POST',
-        'http://localhost:3000/auth/register',
+        'http://localhost:3200/v1/admin/auth/register',
         {
           json: {
             email: 'good.email@gmail.com',
@@ -203,17 +203,17 @@ describe('adminAuthLogin tests', () => {
           }
         }
       )
-      const bodyobj = JSON.parse(String(res.getBody()));
+      const bodyobj = JSON.parse(res.body.toString());
       const expectedResult = {
         error: 'Password length has to be 8 characters & needs to contain at least one number and at least one letter',
       }
-      expect(bodyobj).toBe(expectedResult);
+      expect(bodyobj).toStrictEqual(expectedResult);
     });
 
     test('Check unsuccessful password - does not contain 1 number and 1 letter', () => {
       const res = request(
         'POST',
-        'http://localhost:3000/auth/register',
+        'http://localhost:3200/v1/admin/auth/register',
         {
           json: {
             email: 'good.email@gmail.com',
@@ -223,17 +223,17 @@ describe('adminAuthLogin tests', () => {
           }
         }
       )
-      const bodyobj = JSON.parse(String(res.getBody()));
+      const bodyobj = JSON.parse(res.body.toString());
       const expectedResult = {
         error: 'Password length has to be 8 characters & needs to contain at least one number and at least one letter',
       }
-      expect(bodyobj).toBe(expectedResult);
+      expect(bodyobj).toStrictEqual(expectedResult);
     });
 
     test('Check unsuccessful password - does not contain 1 number and 1 letter', () => {
       const res = request(
         'POST',
-        'http://localhost:3000/auth/register',
+        'http://localhost:3200/v1/admin/auth/register',
         {
           json: {
             email: 'good.email@gmail.com',
@@ -243,17 +243,17 @@ describe('adminAuthLogin tests', () => {
           }
         }
       )
-      const bodyobj = JSON.parse(String(res.getBody()));
+      const bodyobj = JSON.parse(res.body.toString());
       const expectedResult = {
         error: 'Password length has to be 8 characters & needs to contain at least one number and at least one letter',
       }
-      expect(bodyobj).toBe(expectedResult);
+      expect(bodyobj).toStrictEqual(expectedResult);
     });
 
     test('Check unsuccessful password - does not contain 1 number and 1 letter', () => {
       const res = request(
         'POST',
-        'http://localhost:3000/auth/register',
+        'http://localhost:3200/v1/admin/auth/register',
         {
           json: {
             email: 'good.email@gmail.com',
@@ -263,21 +263,21 @@ describe('adminAuthLogin tests', () => {
           }
         }
       )
-      const bodyobj = JSON.parse(String(res.getBody()));
+      const bodyobj = JSON.parse(res.body.toString());
       const expectedResult = {
         error: 'Password length has to be 8 characters & needs to contain at least one number and at least one letter',
       }
-      expect(bodyobj).toBe(expectedResult);
+      expect(bodyobj).toStrictEqual(expectedResult);
     });
   });
 
   
 
   describe('Unsuccessful Register - email', () => {
-    test('1. Check unsuccessful email - email not valid', () => {
+    test('Check unsuccessful email - email not valid', () => {
       const res = request(
         'POST',
-        'http://localhost:3000/auth/register',
+        'http://localhost:3200/v1/admin/auth/register',
         {
           json: {
             email: 'good.emailgmail.com',
@@ -287,20 +287,20 @@ describe('adminAuthLogin tests', () => {
           }
         }
       )
-      const bodyobj = JSON.parse(String(res.getBody()));
+      const bodyobj = JSON.parse(res.body.toString());
       const expectedResult = {
         error: 'Email is not valid',
       }
-      expect(bodyobj).toBe(expectedResult);
+      expect(bodyobj).toStrictEqual(expectedResult);
     });
 
-    test('2. Check unsuccessful email - email used already', () => {
+    test('Check unsuccessful email - email used already', () => {
       const res1 = request(
         'POST',
-        'http://localhost:3000/auth/register',
+        'http://localhost:3200/v1/admin/auth/register',
         {
           json: {
-            email: 'good.emailgmail.com',
+            email: 'good.email@gmail.com',
             password: 'Password123',
             nameFirst: 'Joh nny-Bone',
             nameLast: 'Jones',
@@ -309,21 +309,21 @@ describe('adminAuthLogin tests', () => {
       )
       const res2 = request(
         'POST',
-        'http://localhost:3000/auth/register',
+        'http://localhost:3200/v1/admin/auth/register',
         {
           json: {
-            email: 'good.emailgmail.com',
+            email: 'good.email@gmail.com',
             password: 'Password123',
             nameFirst: 'Joh nny-Bone',
             nameLast: 'Jones',
           }
         }
       )
-      const bodyobj = JSON.parse(String(res.getBody()));
+      const bodyobj = JSON.parse(res2.body.toString());
       const expectedResult = {
         error: 'Email already used',
       }
-      expect(bodyobj).toBe(expectedResult);
+      expect(bodyobj).toStrictEqual(expectedResult);
     });
   });
 });
