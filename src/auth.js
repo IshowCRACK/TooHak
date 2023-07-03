@@ -150,7 +150,7 @@ function adminAuthLogin (email, password) {
 
 /**
   * Update a Users details with an email, password, or  names, then returns empty object
-  *
+  * @param {number} authUserId - Users Id
   * @param {string} email - Users email
   * @param {string} nameFirst - Users first name
   * @param {string} nameLast - Users last name
@@ -207,6 +207,18 @@ function adminUpdateUserDetails(authUserId, email, nameFirst, nameLast) {
 
   return {};
 }
+
+
+/**
+  * Update a Users password with a new password, then returns empty object
+  *
+  * @param {number} authUserId - Users Id
+  * @param {string} oldPassword - Users old password
+  * @param {string} newPassword - Users new password
+  *
+  * @returns {{}} - Returns empty object
+*/
+
 
 
 export { adminAuthLogin, adminAuthRegister, adminUserDetails, adminUpdateUserDetails };
