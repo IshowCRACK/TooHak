@@ -1,5 +1,6 @@
-import { adminAuthLogin, adminAuthRegister, adminUserDetails } from '../auth.js';
-import { clear } from '../other.js';
+import { AdminAuthLogin, AdminAuthRegister, AdminUserDetails, Error } from '../../interfaces/interfaces';
+import { adminAuthLogin, adminAuthRegister, adminUserDetails } from '../auth';
+import { clear } from '../other';
 
 beforeEach(() => {
   clear();
@@ -9,83 +10,83 @@ describe('adminAuthLogin tests', () => {
   test('Check successful register with 1 register', () => {
     adminAuthRegister('good.email@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes');
     adminAuthRegister('g1ood.email@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes');
-    const authUserId3 = adminAuthRegister('god.email@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes');
+    const authUserId3 = adminAuthRegister('god.email@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes') as AdminAuthRegister;
     expect(authUserId3).toStrictEqual({ authUserId: 2 });
   });
 
   describe('Unsuccessful register - names', () => {
     test('Check unsuccessful first name - null input', () => {
-      const authUserId = adminAuthRegister('good.email@gmail.com', 'Password123', '', 'Jones');
+      const authUserId = adminAuthRegister('good.email@gmail.com', 'Password123', '', 'Jones') as Error;
       expect(authUserId).toStrictEqual({ error: 'First name has to be between 2 and 20 characters' });
     });
 
     test('Check unsuccessful first name - using wrong characters', () => {
-      const authUserId = adminAuthRegister('good.email@gmail.com', 'Password123', 'Johnny-B345one', 'Jones');
+      const authUserId = adminAuthRegister('good.email@gmail.com', 'Password123', 'Johnny-B345one', 'Jones') as Error;
       expect(authUserId).toStrictEqual({ error: 'First name can only contain upper/lower case letters, spaces, hyphens or apostrophes' });
     });
 
     test('Check unsuccessful first name - Wrong Size', () => {
-      const authUserId = adminAuthRegister('good.email@gmail.com', 'Password123', 'J', 'Jones');
+      const authUserId = adminAuthRegister('good.email@gmail.com', 'Password123', 'J', 'Jones') as Error;
       expect(authUserId).toStrictEqual({ error: 'First name has to be between 2 and 20 characters' });
     });
 
     test('Check unsuccessful first name - Wrong Size', () => {
-      const authUserId = adminAuthRegister('good.email@gmail.com', 'Password123', 'Jooooooooooooooooooooooooooonnnnnnnnyyyyyyy', 'Jones');
+      const authUserId = adminAuthRegister('good.email@gmail.com', 'Password123', 'Jooooooooooooooooooooooooooonnnnnnnnyyyyyyy', 'Jones') as Error;
       expect(authUserId).toStrictEqual({ error: 'First name has to be between 2 and 20 characters' });
     });
 
     test('Check unsuccessful last name - null input', () => {
-      const authUserId = adminAuthRegister('good.email@gmail.com', 'Password123', 'Joh nny-Bone', '');
+      const authUserId = adminAuthRegister('good.email@gmail.com', 'Password123', 'Joh nny-Bone', '') as Error;
       expect(authUserId).toStrictEqual({ error: 'Last name has to be between 2 and 20 characters' });
     });
 
     test('Check unsuccessful last name - using wrong characters', () => {
-      const authUserId = adminAuthRegister('good.email@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo124143\'nes');
+      const authUserId = adminAuthRegister('good.email@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo124143\'nes') as Error;
       expect(authUserId).toStrictEqual({ error: 'Last name can only contain upper/lower case letters, spaces, hyphens or apostrophes' });
     });
 
     test('Check unsuccessful last name - Wrong Size', () => {
-      const authUserId = adminAuthRegister('good.email@gmail.com', 'Password123', 'Joh nny-Bone', 'j');
+      const authUserId = adminAuthRegister('good.email@gmail.com', 'Password123', 'Joh nny-Bone', 'j') as Error;
       expect(authUserId).toStrictEqual({ error: 'Last name has to be between 2 and 20 characters' });
     });
 
     test('Check unsuccessful LastName - Wrong Size', () => {
-      const authUserId = adminAuthRegister('good.email@gmail.com', 'Password123', 'Joh nny-Bone', 'joooooooooooooooooooooooonnnnnnnnnneeeeeeeeeeessssss');
+      const authUserId = adminAuthRegister('good.email@gmail.com', 'Password123', 'Joh nny-Bone', 'joooooooooooooooooooooooonnnnnnnnnneeeeeeeeeeessssss') as Error;
       expect(authUserId).toStrictEqual({ error: 'Last name has to be between 2 and 20 characters' });
     });
   });
 
   describe('Unsuccessful Register - password', () => {
     test('Check unsuccessful password - less then 8 characters', () => {
-      const authUserId = adminAuthRegister('good.email@gmail.com', 'Pas', 'Joh nny-Bone', 'Jo\'nes');
+      const authUserId = adminAuthRegister('good.email@gmail.com', 'Pas', 'Joh nny-Bone', 'Jo\'nes') as Error;
       expect(authUserId).toStrictEqual({ error: 'Password length has to be 8 characters & needs to contain at least one number and at least one letter' });
     });
 
     test('Check unsuccessful password - does not contain 1 number and 1 letter', () => {
-      const authUserId = adminAuthRegister('good.email@gmail.com', '123456789', 'Joh nny-Bone', 'Jo\'nes');
+      const authUserId = adminAuthRegister('good.email@gmail.com', '123456789', 'Joh nny-Bone', 'Jo\'nes') as Error;
       expect(authUserId).toStrictEqual({ error: 'Password length has to be 8 characters & needs to contain at least one number and at least one letter' });
     });
 
     test('Check unsuccessful password - does not contain 1 number and 1 letter', () => {
-      const authUserId = adminAuthRegister('good.email@gmail.com', '', 'Joh nny-Bone', 'Jo\'nes');
+      const authUserId = adminAuthRegister('good.email@gmail.com', '', 'Joh nny-Bone', 'Jo\'nes') as Error;
       expect(authUserId).toStrictEqual({ error: 'Password length has to be 8 characters & needs to contain at least one number and at least one letter' });
     });
 
     test('Check unsuccessful password - does not contain 1 number and 1 letter', () => {
-      const authUserId = adminAuthRegister('good.email@gmail.com', 'pyassword', 'Joh nny-Bone', 'Jo\'nes');
+      const authUserId = adminAuthRegister('good.email@gmail.com', 'pyassword', 'Joh nny-Bone', 'Jo\'nes') as Error;
       expect(authUserId).toStrictEqual({ error: 'Password length has to be 8 characters & needs to contain at least one number and at least one letter' });
     });
   });
 
   describe('Unsuccessful Register - email', () => {
     test('Check unsuccessful email - email not valid', () => {
-      const authUserId = adminAuthRegister('good.emailgmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes');
+      const authUserId = adminAuthRegister('good.emailgmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes') as Error;
       expect(authUserId).toStrictEqual({ error: 'Email is not valid' });
     });
 
     test('Check unsuccessful email - email used already', () => {
       adminAuthRegister('good.email@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes');
-      const authUserId2 = adminAuthRegister('good.email@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes');
+      const authUserId2 = adminAuthRegister('good.email@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes') as Error;
       expect(authUserId2).toStrictEqual({ error: 'Email already used' });
     });
   });
@@ -94,16 +95,16 @@ describe('adminAuthLogin tests', () => {
 describe('adminAuthLogin tests', () => {
   describe('Successful Login', () => {
     test('One user login', () => {
-      const authUserId = adminAuthRegister('goofy.email@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes');
-      const authUserIdLogin = adminAuthLogin('goofy.email@gmail.com', 'Password123');
+      const authUserId = adminAuthRegister('goofy.email@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes') as AdminAuthRegister;
+      const authUserIdLogin = adminAuthLogin('goofy.email@gmail.com', 'Password123') as AdminAuthLogin;
       expect(authUserId).toStrictEqual(authUserIdLogin);
     });
     test('Multiple user login', () => {
       adminAuthRegister('good.ail@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes');
-      const authUserId = adminAuthRegister('gooemail@gmail.com', 'Password121233', 'Joh nny-Bone', 'Jo\'nes');
-      const authUserId2 = adminAuthRegister('gdemail@gmail.com', 'Password112315g23', 'Joh nny-Bone', 'Jo\'nes');
-      const authUserIdLogin = adminAuthLogin('gooemail@gmail.com', 'Password121233');
-      const authUserIdLogin2 = adminAuthLogin('gdemail@gmail.com', 'Password112315g23');
+      const authUserId = adminAuthRegister('gooemail@gmail.com', 'Password121233', 'Joh nny-Bone', 'Jo\'nes') as AdminAuthRegister;
+      const authUserId2 = adminAuthRegister('gdemail@gmail.com', 'Password112315g23', 'Joh nny-Bone', 'Jo\'nes') as AdminAuthRegister;
+      const authUserIdLogin = adminAuthLogin('gooemail@gmail.com', 'Password121233') as AdminAuthLogin;
+      const authUserIdLogin2 = adminAuthLogin('gdemail@gmail.com', 'Password112315g23') as AdminAuthLogin;
       expect(authUserId).toStrictEqual(authUserIdLogin);
       expect(authUserId2).toStrictEqual(authUserIdLogin2);
     });
@@ -113,17 +114,17 @@ describe('adminAuthLogin tests', () => {
     test('User does not exist', () => {
       adminAuthRegister('gooil@gmail.com', 'Password12sdf3', 'Joh nny-Bone', 'Jo\'nes');
       adminAuthRegister('mail@gmail.com', 'Password12sdf3', 'Joh nny-Bone', 'Jo\'nes');
-      const authUserIdLogin = adminAuthLogin('goyeama@gmail.com', 'Pasworadsa2d123');
+      const authUserIdLogin = adminAuthLogin('goyeama@gmail.com', 'Pasworadsa2d123') as Error;
       expect(authUserIdLogin).toStrictEqual({ error: 'Username or Password is not valid' });
     });
     test('Wrong Email', () => {
       adminAuthRegister('good.email@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes');
-      const authUserIdLogin = adminAuthLogin('good.ema@gmail.com', 'Password123');
+      const authUserIdLogin = adminAuthLogin('good.ema@gmail.com', 'Password123') as Error;
       expect(authUserIdLogin).toStrictEqual({ error: 'Username or Password is not valid' });
     });
     test('Wrong Password', () => {
       adminAuthRegister('good.ail@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes');
-      const authUserIdLogin = adminAuthLogin('good.ail@gmail.com', 'Passw15g23');
+      const authUserIdLogin = adminAuthLogin('good.ail@gmail.com', 'Passw15g23') as Error;
       expect(authUserIdLogin).toStrictEqual({ error: 'Username or Password is not valid' });
     });
   });
@@ -132,16 +133,16 @@ describe('adminAuthLogin tests', () => {
 describe('adminUserDetails test', () => {
   describe('Unsuccessful retrieval of user details', () => {
     test('User does not exists', () => {
-      const authUserId = adminAuthRegister('gdemail@gmail.com', 'Password112315g23', 'Joh nny-Bone', 'Jo\'nes').authUserId;
+      const authUserId = (adminAuthRegister('gdemail@gmail.com', 'Password112315g23', 'Joh nny-Bone', 'Jo\'nes') as AdminAuthRegister).authUserId;
       expect(adminUserDetails(authUserId + 1)).toStrictEqual({ error: 'User does not exists' });
     });
   });
 
   describe('Successful retrieval of user details', () => {
     test('User who has logged in without fail, (register counts as 1 successful login)', () => {
-      const authUserId = adminAuthRegister('goofy.email@gmail.com', 'Password123', 'Pop', 'Smoke').authUserId;
+      const authUserId = (adminAuthRegister('goofy.email@gmail.com', 'Password123', 'Pop', 'Smoke') as AdminAuthRegister).authUserId;
       adminAuthLogin('goofy.email@gmail.com', 'Password123');
-      const userDetails = adminUserDetails(authUserId);
+      const userDetails = adminUserDetails(authUserId) as AdminUserDetails;
       expect(userDetails).toMatchObject({
         user: {
           userId: 0,
@@ -154,12 +155,12 @@ describe('adminUserDetails test', () => {
     });
 
     test('One user who logged in with multiple fails', () => {
-      const authUserId = adminAuthRegister('g1oofy.email@gmail.com', 'Password123', 'Pop', 'Smoke').authUserId;
+      const authUserId = (adminAuthRegister('g1oofy.email@gmail.com', 'Password123', 'Pop', 'Smoke') as AdminAuthRegister).authUserId;
       adminAuthLogin('g1oofy.email@gmail.com', 'Password12');
       adminAuthLogin('g1oofy.email@gmail.com', 'Password12');
       adminAuthLogin('g1oofy.email@gmail.com', 'Password12');
       adminAuthLogin('g1oofy.email@gmail.com', 'Password123');
-      const userDetails = adminUserDetails(authUserId);
+      const userDetails = adminUserDetails(authUserId) as AdminUserDetails;
       expect(userDetails).toMatchObject({
         user: {
           userId: 0,
@@ -172,17 +173,17 @@ describe('adminUserDetails test', () => {
     });
 
     test('Multiple users created and and multiple user who has failed multiple times', () => {
-      const authUserId = adminAuthRegister('good.ail@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes').authUserId;
-      const authUserId2 = adminAuthRegister('gooemail@gmail.com', 'Password121233', 'Joh nny-Bone', 'Jo\'nes').authUserId;
-      const authUserId3 = adminAuthRegister('gdemail@gmail.com', 'Password112315g23', 'Joh nny-Bone', 'Jo\'nes').authUserId;
+      const authUserId = (adminAuthRegister('good.ail@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes') as AdminAuthRegister).authUserId;
+      const authUserId2 = (adminAuthRegister('gooemail@gmail.com', 'Password121233', 'Joh nny-Bone', 'Jo\'nes') as AdminAuthRegister).authUserId;
+      const authUserId3 = (adminAuthRegister('gdemail@gmail.com', 'Password112315g23', 'Joh nny-Bone', 'Jo\'nes') as AdminAuthRegister).authUserId;
 
-      adminAuthLogin('good.ail@gmail.com', 'Pas13ord123', 'Joh nny-Bone', 'Jo\'nes');
-      adminAuthLogin('good.ail@gmail.com', 'Pas13ord123', 'Joh nny-Bone', 'Jo\'nes');
-      adminAuthLogin('good.ail@gmail.com', 'Pas13ord123', 'Joh nny-Bone', 'Jo\'nes');
-      adminAuthLogin('good.ail@gmail.com', 'Pas13ord123', 'Joh nny-Bone', 'Jo\'nes');
-      adminAuthLogin('good.ail@gmail.com', 'Pas13ord123', 'Joh nny-Bone', 'Jo\'nes');
-      adminAuthLogin('good.ail@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes');
-      const userDetails = adminUserDetails(authUserId);
+      adminAuthLogin('good.ail@gmail.com', 'Pas13ord123');
+      adminAuthLogin('good.ail@gmail.com', 'Pas13ord123');
+      adminAuthLogin('good.ail@gmail.com', 'Pas13ord123');
+      adminAuthLogin('good.ail@gmail.com', 'Pas13ord123');
+      adminAuthLogin('good.ail@gmail.com', 'Pas13ord123');
+      adminAuthLogin('good.ail@gmail.com', 'Password123');
+      const userDetails = adminUserDetails(authUserId) as AdminUserDetails;
       expect(userDetails).toMatchObject({
         user: {
           userId: 0,
@@ -193,10 +194,10 @@ describe('adminUserDetails test', () => {
         }
       });
 
-      adminAuthLogin('gooemail@gmail.com', 'Passsword121233', 'Joh nny-Bone', 'Jo\'nes');
-      adminAuthLogin('gooemail@gmail.com', 'Passwosrd121233', 'Joh nny-Bone', 'Jo\'nes');
-      adminAuthLogin('gooemail@gmail.com', 'Password121233', 'Joh nny-Bone', 'Jo\'nes');
-      const userDetails2 = adminUserDetails(authUserId2);
+      adminAuthLogin('gooemail@gmail.com', 'Passsword121233');
+      adminAuthLogin('gooemail@gmail.com', 'Passwosrd121233');
+      adminAuthLogin('gooemail@gmail.com', 'Password121233');
+      const userDetails2 = adminUserDetails(authUserId2) as AdminUserDetails;
       expect(userDetails2).toMatchObject({
         user: {
           userId: 1,
@@ -207,11 +208,11 @@ describe('adminUserDetails test', () => {
         }
       });
 
-      adminAuthLogin('gdemail@gmail.com', 'Passwrd112315g23', 'Joh nny-Bone', 'Jo\'nes');
-      adminAuthLogin('gdemail@gmail.com', 'Password112315g23', 'Joh nny-Bone', 'Jo\'nes');
-      adminAuthLogin('gdemail@gmail.com', 'Password112315g23', 'Joh nny-Bone', 'Jo\'nes');
-      adminAuthLogin('gdemail@gmail.com', 'Password112315g23', 'Joh nny-Bone', 'Jo\'nes');
-      const userDetails3 = adminUserDetails(authUserId3);
+      adminAuthLogin('gdemail@gmail.com', 'Passwrd112315g23');
+      adminAuthLogin('gdemail@gmail.com', 'Password112315g23');
+      adminAuthLogin('gdemail@gmail.com', 'Password112315g23');
+      adminAuthLogin('gdemail@gmail.com', 'Password112315g23');
+      const userDetails3 = adminUserDetails(authUserId3) as AdminUserDetails;
       expect(userDetails3).toMatchObject({
         user: {
           userId: 2,
@@ -224,12 +225,12 @@ describe('adminUserDetails test', () => {
     });
   });
   test('User successfully registers but unable to login', () => {
-    const authUserId = adminAuthRegister('goo4email@gmail.com', 'Password121233', 'Joh nny-Bone', 'Jo\'nes').authUserId;
+    const authUserId = (adminAuthRegister('goo4email@gmail.com', 'Password121233', 'Joh nny-Bone', 'Jo\'nes') as AdminAuthRegister).authUserId;
     adminAuthLogin('goo4email@gmail.com', 'Passsword123');
     adminAuthLogin('goo4email@gmail.com', 'Passsword123');
     adminAuthLogin('goo4email@gmail.com', 'Passsword123');
     adminAuthLogin('goo4email@gmail.com', 'Passsword123');
-    const userDetails = adminUserDetails(authUserId);
+    const userDetails = adminUserDetails(authUserId) as AdminUserDetails;
     expect(userDetails).toMatchObject({
       user: {
         userId: 0,

@@ -1,8 +1,9 @@
-import { getData, setData } from './dataStore.js';
+import { Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQuizCreateReturn, AdminQuizListReturn, AdminQuizList, AdminQuizInfoReturn } from '../interfaces/interfaces';
+import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkAuthUserIdValid, checkQuizAndUserIdValid,
   checkQuizIdValid, checkQuizNameUsed
-} from './helper.js';
+} from './helper';
 
 /**
   * Update the description of the relevant quiz
@@ -13,8 +14,8 @@ import {
   *
   * @returns {{} | {error: string}} - Returns an empty object if valid
  */
-function adminQuizDescriptionUpdate (authUserId, quizId, description) {
-  const data = getData();
+function adminQuizDescriptionUpdate (authUserId: number, quizId: number, description: string): AdminQuizDescriptionUpdateReturn {
+  const data: Data = getData();
   // AuthUserId is not a valid user
   if (!checkAuthUserIdValid(authUserId)) {
     return { error: 'AuthUserId is not a valid user' };
@@ -54,7 +55,7 @@ function adminQuizDescriptionUpdate (authUserId, quizId, description) {
   *
   * @returns {{} | {error: string}} - Returns empty object if valid
  */
-function adminQuizRemove (authUserId, quizId) {
+function adminQuizRemove (authUserId: number, quizId: number): AdminQuizRemoveReturn {
   const data = getData();
 
   // AuthUserId is not a valid user
@@ -95,7 +96,7 @@ function adminQuizRemove (authUserId, quizId) {
   *
   * @returns {{quizId: number} | {error: string}} - Returns an object containing the quizId
  */
-function adminQuizCreate (authUserId, name, description) {
+function adminQuizCreate (authUserId: number, name: string, description: string): AdminQuizCreateReturn {
   // check valid userID
   if (!checkAuthUserIdValid(authUserId)) {
     return { error: 'AuthUserId is not a valid user' };
@@ -161,14 +162,14 @@ function adminQuizCreate (authUserId, name, description) {
   *
   * @returns {{quizzes: Array<{quizId: number, name: string}>} | {error: string}} - An array of quizzes and its details
  */
-function adminQuizList (authUserId) {
+function adminQuizList (authUserId: number): AdminQuizListReturn {
   // check valid UserId
   if (!checkAuthUserIdValid(authUserId)) {
     return { error: 'AuthUserId is not a valid user' };
   }
 
   const data = getData();
-  const output = {
+  const output: AdminQuizList = {
     quizzes: [
 
     ]
@@ -196,7 +197,7 @@ function adminQuizList (authUserId) {
   *
   * @returns {{} | {error: string}} - Returns an empty object if valid
  */
-function adminQuizNameUpdate (authUserId, quizId, name) {
+function adminQuizNameUpdate (authUserId: number, quizId: number, name: string) {
   const data = getData();
 
   // AuthUserId is not a valid user
@@ -249,7 +250,7 @@ function adminQuizNameUpdate (authUserId, quizId, name) {
   *
   * @returns {{quizId: number, name: string, timeCreated: number, timeLastEdited: number, description: string}} - An array of quizzes and its details
  */
-function adminQuizInfo (authUserId, quizId) {
+function adminQuizInfo (authUserId: number, quizId: number): AdminQuizInfoReturn {
   const data = getData();
 
   if (!checkAuthUserIdValid(authUserId)) {

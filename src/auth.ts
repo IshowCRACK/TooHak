@@ -1,5 +1,6 @@
-import { getData, setData } from './dataStore.js';
-import { checkName, checkPassword } from './helper.js';
+import { AdminAuthLoginReturn, AdminAuthRegisterReturn, AdminUserDetailsReturn } from '../interfaces/interfaces';
+import { getData, setData } from './dataStore';
+import { checkName, checkPassword } from './helper';
 import validator from 'validator';
 
 /**
@@ -12,7 +13,7 @@ import validator from 'validator';
   *
   * @returns {{authUserId: number} | {error: string}} - Returns an integer, authUserId that is unique to the user
 */
-function adminAuthRegister (email, password, nameFirst, nameLast) {
+function adminAuthRegister (email: string, password: string, nameFirst: string, nameLast: string): AdminAuthRegisterReturn {
   const data = getData();
 
   // checking if any parts are null
@@ -76,8 +77,8 @@ function adminAuthRegister (email, password, nameFirst, nameLast) {
   data.users.push({
     email,
     password,
-    firstName: nameFirst,
-    lastName: nameLast,
+    nameFirst: nameFirst,
+    nameLast: nameLast,
     authUserId: userID,
     numSuccessLogins: 1,
     numFailedPasswordsSinceLastLogin: 0,
@@ -97,7 +98,7 @@ function adminAuthRegister (email, password, nameFirst, nameLast) {
   *
   * @returns {{user: {userId: number, name: string, email: string, numSuccessfulLogins: number, numFailedPasswordsSinceLastLogin: number}} | {error: string}} - Returns an object of User details
 */
-function adminUserDetails (authUserId) {
+function adminUserDetails (authUserId: number): AdminUserDetailsReturn {
   const data = getData();
 
   // Loop through users dataStore
@@ -107,7 +108,7 @@ function adminUserDetails (authUserId) {
       return {
         user: {
           userId: user.authUserId,
-          name: `${user.firstName} ${user.lastName}`,
+          name: `${user.nameFirst} ${user.nameLast}`,
           email: user.email,
           numSuccessfulLogins: user.numSuccessLogins,
           numFailedPasswordsSinceLastLogin: user.numFailedPasswordsSinceLastLogin
@@ -129,7 +130,7 @@ function adminUserDetails (authUserId) {
   *
   * @returns {{authUserId: number} | {error: string}} - returns an integer, authUserId that is unique to the user
 */
-function adminAuthLogin (email, password) {
+function adminAuthLogin (email: string, password: string): AdminAuthLoginReturn {
   const data = getData();
 
   // loop through users array from dataStore
