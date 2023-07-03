@@ -1,5 +1,5 @@
 import { getData, setData } from './dataStore.js';
-import { checkName, checkPassword } from './helper.js';
+import { checkName, checkPassword, checkEmail, checkAuthUserIdValid, emailAlreadyUsed } from './helper.js';
 import validator from 'validator';
 
 /**
@@ -148,4 +148,65 @@ function adminAuthLogin (email, password) {
   return { error: 'Username or Password is not valid' };
 }
 
-export { adminAuthLogin, adminAuthRegister, adminUserDetails };
+/**
+  * Update a Users details with an email, password, or  names, then returns empty object
+  *
+  * @param {string} email - Users email
+  * @param {string} nameFirst - Users first name
+  * @param {string} nameLast - Users last name
+  *
+  * @returns {{}} - Returns empty object
+*/
+function adminUpdateUserDetails(authUserId, email, nameFirst, nameLast) {
+  const data = getData();
+
+  // Find the user by authUserId
+  const user = data.users.find((user) => user.authUserId === authUserId);
+
+  if (user) {
+    let emailChanged = false;
+
+    // Check if email is provided and valid
+    if (email) {
+      // Check if email is valid and not used by another user
+      if (!validator.isEmail(email) || emailAlreadyUsed(email, authUserId)) {
+        return {
+          error: 'Invalid email or email is already in use'
+        };
+      }
+
+      user.email = email;
+      emailChanged = true;
+    }
+
+    // Update the user's details if the inputs are valid
+    if (checkName(nameFirst) && nameFirst.length >= 2 && nameFirst.length <= 20) {
+      user.firstName = nameFirst;
+    } else {
+      return {
+        error: 'Invalid first name'
+      };
+    }
+
+    if (checkName(nameLast) && nameLast.length >= 2 && nameLast.length <= 20) {
+      user.lastName = nameLast;
+    } else {
+      return {
+        error: 'Invalid last name'
+      };
+    }
+    // Update data only if there were changes
+    if (emailChanged) {
+      setData(data);
+    }
+  } else {
+    return {
+      error: 'User not found'
+    };
+  }
+
+  return {};
+}
+
+
+export { adminAuthLogin, adminAuthRegister, adminUserDetails, adminUpdateUserDetails };

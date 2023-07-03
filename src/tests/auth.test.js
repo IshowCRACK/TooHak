@@ -1,4 +1,4 @@
-import { adminAuthLogin, adminAuthRegister, adminUserDetails } from '../auth.js';
+import { adminAuthLogin, adminAuthRegister, adminUserDetails, adminUpdateUserDetails } from '../auth.js';
 import { clear } from '../other.js';
 
 beforeEach(() => {
@@ -129,6 +129,7 @@ describe('adminAuthLogin tests', () => {
   });
 });
 
+//adminUserDetails test
 describe('adminUserDetails test', () => {
   describe('Unsuccessful retrieval of user details', () => {
     test('User does not exists', () => {
@@ -240,4 +241,84 @@ describe('adminUserDetails test', () => {
       }
     });
   });
+});
+
+//admin Update User details 
+describe('AdminUpdateUserDetails tests', ()=> {
+  beforeEach(() => {
+    adminAuthRegister('something@gmail.com', 'password1', 'Ijlal', 'Khan');
+    adminAuthRegister('joemama@gmail.com', 'password2', 'joe', 'mama');
+  });
+
+  describe('Unsuccessful User detail update', ()=> {
+    test('Email is currently used by another user', () => {
+      const result = adminUpdateUserDetails(0,'joemama@gmail.com', 'Ijlal', 'Khan');
+      const getAdminInfo = adminUserDetails(0);
+      expect(result).toStrictEqual({ error: 'Invalid email or email is already in use' });
+    });
+    test('NameFirst contains characters other than lowercase letters, uppercase letters, spaces, hyphens, or apostrophes', () => {
+      const result = adminUpdateUserDetails(0,'something@gmail.com', 'ij/Lal', 'Khan');
+      const getAdminInfo = adminUserDetails(0);
+      expect(result).toStrictEqual({ error: 'Invalid first name' });
+    });
+    test('NameFirst is less than 2 characters', () => {
+      const result = adminUpdateUserDetails(0,'something@gmail.com', 'a', 'Khan');
+      const getAdminInfo = adminUserDetails(0);
+      expect(result).toStrictEqual({ error: 'Invalid first name' });
+    });
+    test('NameFirst is more than 20 characters', () => {
+      const result = adminUpdateUserDetails(0,'something@gmail.com', 'AbcdeAbcdeAbcdeAbcdef', 'Khan');
+      const getAdminInfo = adminUserDetails(0);
+      expect(result).toStrictEqual({ error: 'Invalid first name' });
+    });
+    test('NameLast contains characters other than lowercase letters, uppercase letters, spaces, hyphens, or apostrophes', () => {
+      const result = adminUpdateUserDetails(0,'something@gmail.com', 'ijLal', 'Kh/an');
+      const getAdminInfo = adminUserDetails(0);
+      expect(result).toStrictEqual({ error: 'Invalid last name' });
+    });
+    test('NameLast is less than 2 characters', () => {
+      const result = adminUpdateUserDetails(0,'something@gmail.com', 'Ijlal', 'A');
+      const getAdminInfo = adminUserDetails(0);
+      expect(result).toStrictEqual({ error: 'Invalid last name' });
+    });
+    test('NameLast is more than 20 characters', () => {
+      const result = adminUpdateUserDetails(0,'something@gmail.com', 'Ijlal', 'AbcdeAbcdeAbcdeAbcdef');
+      const getAdminInfo = adminUserDetails(0);
+      expect(result).toStrictEqual({ error: 'Invalid last name' });
+    });
+  });
+
+  describe('Successful User detail update', ()=> {
+    test('Updating Email', () => {
+      adminUpdateUserDetails(0,'updated@gmail.com', 'Ijlal', 'Khan')
+      const getAdminInfo = adminUserDetails(0)
+      expect(getAdminInfo.user.email).toStrictEqual('updated@gmail.com');
+    });
+    test('Updating Email', () => {
+      adminUpdateUserDetails(1,'updated2@gmail.com', 'joe', 'mama')
+      const getAdminInfo = adminUserDetails(1)
+      expect(getAdminInfo.user.email).toStrictEqual('updated2@gmail.com');
+    });
+    test('Updating first name', () => {
+      adminUpdateUserDetails(0,'something@gmail.com', 'UpdatedNameFirst', 'Khan')
+      const getAdminInfo = adminUserDetails(0)
+      expect(getAdminInfo.user.name).toStrictEqual('UpdatedNameFirst Khan');
+    });
+    test('Updating first name', () => {
+      adminUpdateUserDetails(1,'joemama@gmail.com', 'UpdatedNameFirst', 'mama')
+      const getAdminInfo = adminUserDetails(1)
+      expect(getAdminInfo.user.name).toStrictEqual('UpdatedNameFirst mama');
+    });
+    test('Updating last name', () => {
+      adminUpdateUserDetails(0,'something@gmail.com', 'Ijlal', 'UpdatedNameLast')
+      const getAdminInfo = adminUserDetails(0)
+      expect(getAdminInfo.user.name).toStrictEqual('Ijlal UpdatedNameLast');
+    });
+    test('Updating last name', () => {
+      adminUpdateUserDetails(1,'joemama@gmail.com', 'joe', 'UpdatedNameLast')
+      const getAdminInfo = adminUserDetails(1)
+      expect(getAdminInfo.user.name).toStrictEqual('joe UpdatedNameLast');
+    });
+  });
+  
 });
