@@ -1,4 +1,4 @@
-import { Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQuizCreateReturn, AdminQuizListReturn, AdminQuizList, AdminQuizInfoReturn } from '../interfaces/interfaces';
+import { Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQuizCreateReturn, AdminQuizListReturn, AdminQuizList, AdminQuizInfoReturn, viewUserDeletedQuizzesReturn } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkAuthUserIdValid, checkQuizAndUserIdValid,
@@ -73,18 +73,59 @@ function adminQuizRemove (authUserId: number, quizId: number): AdminQuizRemoveRe
     return { error: 'Quiz ID does not refer to a quiz that this user owns' };
   }
 
-  const length = data.quizzes.length;
-  for (let index = 0; index < length; index++) {
-    if (data.quizzes[index].quizId === quizId) {
-      data.quizzes.splice(index, 1);
-      break;
-    }
+  const userIndex = data.users.findIndex((user) => user.authUserId === authUserId);
+
+  if (userIndex === -1) {
+    return { error: 'User does not exist' };
   }
 
-  setData(data);
+  const quizIndex = data.quizzes.findIndex((quiz) => quiz.quizId === quizId);
 
+  if (quizIndex === -1) {
+    return { error: 'Quiz ID does not refer to a valid quiz' };
+  }
+
+  const deletedQuiz = data.quizzes[quizIndex];
+  const user = data.users[userIndex];
+
+  if (!user.deletedQuizzes) {
+    user.deletedQuizzes = []; // Initialize deletedQuizzes array if it doesn't exist
+  }
+
+  user.deletedQuizzes.push(deletedQuiz);
+  data.quizzes.splice(quizIndex, 1);
+  setData(data);
+  
   return {};
 }
+
+/**
+  * Given a UserId, view the deleted quizes
+  *
+  * @param {number} authUserId - A unique Id for the user who owns the quiz
+  *
+  * @returns {Quiz[] | {error: string}} - Returns array if valid
+ */
+function viewUserDeletedQuizzes(authUserId: number): viewUserDeletedQuizzesReturn {
+  const data = getData();
+
+  if (!checkAuthUserIdValid(authUserId)) {
+    return { error: 'AuthUserId is not a valid user' };
+  }
+
+  const user = data.users.find((user) => user.authUserId === authUserId);
+
+  if (user) {
+    const deletedQuizzes = user.deletedQuizzes.map((quizId) => {
+      return data.quizzes.find((quiz) => quiz.quizId === quizId);
+    });
+
+    return deletedQuizzes;
+  } else {
+    return { error: 'User not found' };
+  }
+}
+
 
 /**
   * Given basic details about a new quiz, create one for the logged in user

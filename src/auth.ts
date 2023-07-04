@@ -10,7 +10,6 @@ import validator from 'validator';
   * @param {string} password - Users password with at least 1 number and 1 letter and is 8 characters long
   * @param {string} nameFirst - Users first name
   * @param {string} nameLast - Users last name
-  *
   * @returns {{authUserId: number} | {error: string}} - Returns an integer, authUserId that is unique to the user
 */
 function adminAuthRegister (email: string, password: string, nameFirst: string, nameLast: string): AdminAuthRegisterReturn {
