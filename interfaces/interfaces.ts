@@ -41,7 +41,7 @@ export type AdminAuthRegisterReturn = AdminAuthRegister | Error;
 export type AdminUserDetailsReturn = AdminUserDetails | Error;
 export type AdminUserALLDetailsReturn = AdminUserALLDetails | Error;
 export type AdminUpdateUserDetailsReturn = AdminUpdateUserDetails| Error;
-export type viewUserDeletedQuizzesReturn = viewUserDeletedQuizzes| Error;
+export type viewUserDeletedQuizzesReturn = Quiz[] | Error;
 
 
 
@@ -70,9 +70,6 @@ export interface AdminQuizList {
     quizzes: AdminQuizListReturnDescription[];
 }
 
-export interface viewUserDeletedQuizzes {
-    quiz: Quiz;
-}
 
 export interface AdminQuizNameUpdate {
 

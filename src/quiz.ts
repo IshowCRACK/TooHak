@@ -107,7 +107,7 @@ function adminQuizRemove (authUserId: number, quizId: number): AdminQuizRemoveRe
   * @returns {Quiz[] | {error: string}} - Returns array if valid
  */
 function viewUserDeletedQuizzes(authUserId: number): viewUserDeletedQuizzesReturn {
-  const data = getData();
+  const data: Data = getData();
 
   if (!checkAuthUserIdValid(authUserId)) {
     return { error: 'AuthUserId is not a valid user' };
@@ -116,11 +116,12 @@ function viewUserDeletedQuizzes(authUserId: number): viewUserDeletedQuizzesRetur
   const user = data.users.find((user) => user.authUserId === authUserId);
 
   if (user) {
-    const deletedQuizzes = user.deletedQuizzes.map((quizId) => {
-      return data.quizzes.find((quiz) => quiz.quizId === quizId);
+    const deletedQuizzes = user.deletedQuizzes || [];
+    const quizzes = deletedQuizzes.map((quiz) => {
+      return data.quizzes.find((q) => q.quizId === quiz.quizId);
     });
 
-    return deletedQuizzes;
+    return quizzes;
   } else {
     return { error: 'User not found' };
   }
