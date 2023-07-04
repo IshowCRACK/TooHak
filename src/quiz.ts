@@ -1,8 +1,8 @@
-import { Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQuizCreateReturn, AdminQuizListReturn, AdminQuizList, AdminQuizInfoReturn } from '../interfaces/interfaces';
+import { Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQuizCreateReturn, AdminQuizListReturn, AdminQuizList, AdminQuizInfoReturn, viewUserDeletedQuizzesReturn } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkAuthUserIdValid, checkQuizAndUserIdValid,
-  checkQuizIdValid, checkQuizNameUsed
+  checkQuizIdValid, checkQuizNameUsed,
 } from './helper';
 
 /**
@@ -73,17 +73,39 @@ function adminQuizRemove (authUserId: number, quizId: number): AdminQuizRemoveRe
     return { error: 'Quiz ID does not refer to a quiz that this user owns' };
   }
 
-  const length = data.quizzes.length;
-  for (let index = 0; index < length; index++) {
-    if (data.quizzes[index].quizId === quizId) {
-      data.quizzes.splice(index, 1);
-      break;
-    }
+  const userIndex = data.users.findIndex((user) => user.authUserId === authUserId);
+  const quizIndex = data.quizzes.findIndex((quiz) => quiz.quizId === quizId);
+  const deletedQuiz = data.quizzes[quizIndex];
+  const user = data.users[userIndex];
+
+  if (!user.deletedQuizzes) {
+    user.deletedQuizzes = []; // Initialize deletedQuizzes array if it doesn't exist
   }
 
-  setData(data);
+  user.deletedQuizzes.push(deletedQuiz);
+  data.quizzes.splice(quizIndex, 1);
 
+  setData(data);
   return {};
+}
+
+/**
+  * Given a UserId, view the deleted quizes
+  *
+  * @param {number} authUserId - A unique Id for the user who owns the quiz
+  *
+  * @returns {Quiz[] | {error: string}} - Returns array if valid
+ */
+function viewUserDeletedQuizzes(authUserId: number): viewUserDeletedQuizzesReturn {
+  const data = getData();
+
+  if (!checkAuthUserIdValid(authUserId)) {
+    return { error: 'AuthUserId is not a valid user' };
+  }
+
+  const user = data.users.find((user) => user.authUserId === authUserId);
+
+  return user.deletedQuizzes;
 }
 
 /**
@@ -279,4 +301,4 @@ function adminQuizInfo (authUserId: number, quizId: number): AdminQuizInfoReturn
   }
 }
 
-export { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo };
+export { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo, viewUserDeletedQuizzes };

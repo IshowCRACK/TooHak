@@ -8,6 +8,7 @@ export interface User {
     password: string;
     numSuccessLogins: number;
     numFailedPasswordsSinceLastLogin: number;
+    deletedQuizzes: Quiz[];
 }
 
 export interface Quiz {
@@ -38,6 +39,10 @@ export type AdminQuizInfoReturn = AdminQuizInfo | Error;
 export type AdminAuthLoginReturn = AdminAuthLogin | Error;
 export type AdminAuthRegisterReturn = AdminAuthRegister | Error;
 export type AdminUserDetailsReturn = AdminUserDetails | Error;
+export type AdminUserALLDetailsReturn = AdminUserALLDetails | Error;
+export type AdminUpdateUserDetailsReturn = AdminUpdateUserDetails| Error;
+export type adminUpdateUserPasswordReturn = adminUpdateUserPassword| Error;
+export type viewUserDeletedQuizzesReturn = Quiz[] | Error;
 
 export interface ClearReturn {
 
@@ -63,6 +68,7 @@ export type AdminQuizListReturnDescription = {
 export interface AdminQuizList {
     quizzes: AdminQuizListReturnDescription[];
 }
+
 
 export interface AdminQuizNameUpdate {
 
@@ -92,9 +98,18 @@ export interface AdminUserDetails {
     user: AdminUserDetailsReturnDetails;
 }
 
+export interface AdminUserALLDetails {
+    user: User;
+}
+
 export interface AdminAuthLogin {
     authUserId: number;
 }
 
+export interface AdminUpdateUserDetails {
 
+}
 
+export interface adminUpdateUserPassword {
+
+}

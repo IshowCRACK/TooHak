@@ -1,4 +1,4 @@
-import { AdminQuizList } from '../interfaces/interfaces';
+import { AdminQuizList, AdminUserALLDetailsReturn } from '../interfaces/interfaces';
 import { getData } from './dataStore';
 import { adminQuizList } from './quiz';
 
@@ -120,7 +120,65 @@ function checkQuizNameUsed (authUserId: number, quizName: string): boolean {
   return false;
 }
 
+/**
+ * Check if email is already used in another User
+ *
+ * @param {string} email - User's email
+ * @param {number} authUserId - User's unique ID
+ *
+ * @returns {boolean} - Returns true if email is already used, otherwise false
+ */
+function emailAlreadyUsed(email: string, authUserId: number): boolean {
+  const data = getData();
+
+  for (const user of data.users) {
+    if (user.email === email && user.authUserId !== authUserId) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+/**
+  * Gets ALL the user details, as 'adminUserDetails' does not return all properties of 'User'
+  * @param {number} authUserId - A unique Id for the user who owns the quiz
+  *
+  * @returns {users: Array<{
+*     authUserId: integer,
+*     nameFirst: string,
+*     nameLast: string,
+*     email: string,
+*     password: string,
+*     numSuccessLogins: integer,
+*     numFailedPasswordsSinceLastLogin: integer,
+*   }>} - Array of objects
+*/
+function adminUserALLDetails(authUserId: number): AdminUserALLDetailsReturn {
+  const data = getData();
+
+  for (const user of data.users) {
+    if (user.authUserId === authUserId) {
+      return {
+        user: {
+          authUserId: user.authUserId,
+          nameFirst: user.nameFirst,
+          nameLast: user.nameLast,
+          email: user.email,
+          password: user.password,
+          numSuccessLogins: user.numSuccessLogins,
+          numFailedPasswordsSinceLastLogin: user.numFailedPasswordsSinceLastLogin,
+          deletedQuizzes: user.deletedQuizzes
+        }
+      };
+    }
+  }
+  return {
+    error: 'User does not exist',
+  };
+}
+
 export {
   checkName, checkPassword, checkAlphanumeric, checkAuthUserIdValid,
-  checkQuizIdValid, checkQuizAndUserIdValid, checkQuizNameUsed
+  checkQuizIdValid, checkQuizAndUserIdValid, checkQuizNameUsed, emailAlreadyUsed, adminUserALLDetails
 };
