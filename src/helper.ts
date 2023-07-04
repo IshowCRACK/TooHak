@@ -120,7 +120,28 @@ function checkQuizNameUsed (authUserId: number, quizName: string): boolean {
   return false;
 }
 
+/**
+ * Check if email is already used in another User
+ *
+ * @param {string} email - User's email
+ * @param {number} authUserId - User's unique ID
+ *
+ * @returns {boolean} - Returns true if email is already used, otherwise false
+ */
+function emailAlreadyUsed(email: string, authUserId: number): boolean {
+  const data = getData();
+
+  for (const user of data.users) {
+    if (user.email === email && user.authUserId !== authUserId) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+
 export {
   checkName, checkPassword, checkAlphanumeric, checkAuthUserIdValid,
-  checkQuizIdValid, checkQuizAndUserIdValid, checkQuizNameUsed
+  checkQuizIdValid, checkQuizAndUserIdValid, checkQuizNameUsed, emailAlreadyUsed,
 };

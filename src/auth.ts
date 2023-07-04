@@ -149,4 +149,66 @@ function adminAuthLogin (email: string, password: string): AdminAuthLoginReturn 
   return { error: 'Username or Password is not valid' };
 }
 
-export { adminAuthLogin, adminAuthRegister, adminUserDetails };
+/**
+ * Update a User's details with an email, password, or names, then returns an empty object.
+ *
+ * @param {number} authUserId - User's unique ID
+ * @param {string} email - User's email
+ * @param {string} nameFirst - User's first name
+ * @param {string} nameLast - User's last name
+ *
+ * @returns {{}} - Returns an empty object
+ */
+function adminUpdateUserDetails(authUserId: number, email: string, nameFirst: string, nameLast: string): {} {
+  const data = getData();
+
+  // Find the user by authUserId
+  const user = data.users.find((user) => user.authUserId === authUserId);
+
+  if (user) {
+    let emailChanged = false;
+
+    // Check if email is provided and valid
+    if (email) {
+      // Check if email is valid and not used by another user
+      if (!validator.isEmail(email) || emailAlreadyUsed(email, authUserId)) {
+        return {
+          error: 'Invalid email or email is already in use'
+        };
+      }
+
+      user.email = email;
+      emailChanged = true;
+    }
+
+    // Update the user's details if the inputs are valid
+    if (checkName(nameFirst) && nameFirst.length >= 2 && nameFirst.length <= 20) {
+      user.nameFirst = nameFirst;
+    } else {
+      return {
+        error: 'Invalid first name'
+      };
+    }
+
+    if (checkName(nameLast) && nameLast.length >= 2 && nameLast.length <= 20) {
+      user.nameLast = nameLast;
+    } else {
+      return {
+        error: 'Invalid last name'
+      };
+    }
+
+    // Update data only if there were changes
+    if (emailChanged) {
+      setData(data);
+    }
+  } else {
+    return {
+      error: 'User not found'
+    };
+  }
+
+  return {};
+}
+
+export { adminAuthLogin, adminAuthRegister, adminUserDetails, adminUpdateUserDetails };
