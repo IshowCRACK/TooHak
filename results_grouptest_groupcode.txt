@@ -3,13 +3,13 @@ npm info using npm@9.5.1
 npm info using node@v18.16.0
 npm verb title npm run test
 npm verb argv "run" "test" "--loglevel" "verbose"
-npm verb logfile logs-max:10 dir:/import/kamen/3/cs1531/.npm/_logs/2023-06-24T16_40_09_637Z-
-npm verb logfile /import/kamen/3/cs1531/.npm/_logs/2023-06-24T16_40_09_637Z-debug-0.log
+npm verb logfile logs-max:10 dir:/import/kamen/3/cs1531/.npm/_logs/2023-07-03T23_51_43_821Z-
+npm verb logfile /import/kamen/3/cs1531/.npm/_logs/2023-07-03T23_51_43_821Z-debug-0.log
 
 > test
 > jest
 
-npm http fetch GET 200 https://registry.npmjs.org/npm 68ms (cache hit)
+npm http fetch GET 200 https://registry.npmjs.org/npm 46ms (cache hit)
 PASS src/tests/echo.test.js
 PASS src/tests/other.test.js
 PASS src/tests/auth.test.js
@@ -18,7 +18,7 @@ PASS src/tests/quiz.test.js
 Test Suites: 4 passed, 4 total
 Tests:       76 passed, 76 total
 Snapshots:   0 total
-Time:        2.228 s
+Time:        2.828 s
 Ran all test suites.
 npm notice 
 npm notice New minor version of npm available! 9.5.1 -> 9.7.2
