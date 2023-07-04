@@ -38,6 +38,8 @@ export type AdminQuizInfoReturn = AdminQuizInfo | Error;
 export type AdminAuthLoginReturn = AdminAuthLogin | Error;
 export type AdminAuthRegisterReturn = AdminAuthRegister | Error;
 export type AdminUserDetailsReturn = AdminUserDetails | Error;
+export type AdminUserALLDetailsReturn = AdminUserALLDetails | Error;
+export type AdminUpdateUserDetailsReturn = AdminUpdateUserDetails| Error;
 
 export interface ClearReturn {
 
@@ -92,9 +94,15 @@ export interface AdminUserDetails {
     user: AdminUserDetailsReturnDetails;
 }
 
+export interface AdminUserALLDetails {
+    user: User;
+}
+
 export interface AdminAuthLogin {
     authUserId: number;
 }
 
+export interface AdminUpdateUserDetails {
 
+}
 

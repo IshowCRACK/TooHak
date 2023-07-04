@@ -1,4 +1,4 @@
-import { AdminAuthLoginReturn, AdminAuthRegisterReturn, AdminUserDetailsReturn } from '../interfaces/interfaces';
+import { AdminAuthLoginReturn, AdminAuthRegisterReturn, AdminUserDetailsReturn, AdminUpdateUserDetailsReturn } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import { checkName, checkPassword, emailAlreadyUsed } from './helper';
 import validator from 'validator';
@@ -157,9 +157,9 @@ function adminAuthLogin (email: string, password: string): AdminAuthLoginReturn 
  * @param {string} nameFirst - User's first name
  * @param {string} nameLast - User's last name
  *
- * @returns {{}} - Returns an empty object
+ * @returns {{} | {error: string}} - Returns an empty object or Error
  */
-function adminUpdateUserDetails(authUserId: number, email: string, nameFirst: string, nameLast: string): {} {
+function adminUpdateUserDetails(authUserId: number, email: string, nameFirst: string, nameLast: string): AdminUpdateUserDetailsReturn {
   const data = getData();
 
   // Find the user by authUserId
@@ -211,4 +211,56 @@ function adminUpdateUserDetails(authUserId: number, email: string, nameFirst: st
   return {};
 }
 
-export { adminAuthLogin, adminAuthRegister, adminUserDetails, adminUpdateUserDetails };
+
+/**
+  * Update a Users password with a new password, then returns empty object
+  *
+  * @param {number} authUserId - Users Id
+  * @param {string} oldPassword - Users old password
+  * @param {string} newPassword - Users new password
+  *
+ * @returns {{} | {error: string}} - Returns an empty object or Error
+*/
+function adminUpdateUserPassword(authUserId: number, oldPassword: string, newPassword: string): {} {
+  const data = getData();
+
+  // Find the user by authUserId
+  const user = data.users.find((user) => user.authUserId === authUserId);
+
+  if (user) {
+    // Check if the old password matches the user's current password
+    if (user.password !== oldPassword) {
+      return {
+        error: 'Old password is not correct'
+      };
+    }
+
+    // Check if the new password has been used before by this user
+    if (user.password === newPassword) {
+      return {
+        error: 'New password cannot be the same as the old password'
+      };
+    }
+
+    // Check if the new password meets the requirements
+    if (newPassword.length < 8 || !checkPassword(newPassword)) {
+      return {
+        error: 'New password must be at least 8 characters long and contain at least one number and one letter'
+      };
+    }
+
+    // Update the user's password
+    user.password = newPassword;
+
+    setData(data);
+  } else {
+    return {
+      error: 'User not found'
+    };
+  }
+
+  return {};
+}
+
+
+export { adminAuthLogin, adminAuthRegister, adminUserDetails, adminUpdateUserDetails, adminUpdateUserPassword };
