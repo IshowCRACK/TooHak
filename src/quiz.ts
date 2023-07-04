@@ -95,7 +95,6 @@ function adminQuizRemove (authUserId: number, quizId: number): AdminQuizRemoveRe
   user.deletedQuizzes.push(deletedQuiz);
   data.quizzes.splice(quizIndex, 1);
   setData(data);
-  
   return {};
 }
 

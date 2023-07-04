@@ -160,26 +160,23 @@ function adminUserALLDetails(authUserId: number): AdminUserALLDetailsReturn {
   for (const user of data.users) {
     if (user.authUserId === authUserId) {
       return {
-        user: {
-            authUserId: user.authUserId,
-            nameFirst: user.nameFirst,
-            nameLast: user.nameLast,
-            email: user.email,
-            password: user.password,
-            numSuccessLogins: user.numSuccessLogins,
-            numFailedPasswordsSinceLastLogin: user.numFailedPasswordsSinceLastLogin,
+        user: 
+        {
+          authUserId: user.authUserId,
+          nameFirst: user.nameFirst,
+          nameLast: user.nameLast,
+          email: user.email,
+          password: user.password,
+          numSuccessLogins: user.numSuccessLogins,
+          numFailedPasswordsSinceLastLogin: user.numFailedPasswordsSinceLastLogin,
         }
       };
     }
   }
-  
-
   return {
     error: 'User does not exist',
   };
 }
-
-
 
 export {
   checkName, checkPassword, checkAlphanumeric, checkAuthUserIdValid,

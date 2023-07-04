@@ -1,4 +1,4 @@
-import { AdminAuthLoginReturn, AdminAuthRegisterReturn, AdminUserDetailsReturn, AdminUpdateUserDetailsReturn } from '../interfaces/interfaces';
+import { AdminAuthLoginReturn, AdminAuthRegisterReturn, AdminUserDetailsReturn, AdminUpdateUserDetailsReturn, adminUpdateUserPasswordReturn } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import { checkName, checkPassword, emailAlreadyUsed } from './helper';
 import validator from 'validator';
@@ -210,7 +210,6 @@ function adminUpdateUserDetails(authUserId: number, email: string, nameFirst: st
   return {};
 }
 
-
 /**
   * Update a Users password with a new password, then returns empty object
   *
@@ -220,7 +219,7 @@ function adminUpdateUserDetails(authUserId: number, email: string, nameFirst: st
   *
  * @returns {{} | {error: string}} - Returns an empty object or Error
 */
-function adminUpdateUserPassword(authUserId: number, oldPassword: string, newPassword: string): {} {
+function adminUpdateUserPassword(authUserId: number, oldPassword: string, newPassword: string): adminUpdateUserPasswordReturn {
   const data = getData();
 
   // Find the user by authUserId
@@ -260,6 +259,5 @@ function adminUpdateUserPassword(authUserId: number, oldPassword: string, newPas
 
   return {};
 }
-
 
 export { adminAuthLogin, adminAuthRegister, adminUserDetails, adminUpdateUserDetails, adminUpdateUserPassword };

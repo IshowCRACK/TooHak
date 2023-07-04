@@ -41,9 +41,8 @@ export type AdminAuthRegisterReturn = AdminAuthRegister | Error;
 export type AdminUserDetailsReturn = AdminUserDetails | Error;
 export type AdminUserALLDetailsReturn = AdminUserALLDetails | Error;
 export type AdminUpdateUserDetailsReturn = AdminUpdateUserDetails| Error;
+export type adminUpdateUserPasswordReturn = adminUpdateUserPassword| Error;
 export type viewUserDeletedQuizzesReturn = Quiz[] | Error;
-
-
 
 export interface ClearReturn {
 
@@ -111,3 +110,6 @@ export interface AdminUpdateUserDetails {
 
 }
 
+export interface adminUpdateUserPassword {
+
+}
