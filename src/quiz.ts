@@ -2,7 +2,7 @@ import { Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQui
 import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkAuthUserIdValid, checkQuizAndUserIdValid,
-  checkQuizIdValid, checkQuizNameUsed
+  checkQuizIdValid, checkQuizNameUsed,
 } from './helper';
 
 /**
@@ -74,17 +74,7 @@ function adminQuizRemove (authUserId: number, quizId: number): AdminQuizRemoveRe
   }
 
   const userIndex = data.users.findIndex((user) => user.authUserId === authUserId);
-
-  if (userIndex === -1) {
-    return { error: 'User does not exist' };
-  }
-
   const quizIndex = data.quizzes.findIndex((quiz) => quiz.quizId === quizId);
-
-  if (quizIndex === -1) {
-    return { error: 'Quiz ID does not refer to a valid quiz' };
-  }
-
   const deletedQuiz = data.quizzes[quizIndex];
   const user = data.users[userIndex];
 
@@ -94,6 +84,7 @@ function adminQuizRemove (authUserId: number, quizId: number): AdminQuizRemoveRe
 
   user.deletedQuizzes.push(deletedQuiz);
   data.quizzes.splice(quizIndex, 1);
+
   setData(data);
   return {};
 }
@@ -106,7 +97,7 @@ function adminQuizRemove (authUserId: number, quizId: number): AdminQuizRemoveRe
   * @returns {Quiz[] | {error: string}} - Returns array if valid
  */
 function viewUserDeletedQuizzes(authUserId: number): viewUserDeletedQuizzesReturn {
-  const data: Data = getData();
+  const data = getData();
 
   if (!checkAuthUserIdValid(authUserId)) {
     return { error: 'AuthUserId is not a valid user' };
@@ -114,18 +105,8 @@ function viewUserDeletedQuizzes(authUserId: number): viewUserDeletedQuizzesRetur
 
   const user = data.users.find((user) => user.authUserId === authUserId);
 
-  if (user) {
-    const deletedQuizzes = user.deletedQuizzes || [];
-    const quizzes = deletedQuizzes.map((quiz) => {
-      return data.quizzes.find((q) => q.quizId === quiz.quizId);
-    });
-
-    return quizzes;
-  } else {
-    return { error: 'User not found' };
-  }
+  return user.deletedQuizzes;
 }
-
 
 /**
   * Given basic details about a new quiz, create one for the logged in user
@@ -320,4 +301,4 @@ function adminQuizInfo (authUserId: number, quizId: number): AdminQuizInfoReturn
   }
 }
 
-export { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo };
+export { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo, viewUserDeletedQuizzes };

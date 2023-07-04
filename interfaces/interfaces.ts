@@ -8,7 +8,7 @@ export interface User {
     password: string;
     numSuccessLogins: number;
     numFailedPasswordsSinceLastLogin: number;
-    deletedQuizzes?: Quiz[];
+    deletedQuizzes: Quiz[];
 }
 
 export interface Quiz {

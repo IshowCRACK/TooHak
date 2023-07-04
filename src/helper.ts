@@ -160,8 +160,7 @@ function adminUserALLDetails(authUserId: number): AdminUserALLDetailsReturn {
   for (const user of data.users) {
     if (user.authUserId === authUserId) {
       return {
-        user: 
-        {
+        user: {
           authUserId: user.authUserId,
           nameFirst: user.nameFirst,
           nameLast: user.nameLast,
@@ -169,6 +168,7 @@ function adminUserALLDetails(authUserId: number): AdminUserALLDetailsReturn {
           password: user.password,
           numSuccessLogins: user.numSuccessLogins,
           numFailedPasswordsSinceLastLogin: user.numFailedPasswordsSinceLastLogin,
+          deletedQuizzes: user.deletedQuizzes
         }
       };
     }

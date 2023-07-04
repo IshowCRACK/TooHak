@@ -81,6 +81,7 @@ function adminAuthRegister (email: string, password: string, nameFirst: string, 
     authUserId: userID,
     numSuccessLogins: 1,
     numFailedPasswordsSinceLastLogin: 0,
+    deletedQuizzes: []
   });
 
   setData(data);
@@ -203,7 +204,7 @@ function adminUpdateUserDetails(authUserId: number, email: string, nameFirst: st
     }
   } else {
     return {
-      error: 'User not found'
+      error: 'User doesnt exist'
     };
   }
 
@@ -253,7 +254,7 @@ function adminUpdateUserPassword(authUserId: number, oldPassword: string, newPas
     setData(data);
   } else {
     return {
-      error: 'User not found'
+      error: 'User doenst exist'
     };
   }
 

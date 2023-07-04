@@ -1,6 +1,6 @@
 import { AdminAuthLogin, AdminAuthRegister, AdminUserDetails, AdminUserALLDetails, Error } from '../../interfaces/interfaces';
 import { adminAuthLogin, adminAuthRegister, adminUserDetails, adminUpdateUserDetails, adminUpdateUserPassword } from '../auth';
-import { adminUserALLDetails, } from '../helper';
+import { adminUserALLDetails } from '../helper';
 import { clear } from '../other';
 
 beforeEach(() => {
@@ -244,131 +244,119 @@ describe('adminUserDetails test', () => {
   });
 });
 
-//admin Update User details 
-describe('AdminUpdateUserDetails tests', ()=> {
+describe('AdminUpdateUserDetails tests', () => {
   beforeEach(() => {
     adminAuthRegister('something@gmail.com', 'password1', 'Ijlal', 'Khan');
     adminAuthRegister('joemama@gmail.com', 'password2', 'joe', 'mama');
   });
 
-  describe('Unsuccessful User detail update', ()=> {
+  describe('Unsuccessful User detail update', () => {
     test('Email is currently used by another user', () => {
-      const result = adminUpdateUserDetails(0,'joemama@gmail.com', 'Ijlal', 'Khan');
-      const getAdminInfo = adminUserDetails(0) as AdminUserDetails;
+      const result = adminUpdateUserDetails(0, 'joemama@gmail.com', 'Ijlal', 'Khan');
       expect(result).toStrictEqual({ error: 'Invalid email or email is already in use' });
     });
     test('NameFirst contains characters other than lowercase letters, uppercase letters, spaces, hyphens, or apostrophes', () => {
-      const result = adminUpdateUserDetails(0,'something@gmail.com', 'ij/Lal', 'Khan');
-      const getAdminInfo = adminUserDetails(0) as AdminUserDetails;
+      const result = adminUpdateUserDetails(0, 'something@gmail.com', 'ij/Lal', 'Khan');
       expect(result).toStrictEqual({ error: 'Invalid first name' });
     });
     test('NameFirst is less than 2 characters', () => {
-      const result = adminUpdateUserDetails(0,'something@gmail.com', 'a', 'Khan');
-      const getAdminInfo = adminUserDetails(0) as AdminUserDetails;
+      const result = adminUpdateUserDetails(0, 'something@gmail.com', 'a', 'Khan');
       expect(result).toStrictEqual({ error: 'Invalid first name' });
     });
     test('NameFirst is more than 20 characters', () => {
-      const result = adminUpdateUserDetails(0,'something@gmail.com', 'AbcdeAbcdeAbcdeAbcdef', 'Khan');
-      const getAdminInfo = adminUserDetails(0) as AdminUserDetails;
+      const result = adminUpdateUserDetails(0, 'something@gmail.com', 'AbcdeAbcdeAbcdeAbcdef', 'Khan');
       expect(result).toStrictEqual({ error: 'Invalid first name' });
     });
     test('NameLast contains characters other than lowercase letters, uppercase letters, spaces, hyphens, or apostrophes', () => {
-      const result = adminUpdateUserDetails(0,'something@gmail.com', 'ijLal', 'Kh/an');
-      const getAdminInfo = adminUserDetails(0) as AdminUserDetails;
+      const result = adminUpdateUserDetails(0, 'something@gmail.com', 'ijLal', 'Kh/an');
       expect(result).toStrictEqual({ error: 'Invalid last name' });
     });
     test('NameLast is less than 2 characters', () => {
-      const result = adminUpdateUserDetails(0,'something@gmail.com', 'Ijlal', 'A');
-      const getAdminInfo = adminUserDetails(0) as AdminUserDetails;
+      const result = adminUpdateUserDetails(0, 'something@gmail.com', 'Ijlal', 'A');
       expect(result).toStrictEqual({ error: 'Invalid last name' });
     });
     test('NameLast is more than 20 characters', () => {
-      const result = adminUpdateUserDetails(0,'something@gmail.com', 'Ijlal', 'AbcdeAbcdeAbcdeAbcdef');
-      const getAdminInfo = adminUserDetails(0) as AdminUserDetails;
+      const result = adminUpdateUserDetails(0, 'something@gmail.com', 'Ijlal', 'AbcdeAbcdeAbcdeAbcdef');
       expect(result).toStrictEqual({ error: 'Invalid last name' });
     });
   });
 
-  describe('Successful User detail update', ()=> {
+  describe('Successful User detail update', () => {
     test('Updating Email', () => {
-      adminUpdateUserDetails(0,'updated@gmail.com', 'Ijlal', 'Khan')
+      adminUpdateUserDetails(0, 'updated@gmail.com', 'Ijlal', 'Khan');
       const getAdminInfo = adminUserDetails(0) as AdminUserDetails;
       expect(getAdminInfo.user.email).toStrictEqual('updated@gmail.com');
     });
     test('Updating Email', () => {
-      adminUpdateUserDetails(1,'updated2@gmail.com', 'joe', 'mama')
+      adminUpdateUserDetails(1, 'updated2@gmail.com', 'joe', 'mama');
       const getAdminInfo = adminUserDetails(1) as AdminUserDetails;
       expect(getAdminInfo.user.email).toStrictEqual('updated2@gmail.com');
     });
     test('Updating first name', () => {
-      adminUpdateUserDetails(0,'something@gmail.com', 'UpdatedNameFirst', 'Khan')
+      adminUpdateUserDetails(0, 'something@gmail.com', 'UpdatedNameFirst', 'Khan');
       const getAdminInfo = adminUserDetails(0) as AdminUserDetails;
       expect(getAdminInfo.user.name).toStrictEqual('UpdatedNameFirst Khan');
     });
     test('Updating first name', () => {
-      adminUpdateUserDetails(1,'joemama@gmail.com', 'UpdatedNameFirst', 'mama')
+      adminUpdateUserDetails(1, 'joemama@gmail.com', 'UpdatedNameFirst', 'mama');
       const getAdminInfo = adminUserDetails(1) as AdminUserDetails;
       expect(getAdminInfo.user.name).toStrictEqual('UpdatedNameFirst mama');
     });
     test('Updating last name', () => {
-      adminUpdateUserDetails(0,'something@gmail.com', 'Ijlal', 'UpdatedNameLast')
+      adminUpdateUserDetails(0, 'something@gmail.com', 'Ijlal', 'UpdatedNameLast');
       const getAdminInfo = adminUserDetails(0) as AdminUserDetails;
       expect(getAdminInfo.user.name).toStrictEqual('Ijlal UpdatedNameLast');
     });
     test('Updating last name', () => {
-      adminUpdateUserDetails(1,'joemama@gmail.com', 'joe', 'UpdatedNameLast')
+      adminUpdateUserDetails(1, 'joemama@gmail.com', 'joe', 'UpdatedNameLast');
       const getAdminInfo = adminUserDetails(1) as AdminUserDetails;
       expect(getAdminInfo.user.name).toStrictEqual('joe UpdatedNameLast');
     });
   });
 });
 
-
-//admin Update User Password 
-describe('AdminUpdateUserPassword tests', ()=> {
+describe('AdminUpdateUserPassword tests', () => {
   beforeEach(() => {
     adminAuthRegister('something@gmail.com', 'password0', 'Ijlal', 'Khan');
     adminAuthRegister('joemama@gmail.com', 'password1', 'joe', 'mama');
   });
 
-  describe('Unsuccessful User detail update', ()=> {
+  describe('Unsuccessful User detail update', () => {
     test('Old Password is not the correct old password', () => {
-      const result = adminUpdateUserPassword(0,'wrongPassword0','newPassword0');
+      const result = adminUpdateUserPassword(0, 'wrongPassword0', 'newPassword0');
       expect(result).toStrictEqual({ error: 'Old password is not correct' });
     });
     test('New Password has already been used before by this user', () => {
-      const result = adminUpdateUserPassword(0,'password0','password0');
+      const result = adminUpdateUserPassword(0, 'password0', 'password0');
       expect(result).toStrictEqual({ error: 'New password cannot be the same as the old password' });
     });
     test('New Password is less than 8 characters', () => {
-      const result = adminUpdateUserPassword(0,'password0','abc1234');
+      const result = adminUpdateUserPassword(0, 'password0', 'abc1234');
       expect(result).toStrictEqual({ error: 'New password must be at least 8 characters long and contain at least one number and one letter' });
     });
     test('New Password does not contain at least one number and at least one letter', () => {
-      const result = adminUpdateUserPassword(0,'password0','12345678');
+      const result = adminUpdateUserPassword(0, 'password0', '12345678');
       expect(result).toStrictEqual({ error: 'New password must be at least 8 characters long and contain at least one number and one letter' });
     });
     test('New Password does not contain at least one number and at least one letter', () => {
-      const result = adminUpdateUserPassword(0,'password0','abcdefghijk');
+      const result = adminUpdateUserPassword(0, 'password0', 'abcdefghijk');
       expect(result).toStrictEqual({ error: 'New password must be at least 8 characters long and contain at least one number and one letter' });
     });
   });
 
-  describe('Successful User password update', ()=> {
+  describe('Successful User password update', () => {
     test('Updating password', () => {
-      adminUpdateUserPassword(0,'password0','newPassword0');
+      adminUpdateUserPassword(0, 'password0', 'newPassword0');
       const getAdminInfo = adminUserALLDetails(0) as AdminUserALLDetails;
       expect(getAdminInfo.user.password).toStrictEqual('newPassword0');
     });
     test('Updating password, multiple users', () => {
-      adminUpdateUserPassword(0,'password0','newPassword0');
-      adminUpdateUserPassword(1,'password1','newPassword1');
+      adminUpdateUserPassword(0, 'password0', 'newPassword0');
+      adminUpdateUserPassword(1, 'password1', 'newPassword1');
       const getAdminInfo0 = adminUserALLDetails(0) as AdminUserALLDetails;
       const getAdminInfo1 = adminUserALLDetails(1) as AdminUserALLDetails;
-
       expect(getAdminInfo0.user.password).toStrictEqual('newPassword0');
       expect(getAdminInfo1.user.password).toStrictEqual('newPassword1');
-
     });
   });
 });
