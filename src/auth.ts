@@ -1,6 +1,6 @@
 import { AdminAuthLoginReturn, AdminAuthRegisterReturn, AdminUserDetailsReturn } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
-import { checkName, checkPassword } from './helper';
+import { checkName, checkPassword, emailAlreadyUsed } from './helper';
 import validator from 'validator';
 
 /**
