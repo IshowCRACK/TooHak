@@ -1,4 +1,4 @@
-import { Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQuizCreateReturn, AdminQuizListReturn, AdminQuizList, AdminQuizInfoReturn, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn } from '../interfaces/interfaces';
+import { Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQuizCreateReturn, AdminQuizListReturn, AdminQuizList, AdminQuizInfoReturn, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkAuthUserIdValid, checkQuizAndUserIdValid,
@@ -322,7 +322,7 @@ function adminQuizRestore(authUserId: number, quizId: number): AdminQuizRestoreR
     (quiz) => quiz.quizId === quizId
   );
   if (deletedQuizIndex === -1) {
-    return { error: 'Quiz ID refers to a quiz that is not currently in the trash' };
+    return { error: 'Quiz ID refers to a quiz that is not currently in the trash or invalid Quiz ID' };
   }
 
   const deletedQuiz = data.users[userIndex].deletedQuizzes[deletedQuizIndex];
@@ -338,4 +338,32 @@ function adminQuizRestore(authUserId: number, quizId: number): AdminQuizRestoreR
   return {};
 }
 
-export { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo, viewUserDeletedQuizzes, adminQuizRestore };
+/**
+  * Permanently clears 'deletedQuizzes'
+  *
+  * @param {number} authUserId - The unique id of the registered user
+  *
+  * @returns {{} | {error: string}} - Returns an empty object if valid
+ */
+function adminQuizEmptyTrash(authUserId: number): AdminQuizEmptyTrashReturn {
+  const data = getData();
+
+  // Check if authUserId is valid
+  if (!checkAuthUserIdValid(authUserId)) {
+    return { error: 'AuthUserId is not a valid user' };
+  }
+
+  // Find the user in the users array
+  const userIndex = data.users.findIndex((user) => user.authUserId === authUserId);
+
+  if (userIndex !== -1) {
+    const user = data.users[userIndex];
+
+    // Empty the deletedQuizzes array of the user
+    user.deletedQuizzes = [];
+  }
+  setData(data);
+  return {};
+}
+
+export { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo, viewUserDeletedQuizzes, adminQuizRestore, adminQuizEmptyTrash };

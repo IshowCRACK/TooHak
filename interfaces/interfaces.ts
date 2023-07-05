@@ -43,6 +43,7 @@ export type AdminUserALLDetailsReturn = AdminUserALLDetails | Error;
 export type AdminUpdateUserDetailsReturn = AdminUpdateUserDetails| Error;
 export type adminUpdateUserPasswordReturn = AdminUpdateUserPassword| Error;
 export type AdminQuizRestoreReturn = AdminQuizRestore| Error;
+export type AdminQuizEmptyTrashReturn = AdminQuizEmptyTrash| Error;
 export type viewUserDeletedQuizzesReturn = Quiz[] | Error;
 
 export interface ClearReturn {
@@ -61,6 +62,9 @@ export interface AdminQuizRestore {
 
 }
 
+export interface AdminQuizEmptyTrash {
+    
+}
 export interface AdminQuizCreate {
     quizId: number;
 } 
