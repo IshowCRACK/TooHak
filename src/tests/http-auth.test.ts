@@ -1,9 +1,8 @@
 import { AdminAuthLogin, AdminAuthRegister, Error } from '../../interfaces/interfaces';
-import { clear } from '../other';
 import request from 'sync-request';
 
 beforeEach(() => {
-  clear();
+  clearUsers();
 });
 
 // Wrapper functions
@@ -37,6 +36,13 @@ function loginUser (email: string, password: string): AdminAuthLogin | Error {
   );
   const authLoginId: AdminAuthLogin | Error = JSON.parse(res.body.toString());
   return authLoginId;
+}
+
+function clearUsers (): void {
+  request(
+    'DELETE',
+    'http://localhost:3200/v1/clear'
+  );
 }
 
 // TESTS FOR REGISTER //
@@ -202,5 +208,14 @@ describe('adminAuthLogin tests', () => {
       const authUserIdLogin: AdminAuthLogin | Error = loginUser('good.ail@gmail.com', 'Passw15g23');
       expect(authUserIdLogin).toStrictEqual({ error: 'Username or Password is not valid' });
     });
+  });
+});
+
+describe('clear tests', () => {
+  test('Clearing users', () => {
+    registerUser('email@gmail.com', 'Password123', 'Johnny', 'Jones');
+    clearUsers();
+    const authRegisterId: AdminAuthRegister | Error = registerUser('email@gmail.com', 'Password123', 'Johnny', 'Jones');
+    expect(authRegisterId).toStrictEqual({ authUserId: 0 });
   });
 });
