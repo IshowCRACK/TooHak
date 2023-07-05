@@ -24,6 +24,13 @@ function registerUser (email: string, password: string, nameFirst: string, nameL
   return authRegisterId;
 }
 
+function clearUsers (): void {
+  const res = request(
+    'DELETE',
+    'http://localhost:3200/v1/clear',
+  )
+}
+
 // TESTS //
 describe('adminAuthRegister tests', () => {
   test('Check successful Register', () => {
@@ -148,5 +155,14 @@ describe('adminAuthRegister tests', () => {
       };
       expect(authRegisterId).toStrictEqual(expectedResult);
     });
+  });
+});
+
+describe('clear tests', () => {
+  test('Check unsuccessful email - email not valid', () => {
+    registerUser('email@gmail.com', 'Password123', 'Johnny', 'Jones');
+    clearUsers();
+    const authRegisterId: AdminAuthRegister | Error = registerUser('email@gmail.com', 'Password123', 'Johnny', 'Jones');
+    expect(authRegisterId).toStrictEqual({ authUserId: 0 });
   });
 });
