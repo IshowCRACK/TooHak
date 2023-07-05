@@ -586,7 +586,7 @@ describe('adminQuizTransfer Tests', () => {
 
 
   beforeEach(() => {
-    authUserId0 = (adminAuthRegister('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as AdminAuthRegister).authUserId;
+    authUserId0 = (adminAuthRegister('user0@gmail.com', 'Password123', 'John', 'Smith') as AdminAuthRegister).authUserId;
     authUserId1 = (adminAuthRegister('user1@gmail.com', 'password1', 'joe', 'mama') as AdminAuthRegister).authUserId;
     user0quizId0 = (adminQuizCreate(authUserId0, 'Quiz 0', 'Description 0') as AdminQuizCreate).quizId;
     user1quizId1 = (adminQuizCreate(authUserId1, 'Quiz same name', 'Description 1') as AdminQuizCreate).quizId;
@@ -608,12 +608,12 @@ describe('adminQuizTransfer Tests', () => {
 
     test('Returns an error when Email is not a valid user', () => {
       const result = adminQuizTransfer(authUserId0, user0quizId0, 'invalid@gmail.com');
-      expect(result).toStrictEqual({ error: 'Email is not a valid user' });
+      expect(result).toStrictEqual({ error: 'User email is not a registered user' });
     });
 
     test('Returns an error when Email is the current logged in user, it must be another user', () => {
       const result = adminQuizTransfer(authUserId0, user0quizId0, 'user0@gmail.com');
-      expect(result).toStrictEqual({ error: 'Email is the current logged in user' });
+      expect(result).toStrictEqual({ error: 'User email is the same as the current logged-in user' });
     });
 
     test('Returns an error when Quiz ID refers to a quiz that has a name that is already used by the target user', () => {

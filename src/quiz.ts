@@ -1,5 +1,5 @@
 import { Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQuizCreateReturn, AdminQuizListReturn, 
-  AdminQuizList, AdminQuizInfoReturn, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn, AdminQuizTransferReturn } from '../interfaces/interfaces';
+  AdminQuizList, AdminQuizInfoReturn, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn, AdminQuizTransferReturn, User } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkAuthUserIdValid, checkQuizAndUserIdValid,
@@ -376,7 +376,36 @@ function adminQuizEmptyTrash(authUserId: number): AdminQuizEmptyTrashReturn {
   * @returns {{} | {error: string}} - Returns an empty object if valid
  */
 function adminQuizTransfer(authUserId: number, quizId: number, email: string): AdminQuizTransferReturn {
+  const data = getData()
 
+  if (!checkQuizIdValid(quizId)) {
+    return { error: 'Quiz ID does not refer to a valid quiz' };
+  }
+
+  const targetUser = data.users.find((user) => user.email === email);
+
+  if (!targetUser) {
+    return { error: 'User email is not a registered user' };
+  }
+
+  if (targetUser.authUserId === authUserId) {
+    return { error: 'User email is the same as the current logged-in user' };
+  }
+
+  if (!checkQuizAndUserIdValid(quizId, authUserId)) {
+    return { error: 'Quiz ID does not refer to a quiz that this user owns' };
+  }
+
+  const quizName = data.quizzes.find((quiz) => quiz.quizId === quizId)?.name;
+  if (quizName && checkQuizNameUsed(targetUser.authUserId, quizName)) {
+    return { error: 'Quiz ID refers to a quiz that has a name that is already used by the target user' };
+  }
+
+  // Update the adminQuizId to the target user's authUserId
+  const quizToUpdate = data.quizzes.find((quiz) => quiz.quizId === quizId);
+  quizToUpdate.adminQuizId = targetUser.authUserId;
+
+  setData(data);
   return {};
 }
 
