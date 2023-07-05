@@ -1,4 +1,4 @@
-import { Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQuizCreateReturn, AdminQuizListReturn, AdminQuizList, AdminQuizInfoReturn, viewUserDeletedQuizzesReturn } from '../interfaces/interfaces';
+import { Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQuizCreateReturn, AdminQuizListReturn, AdminQuizList, AdminQuizInfoReturn, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkAuthUserIdValid, checkQuizAndUserIdValid,
@@ -267,8 +267,8 @@ function adminQuizNameUpdate (authUserId: number, quizId: number, name: string) 
 /**
   * Get all of the relevant information about the current quiz
   *
-  * @param {number} authUserId - The unique id of the registered user you are trying to look at the quizzes of
-  * @param {number} quizId - The unique id of the quiz you are trying to trying to get information of
+  * @param {number} authUserId - The unique id of the registered user
+  * @param {number} quizId - The unique id of the quiz
   *
   * @returns {{quizId: number, name: string, timeCreated: number, timeLastEdited: number, description: string}} - An array of quizzes and its details
  */
@@ -301,4 +301,41 @@ function adminQuizInfo (authUserId: number, quizId: number): AdminQuizInfoReturn
   }
 }
 
-export { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo, viewUserDeletedQuizzes };
+/**
+  * Restores a Quiz from the Trash
+  *
+  * @param {number} authUserId - The unique id of the registered user
+  * @param {number} quizId - The unique id of the quiz
+  *
+  * @returns {{} | {error: string}} - Returns an empty object if valid
+ */
+function adminQuizRestore(authUserId: number, quizId: number): AdminQuizRestoreReturn {
+  const data = getData();
+
+  // Check if authUserId is valid
+  if (!checkAuthUserIdValid(authUserId)) {
+    return { error: 'AuthUserId is not a valid user' };
+  }
+
+  const userIndex = data.users.findIndex((user) => user.authUserId === authUserId);
+  const deletedQuizIndex = data.users[userIndex].deletedQuizzes.findIndex(
+    (quiz) => quiz.quizId === quizId
+  );
+  if (deletedQuizIndex === -1) {
+    return { error: 'Quiz ID refers to a quiz that is not currently in the trash' };
+  }
+
+  const deletedQuiz = data.users[userIndex].deletedQuizzes[deletedQuizIndex];
+
+  // Remove the quiz from the deletedQuizzes array
+  data.users[userIndex].deletedQuizzes.splice(deletedQuizIndex, 1);
+
+  // Add the quiz back to the quizzes array
+  data.quizzes.push(deletedQuiz);
+
+  setData(data);
+
+  return {};
+}
+
+export { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo, viewUserDeletedQuizzes, adminQuizRestore };

@@ -1,11 +1,11 @@
 import { adminAuthRegister } from '../auth';
 import {
   adminQuizDescriptionUpdate, adminQuizRemove, adminQuizCreate,
-  adminQuizList, adminQuizNameUpdate, adminQuizInfo, viewUserDeletedQuizzes
+  adminQuizList, adminQuizNameUpdate, adminQuizInfo, viewUserDeletedQuizzes, adminQuizRestore
 } from '../quiz';
 import { clear } from '../other';
 import { adminUserALLDetails } from '../helper';
-import { AdminAuthRegister, AdminUserALLDetails, AdminQuizCreate, AdminQuizDescriptionUpdate, AdminQuizInfo, AdminQuizNameUpdate, Quiz } from '../../interfaces/interfaces';
+import { AdminAuthRegister, AdminUserALLDetails, AdminQuizCreate, AdminQuizDescriptionUpdate, AdminQuizInfo, AdminQuizList, AdminQuizNameUpdate, Quiz } from '../../interfaces/interfaces';
 
 beforeEach(() => {
   clear();
@@ -134,7 +134,7 @@ describe('adminQuizCreate tests', () => {
   });
 });
 
-//  Quiz remove -> made changes to test the storage of deleted quizes
+//  Quiz remove -> Also tests viewUserDeletedQuizes & adminQuizRestore
 describe('adminQuizRemove tests', () => {
   let authUserId: number;
 
@@ -172,6 +172,12 @@ describe('adminQuizRemove tests', () => {
       expect((adminUserALLDetails(authUserId) as AdminUserALLDetails).user.deletedQuizzes[0].quizId).toEqual(quizId);
       //  check viewUserDeletedQuizzes
       expect((viewUserDeletedQuizzes(authUserId) as Quiz[])[0].quizId).toEqual(quizId);
+      //  check adminQuizRestore
+      expect(adminQuizRestore(authUserId, quizId)).toStrictEqual(
+        {
+        }
+      );
+      expect((adminQuizList(authUserId) as AdminQuizList).quizzes[0].quizId).toStrictEqual(quizId);
     });
     test('Removing multiple quizzes from one user', () => {
       const quizId0 = (adminQuizCreate(authUserId, 'QuizaboutBarbie', 'Quiz on barbies') as AdminQuizCreate).quizId;
@@ -191,6 +197,12 @@ describe('adminQuizRemove tests', () => {
       //  check viewUserDeletedQuizzes
       expect((viewUserDeletedQuizzes(authUserId) as Quiz[])[0].quizId).toEqual(quizId0);
       expect((viewUserDeletedQuizzes(authUserId) as Quiz[])[1].quizId).toEqual(quizId1);
+      //  check adminQuizRestore
+      expect(adminQuizRestore(authUserId, quizId0)).toStrictEqual(
+        {
+        }
+      );
+      expect((adminQuizList(authUserId) as AdminQuizList).quizzes[0].quizId).toStrictEqual(quizId0);
     });
 
     test('Removing one quiz out of multiple from one user ', () => {
@@ -205,6 +217,12 @@ describe('adminQuizRemove tests', () => {
       expect((adminUserALLDetails(authUserId) as AdminUserALLDetails).user.deletedQuizzes[0].quizId).toEqual(quizId);
       //  check viewUserDeletedQuizzes
       expect((viewUserDeletedQuizzes(authUserId) as Quiz[])[0].quizId).toEqual(quizId);
+      //  check adminQuizRestore
+      expect(adminQuizRestore(authUserId, quizId)).toStrictEqual(
+        {
+        }
+      );
+      expect((adminQuizList(authUserId) as AdminQuizList).quizzes[2].quizId).toStrictEqual(quizId);
     });
 
     test('Removing multiple quizzes from multiple users  ', () => {
@@ -277,6 +295,12 @@ describe('adminQuizRemove tests', () => {
       expect((adminUserALLDetails(authUserId2) as AdminUserALLDetails).user.deletedQuizzes[0].quizId).toEqual(quizId4);
       //  check viewUserDeletedQuizzes
       expect((viewUserDeletedQuizzes(authUserId2) as Quiz[])[0].quizId).toEqual(quizId4);
+      //  check adminQuizRestore
+      expect(adminQuizRestore(authUserId2, quizId4)).toStrictEqual(
+        {
+        }
+      );
+      expect((adminQuizList(authUserId2) as AdminQuizList).quizzes[1].quizId).toStrictEqual(quizId4);
     });
   });
 });

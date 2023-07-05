@@ -17,6 +17,7 @@ let data: Data = {
   *     password: string,
   *     numSuccessLogins: number,
   *     numFailedPasswordsSinceLastLogin: number,
+  *     deletedQuizzes: Array
   *   }>,
   *   quizzes: Array<{
   *     quizId: number,
@@ -43,6 +44,7 @@ function getData (): Data {
   *     password: string,
   *     numSuccessLogins: integer,
   *     numFailedPasswordsSinceLastLogin: integer,
+  *     deletedQuizzes: Array
   *   }>,
   *   quizzes: Array<{
   *     quizId: number,
