@@ -1,4 +1,5 @@
-import { Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQuizCreateReturn, AdminQuizListReturn, AdminQuizList, AdminQuizInfoReturn, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn } from '../interfaces/interfaces';
+import { Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQuizCreateReturn, AdminQuizListReturn, 
+  AdminQuizList, AdminQuizInfoReturn, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn, AdminQuizTransferReturn } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkAuthUserIdValid, checkQuizAndUserIdValid,
@@ -366,4 +367,17 @@ function adminQuizEmptyTrash(authUserId: number): AdminQuizEmptyTrashReturn {
   return {};
 }
 
-export { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo, viewUserDeletedQuizzes, adminQuizRestore, adminQuizEmptyTrash };
+/**
+  * Transfers Quiz Ownership to another user
+  * @param {number} authUserId - The unique id of the user in session
+  * @param {number} quizId - The unique id of the quiz to be transfered
+  * @param {string} email - email of target user (quiz is being transfered to this user)
+  * 
+  * @returns {{} | {error: string}} - Returns an empty object if valid
+ */
+function adminQuizTransfer(authUserId: number, quizId: number, email: string): AdminQuizTransferReturn {
+
+  return {};
+}
+
+export { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo, viewUserDeletedQuizzes, adminQuizRestore, adminQuizEmptyTrash, adminQuizTransfer };
