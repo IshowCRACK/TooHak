@@ -1,5 +1,7 @@
-import { Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQuizCreateReturn, AdminQuizListReturn, 
-  AdminQuizList, AdminQuizInfoReturn, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn, AdminQuizTransferReturn, User } from '../interfaces/interfaces';
+import {
+  Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQuizCreateReturn, AdminQuizListReturn,
+  AdminQuizList, AdminQuizInfoReturn, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn, AdminQuizTransferReturn
+} from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkAuthUserIdValid, checkQuizAndUserIdValid,
@@ -372,11 +374,11 @@ function adminQuizEmptyTrash(authUserId: number): AdminQuizEmptyTrashReturn {
   * @param {number} authUserId - The unique id of the user in session
   * @param {number} quizId - The unique id of the quiz to be transfered
   * @param {string} email - email of target user (quiz is being transfered to this user)
-  * 
+  *
   * @returns {{} | {error: string}} - Returns an empty object if valid
  */
 function adminQuizTransfer(authUserId: number, quizId: number, email: string): AdminQuizTransferReturn {
-  const data = getData()
+  const data = getData();
 
   if (!checkQuizIdValid(quizId)) {
     return { error: 'Quiz ID does not refer to a valid quiz' };

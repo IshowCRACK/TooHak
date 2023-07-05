@@ -584,7 +584,6 @@ describe('adminQuizTransfer Tests', () => {
   let user0quizId2: number;
   let user1quizId3: number;
 
-
   beforeEach(() => {
     authUserId0 = (adminAuthRegister('user0@gmail.com', 'Password123', 'John', 'Smith') as AdminAuthRegister).authUserId;
     authUserId1 = (adminAuthRegister('user1@gmail.com', 'password1', 'joe', 'mama') as AdminAuthRegister).authUserId;
@@ -592,7 +591,6 @@ describe('adminQuizTransfer Tests', () => {
     user1quizId1 = (adminQuizCreate(authUserId1, 'Quiz same name', 'Description 1') as AdminQuizCreate).quizId;
     user0quizId2 = (adminQuizCreate(authUserId0, 'Quiz same name', 'Description 2') as AdminQuizCreate).quizId;
     user1quizId3 = (adminQuizCreate(authUserId1, 'Quiz 3', 'Description 3') as AdminQuizCreate).quizId;
-
   });
 
   describe('Unsuccessful test', () => {
@@ -647,7 +645,7 @@ describe('adminQuizTransfer Tests', () => {
       expect((adminQuizALLDetails(user1quizId3) as AdminQuizALLDetails).quizzes.adminQuizId).toStrictEqual(authUserId0);
       expect((adminQuizALLDetails(user0quizId0) as AdminQuizALLDetails).quizzes.adminQuizId).toStrictEqual(authUserId1);
     });
-  }); 
+  });
 });
 
 describe('Additional tests', () => {
@@ -744,5 +742,3 @@ describe('Additional tests', () => {
     expect(getQuizInfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime + timeBufferSeconds);
   });
 });
-
-
