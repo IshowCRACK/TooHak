@@ -188,7 +188,6 @@ describe('adminQuizRemove tests', () => {
         }
       );
       expect((adminUserALLDetails(authUserId) as AdminUserALLDetails).user.deletedQuizzes).toStrictEqual([]);
-
     });
     test('Removing multiple quizzes from one user', () => {
       const quizId0 = (adminQuizCreate(authUserId, 'QuizaboutBarbie', 'Quiz on barbies') as AdminQuizCreate).quizId;
