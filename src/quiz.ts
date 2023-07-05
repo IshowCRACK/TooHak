@@ -1,4 +1,4 @@
-import { Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQuizCreateReturn, AdminQuizListReturn, AdminQuizList, AdminQuizInfoReturn, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn } from '../interfaces/interfaces';
+import { Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQuizCreateReturn, AdminQuizListReturn, AdminQuizList, AdminQuizInfoReturn, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkAuthUserIdValid, checkQuizAndUserIdValid,
@@ -322,7 +322,7 @@ function adminQuizRestore(authUserId: number, quizId: number): AdminQuizRestoreR
     (quiz) => quiz.quizId === quizId
   );
   if (deletedQuizIndex === -1) {
-    return { error: 'Quiz ID refers to a quiz that is not currently in the trash' };
+    return { error: 'Quiz ID refers to a quiz that is not currently in the trash or invalid Quiz ID' };
   }
 
   const deletedQuiz = data.users[userIndex].deletedQuizzes[deletedQuizIndex];
@@ -335,6 +335,17 @@ function adminQuizRestore(authUserId: number, quizId: number): AdminQuizRestoreR
 
   setData(data);
 
+  return {};
+}
+
+/**
+  * Permanently clears 'deletedQuizzes'
+  *
+  * @param {number} authUserId - The unique id of the registered user
+  *
+  * @returns {{} | {error: string}} - Returns an empty object if valid
+ */
+function adminQuizEmtpyTrash(authUserId: number): AdminQuizEmptyTrashReturn {
   return {};
 }
 
