@@ -1,10 +1,6 @@
 import { AdminAuthLogin, AdminAuthRegister, Error } from '../../interfaces/interfaces';
 import request from 'sync-request';
 
-beforeEach(() => {
-  clearUsers();
-});
-
 // Wrapper functions
 function registerUser (email: string, password: string, nameFirst: string, nameLast:string): AdminAuthRegister | Error {
   const res = request(
@@ -26,7 +22,7 @@ function registerUser (email: string, password: string, nameFirst: string, nameL
 function loginUser (email: string, password: string): AdminAuthLogin | Error {
   const res = request(
     'POST',
-    'http://localhost:3200/v1/admin/auth/register',
+    'http://localhost:3200/v1/admin/auth/login',
     {
       json: {
         email: email,
@@ -46,6 +42,11 @@ function clearUsers (): void {
 }
 
 // TESTS FOR REGISTER //
+
+beforeEach(() => {
+  clearUsers();
+});
+
 describe('adminAuthRegister tests', () => {
   test('Check successful Register', () => {
     const authRegisterId: AdminAuthRegister | Error = registerUser('example@email.com', 'Password123', 'First', 'Last');
@@ -176,14 +177,14 @@ describe('adminAuthRegister tests', () => {
 describe('adminAuthLogin tests', () => {
   describe('Successful Login', () => {
     test('One user login', () => {
-      const authUserId: AdminAuthRegister | Error = registerUser('goofy.email@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes');
+      const authUserId: AdminAuthRegister | Error = registerUser('goofy.email@gmail.com', 'Password123', 'Joh nny-Bone', 'Jones');
       const authUserIdLogin: AdminAuthLogin | Error = loginUser('goofy.email@gmail.com', 'Password123');
       expect(authUserId).toStrictEqual(authUserIdLogin);
     });
     test('Multiple user login', () => {
       registerUser('good.ail@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes');
-      const authUserId: AdminAuthRegister | Error = registerUser('gooemail@gmail.com', 'Password121233', 'Joh nny-Bone', 'Jo\'nes');
-      const authUserId2: AdminAuthRegister | Error = registerUser('gdemail@gmail.com', 'Password112315g23', 'Joh nny-Bone', 'Jo\'nes');
+      const authUserId: AdminAuthRegister | Error = registerUser('gooemail@gmail.com', 'Password121233', 'Joh nny-Bone', 'Jones');
+      const authUserId2: AdminAuthRegister | Error = registerUser('gdemail@gmail.com', 'Password112315g23', 'Joh nny-Bone', 'Jones');
       const authUserIdLogin: AdminAuthRegister | Error = loginUser('gooemail@gmail.com', 'Password121233');
       const authUserIdLogin2: AdminAuthRegister | Error = loginUser('gdemail@gmail.com', 'Password112315g23');
       expect(authUserId).toStrictEqual(authUserIdLogin);
@@ -193,18 +194,18 @@ describe('adminAuthLogin tests', () => {
 
   describe('Unsuccessful Login', () => {
     test('User does not exist', () => {
-      registerUser('gooil@gmail.com', 'Password12sdf3', 'Joh nny-Bone', 'Jo\'nes');
-      registerUser('mail@gmail.com', 'Password12sdf3', 'Joh nny-Bone', 'Jo\'nes');
+      registerUser('gooil@gmail.com', 'Password12sdf3', 'Joh nny-Bone', 'Jones');
+      registerUser('mail@gmail.com', 'Password12sdf3', 'Joh nny-Bone', 'Jones');
       const authUserIdLogin: AdminAuthRegister | Error = loginUser('goyeama@gmail.com', 'Pasworadsa2d123');
       expect(authUserIdLogin).toStrictEqual({ error: 'Username or Password is not valid' });
     });
     test('Wrong Email', () => {
-      registerUser('good.email@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes');
+      registerUser('good.email@gmail.com', 'Password123', 'Joh nny-Bone', 'Jones');
       const authUserIdLogin: AdminAuthRegister | Error = loginUser('good.ema@gmail.com', 'Password123');
       expect(authUserIdLogin).toStrictEqual({ error: 'Username or Password is not valid' });
     });
     test('Wrong Password', () => {
-      registerUser('good.ail@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes');
+      registerUser('good.ail@gmail.com', 'Password123', 'Joh nny-Bone', 'Jones');
       const authUserIdLogin: AdminAuthLogin | Error = loginUser('good.ail@gmail.com', 'Passw15g23');
       expect(authUserIdLogin).toStrictEqual({ error: 'Username or Password is not valid' });
     });
@@ -214,6 +215,7 @@ describe('adminAuthLogin tests', () => {
 describe('clear tests', () => {
   test('Clearing users', () => {
     registerUser('email@gmail.com', 'Password123', 'Johnny', 'Jones');
+    registerUser('emailllll@gmail.com', 'Password123', 'Johnny', 'Jones');
     clearUsers();
     const authRegisterId: AdminAuthRegister | Error = registerUser('email@gmail.com', 'Password123', 'Johnny', 'Jones');
     expect(authRegisterId).toStrictEqual({ authUserId: 0 });
