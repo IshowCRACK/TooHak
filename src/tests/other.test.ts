@@ -1,7 +1,8 @@
 // Clear Function Tests
-import { clear } from '../other.js';
-import { adminAuthLogin, adminAuthRegister, adminUserDetails } from '../auth.js';
-import { adminQuizList, adminQuizRemove, adminQuizCreate, adminQuizNameUpdate, adminQuizDescriptionUpdate, adminQuizInfo } from '../quiz.js';
+import { clear } from '../other';
+import { adminAuthLogin, adminAuthRegister, adminUserDetails } from '../auth';
+import { adminQuizList, adminQuizRemove, adminQuizCreate, adminQuizNameUpdate, adminQuizDescriptionUpdate, adminQuizInfo } from '../quiz';
+import { AdminAuthRegister, AdminQuizCreate } from '../../interfaces/interfaces';
 
 describe('Clear tests', () => {
   test('Empty clear', () => {
@@ -9,10 +10,10 @@ describe('Clear tests', () => {
   });
 
   describe('Clear with admin related functionality', () => {
-    let authUserId;
+    let authUserId: number;
 
     beforeEach(() => {
-      authUserId = adminAuthRegister('JohnSmith@gmail.com', 'password123', 'John', 'Smith').authUserId;
+      authUserId = (adminAuthRegister('JohnSmith@gmail.com', 'password123', 'John', 'Smith') as AdminAuthRegister).authUserId;
     });
 
     test('Clear with one user', () => {
@@ -22,7 +23,7 @@ describe('Clear tests', () => {
     });
 
     test('Clear with multiple users', () => {
-      const authUserId2 = adminAuthRegister('JaneAusten@gmail.com', 'password133', 'Jane', 'Austen').authUserId;
+      const authUserId2 = (adminAuthRegister('JaneAusten@gmail.com', 'password133', 'Jane', 'Austen') as AdminAuthRegister).authUserId;
 
       expect(clear()).toEqual({});
       expect(adminAuthLogin('JohnSmith@gmail.com', 'password123')).toEqual({ error: 'Username or Password is not valid' });
@@ -33,12 +34,12 @@ describe('Clear tests', () => {
   });
 
   describe('Clear with quiz related functionality', () => {
-    let authUserId;
-    let quizId;
+    let authUserId: number;
+    let quizId: number;
 
     beforeEach(() => {
-      authUserId = adminAuthRegister('JohnSmith@gmail.com', 'password123', 'John', 'Smith').authUserId;
-      quizId = adminQuizCreate(authUserId, 'Countries of the World', 'Quiz on all Countries').quizId;
+      authUserId = (adminAuthRegister('JohnSmith@gmail.com', 'password123', 'John', 'Smith') as AdminAuthRegister).authUserId;
+      quizId = (adminQuizCreate(authUserId, 'Countries of the World', 'Quiz on all Countries') as AdminQuizCreate).quizId;
     });
 
     test('Clear with one quiz creation', () => {
@@ -52,8 +53,8 @@ describe('Clear tests', () => {
     });
 
     test('Clear with multiple quiz creations', () => {
-      const authUserId2 = adminAuthRegister('JaneAusten@gmail.com', 'password133', 'Jane', 'Austen').authUserId;
-      const quizId2 = adminQuizCreate(authUserId2, 'Flags of the World', 'Quiz on all Flags').quizId;
+      const authUserId2 = (adminAuthRegister('JaneAusten@gmail.com', 'password133', 'Jane', 'Austen') as AdminAuthRegister).authUserId;
+      const quizId2 = (adminQuizCreate(authUserId2, 'Flags of the World', 'Quiz on all Flags') as AdminQuizCreate).quizId;
 
       expect(clear()).toEqual({});
 

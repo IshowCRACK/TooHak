@@ -1,5 +1,6 @@
-import { getData, setData } from './dataStore.js';
-import { checkName, checkPassword } from './helper.js';
+import { AdminAuthLoginReturn, AdminAuthRegisterReturn, AdminUserDetailsReturn, AdminUpdateUserDetailsReturn, adminUpdateUserPasswordReturn } from '../interfaces/interfaces';
+import { getData, setData } from './dataStore';
+import { checkName, checkPassword, emailAlreadyUsed } from './helper';
 import validator from 'validator';
 
 /**
@@ -9,10 +10,9 @@ import validator from 'validator';
   * @param {string} password - Users password with at least 1 number and 1 letter and is 8 characters long
   * @param {string} nameFirst - Users first name
   * @param {string} nameLast - Users last name
-  *
   * @returns {{authUserId: number} | {error: string}} - Returns an integer, authUserId that is unique to the user
 */
-function adminAuthRegister (email, password, nameFirst, nameLast) {
+function adminAuthRegister (email: string, password: string, nameFirst: string, nameLast: string): AdminAuthRegisterReturn {
   const data = getData();
 
   // checking if any parts are null
@@ -76,11 +76,12 @@ function adminAuthRegister (email, password, nameFirst, nameLast) {
   data.users.push({
     email,
     password,
-    firstName: nameFirst,
-    lastName: nameLast,
+    nameFirst: nameFirst,
+    nameLast: nameLast,
     authUserId: userID,
     numSuccessLogins: 1,
     numFailedPasswordsSinceLastLogin: 0,
+    deletedQuizzes: []
   });
 
   setData(data);
@@ -97,7 +98,7 @@ function adminAuthRegister (email, password, nameFirst, nameLast) {
   *
   * @returns {{user: {userId: number, name: string, email: string, numSuccessfulLogins: number, numFailedPasswordsSinceLastLogin: number}} | {error: string}} - Returns an object of User details
 */
-function adminUserDetails (authUserId) {
+function adminUserDetails (authUserId: number): AdminUserDetailsReturn {
   const data = getData();
 
   // Loop through users dataStore
@@ -107,7 +108,7 @@ function adminUserDetails (authUserId) {
       return {
         user: {
           userId: user.authUserId,
-          name: `${user.firstName} ${user.lastName}`,
+          name: `${user.nameFirst} ${user.nameLast}`,
           email: user.email,
           numSuccessfulLogins: user.numSuccessLogins,
           numFailedPasswordsSinceLastLogin: user.numFailedPasswordsSinceLastLogin
@@ -129,7 +130,7 @@ function adminUserDetails (authUserId) {
   *
   * @returns {{authUserId: number} | {error: string}} - returns an integer, authUserId that is unique to the user
 */
-function adminAuthLogin (email, password) {
+function adminAuthLogin (email: string, password: string): AdminAuthLoginReturn {
   const data = getData();
 
   // loop through users array from dataStore
@@ -148,4 +149,116 @@ function adminAuthLogin (email, password) {
   return { error: 'Username or Password is not valid' };
 }
 
-export { adminAuthLogin, adminAuthRegister, adminUserDetails };
+/**
+ * Update a User's details with an email, password, or names, then returns an empty object.
+ *
+ * @param {number} authUserId - User's unique ID
+ * @param {string} email - User's email
+ * @param {string} nameFirst - User's first name
+ * @param {string} nameLast - User's last name
+ *
+ * @returns {{} | {error: string}} - Returns an empty object or Error
+ */
+function adminUpdateUserDetails(authUserId: number, email: string, nameFirst: string, nameLast: string): AdminUpdateUserDetailsReturn {
+  const data = getData();
+
+  // Find the user by authUserId
+  const user = data.users.find((user) => user.authUserId === authUserId);
+
+  if (user) {
+    let emailChanged = false;
+
+    // Check if email is provided and valid
+    if (email) {
+      // Check if email is valid and not used by another user
+      if (!validator.isEmail(email) || emailAlreadyUsed(email, authUserId)) {
+        return {
+          error: 'Invalid email or email is already in use'
+        };
+      }
+
+      user.email = email;
+      emailChanged = true;
+    }
+
+    // Update the user's details if the inputs are valid
+    if (checkName(nameFirst) && nameFirst.length >= 2 && nameFirst.length <= 20) {
+      user.nameFirst = nameFirst;
+    } else {
+      return {
+        error: 'Invalid first name'
+      };
+    }
+
+    if (checkName(nameLast) && nameLast.length >= 2 && nameLast.length <= 20) {
+      user.nameLast = nameLast;
+    } else {
+      return {
+        error: 'Invalid last name'
+      };
+    }
+
+    // Update data only if there were changes
+    if (emailChanged) {
+      setData(data);
+    }
+  } else {
+    return {
+      error: 'User doesnt exist'
+    };
+  }
+
+  return {};
+}
+
+/**
+  * Update a Users password with a new password, then returns empty object
+  *
+  * @param {number} authUserId - Users Id
+  * @param {string} oldPassword - Users old password
+  * @param {string} newPassword - Users new password
+  *
+ * @returns {{} | {error: string}} - Returns an empty object or Error
+*/
+function adminUpdateUserPassword(authUserId: number, oldPassword: string, newPassword: string): adminUpdateUserPasswordReturn {
+  const data = getData();
+
+  // Find the user by authUserId
+  const user = data.users.find((user) => user.authUserId === authUserId);
+
+  if (user) {
+    // Check if the old password matches the user's current password
+    if (user.password !== oldPassword) {
+      return {
+        error: 'Old password is not correct'
+      };
+    }
+
+    // Check if the new password has been used before by this user
+    if (user.password === newPassword) {
+      return {
+        error: 'New password cannot be the same as the old password'
+      };
+    }
+
+    // Check if the new password meets the requirements
+    if (newPassword.length < 8 || !checkPassword(newPassword)) {
+      return {
+        error: 'New password must be at least 8 characters long and contain at least one number and one letter'
+      };
+    }
+
+    // Update the user's password
+    user.password = newPassword;
+
+    setData(data);
+  } else {
+    return {
+      error: 'User doenst exist'
+    };
+  }
+
+  return {};
+}
+
+export { adminAuthLogin, adminAuthRegister, adminUserDetails, adminUpdateUserDetails, adminUpdateUserPassword };

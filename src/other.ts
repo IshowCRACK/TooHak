@@ -1,12 +1,13 @@
-import { getData, setData } from './dataStore.js';
+import { ClearReturn, Data } from '../interfaces/interfaces';
+import { getData, setData } from './dataStore';
 
 /**
   * Reset the state of the application back to the start
   *
   * @returns {{}} - Returns empty object
 */
-function clear () {
-  const data = getData();
+function clear (): ClearReturn {
+  const data: Data = getData();
 
   // Reset user and quizzes array by making them empty
   data.users = [];

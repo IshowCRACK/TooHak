@@ -1,5 +1,6 @@
-import { getData } from './dataStore.js';
-import { adminQuizList } from './quiz.js';
+import { AdminQuizList, AdminUserALLDetailsReturn } from '../interfaces/interfaces';
+import { getData } from './dataStore';
+import { adminQuizList } from './quiz';
 
 /**
  * -------------------------------------- HELPERS FUNCTIONS-----------------------------------------------
@@ -12,7 +13,7 @@ import { adminQuizList } from './quiz.js';
   *
   * @returns {boolean} - Returns true or false if first name or last name satisfies the conditions
 */
-function checkName (name) {
+function checkName (name: string): boolean {
   return /^[a-zA-Z\s\-']+$/.test(name);
 }
 
@@ -23,7 +24,7 @@ function checkName (name) {
   *
   * @returns {boolean} - Returns true or false if password satisfies the conditions
 */
-function checkPassword (password) {
+function checkPassword (password: string): boolean {
   return /^(?=.*[a-zA-Z])(?=.*[0-9])/.test(password);
 }
 
@@ -35,7 +36,7 @@ function checkPassword (password) {
   * @returns {boolean} - Returns false if not made up of alphanumbers and spaces, else true
  */
 
-function checkAlphanumeric(name) {
+function checkAlphanumeric(name: string): boolean {
   if (!/^[a-zA-Z0-9\s]+$/.test(name)) {
     return false;
   }
@@ -50,7 +51,7 @@ function checkAlphanumeric(name) {
   *
   * @returns {boolean} - returns true if userId is valid, false otherwise
  */
-function checkAuthUserIdValid (authUserId) {
+function checkAuthUserIdValid (authUserId: number): boolean {
   const data = getData();
 
   for (const user of data.users) {
@@ -67,7 +68,7 @@ function checkAuthUserIdValid (authUserId) {
   *
   * @returns {boolean} - Returns true if userId is valid, false otherwise
  */
-function checkQuizIdValid (quizId) {
+function checkQuizIdValid (quizId: number): boolean {
   const data = getData();
 
   for (const quiz of data.quizzes) {
@@ -87,7 +88,7 @@ function checkQuizIdValid (quizId) {
   *
   * @returns {boolean} - Returns true if user owns quiz, false otherwise
  */
-function checkQuizAndUserIdValid (quizId, authUserId) {
+function checkQuizAndUserIdValid (quizId: number, authUserId: number): boolean {
   const data = getData();
 
   for (const quiz of data.quizzes) {
@@ -103,12 +104,12 @@ function checkQuizAndUserIdValid (quizId, authUserId) {
   * Check if quiz name is already used in another quiz by the same user
   *
   * @param {number} authUserId - A unique Id for the user who owns the quiz
-  * @param {number} quizName - The specified quiz name
+  * @param {string} quizName - The specified quiz name
   *
   * @returns {boolean} - Returns true if quizname is already used, otherwise, false
  */
-function checkQuizNameUsed (authUserId, quizName) {
-  const list = adminQuizList(authUserId);
+function checkQuizNameUsed (authUserId: number, quizName: string): boolean {
+  const list = adminQuizList(authUserId) as AdminQuizList;
 
   for (const quiz of list.quizzes) {
     if (quizName === quiz.name) {
@@ -119,7 +120,65 @@ function checkQuizNameUsed (authUserId, quizName) {
   return false;
 }
 
+/**
+ * Check if email is already used in another User
+ *
+ * @param {string} email - User's email
+ * @param {number} authUserId - User's unique ID
+ *
+ * @returns {boolean} - Returns true if email is already used, otherwise false
+ */
+function emailAlreadyUsed(email: string, authUserId: number): boolean {
+  const data = getData();
+
+  for (const user of data.users) {
+    if (user.email === email && user.authUserId !== authUserId) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+/**
+  * Gets ALL the user details, as 'adminUserDetails' does not return all properties of 'User'
+  * @param {number} authUserId - A unique Id for the user who owns the quiz
+  *
+  * @returns {users: Array<{
+*     authUserId: integer,
+*     nameFirst: string,
+*     nameLast: string,
+*     email: string,
+*     password: string,
+*     numSuccessLogins: integer,
+*     numFailedPasswordsSinceLastLogin: integer,
+*   }>} - Array of objects
+*/
+function adminUserALLDetails(authUserId: number): AdminUserALLDetailsReturn {
+  const data = getData();
+
+  for (const user of data.users) {
+    if (user.authUserId === authUserId) {
+      return {
+        user: {
+          authUserId: user.authUserId,
+          nameFirst: user.nameFirst,
+          nameLast: user.nameLast,
+          email: user.email,
+          password: user.password,
+          numSuccessLogins: user.numSuccessLogins,
+          numFailedPasswordsSinceLastLogin: user.numFailedPasswordsSinceLastLogin,
+          deletedQuizzes: user.deletedQuizzes
+        }
+      };
+    }
+  }
+  return {
+    error: 'User does not exist',
+  };
+}
+
 export {
   checkName, checkPassword, checkAlphanumeric, checkAuthUserIdValid,
-  checkQuizIdValid, checkQuizAndUserIdValid, checkQuizNameUsed
+  checkQuizIdValid, checkQuizAndUserIdValid, checkQuizNameUsed, emailAlreadyUsed, adminUserALLDetails
 };

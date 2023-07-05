@@ -1,4 +1,6 @@
-let data = {
+import { Data } from '../interfaces/interfaces';
+
+let data: Data = {
   users: [],
   quizzes: []
 };
@@ -8,13 +10,13 @@ let data = {
   *
   * @returns {{data: {
   *   users: Array<{
-  *     authUserId: integer,
+  *     authUserId: number,
   *     nameFirst: string,
   *     nameLast: string,
   *     email: string,
   *     password: string,
-  *     numSuccessLogins: integer,
-  *     numFailedPasswordsSinceLastLogin: integer,
+  *     numSuccessLogins: number,
+  *     numFailedPasswordsSinceLastLogin: number,
   *   }>,
   *   quizzes: Array<{
   *     quizId: number,
@@ -25,7 +27,7 @@ let data = {
   *   }>
   * }}}
 */
-function getData () {
+function getData (): Data {
   return data;
 }
 
@@ -51,7 +53,7 @@ function getData () {
   *   }>
   * }}} newData
 */
-function setData (newData) {
+function setData (newData: Data): void {
   data = newData;
 }
 
