@@ -1,4 +1,4 @@
-import { AdminAuthRegister, Error } from '../../interfaces/interfaces';
+import { AdminAuthLogin, AdminAuthRegister, Error } from '../../interfaces/interfaces';
 import { clear } from '../other';
 import request from 'sync-request';
 
@@ -24,7 +24,22 @@ function registerUser (email: string, password: string, nameFirst: string, nameL
   return authRegisterId;
 }
 
-// TESTS //
+function loginUser (email: string, password: string): AdminAuthLogin | Error {
+  const res = request(
+    'POST',
+    'http://localhost:3200/v1/admin/auth/register',
+    {
+      json: {
+        email: email,
+        password: password,
+      }
+    }
+  );
+  const authLoginId: AdminAuthLogin | Error = JSON.parse(res.body.toString());
+  return authLoginId;
+}
+
+// TESTS FOR REGISTER //
 describe('adminAuthRegister tests', () => {
   test('Check successful Register', () => {
     const authRegisterId: AdminAuthRegister | Error = registerUser('example@email.com', 'Password123', 'First', 'Last');
@@ -147,6 +162,45 @@ describe('adminAuthRegister tests', () => {
         error: 'Email already used',
       };
       expect(authRegisterId).toStrictEqual(expectedResult);
+    });
+  });
+});
+
+// TESTS FOR LOGIN //
+describe('adminAuthLogin tests', () => {
+  describe('Successful Login', () => {
+    test('One user login', () => {
+      const authUserId: AdminAuthRegister | Error = registerUser('goofy.email@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes');
+      const authUserIdLogin: AdminAuthLogin | Error = loginUser('goofy.email@gmail.com', 'Password123');
+      expect(authUserId).toStrictEqual(authUserIdLogin);
+    });
+    test('Multiple user login', () => {
+      registerUser('good.ail@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes');
+      const authUserId: AdminAuthRegister | Error = registerUser('gooemail@gmail.com', 'Password121233', 'Joh nny-Bone', 'Jo\'nes');
+      const authUserId2: AdminAuthRegister | Error = registerUser('gdemail@gmail.com', 'Password112315g23', 'Joh nny-Bone', 'Jo\'nes');
+      const authUserIdLogin: AdminAuthRegister | Error = loginUser('gooemail@gmail.com', 'Password121233');
+      const authUserIdLogin2: AdminAuthRegister | Error = loginUser('gdemail@gmail.com', 'Password112315g23');
+      expect(authUserId).toStrictEqual(authUserIdLogin);
+      expect(authUserId2).toStrictEqual(authUserIdLogin2);
+    });
+  });
+
+  describe('Unsuccessful Login', () => {
+    test('User does not exist', () => {
+      registerUser('gooil@gmail.com', 'Password12sdf3', 'Joh nny-Bone', 'Jo\'nes');
+      registerUser('mail@gmail.com', 'Password12sdf3', 'Joh nny-Bone', 'Jo\'nes');
+      const authUserIdLogin: AdminAuthRegister | Error = loginUser('goyeama@gmail.com', 'Pasworadsa2d123');
+      expect(authUserIdLogin).toStrictEqual({ error: 'Username or Password is not valid' });
+    });
+    test('Wrong Email', () => {
+      registerUser('good.email@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes');
+      const authUserIdLogin: AdminAuthRegister | Error = loginUser('good.ema@gmail.com', 'Password123');
+      expect(authUserIdLogin).toStrictEqual({ error: 'Username or Password is not valid' });
+    });
+    test('Wrong Password', () => {
+      registerUser('good.ail@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes');
+      const authUserIdLogin: AdminAuthLogin | Error = loginUser('good.ail@gmail.com', 'Passw15g23');
+      expect(authUserIdLogin).toStrictEqual({ error: 'Username or Password is not valid' });
     });
   });
 });
