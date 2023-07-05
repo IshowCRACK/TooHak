@@ -26,8 +26,8 @@ function registerUser (email: string, password: string, nameFirst: string, nameL
 function clearUsers (): void {
   request(
     'DELETE',
-    'http://localhost:3200/v1/clear',
-  )
+    'http://localhost:3200/v1/clear'
+  );
 }
 
 // TESTS //
