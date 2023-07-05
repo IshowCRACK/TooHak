@@ -310,8 +310,32 @@ function adminQuizInfo (authUserId: number, quizId: number): AdminQuizInfoReturn
   * @returns {{} | {error: string}} - Returns an empty object if valid
  */
 function adminQuizRestore(authUserId: number, quizId: number): AdminQuizRestoreReturn {
-return {};
-}
+  const data = getData();
 
+  // Check if authUserId is valid
+  if (!checkAuthUserIdValid(authUserId)) {
+    return { error: 'AuthUserId is not a valid user' };
+  }
+
+  const userIndex = data.users.findIndex((user) => user.authUserId === authUserId);
+  const deletedQuizIndex = data.users[userIndex].deletedQuizzes.findIndex(
+    (quiz) => quiz.quizId === quizId
+  );
+  if (deletedQuizIndex === -1) {
+    return { error: 'Quiz ID refers to a quiz that is not currently in the trash' };
+  }
+
+  const deletedQuiz = data.users[userIndex].deletedQuizzes[deletedQuizIndex];
+
+  // Remove the quiz from the deletedQuizzes array
+  data.users[userIndex].deletedQuizzes.splice(deletedQuizIndex, 1);
+
+  // Add the quiz back to the quizzes array
+  data.quizzes.push(deletedQuiz);
+
+  setData(data);
+
+  return {};
+}
 
 export { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo, viewUserDeletedQuizzes, adminQuizRestore };

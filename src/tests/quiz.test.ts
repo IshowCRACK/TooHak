@@ -177,7 +177,7 @@ describe('adminQuizRemove tests', () => {
         {
         }
       );
-      expect((adminQuizList(authUserId) as AdminQuizList).quizId).toStrictEqual(quizId);
+      expect((adminQuizList(authUserId) as AdminQuizList).quizzes[0].quizId).toStrictEqual(quizId);
     });
     test('Removing multiple quizzes from one user', () => {
       const quizId0 = (adminQuizCreate(authUserId, 'QuizaboutBarbie', 'Quiz on barbies') as AdminQuizCreate).quizId;
@@ -202,7 +202,7 @@ describe('adminQuizRemove tests', () => {
         {
         }
       );
-      expect((adminQuizList(authUserId) as AdminQuizList).quizId).toStrictEqual(quizId0);
+      expect((adminQuizList(authUserId) as AdminQuizList).quizzes[0].quizId).toStrictEqual(quizId0);
     });
 
     test('Removing one quiz out of multiple from one user ', () => {
@@ -222,7 +222,7 @@ describe('adminQuizRemove tests', () => {
         {
         }
       );
-      expect((adminQuizList(authUserId) as AdminQuizList).quizId).toStrictEqual(quizId);
+      expect((adminQuizList(authUserId) as AdminQuizList).quizzes[2].quizId).toStrictEqual(quizId);
     });
 
     test('Removing multiple quizzes from multiple users  ', () => {
@@ -300,7 +300,7 @@ describe('adminQuizRemove tests', () => {
         {
         }
       );
-      expect((adminQuizList(authUserId2) as AdminQuizList).quizId).toStrictEqual(quizId4);
+      expect((adminQuizList(authUserId2) as AdminQuizList).quizzes[1].quizId).toStrictEqual(quizId4);
     });
   });
 });
