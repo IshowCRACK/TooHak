@@ -1,8 +1,8 @@
-import { Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQuizCreateReturn, AdminQuizListReturn, AdminQuizList, AdminQuizInfoReturn, viewUserDeletedQuizzesReturn } from '../interfaces/interfaces';
+import { Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQuizCreateReturn, AdminQuizListReturn, AdminQuizList, AdminQuizInfoReturn, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkAuthUserIdValid, checkQuizAndUserIdValid,
-  checkQuizIdValid, checkQuizNameUsed,
+  checkQuizIdValid, checkQuizNameUsed, adminUserALLDetails
 } from './helper';
 
 /**
@@ -267,8 +267,8 @@ function adminQuizNameUpdate (authUserId: number, quizId: number, name: string) 
 /**
   * Get all of the relevant information about the current quiz
   *
-  * @param {number} authUserId - The unique id of the registered user you are trying to look at the quizzes of
-  * @param {number} quizId - The unique id of the quiz you are trying to trying to get information of
+  * @param {number} authUserId - The unique id of the registered user 
+  * @param {number} quizId - The unique id of the quiz 
   *
   * @returns {{quizId: number, name: string, timeCreated: number, timeLastEdited: number, description: string}} - An array of quizzes and its details
  */
@@ -301,4 +301,17 @@ function adminQuizInfo (authUserId: number, quizId: number): AdminQuizInfoReturn
   }
 }
 
-export { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo, viewUserDeletedQuizzes };
+/**
+  * Restores a Quiz from the Trash
+  *
+  * @param {number} authUserId - The unique id of the registered user 
+  * @param {number} quizId - The unique id of the quiz 
+  *
+  * @returns {{} | {error: string}} - Returns an empty object if valid
+ */
+function adminQuizRestore(authUserId: number, quizId: number): AdminQuizRestoreReturn {
+return {};
+}
+
+
+export { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo, viewUserDeletedQuizzes, adminQuizRestore };
