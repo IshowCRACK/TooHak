@@ -1,9 +1,8 @@
 import { AdminAuthRegister, Error } from '../../interfaces/interfaces';
-import { clear } from '../other';
 import request from 'sync-request';
 
 beforeEach(() => {
-  clear();
+  clearUsers();
 });
 
 // Wrapper functions
@@ -25,7 +24,7 @@ function registerUser (email: string, password: string, nameFirst: string, nameL
 }
 
 function clearUsers (): void {
-  const res = request(
+  request(
     'DELETE',
     'http://localhost:3200/v1/clear',
   )
@@ -159,7 +158,7 @@ describe('adminAuthRegister tests', () => {
 });
 
 describe('clear tests', () => {
-  test('Check unsuccessful email - email not valid', () => {
+  test('Clearing users', () => {
     registerUser('email@gmail.com', 'Password123', 'Johnny', 'Jones');
     clearUsers();
     const authRegisterId: AdminAuthRegister | Error = registerUser('email@gmail.com', 'Password123', 'Johnny', 'Jones');
