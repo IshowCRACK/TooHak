@@ -5,7 +5,7 @@ import {
 } from '../quiz';
 import { clear } from '../other';
 import { adminUserALLDetails } from '../helper';
-import { AdminAuthRegister, AdminUserALLDetails, AdminQuizCreate, AdminQuizDescriptionUpdate, AdminQuizInfo, AdminQuizList, AdminQuizNameUpdate, AdminQuizRestore, Quiz } from '../../interfaces/interfaces';
+import { AdminAuthRegister, AdminUserALLDetails, AdminQuizCreate, AdminQuizDescriptionUpdate, AdminQuizInfo, AdminQuizList, AdminQuizNameUpdate, Quiz } from '../../interfaces/interfaces';
 
 beforeEach(() => {
   clear();

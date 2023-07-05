@@ -2,7 +2,7 @@ import { Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQui
 import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkAuthUserIdValid, checkQuizAndUserIdValid,
-  checkQuizIdValid, checkQuizNameUsed, adminUserALLDetails
+  checkQuizIdValid, checkQuizNameUsed,
 } from './helper';
 
 /**
@@ -267,8 +267,8 @@ function adminQuizNameUpdate (authUserId: number, quizId: number, name: string) 
 /**
   * Get all of the relevant information about the current quiz
   *
-  * @param {number} authUserId - The unique id of the registered user 
-  * @param {number} quizId - The unique id of the quiz 
+  * @param {number} authUserId - The unique id of the registered user
+  * @param {number} quizId - The unique id of the quiz
   *
   * @returns {{quizId: number, name: string, timeCreated: number, timeLastEdited: number, description: string}} - An array of quizzes and its details
  */
@@ -304,8 +304,8 @@ function adminQuizInfo (authUserId: number, quizId: number): AdminQuizInfoReturn
 /**
   * Restores a Quiz from the Trash
   *
-  * @param {number} authUserId - The unique id of the registered user 
-  * @param {number} quizId - The unique id of the quiz 
+  * @param {number} authUserId - The unique id of the registered user
+  * @param {number} quizId - The unique id of the quiz
   *
   * @returns {{} | {error: string}} - Returns an empty object if valid
  */
