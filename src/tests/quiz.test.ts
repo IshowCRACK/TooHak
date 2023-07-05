@@ -1,7 +1,7 @@
 import { adminAuthRegister } from '../auth';
 import {
   adminQuizDescriptionUpdate, adminQuizRemove, adminQuizCreate,
-  adminQuizList, adminQuizNameUpdate, adminQuizInfo, viewUserDeletedQuizzes, adminQuizRestore
+  adminQuizList, adminQuizNameUpdate, adminQuizInfo, viewUserDeletedQuizzes, adminQuizRestore, adminQuizEmptyTrash
 } from '../quiz';
 import { clear } from '../other';
 import { adminUserALLDetails } from '../helper';
@@ -187,7 +187,7 @@ describe('adminQuizRemove tests', () => {
         {
         }
       );
-      expect((adminQuizList(authUserId) as AdminQuizList).quizzes).toStrictEqual([]);
+      expect((adminUserALLDetails(authUserId) as AdminUserALLDetails).user.deletedQuizzes).toStrictEqual([]);
 
     });
     test('Removing multiple quizzes from one user', () => {
