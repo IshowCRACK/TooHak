@@ -1,11 +1,11 @@
 import { adminAuthRegister } from '../auth';
 import {
   adminQuizDescriptionUpdate, adminQuizRemove, adminQuizCreate,
-  adminQuizList, adminQuizNameUpdate, adminQuizInfo, viewUserDeletedQuizzes, adminQuizRestore, adminQuizEmptyTrash
+  adminQuizList, adminQuizNameUpdate, adminQuizInfo, viewUserDeletedQuizzes, adminQuizRestore, adminQuizEmptyTrash, adminQuizTransfer
 } from '../quiz';
 import { clear } from '../other';
-import { adminUserALLDetails } from '../helper';
-import { AdminAuthRegister, AdminUserALLDetails, AdminQuizCreate, AdminQuizDescriptionUpdate, AdminQuizInfo, AdminQuizList, AdminQuizNameUpdate, Quiz } from '../../interfaces/interfaces';
+import { adminUserALLDetails, adminQuizALLDetails } from '../helper';
+import { AdminAuthRegister, AdminUserALLDetails, AdminQuizALLDetails, AdminQuizCreate, AdminQuizDescriptionUpdate, AdminQuizInfo, AdminQuizList, AdminQuizNameUpdate, Quiz } from '../../interfaces/interfaces';
 
 beforeEach(() => {
   clear();
@@ -572,6 +572,78 @@ describe('adminQuizNameUpdate Tests', () => {
       expect(result).toEqual({
         error: 'Quiz name already in use'
       });
+    });
+  });
+});
+
+describe('adminQuizTransfer Tests', () => {
+  let authUserId0: number;
+  let authUserId1: number;
+  let user0quizId0: number;
+  let user1quizId1: number;
+  let user0quizId2: number;
+  let user1quizId3: number;
+
+  beforeEach(() => {
+    authUserId0 = (adminAuthRegister('user0@gmail.com', 'Password123', 'John', 'Smith') as AdminAuthRegister).authUserId;
+    authUserId1 = (adminAuthRegister('user1@gmail.com', 'password1', 'joe', 'mama') as AdminAuthRegister).authUserId;
+    user0quizId0 = (adminQuizCreate(authUserId0, 'Quiz 0', 'Description 0') as AdminQuizCreate).quizId;
+    user1quizId1 = (adminQuizCreate(authUserId1, 'Quiz same name', 'Description 1') as AdminQuizCreate).quizId;
+    user0quizId2 = (adminQuizCreate(authUserId0, 'Quiz same name', 'Description 2') as AdminQuizCreate).quizId;
+    user1quizId3 = (adminQuizCreate(authUserId1, 'Quiz 3', 'Description 3') as AdminQuizCreate).quizId;
+  });
+
+  describe('Unsuccessful test', () => {
+    test('Returns an error when Quiz ID does not refer to a valid quiz', () => {
+      const result = adminQuizTransfer(authUserId0, -99, 'user1@gmail.com');
+      expect(result).toStrictEqual({ error: 'Quiz ID does not refer to a valid quiz' });
+    });
+
+    test('Returns an error when Quiz ID does not refer to a quiz that this user owns', () => {
+      const result = adminQuizTransfer(authUserId0, user1quizId1, 'user1@gmail.com');
+      expect(result).toStrictEqual({ error: 'Quiz ID does not refer to a quiz that this user owns' });
+    });
+
+    test('Returns an error when Email is not a valid user', () => {
+      const result = adminQuizTransfer(authUserId0, user0quizId0, 'invalid@gmail.com');
+      expect(result).toStrictEqual({ error: 'User email is not a registered user' });
+    });
+
+    test('Returns an error when Email is the current logged in user, it must be another user', () => {
+      const result = adminQuizTransfer(authUserId0, user0quizId0, 'user0@gmail.com');
+      expect(result).toStrictEqual({ error: 'User email is the same as the current logged-in user' });
+    });
+
+    test('Returns an error when Quiz ID refers to a quiz that has a name that is already used by the target user', () => {
+      const result = adminQuizTransfer(authUserId0, user0quizId2, 'user1@gmail.com');
+      expect(result).toStrictEqual({ error: 'Quiz ID refers to a quiz that has a name that is already used by the target user' });
+    });
+
+    test('All sessions for this quiz must be in END state', () => {
+      expect('Requires Token').toStrictEqual('Requires Token');
+    });
+  });
+
+  describe('Successful test', () => {
+    test('Transfers 1 quiz successfully', () => {
+      const result = adminQuizTransfer(authUserId1, user1quizId3, 'user0@gmail.com');
+      expect(result).toStrictEqual({
+
+      });
+      expect((adminQuizALLDetails(user1quizId3) as AdminQuizALLDetails).quizzes.adminQuizId).toStrictEqual(authUserId0);
+    });
+
+    test('Transfers multiple quizzes successfully', () => {
+      const result = adminQuizTransfer(authUserId1, user1quizId3, 'user0@gmail.com');
+      expect(result).toStrictEqual({
+
+      });
+      const result2 = adminQuizTransfer(authUserId0, user0quizId0, 'user1@gmail.com');
+      expect(result2).toStrictEqual({
+
+      });
+      expect((adminQuizALLDetails(user1quizId3) as AdminQuizALLDetails).quizzes.adminQuizId).toStrictEqual(authUserId0);
+      expect((adminQuizALLDetails(user0quizId0) as AdminQuizALLDetails).quizzes.adminQuizId).toStrictEqual(authUserId1);
     });
   });
 });

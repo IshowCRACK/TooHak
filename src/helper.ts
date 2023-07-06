@@ -1,4 +1,4 @@
-import { AdminQuizList, AdminUserALLDetailsReturn } from '../interfaces/interfaces';
+import { AdminQuizList, AdminUserALLDetailsReturn, AdminQuizALLDetailsReturn } from '../interfaces/interfaces';
 import { getData } from './dataStore';
 import { adminQuizList } from './quiz';
 
@@ -145,15 +145,15 @@ function emailAlreadyUsed(email: string, authUserId: number): boolean {
   * @param {number} authUserId - A unique Id for the user who owns the quiz
   *
   * @returns {users: Array<{
-*     authUserId: integer,
-*     nameFirst: string,
-*     nameLast: string,
-*     email: string,
-*     password: string,
-*     numSuccessLogins: integer,
-*     numFailedPasswordsSinceLastLogin: integer,
-*   }>} - Array of objects
-*/
+  *   authUserId: integer,
+  *   nameFirst: string,
+  *   nameLast: string,
+  *   email: string,
+  *   password: string,
+  *   numSuccessLogins: integer,
+  *   numFailedPasswordsSinceLastLogin: integer,
+  * }>} - Array of objects
+  */
 function adminUserALLDetails(authUserId: number): AdminUserALLDetailsReturn {
   const data = getData();
 
@@ -178,7 +178,43 @@ function adminUserALLDetails(authUserId: number): AdminUserALLDetailsReturn {
   };
 }
 
+/**
+  * Gets ALL the user details, as 'adminUserDetails' does not return all properties of 'User'
+  * @param {number} authUserId - A unique Id for the user who owns the quiz
+  *
+  * @returns {{quizzes: Array<{
+  *   quizId: number;
+  *   adminQuizId: number;
+  *   name: string;
+  *   timeCreated: number;
+  *   timeLastEdited: number;
+  *   description: string;
+  * }>} | {error: string}} - An array of quizzes and its details
+  *
+  */
+function adminQuizALLDetails(quizId: number): AdminQuizALLDetailsReturn {
+  const data = getData();
+
+  for (const quiz of data.quizzes) {
+    if (quiz.quizId === quizId) {
+      return {
+        quizzes: {
+          quizId: quiz.quizId,
+          adminQuizId: quiz.adminQuizId,
+          name: quiz.name,
+          timeCreated: quiz.timeCreated,
+          timeLastEdited: quiz.timeLastEdited,
+          description: quiz.description
+        }
+      };
+    }
+  }
+  return {
+    error: 'Quiz does not exist',
+  };
+}
+
 export {
   checkName, checkPassword, checkAlphanumeric, checkAuthUserIdValid,
-  checkQuizIdValid, checkQuizAndUserIdValid, checkQuizNameUsed, emailAlreadyUsed, adminUserALLDetails
+  checkQuizIdValid, checkQuizAndUserIdValid, checkQuizNameUsed, emailAlreadyUsed, adminUserALLDetails, adminQuizALLDetails
 };

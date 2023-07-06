@@ -40,10 +40,12 @@ export type AdminAuthLoginReturn = AdminAuthLogin | Error;
 export type AdminAuthRegisterReturn = AdminAuthRegister | Error;
 export type AdminUserDetailsReturn = AdminUserDetails | Error;
 export type AdminUserALLDetailsReturn = AdminUserALLDetails | Error;
+export type AdminQuizALLDetailsReturn = AdminQuizALLDetails | Error;
 export type AdminUpdateUserDetailsReturn = AdminUpdateUserDetails| Error;
 export type adminUpdateUserPasswordReturn = AdminUpdateUserPassword| Error;
 export type AdminQuizRestoreReturn = AdminQuizRestore| Error;
 export type AdminQuizEmptyTrashReturn = AdminQuizEmptyTrash| Error;
+export type AdminQuizTransferReturn = AdminQuizTransfer| Error;
 export type viewUserDeletedQuizzesReturn = Quiz[] | Error;
 
 export interface ClearReturn {
@@ -63,6 +65,10 @@ export interface AdminQuizRestore {
 }
 
 export interface AdminQuizEmptyTrash {
+    
+}
+
+export interface AdminQuizTransfer {
     
 }
 export interface AdminQuizCreate {
@@ -109,6 +115,10 @@ export interface AdminUserDetails {
 
 export interface AdminUserALLDetails {
     user: User;
+}
+
+export interface AdminQuizALLDetails {
+    quizzes: Quiz;
 }
 
 export interface AdminAuthLogin {

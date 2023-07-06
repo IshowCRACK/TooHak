@@ -1,4 +1,7 @@
-import { Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQuizCreateReturn, AdminQuizListReturn, AdminQuizList, AdminQuizInfoReturn, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn } from '../interfaces/interfaces';
+import {
+  Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQuizCreateReturn, AdminQuizListReturn,
+  AdminQuizList, AdminQuizInfoReturn, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn, AdminQuizTransferReturn
+} from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkAuthUserIdValid, checkQuizAndUserIdValid,
@@ -366,4 +369,46 @@ function adminQuizEmptyTrash(authUserId: number): AdminQuizEmptyTrashReturn {
   return {};
 }
 
-export { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo, viewUserDeletedQuizzes, adminQuizRestore, adminQuizEmptyTrash };
+/**
+  * Transfers Quiz Ownership to another user
+  * @param {number} authUserId - The unique id of the user in session
+  * @param {number} quizId - The unique id of the quiz to be transfered
+  * @param {string} email - email of target user (quiz is being transfered to this user)
+  *
+  * @returns {{} | {error: string}} - Returns an empty object if valid
+ */
+function adminQuizTransfer(authUserId: number, quizId: number, email: string): AdminQuizTransferReturn {
+  const data = getData();
+
+  if (!checkQuizIdValid(quizId)) {
+    return { error: 'Quiz ID does not refer to a valid quiz' };
+  }
+
+  const targetUser = data.users.find((user) => user.email === email);
+
+  if (!targetUser) {
+    return { error: 'User email is not a registered user' };
+  }
+
+  if (targetUser.authUserId === authUserId) {
+    return { error: 'User email is the same as the current logged-in user' };
+  }
+
+  if (!checkQuizAndUserIdValid(quizId, authUserId)) {
+    return { error: 'Quiz ID does not refer to a quiz that this user owns' };
+  }
+
+  const quizName = data.quizzes.find((quiz) => quiz.quizId === quizId)?.name;
+  if (quizName && checkQuizNameUsed(targetUser.authUserId, quizName)) {
+    return { error: 'Quiz ID refers to a quiz that has a name that is already used by the target user' };
+  }
+
+  // Update the adminQuizId to the target user's authUserId
+  const quizToUpdate = data.quizzes.find((quiz) => quiz.quizId === quizId);
+  quizToUpdate.adminQuizId = targetUser.authUserId;
+
+  setData(data);
+  return {};
+}
+
+export { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo, viewUserDeletedQuizzes, adminQuizRestore, adminQuizEmptyTrash, adminQuizTransfer };
