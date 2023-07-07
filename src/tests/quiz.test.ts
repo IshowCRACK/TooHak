@@ -183,11 +183,6 @@ describe('adminQuizRemove tests', () => {
         {
         }
       );
-      expect(adminQuizEmptyTrash(authUserId)).toStrictEqual(
-        {
-        }
-      );
-      expect((adminUserALLDetails(authUserId) as AdminUserALLDetails).user.deletedQuizzes).toStrictEqual([]);
     });
     test('Removing multiple quizzes from one user', () => {
       const quizId0 = (adminQuizCreate(authUserId, 'QuizaboutBarbie', 'Quiz on barbies') as AdminQuizCreate).quizId;
@@ -218,11 +213,6 @@ describe('adminQuizRemove tests', () => {
         {
         }
       );
-      expect(adminQuizEmptyTrash(authUserId)).toStrictEqual(
-        {
-        }
-      );
-      expect((adminUserALLDetails(authUserId) as AdminUserALLDetails).user.deletedQuizzes).toStrictEqual([]);
     });
 
     test('Removing one quiz out of multiple from one user ', () => {
@@ -248,11 +238,6 @@ describe('adminQuizRemove tests', () => {
         {
         }
       );
-      expect(adminQuizEmptyTrash(authUserId)).toStrictEqual(
-        {
-        }
-      );
-      expect((adminUserALLDetails(authUserId) as AdminUserALLDetails).user.deletedQuizzes).toStrictEqual([]);
     });
 
     test('Removing multiple quizzes from multiple users  ', () => {
@@ -293,12 +278,6 @@ describe('adminQuizRemove tests', () => {
       expect((adminUserALLDetails(authUserId) as AdminUserALLDetails).user.deletedQuizzes[0].quizId).toEqual(quizId1);
       //  check viewUserDeletedQuizzes
       expect((viewUserDeletedQuizzes(authUserId) as Quiz[])[0].quizId).toEqual(quizId1);
-      //  check adminQuizEmptyTrash
-      expect(adminQuizEmptyTrash(authUserId)).toStrictEqual(
-        {
-        }
-      );
-      expect((adminUserALLDetails(authUserId) as AdminUserALLDetails).user.deletedQuizzes).toStrictEqual([]);
       expect(adminQuizList(authUserId2)).toStrictEqual({
         quizzes: [
           {
@@ -644,6 +623,84 @@ describe('adminQuizTransfer Tests', () => {
       });
       expect((adminQuizALLDetails(user1quizId3) as AdminQuizALLDetails).quizzes.adminQuizId).toStrictEqual(authUserId0);
       expect((adminQuizALLDetails(user0quizId0) as AdminQuizALLDetails).quizzes.adminQuizId).toStrictEqual(authUserId1);
+    });
+  });
+});
+
+
+describe('adminQuizEmptyTrash Tests', () => {
+  let authUserId0: number;
+  let authUserId1: number;
+  let user0quizId0: number;
+  let user1quizId1: number;
+  let user0quizId2: number;
+  let user1quizId3: number;
+  let user1quizId4: number;
+  beforeEach(() => {
+    authUserId0 = (adminAuthRegister('user0@gmail.com', 'Password123', 'John', 'Smith') as AdminAuthRegister).authUserId;
+    authUserId1 = (adminAuthRegister('user1@gmail.com', 'password1', 'joe', 'mama') as AdminAuthRegister).authUserId;
+    user0quizId0 = (adminQuizCreate(authUserId0, 'Quiz 0', 'Description 0') as AdminQuizCreate).quizId;
+    user1quizId1 = (adminQuizCreate(authUserId1, 'Quiz 1', 'Description 1') as AdminQuizCreate).quizId;
+    user0quizId2 = (adminQuizCreate(authUserId0, 'Quiz 2', 'Description 2') as AdminQuizCreate).quizId;
+    user1quizId3 = (adminQuizCreate(authUserId1, 'Quiz 3', 'Description 3') as AdminQuizCreate).quizId;
+    user1quizId4 = (adminQuizCreate(authUserId1, 'Quiz 4', 'Description 4') as AdminQuizCreate).quizId;
+  });
+
+  describe('Unsuccessful test', () => {
+    test('Returns an error when One or more of the Quiz IDs is not a valid quiz', () => {
+      adminQuizRemove(authUserId0, user0quizId0);
+      const result = adminQuizEmptyTrash(authUserId0, [-99])
+      expect(result).toStrictEqual({ error: 'One or more of the Quiz IDs is not a valid quiz' });
+    });
+
+    test('Returns an error when One or more of the Quiz IDs refers to a quiz that this current user does not own', () => {
+      adminQuizRemove(authUserId0, user0quizId0);
+      const result = adminQuizEmptyTrash(authUserId0, [user1quizId1])
+      expect(result).toStrictEqual({ error: 'One or more of the Quiz IDs refers to a quiz that this current user does not own' });
+    });
+
+    test('Returns an error when One or more of the Quiz IDs is not currently in the trash', () => {
+      adminQuizRemove(authUserId0, user0quizId0);
+      const result = adminQuizEmptyTrash(authUserId0, [user0quizId2])
+      expect(result).toStrictEqual({ error: 'One or more of the Quiz IDs is not currently in the trash' });
+    });
+
+  });
+
+  describe('Successful test', () => {
+    test('Permanent delete 1 quiz out of 1 quiz in trash', () => {
+      adminQuizRemove(authUserId0, user0quizId0);
+      const result = adminQuizEmptyTrash(authUserId0, [user0quizId0]);
+      expect(result).toStrictEqual({
+
+      })
+      expect((adminUserALLDetails(authUserId0) as AdminUserALLDetails).user.deletedQuizzes).toStrictEqual([]);
+    });
+
+    test('Permanent delete 1 quiz out of multiple quiz in trash', () => {
+      adminQuizRemove(authUserId0, user0quizId0);
+      adminQuizRemove(authUserId0, user0quizId2);
+      const result = adminQuizEmptyTrash(authUserId0, [user0quizId2]);
+      expect(result).toStrictEqual({
+
+      })
+      expect((adminUserALLDetails(authUserId0) as AdminUserALLDetails).user.deletedQuizzes[0].quizId).toStrictEqual(user0quizId0);
+    });
+
+    test('Permanent delete multiple quiz out of multiple quiz in trash', () => {
+
+      adminQuizRemove(authUserId1, user1quizId1);
+      adminQuizRemove(authUserId1, user1quizId3);
+      adminQuizRemove(authUserId1, user1quizId4);
+      const result = adminQuizEmptyTrash(authUserId1, [user1quizId1]);
+      expect(result).toStrictEqual({
+
+      })
+      const result2 = adminQuizEmptyTrash(authUserId1, [user1quizId3]);
+      expect(result2).toStrictEqual({
+
+      })
+      expect((adminUserALLDetails(authUserId1) as AdminUserALLDetails).user.deletedQuizzes[0].quizId).toStrictEqual(user1quizId4);
     });
   });
 });

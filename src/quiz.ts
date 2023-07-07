@@ -5,7 +5,7 @@ import {
 import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkAuthUserIdValid, checkQuizAndUserIdValid,
-  checkQuizIdValid, checkQuizNameUsed,
+  checkQuizIdValid, checkQuizNameUsed, checkALLQuizOwnership, checkQuizIdExistsGlobally
 } from './helper';
 
 /**
@@ -345,16 +345,12 @@ function adminQuizRestore(authUserId: number, quizId: number): AdminQuizRestoreR
   * Permanently clears 'deletedQuizzes'
   *
   * @param {number} authUserId - The unique id of the registered user
+  * @param {number[]} quizIds - An array of quizId's to be deleted from the trash
   *
   * @returns {{} | {error: string}} - Returns an empty object if valid
  */
-function adminQuizEmptyTrash(authUserId: number): AdminQuizEmptyTrashReturn {
+function adminQuizEmptyTrash(authUserId: number, quizIds: number[]): AdminQuizEmptyTrashReturn {
   const data = getData();
-
-  // Check if authUserId is valid
-  if (!checkAuthUserIdValid(authUserId)) {
-    return { error: 'AuthUserId is not a valid user' };
-  }
 
   // Find the user in the users array
   const userIndex = data.users.findIndex((user) => user.authUserId === authUserId);
@@ -362,8 +358,32 @@ function adminQuizEmptyTrash(authUserId: number): AdminQuizEmptyTrashReturn {
   if (userIndex !== -1) {
     const user = data.users[userIndex];
 
-    // Empty the deletedQuizzes array of the user
-    user.deletedQuizzes = [];
+    for (const quizId of quizIds) {
+      // Check if the specified quizId is a valid quiz
+      if (!checkQuizIdExistsGlobally(quizId)) {
+        return { error: "One or more of the Quiz IDs is not a valid quiz" };
+      }
+
+      // Check if the user owns the specified quiz
+      if (!checkALLQuizOwnership(authUserId, quizId)) {
+        return {
+          error: "One or more of the Quiz IDs refers to a quiz that this current user does not own",
+        };
+      }
+
+      // Find the quiz in the deletedQuizzes array
+      const quizIndex = user.deletedQuizzes.findIndex((quiz) => quiz.quizId === quizId);
+
+      // Check if the specified quizId is currently in the trash
+      if (quizIndex === -1) {
+        return { error: "One or more of the Quiz IDs is not currently in the trash" };
+      }
+
+      // Remove the specified quizId from the user's deletedQuizzes array
+      user.deletedQuizzes.splice(quizIndex, 1);
+    }
+  } else {
+    return { error: "AuthUserId is not a valid user" };
   }
   setData(data);
   return {};
