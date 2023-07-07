@@ -214,7 +214,6 @@ function adminQuizALLDetails(quizId: number): AdminQuizALLDetailsReturn {
   };
 }
 
-
 /**
  * Checks if the user owns a quiz globally
  *
@@ -243,7 +242,6 @@ function checkALLQuizOwnership(authUserId: number, quizId: number): boolean {
 
   return true; // User owns the quiz
 }
-
 
 /**
  * Checks if the quizId exists globally

@@ -361,13 +361,13 @@ function adminQuizEmptyTrash(authUserId: number, quizIds: number[]): AdminQuizEm
     for (const quizId of quizIds) {
       // Check if the specified quizId is a valid quiz
       if (!checkQuizIdExistsGlobally(quizId)) {
-        return { error: "One or more of the Quiz IDs is not a valid quiz" };
+        return { error: 'One or more of the Quiz IDs is not a valid quiz' };
       }
 
       // Check if the user owns the specified quiz
       if (!checkALLQuizOwnership(authUserId, quizId)) {
         return {
-          error: "One or more of the Quiz IDs refers to a quiz that this current user does not own",
+          error: 'One or more of the Quiz IDs refers to a quiz that this current user does not own',
         };
       }
 
@@ -376,14 +376,14 @@ function adminQuizEmptyTrash(authUserId: number, quizIds: number[]): AdminQuizEm
 
       // Check if the specified quizId is currently in the trash
       if (quizIndex === -1) {
-        return { error: "One or more of the Quiz IDs is not currently in the trash" };
+        return { error: 'One or more of the Quiz IDs is not currently in the trash' };
       }
 
       // Remove the specified quizId from the user's deletedQuizzes array
       user.deletedQuizzes.splice(quizIndex, 1);
     }
   } else {
-    return { error: "AuthUserId is not a valid user" };
+    return { error: 'AuthUserId is not a valid user' };
   }
   setData(data);
   return {};
