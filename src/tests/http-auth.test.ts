@@ -1,11 +1,14 @@
-import { AdminAuthLogin, AdminAuthLogout, AdminAuthRegister, ErrorObj } from '../../interfaces/interfaces';
+import { AdminAuthLogin, AdminAuthLogout, AdminAuthRegister, ErrorObj, Jwt, Token } from '../../interfaces/interfaces';
 import request from 'sync-request';
 import { getUrl } from '../helper';
+import { jwtToToken } from '../token';
+import { checkTokenValid } from './testHelpers';
+import { getData } from '../dataStore';
 
 const URL: string = getUrl();
 
 // Wrapper functions
-function registerUser (email: string, password: string, nameFirst: string, nameLast:string): AdminAuthRegister | ErrorObj {
+function registerUser (email: string, password: string, nameFirst: string, nameLast:string): Token | ErrorObj {
   const res = request(
     'POST',
     URL + 'v1/admin/auth/register',
@@ -18,8 +21,13 @@ function registerUser (email: string, password: string, nameFirst: string, nameL
       }
     }
   );
-  const authRegisterId: AdminAuthRegister | ErrorObj = JSON.parse(res.body.toString());
-  return authRegisterId;
+  const parsedResponse: Jwt | ErrorObj = JSON.parse(res.body.toString());
+
+  if ('error' in parsedResponse) {
+    return parsedResponse;
+  } else {
+    return jwtToToken(parsedResponse);
+  }
 }
 
 function loginUser (email: string, password: string): AdminAuthLogin | ErrorObj {
@@ -59,6 +67,10 @@ function clearUsers (): void {
 //   return logOutResponse;
 // }
 
+
+
+
+
 // TESTS FOR REGISTER //
 
 beforeEach(() => {
@@ -67,126 +79,126 @@ beforeEach(() => {
 
 describe('adminAuthRegister tests', () => {
   test('Check successful Register', () => {
-    const authRegisterId: AdminAuthRegister | ErrorObj = registerUser('example@email.com', 'Password123', 'First', 'Last');
-    expect(authRegisterId).toStrictEqual({ authUserId: 0 });
+    const res: Token | ErrorObj = registerUser('example@email.com', 'Password123', 'First', 'Last');
+    expect(checkTokenValid(res as Token, 0)).toEqual(true);
   });
 
   describe('Unsuccessful register - names', () => {
     test('Check unsuccessful first name - null input', () => {
-      const authRegisterId: AdminAuthRegister | ErrorObj = registerUser('good.email@gmail.com', 'Password123', '', 'Jones');
+      const res: Token | ErrorObj = registerUser('good.email@gmail.com', 'Password123', '', 'Jones');
       const expectedResult = {
         error: 'First name has to be between 2 and 20 characters',
       };
-      expect(authRegisterId).toStrictEqual(expectedResult);
+      expect(res).toStrictEqual(expectedResult);
     });
 
     test('Check unsuccessful first name - using wrong characters', () => {
-      const authRegisterId: AdminAuthRegister | ErrorObj = registerUser('good.email@gmail.com', 'Password123', 'Johnny-B345one', 'Jones');
+      const res: Token | ErrorObj = registerUser('good.email@gmail.com', 'Password123', 'Johnny-B345one', 'Jones');
       const expectedResult = {
         error: 'First name can only contain upper/lower case letters, spaces, hyphens or apostrophes',
       };
-      expect(authRegisterId).toStrictEqual(expectedResult);
+      expect(res).toStrictEqual(expectedResult);
     });
 
     test('Check unsuccessful first name - wrong size', () => {
-      const authRegisterId: AdminAuthRegister | ErrorObj = registerUser('good.email@gmail.com', 'Password123', 'J', 'Jones');
+      const res: Token | ErrorObj = registerUser('good.email@gmail.com', 'Password123', 'J', 'Jones');
       const expectedResult = {
         error: 'First name has to be between 2 and 20 characters',
       };
-      expect(authRegisterId).toStrictEqual(expectedResult);
+      expect(res).toStrictEqual(expectedResult);
     });
 
     test('Check unsuccessful first name - wrong size', () => {
-      const authRegisterId: AdminAuthRegister | ErrorObj = registerUser('good.email@gmail.com', 'Password123', 'Jooooooooooooooooooooooooooonnnnnnnnyyyyyyy', 'Jones');
+      const res: Token | ErrorObj = registerUser('good.email@gmail.com', 'Password123', 'Jooooooooooooooooooooooooooonnnnnnnnyyyyyyy', 'Jones');
       const expectedResult = {
         error: 'First name has to be between 2 and 20 characters',
       };
-      expect(authRegisterId).toStrictEqual(expectedResult);
+      expect(res).toStrictEqual(expectedResult);
     });
 
     test('Check unsuccessful last name - null input', () => {
-      const authRegisterId: AdminAuthRegister | ErrorObj = registerUser('good.email@gmail.com', 'Password123', 'Johnny', '');
+      const res: Token | ErrorObj = registerUser('good.email@gmail.com', 'Password123', 'Johnny', '');
       const expectedResult = {
         error: 'Last name has to be between 2 and 20 characters',
       };
-      expect(authRegisterId).toStrictEqual(expectedResult);
+      expect(res).toStrictEqual(expectedResult);
     });
 
     test('Check unsuccessful last name - using wrong characters', () => {
-      const authRegisterId: AdminAuthRegister | ErrorObj = registerUser('good.email@gmail.com', 'Password123', 'Johnny', 'Jo124143\'nes');
+      const res: Token | ErrorObj = registerUser('good.email@gmail.com', 'Password123', 'Johnny', 'Jo124143\'nes');
       const expectedResult = {
         error: 'Last name can only contain upper/lower case letters, spaces, hyphens or apostrophes',
       };
-      expect(authRegisterId).toStrictEqual(expectedResult);
+      expect(res).toStrictEqual(expectedResult);
     });
 
     test('Check unsuccessful last name - Wrong size', () => {
-      const authRegisterId: AdminAuthRegister | ErrorObj = registerUser('good.email@gmail.com', 'Password123', 'Johnny', 'J');
+      const res: Token | ErrorObj = registerUser('good.email@gmail.com', 'Password123', 'Johnny', 'J');
       const expectedResult = {
         error: 'Last name has to be between 2 and 20 characters',
       };
-      expect(authRegisterId).toStrictEqual(expectedResult);
+      expect(res).toStrictEqual(expectedResult);
     });
 
     test('Check unsuccessful last name - Wrong size', () => {
-      const authRegisterId: AdminAuthRegister | ErrorObj = registerUser('good.email@gmail.com', 'Password123', 'Johnny', 'joooooooooooooooooooooooonnnnnnnnnneeeeeeeeeeessssss');
+      const res: Token | ErrorObj = registerUser('good.email@gmail.com', 'Password123', 'Johnny', 'joooooooooooooooooooooooonnnnnnnnnneeeeeeeeeeessssss');
       const expectedResult = {
         error: 'Last name has to be between 2 and 20 characters',
       };
-      expect(authRegisterId).toStrictEqual(expectedResult);
+      expect(res).toStrictEqual(expectedResult);
     });
   });
 
   describe('Unsuccessful Register - password', () => {
     test('Check unsuccessful password - less then 8 characters', () => {
-      const authRegisterId: AdminAuthRegister | ErrorObj = registerUser('good.email@gmail.com', 'Pas', 'Johnny', 'Jones');
+      const res: Token | ErrorObj = registerUser('good.email@gmail.com', 'Pas', 'Johnny', 'Jones');
       const expectedResult = {
         error: 'Password length has to be 8 characters & needs to contain at least one number and at least one letter',
       };
-      expect(authRegisterId).toStrictEqual(expectedResult);
+      expect(res).toStrictEqual(expectedResult);
     });
 
     test('Check unsuccessful password - does not contain 1 number and 1 letter', () => {
-      const authRegisterId: AdminAuthRegister | ErrorObj = registerUser('good.email@gmail.com', '123456789', 'Johnny', 'Jones');
+      const res: Token | ErrorObj = registerUser('good.email@gmail.com', '123456789', 'Johnny', 'Jones');
       const expectedResult = {
         error: 'Password length has to be 8 characters & needs to contain at least one number and at least one letter',
       };
-      expect(authRegisterId).toStrictEqual(expectedResult);
+      expect(res).toStrictEqual(expectedResult);
     });
 
     test('Check unsuccessful password - does not contain 1 number and 1 letter', () => {
-      const authRegisterId: AdminAuthRegister | ErrorObj = registerUser('good.email@gmail.com', '', 'Johnny', 'Jones');
+      const res: Token | ErrorObj = registerUser('good.email@gmail.com', '', 'Johnny', 'Jones');
       const expectedResult = {
         error: 'Password length has to be 8 characters & needs to contain at least one number and at least one letter',
       };
-      expect(authRegisterId).toStrictEqual(expectedResult);
+      expect(res).toStrictEqual(expectedResult);
     });
 
     test('Check unsuccessful password - does not contain 1 number and 1 letter', () => {
-      const authRegisterId: AdminAuthRegister | ErrorObj = registerUser('good.email@gmail.com', 'pyassword', 'Johnny', 'Jones');
+      const res: Token | ErrorObj = registerUser('good.email@gmail.com', 'pyassword', 'Johnny', 'Jones');
       const expectedResult = {
         error: 'Password length has to be 8 characters & needs to contain at least one number and at least one letter',
       };
-      expect(authRegisterId).toStrictEqual(expectedResult);
+      expect(res).toStrictEqual(expectedResult);
     });
   });
 
   describe('Unsuccessful Register - email', () => {
     test('Check unsuccessful email - email not valid', () => {
-      const authRegisterId: AdminAuthRegister | ErrorObj = registerUser('good.emailgmail.com', 'Password123', 'Johnny', 'Jones');
+      const res: Token | ErrorObj = registerUser('good.emailgmail.com', 'Password123', 'Johnny', 'Jones');
       const expectedResult = {
         error: 'Email is not valid',
       };
-      expect(authRegisterId).toStrictEqual(expectedResult);
+      expect(res).toStrictEqual(expectedResult);
     });
 
     test('Check unsuccessful email - email used already', () => {
       registerUser('good.email@gmail.com', 'Password123', 'Johnny', 'Jones');
-      const authRegisterId: AdminAuthRegister | ErrorObj = registerUser('good.email@gmail.com', 'Password123', 'Johnny', 'Jones');
+      const res: Token | ErrorObj = registerUser('good.email@gmail.com', 'Password123', 'Johnny', 'Jones');
       const expectedResult = {
         error: 'Email already used',
       };
-      expect(authRegisterId).toStrictEqual(expectedResult);
+      expect(res).toStrictEqual(expectedResult);
     });
   });
 });

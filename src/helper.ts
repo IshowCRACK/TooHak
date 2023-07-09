@@ -1,4 +1,4 @@
-import { AdminQuizList, AdminUserALLDetailsReturn, AdminQuizALLDetailsReturn } from '../interfaces/interfaces';
+import { AdminQuizList, AdminUserALLDetailsReturn, AdminQuizALLDetailsReturn, ErrorObj } from '../interfaces/interfaces';
 import { getData } from './dataStore';
 import { adminQuizList } from './quiz';
 import config from './config.json';
@@ -13,6 +13,9 @@ export const getUrl = (): string => {
   const URL: string = 'http://' + HOST + ':' + PORT.toString() + '/';
   return URL;
 };
+
+export const formatError = (errorObj: ErrorObj) => {return {error: errorObj.error}};
+
 
 /**
   * Function looks at the characters used in first name/last name

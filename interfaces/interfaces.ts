@@ -10,7 +10,7 @@ export interface User {
     deletedQuizzes: Quiz[];
 }
 
-export type Jwt = string;
+export type JwtToken = string;
 export interface Quiz {
     quizId: number;
     adminQuizId: number;
@@ -32,10 +32,13 @@ export interface Data {
     session: Token[];
 }
 
-
 export interface ErrorObj {
     error: string;
-    statusCode?: number;
+}
+
+export interface ErrorAndStatusCode {
+    error: string;
+    statusCode: number;
 }
 
 export type AdminQuizDescriptionUpdateReturn = AdminQuizDescriptionUpdate | ErrorObj;
@@ -55,6 +58,10 @@ export type AdminQuizRestoreReturn = AdminQuizRestore| ErrorObj;
 export type AdminQuizEmptyTrashReturn = AdminQuizEmptyTrash| ErrorObj;
 export type AdminQuizTransferReturn = AdminQuizTransfer| ErrorObj;
 export type viewUserDeletedQuizzesReturn = Quiz[] | ErrorObj;
+
+export interface Jwt {
+    token: JwtToken;
+}
 
 export interface ClearReturn {
 

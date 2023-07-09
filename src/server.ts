@@ -9,6 +9,7 @@ import fs from 'fs';
 
 import { adminAuthRegister, adminAuthLogin } from './auth';
 import { clear } from './other';
+import { formatError } from './helper';
 
 // Set up web app
 const app = express();
@@ -45,9 +46,10 @@ app.post('/v1/admin/auth/register', (req: Request, res: Response) => {
   const response = adminAuthRegister(email, password, nameFirst, nameLast);
 
   if ('error' in response) {
-    return res.status(400).json(response);
+    return res.status(response.statusCode).json(formatError(response));
   }
-  res.json(response);
+
+  res.status(200).json(response);
 });
 
 app.post('/v1/admin/auth/login', (req: Request, res: Response) => {

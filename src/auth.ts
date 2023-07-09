@@ -1,7 +1,8 @@
-import { AdminAuthLoginReturn, AdminAuthRegisterReturn, AdminUserDetailsReturn, AdminUpdateUserDetailsReturn, adminUpdateUserPasswordReturn } from '../interfaces/interfaces';
+import { AdminAuthLoginReturn, AdminAuthRegisterReturn, AdminUserDetailsReturn, AdminUpdateUserDetailsReturn, adminUpdateUserPasswordReturn, ErrorObj, Token, Jwt, ErrorAndStatusCode } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import { checkName, checkPassword, emailAlreadyUsed } from './helper';
 import validator from 'validator';
+import { addTokenToSession, createToken, tokenToJwt } from './token';
 
 /**
   * Register a user with an email, password, and names, then returns thier authUserId value
@@ -12,13 +13,14 @@ import validator from 'validator';
   * @param {string} nameLast - Users last name
   * @returns {{authUserId: number} | {error: string}} - Returns an integer, authUserId that is unique to the user
 */
-function adminAuthRegister (email: string, password: string, nameFirst: string, nameLast: string): AdminAuthRegisterReturn {
+function adminAuthRegister (email: string, password: string, nameFirst: string, nameLast: string): Jwt | ErrorAndStatusCode {
   const data = getData();
 
   // checking if any parts are null
   if (email === null || password === null || nameFirst === null || nameLast === null) {
     return {
-      error: 'All sections should be filled'
+      error: 'All sections should be filled',
+      statusCode: 400
     };
   }
 
@@ -26,7 +28,8 @@ function adminAuthRegister (email: string, password: string, nameFirst: string, 
   for (const user of data.users) {
     if (user.email === email) {
       return {
-        error: 'Email already used'
+        error: 'Email already used',
+        statusCode: 400
       };
     }
   }
@@ -34,40 +37,46 @@ function adminAuthRegister (email: string, password: string, nameFirst: string, 
   // check email is valid using validator
   if (!validator.isEmail(email)) {
     return {
-      error: 'Email is not valid'
+      error: 'Email is not valid',
+      statusCode: 400
     };
   }
 
   // checking first name
   if (nameFirst.length > 20 || nameFirst.length < 2) {
     return {
-      error: 'First name has to be between 2 and 20 characters'
+      error: 'First name has to be between 2 and 20 characters',
+      statusCode: 400
     };
   }
 
   if (!checkName(nameFirst)) {
     return {
-      error: 'First name can only contain upper/lower case letters, spaces, hyphens or apostrophes'
+      error: 'First name can only contain upper/lower case letters, spaces, hyphens or apostrophes',
+      statusCode: 400
     };
   }
 
   // checking last name
   if (nameLast.length > 20 || nameLast.length < 2) {
     return {
-      error: 'Last name has to be between 2 and 20 characters'
+      error: 'Last name has to be between 2 and 20 characters',
+      statusCode: 400
     };
   }
 
   if (!checkName(nameLast)) {
     return {
-      error: 'Last name can only contain upper/lower case letters, spaces, hyphens or apostrophes'
+      error: 'Last name can only contain upper/lower case letters, spaces, hyphens or apostrophes',
+      statusCode: 400
     };
   }
 
   // checking password
   if (password.length < 8 || !checkPassword(password)) {
     return {
-      error: 'Password length has to be 8 characters & needs to contain at least one number and at least one letter'
+      error: 'Password length has to be 8 characters & needs to contain at least one number and at least one letter',
+      statusCode: 400
     };
   }
 
@@ -86,9 +95,9 @@ function adminAuthRegister (email: string, password: string, nameFirst: string, 
 
   setData(data);
 
-  return {
-    authUserId: userID
-  };
+  const token: Token = createToken(userID);
+  addTokenToSession(token);
+  return tokenToJwt(token);
 }
 
 /**
