@@ -1,7 +1,7 @@
-import { ErrorObj, Jwt, Token } from '../../interfaces/interfaces';
+import { ErrorObj, Jwt, OkObj, Token } from '../../interfaces/interfaces';
 import request from 'sync-request';
 import { getUrl } from '../helper';
-import { jwtToToken } from '../token';
+import { jwtToToken, objToJwt, tokenToJwt } from '../token';
 import { checkTokenValid } from './testHelpers';
 
 const URL: string = getUrl();
@@ -57,20 +57,21 @@ function clearUsers (): void {
   );
 }
 
-// const logoutUserHandler = (httpToken: HttpToken) => {
-//   const res = request(
-//     'POST',
-//     URL + 'v1/admin/auth/logout',
-//     {
-//       json: {
-//         token: httpToken
-//       }
-//     }
-//   );
+const logoutUserHandler = (jwt: Jwt) => {
+  const res = request(
+    'POST',
+    URL + 'v1/admin/auth/logout',
+    {
+      json: {
+        token: jwt
+      }
+    }
+  );
 
-//   const logOutResponse: AdminAuthLogout | ErrorObj = JSON.parse(res.body.toString());
-//   return logOutResponse;
-// }
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
+};
 
 // TESTS FOR REGISTER //
 
@@ -253,9 +254,67 @@ describe('clear tests', () => {
   });
 });
 
-// // TESTS FOR LOGOUT //
-// describe.skip('Tests related to logging out an admin', () => {
-//   beforeEach(() => {
-//     // const token: Token = convertToken(registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith'));
-//   })
-// });
+// TESTS FOR LOGOUT //
+describe.skip('Tests related to logging out an admin', () => {
+  let jwt: Jwt;
+  beforeEach(() => {
+    const token = registerUser('JohnSmith@gmail.com', 'Password123', 'Johnny', 'Jones') as Token;
+    jwt = tokenToJwt(token);
+  });
+
+  describe('Unsuccessful Tests', () => {
+    test('User already logged out', () => {
+      const jwt2: Jwt = objToJwt({
+        sessionId: '90343',
+        userId: 5
+      });
+
+      expect(logoutUserHandler(jwt2)).toEqual({
+        error: 'User has already logged out'
+      });
+
+      logoutUserHandler(jwt);
+
+      expect(logoutUserHandler(jwt)).toEqual({
+        error: 'User has already logged out'
+      });
+    });
+
+    test('Token is not a valid structure', () => {
+      const jwt2: Jwt = objToJwt({
+        sessionId: '234903',
+        userId: 8,
+        otherProperty: 9
+      });
+
+      expect(logoutUserHandler(jwt2)).toEqual({
+        error: 'Token is not a valid structure'
+      });
+
+      expect(logoutUserHandler({ token: 'Some JWT string' })).toEqual({
+        error: 'Token is not a valid structure'
+      });
+    });
+  });
+
+  describe('Successful tests', () => {
+    test('One user logged in at once', () => {
+      expect(logoutUserHandler(jwt)).toEqual({
+
+      });
+    });
+
+    test('Multiple users logged in at once', () => {
+      const token2 = registerUser('JaneAusten@gmail.com', 'Password123', 'Jane', 'Austen') as Token;
+      const jwt2 = tokenToJwt(token2);
+
+      expect(logoutUserHandler(jwt2)).toEqual({
+
+      });
+
+      expect(logoutUserHandler(jwt)).toEqual({
+
+      });
+    });
+  });
+});

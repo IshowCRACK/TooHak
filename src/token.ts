@@ -70,3 +70,9 @@ export const getTokenLogin = (userId: number): Token => {
 
   return token;
 };
+
+export const objToJwt = (obj: object): Jwt => {
+  return {
+    token: jsonwebtoken.sign(obj, SECRET_KEY) as string
+  };
+};
