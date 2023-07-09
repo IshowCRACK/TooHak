@@ -1,10 +1,18 @@
 import { AdminQuizList, AdminUserALLDetailsReturn, AdminQuizALLDetailsReturn } from '../interfaces/interfaces';
 import { getData } from './dataStore';
 import { adminQuizList } from './quiz';
+import config from './config.json';
 
 /**
  * -------------------------------------- HELPERS FUNCTIONS-----------------------------------------------
  */
+
+export const getUrl = (): string => {
+  const PORT: number = parseInt(process.env.PORT || config.port);
+  const HOST: string = process.env.IP || 'localhost';
+  const URL: string = 'http://' + HOST + ':' + PORT.toString() + '/';
+  return URL;
+};
 
 /**
   * Function looks at the characters used in first name/last name

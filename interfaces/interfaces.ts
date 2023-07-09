@@ -1,5 +1,4 @@
 
-
 export interface User {
     authUserId: number;
     nameFirst: string;
@@ -11,6 +10,7 @@ export interface User {
     deletedQuizzes: Quiz[];
 }
 
+export type Jwt = string;
 export interface Quiz {
     quizId: number;
     adminQuizId: number;
@@ -20,33 +20,41 @@ export interface Quiz {
     description: string;
 }
 
+export interface Token { 
+    sessionId: string;
+    userId: number;
+}
+
+
 export interface Data {
     users: User[];
     quizzes: Quiz[];
+    session: Token[];
 }
 
-export interface Error {
+
+export interface ErrorObj {
     error: string;
-    statuCode?: number;
+    statusCode?: number;
 }
 
-export type AdminQuizDescriptionUpdateReturn = AdminQuizDescriptionUpdate | Error;
-export type AdminQuizRemoveReturn = AdminQuizRemove | Error;
-export type AdminQuizCreateReturn = AdminQuizCreate | Error;
-export type AdminQuizListReturn = AdminQuizList | Error;
-export type AdminQuizNameUpdateReturn = AdminQuizNameUpdate | Error;
-export type AdminQuizInfoReturn = AdminQuizInfo | Error;
-export type AdminAuthLoginReturn = AdminAuthLogin | Error;
-export type AdminAuthRegisterReturn = AdminAuthRegister | Error;
-export type AdminUserDetailsReturn = AdminUserDetails | Error;
-export type AdminUserALLDetailsReturn = AdminUserALLDetails | Error;
-export type AdminQuizALLDetailsReturn = AdminQuizALLDetails | Error;
-export type AdminUpdateUserDetailsReturn = AdminUpdateUserDetails| Error;
-export type adminUpdateUserPasswordReturn = AdminUpdateUserPassword| Error;
-export type AdminQuizRestoreReturn = AdminQuizRestore| Error;
-export type AdminQuizEmptyTrashReturn = AdminQuizEmptyTrash| Error;
-export type AdminQuizTransferReturn = AdminQuizTransfer| Error;
-export type viewUserDeletedQuizzesReturn = Quiz[] | Error;
+export type AdminQuizDescriptionUpdateReturn = AdminQuizDescriptionUpdate | ErrorObj;
+export type AdminQuizRemoveReturn = AdminQuizRemove | ErrorObj;
+export type AdminQuizCreateReturn = AdminQuizCreate | ErrorObj;
+export type AdminQuizListReturn = AdminQuizList | ErrorObj;
+export type AdminQuizNameUpdateReturn = AdminQuizNameUpdate | ErrorObj;
+export type AdminQuizInfoReturn = AdminQuizInfo | ErrorObj;
+export type AdminAuthLoginReturn = AdminAuthLogin | ErrorObj;
+export type AdminAuthRegisterReturn = AdminAuthRegister | ErrorObj;
+export type AdminUserDetailsReturn = AdminUserDetails | ErrorObj;
+export type AdminUserALLDetailsReturn = AdminUserALLDetails | ErrorObj;
+export type AdminQuizALLDetailsReturn = AdminQuizALLDetails | ErrorObj;
+export type AdminUpdateUserDetailsReturn = AdminUpdateUserDetails| ErrorObj;
+export type adminUpdateUserPasswordReturn = AdminUpdateUserPassword| ErrorObj;
+export type AdminQuizRestoreReturn = AdminQuizRestore| ErrorObj;
+export type AdminQuizEmptyTrashReturn = AdminQuizEmptyTrash| ErrorObj;
+export type AdminQuizTransferReturn = AdminQuizTransfer| ErrorObj;
+export type viewUserDeletedQuizzesReturn = Quiz[] | ErrorObj;
 
 export interface ClearReturn {
 
@@ -129,6 +137,10 @@ export interface AdminUpdateUserDetails {
 
 }
 
-export interface adminUpdateUserPassword {
+export interface AdminUpdateUserPassword {
+
+}
+
+export interface AdminAuthLogout {
 
 }
