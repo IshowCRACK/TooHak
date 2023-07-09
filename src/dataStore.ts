@@ -2,7 +2,8 @@ import { Data } from '../interfaces/interfaces';
 
 let data: Data = {
   users: [],
-  quizzes: []
+  quizzes: [],
+  session: []
 };
 
 /**
