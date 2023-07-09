@@ -10,6 +10,8 @@ import fs from 'fs';
 import { adminAuthRegister, adminAuthLogin } from './auth';
 import { clear } from './other';
 import { formatError } from './helper';
+import { jwtToToken } from './token';
+import { getData } from './dataStore';
 
 // Set up web app
 const app = express();
@@ -57,9 +59,17 @@ app.post('/v1/admin/auth/login', (req: Request, res: Response) => {
   const response = adminAuthLogin(email, password);
 
   if ('error' in response) {
-    return res.status(400).json(response);
+    return res.status(response.statusCode).json(formatError(response));
   }
-  res.json(response);
+
+  console.log('RESPONSE AUTH LOGIN');
+  console.log(jwtToToken(response));
+  console.log('HIWEFHOWEF');
+  const data = getData();
+  console.log(data);
+  console.log('RESPONSE AUTH LOGIN');
+
+  res.status(200).json(response);
 });
 
 app.delete('/v1/clear', (req: Request, res: Response) => {

@@ -12,6 +12,7 @@ function clear (): ClearReturn {
   // Reset user and quizzes array by making them empty
   data.users = [];
   data.quizzes = [];
+  data.session = [];
 
   // Sets the new empty data object
   setData(data);

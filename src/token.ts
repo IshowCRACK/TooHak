@@ -1,4 +1,4 @@
-import { Data, ErrorObj, Jwt, Token } from '../interfaces/interfaces';
+import { Data, Jwt, Token } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import jsonwebtoken, { JwtPayload } from 'jsonwebtoken';
 
@@ -19,6 +19,7 @@ const createSessionId = (): string => {
   return possibleSessionId;
 };
 
+// Creates a new token given a userId
 export const createToken = (userId: number): Token => {
   const sessionId: string = createSessionId();
   const token: Token = {
@@ -29,26 +30,43 @@ export const createToken = (userId: number): Token => {
   return token;
 };
 
+// Converts a jwt string into a token
 export const jwtToToken = (jwt: Jwt): Token => {
   const decode = jsonwebtoken.verify(jwt.token, SECRET_KEY) as JwtPayload;
 
   return {
     sessionId: decode.sessionId,
     userId: decode.userId
-  }
+  };
 };
 
+// Encodes a token into a jwt string
 export const tokenToJwt = (token: Token): Jwt => {
   return {
     token: jsonwebtoken.sign(token, SECRET_KEY) as string
-  }
-}
+  };
+};
 
-export const addTokenToSession = (token: Token): void => {
+// Adds token to datastore that stores all current sessions
+export const addTokenToSession = (newToken: Token): void => {
   const data = getData();
 
-  data.session.push(token);
+  // Don't create token if user already in a session
+  if (data.session.find((token: Token) => token.userId === newToken.userId) !== undefined) return;
+
+  data.session.push(newToken);
 
   setData(data);
-}
+};
 
+// Gets token from sessions datastore from a userId. If not available, then creates a new one
+export const getTokenLogin = (userId: number): Token => {
+  const data = getData();
+  let token = data.session.find((token: Token) => token.userId === userId);
+
+  if (token === undefined) {
+    token = createToken(userId);
+  }
+
+  return token;
+};

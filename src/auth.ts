@@ -1,8 +1,8 @@
-import { AdminAuthLoginReturn, AdminAuthRegisterReturn, AdminUserDetailsReturn, AdminUpdateUserDetailsReturn, adminUpdateUserPasswordReturn, ErrorObj, Token, Jwt, ErrorAndStatusCode } from '../interfaces/interfaces';
+import { AdminUserDetailsReturn, AdminUpdateUserDetailsReturn, adminUpdateUserPasswordReturn, Token, Jwt, ErrorAndStatusCode } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import { checkName, checkPassword, emailAlreadyUsed } from './helper';
 import validator from 'validator';
-import { addTokenToSession, createToken, tokenToJwt } from './token';
+import { addTokenToSession, createToken, getTokenLogin, tokenToJwt } from './token';
 
 /**
   * Register a user with an email, password, and names, then returns thier authUserId value
@@ -101,6 +101,37 @@ function adminAuthRegister (email: string, password: string, nameFirst: string, 
 }
 
 /**
+  * Given a registered user's email and password returns their authUserId value
+  *
+  * @param {string} email - Users email
+  * @param {string} password - Users password with at least 1 number and 1 letter and is 8 characters long
+  *
+  * @returns {{authUserId: number} | {error: string}} - returns an integer, authUserId that is unique to the user
+*/
+function adminAuthLogin (email: string, password: string): Jwt | ErrorAndStatusCode {
+  const data = getData();
+
+  // loop through users array from dataStore
+  for (const user of data.users) {
+    if (user.email === email && user.password === password) {
+      // add successful logins for all times & change failed password
+      user.numSuccessLogins++;
+      user.numFailedPasswordsSinceLastLogin = 0;
+
+      const token: Token = getTokenLogin(user.authUserId);
+      addTokenToSession(token);
+
+      return tokenToJwt(token);
+    } else {
+      // Add on to how many times user has failed before a successful login
+      user.numFailedPasswordsSinceLastLogin++;
+    }
+  }
+
+  return { error: 'Username or Password is not valid', statusCode: 400 };
+}
+
+/**
   * Given an admin user's authUserId, return details about the user
   *
   * @param {number} authUserId - Unique Id for a user to help identify them
@@ -129,33 +160,6 @@ function adminUserDetails (authUserId: number): AdminUserDetailsReturn {
   return {
     error: 'User does not exists'
   };
-}
-
-/**
-  * Given a registered user's email and password returns their authUserId value
-  *
-  * @param {string} email - Users email
-  * @param {string} password - Users password with at least 1 number and 1 letter and is 8 characters long
-  *
-  * @returns {{authUserId: number} | {error: string}} - returns an integer, authUserId that is unique to the user
-*/
-function adminAuthLogin (email: string, password: string): AdminAuthLoginReturn {
-  const data = getData();
-
-  // loop through users array from dataStore
-  for (const user of data.users) {
-    if (user.email === email && user.password === password) {
-      // add successful logins for all times & change failed password
-      user.numSuccessLogins++;
-      user.numFailedPasswordsSinceLastLogin = 0;
-      return { authUserId: user.authUserId };
-    } else {
-      // Add on to how many times user has failed before a successful login
-      user.numFailedPasswordsSinceLastLogin++;
-    }
-  }
-
-  return { error: 'Username or Password is not valid' };
 }
 
 /**

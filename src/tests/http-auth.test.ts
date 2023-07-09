@@ -1,14 +1,13 @@
-import { AdminAuthLogin, AdminAuthLogout, AdminAuthRegister, ErrorObj, Jwt, Token } from '../../interfaces/interfaces';
+import { ErrorObj, Jwt, Token } from '../../interfaces/interfaces';
 import request from 'sync-request';
 import { getUrl } from '../helper';
 import { jwtToToken } from '../token';
 import { checkTokenValid } from './testHelpers';
-import { getData } from '../dataStore';
 
 const URL: string = getUrl();
 
 // Wrapper functions
-function registerUser (email: string, password: string, nameFirst: string, nameLast:string): Token | ErrorObj {
+const registerUser = (email: string, password: string, nameFirst: string, nameLast:string): Token | ErrorObj => {
   const res = request(
     'POST',
     URL + 'v1/admin/auth/register',
@@ -28,9 +27,9 @@ function registerUser (email: string, password: string, nameFirst: string, nameL
   } else {
     return jwtToToken(parsedResponse);
   }
-}
+};
 
-function loginUser (email: string, password: string): AdminAuthLogin | ErrorObj {
+const loginUser = (email: string, password: string): Token | ErrorObj => {
   const res = request(
     'POST',
     URL + 'v1/admin/auth/login',
@@ -41,9 +40,15 @@ function loginUser (email: string, password: string): AdminAuthLogin | ErrorObj 
       }
     }
   );
-  const authLoginId: AdminAuthLogin | ErrorObj = JSON.parse(res.body.toString());
-  return authLoginId;
-}
+
+  const parsedResponse: Jwt | ErrorObj = JSON.parse(res.body.toString());
+
+  if ('error' in parsedResponse) {
+    return parsedResponse;
+  } else {
+    return jwtToToken(parsedResponse);
+  }
+};
 
 function clearUsers (): void {
   request(
@@ -66,10 +71,6 @@ function clearUsers (): void {
 //   const logOutResponse: AdminAuthLogout | ErrorObj = JSON.parse(res.body.toString());
 //   return logOutResponse;
 // }
-
-
-
-
 
 // TESTS FOR REGISTER //
 
@@ -203,54 +204,54 @@ describe('adminAuthRegister tests', () => {
   });
 });
 
-// // TESTS FOR LOGIN //
-// describe('adminAuthLogin tests', () => {
-//   describe('Successful Login', () => {
-//     test('One user login', () => {
-//       const authUserId: AdminAuthRegister | ErrorObj = registerUser('goofy.email@gmail.com', 'Password123', 'Joh nny-Bone', 'Jones');
-//       const authUserIdLogin: AdminAuthLogin | ErrorObj = loginUser('goofy.email@gmail.com', 'Password123');
-//       expect(authUserId).toStrictEqual(authUserIdLogin);
-//     });
-//     test('Multiple user login', () => {
-//       registerUser('good.ail@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes');
-//       const authUserId: AdminAuthRegister | ErrorObj = registerUser('gooemail@gmail.com', 'Password121233', 'Joh nny-Bone', 'Jones');
-//       const authUserId2: AdminAuthRegister | ErrorObj = registerUser('gdemail@gmail.com', 'Password112315g23', 'Joh nny-Bone', 'Jones');
-//       const authUserIdLogin: AdminAuthRegister | ErrorObj = loginUser('gooemail@gmail.com', 'Password121233');
-//       const authUserIdLogin2: AdminAuthRegister | ErrorObj = loginUser('gdemail@gmail.com', 'Password112315g23');
-//       expect(authUserId).toStrictEqual(authUserIdLogin);
-//       expect(authUserId2).toStrictEqual(authUserIdLogin2);
-//     });
-//   });
+// TESTS FOR LOGIN //
+describe('adminAuthLogin tests', () => {
+  describe('Successful Login', () => {
+    test('One user login', () => {
+      const token: Token | ErrorObj = registerUser('goofy.email@gmail.com', 'Password123', 'Joh nny-Bone', 'Jones');
+      const loginToken: Token | ErrorObj = loginUser('goofy.email@gmail.com', 'Password123');
+      expect(token).toStrictEqual(loginToken);
+    });
+    test('Multiple user login', () => {
+      registerUser('good.ail@gmail.com', 'Password123', 'Joh nny-Bone', 'Jo\'nes');
+      const token: Token | ErrorObj = registerUser('gooemail@gmail.com', 'Password121233', 'Joh nny-Bone', 'Jones');
+      const token2: Token | ErrorObj = registerUser('gdemail@gmail.com', 'Password112315g23', 'Joh nny-Bone', 'Jones');
+      const loginToken: Token | ErrorObj = loginUser('gooemail@gmail.com', 'Password121233');
+      const loginToken2: Token | ErrorObj = loginUser('gdemail@gmail.com', 'Password112315g23');
+      expect(token).toStrictEqual(loginToken);
+      expect(token2).toStrictEqual(loginToken2);
+    });
+  });
 
-//   describe('Unsuccessful Login', () => {
-//     test('User does not exist', () => {
-//       registerUser('gooil@gmail.com', 'Password12sdf3', 'Joh nny-Bone', 'Jones');
-//       registerUser('mail@gmail.com', 'Password12sdf3', 'Joh nny-Bone', 'Jones');
-//       const authUserIdLogin: AdminAuthRegister | ErrorObj = loginUser('goyeama@gmail.com', 'Pasworadsa2d123');
-//       expect(authUserIdLogin).toStrictEqual({ error: 'Username or Password is not valid' });
-//     });
-//     test('Wrong Email', () => {
-//       registerUser('good.email@gmail.com', 'Password123', 'Joh nny-Bone', 'Jones');
-//       const authUserIdLogin: AdminAuthRegister | ErrorObj = loginUser('good.ema@gmail.com', 'Password123');
-//       expect(authUserIdLogin).toStrictEqual({ error: 'Username or Password is not valid' });
-//     });
-//     test('Wrong Password', () => {
-//       registerUser('good.ail@gmail.com', 'Password123', 'Joh nny-Bone', 'Jones');
-//       const authUserIdLogin: AdminAuthLogin | ErrorObj = loginUser('good.ail@gmail.com', 'Passw15g23');
-//       expect(authUserIdLogin).toStrictEqual({ error: 'Username or Password is not valid' });
-//     });
-//   });
-// });
+  describe('Unsuccessful Login', () => {
+    test('User does not exist', () => {
+      registerUser('gooil@gmail.com', 'Password12sdf3', 'Joh nny-Bone', 'Jones');
+      registerUser('mail@gmail.com', 'Password12sdf3', 'Joh nny-Bone', 'Jones');
+      const res: Token | ErrorObj = loginUser('goyeama@gmail.com', 'Pasworadsa2d123');
+      expect(res).toStrictEqual({ error: 'Username or Password is not valid' });
+    });
+    test('Wrong Email', () => {
+      registerUser('good.email@gmail.com', 'Password123', 'Joh nny-Bone', 'Jones');
+      const res: Token | ErrorObj = loginUser('good.ema@gmail.com', 'Password123');
+      expect(res).toStrictEqual({ error: 'Username or Password is not valid' });
+    });
+    test('Wrong Password', () => {
+      registerUser('good.ail@gmail.com', 'Password123', 'Joh nny-Bone', 'Jones');
+      const res: Token | ErrorObj = loginUser('good.ail@gmail.com', 'Passw15g23');
+      expect(res).toStrictEqual({ error: 'Username or Password is not valid' });
+    });
+  });
+});
 
-// describe('clear tests', () => {
-//   test('Clearing users', () => {
-//     registerUser('email@gmail.com', 'Password123', 'Johnny', 'Jones');
-//     registerUser('emailllll@gmail.com', 'Password123', 'Johnny', 'Jones');
-//     clearUsers();
-//     const authRegisterId: AdminAuthRegister | ErrorObj = registerUser('email@gmail.com', 'Password123', 'Johnny', 'Jones');
-//     expect(authRegisterId).toStrictEqual({ authUserId: 0 });
-//   });
-// });
+describe('clear tests', () => {
+  test('Clearing users', () => {
+    registerUser('email@gmail.com', 'Password123', 'Johnny', 'Jones');
+    registerUser('emailllll@gmail.com', 'Password123', 'Johnny', 'Jones');
+    clearUsers();
+    const res: Token | ErrorObj = registerUser('email@gmail.com', 'Password123', 'Johnny', 'Jones');
+    expect(checkTokenValid(res as Token, 0)).toEqual(true);
+  });
+});
 
 // // TESTS FOR LOGOUT //
 // describe.skip('Tests related to logging out an admin', () => {

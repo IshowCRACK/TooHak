@@ -14,8 +14,7 @@ export const getUrl = (): string => {
   return URL;
 };
 
-export const formatError = (errorObj: ErrorObj) => {return {error: errorObj.error}};
-
+export const formatError = (errorObj: ErrorObj) => { return { error: errorObj.error }; };
 
 /**
   * Function looks at the characters used in first name/last name
