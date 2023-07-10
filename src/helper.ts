@@ -224,7 +224,57 @@ function adminQuizALLDetails(quizId: number): AdminQuizALLDetailsReturn {
   };
 }
 
+/**
+ * Checks if the user owns a quiz globally
+ *
+ * @param {number} authUserId -User's unique ID
+ * @param {number} quizId - quiz unique ID
+ *
+ * @returns {boolean} - Returns true if User owns quiz, otherwise false
+ */
+function checkALLQuizOwnership(authUserId: number, quizId: number): boolean {
+  const data = getData();
+
+  // Check if the quizId exists in quizzes
+  const quizExistsInQuizzes = data.quizzes.some((quiz) => quiz.quizId === quizId);
+
+  // Check if the quizId exists in the user's deletedQuizzes
+  const user = data.users.find((user) => user.authUserId === authUserId);
+  const quizExistsInDeletedQuizzes = user.deletedQuizzes.some((quiz) => quiz.quizId === quizId);
+
+  // Check if the user owns the quiz
+  if (
+    (quizExistsInQuizzes || quizExistsInDeletedQuizzes) &&
+    (quizExistsInQuizzes && data.quizzes.find((quiz) => quiz.quizId === quizId).adminQuizId !== authUserId)
+  ) {
+    return false; // User does not own the quiz
+  }
+
+  return true; // User owns the quiz
+}
+
+/**
+ * Checks if the quizId exists globally
+ *
+ * @param {number} quizId - quiz unique id
+ *
+ * @returns {boolean} - Returns true if User owns quiz, otherwise false
+ */
+function checkQuizIdExistsGlobally(quizId: number): boolean {
+  const data = getData();
+  // Check if the quizId exists in the quizzes array
+  const quizExistsInQuizzes = data.quizzes.some((quiz) => quiz.quizId === quizId);
+
+  // Check if the quizId exists in the deletedQuizzes array of any user
+  const quizExistsInDeletedQuizzes = data.users.some((user) =>
+    user.deletedQuizzes.some((quiz) => quiz.quizId === quizId)
+  );
+
+  // Return true if the quizId exists in either array, false otherwise
+  return quizExistsInQuizzes || quizExistsInDeletedQuizzes;
+}
+
 export {
   checkName, checkPassword, checkAlphanumeric, checkAuthUserIdValid,
-  checkQuizIdValid, checkQuizAndUserIdValid, checkQuizNameUsed, emailAlreadyUsed, adminUserALLDetails, adminQuizALLDetails
+  checkQuizIdValid, checkQuizAndUserIdValid, checkQuizNameUsed, emailAlreadyUsed, adminUserALLDetails, adminQuizALLDetails, checkALLQuizOwnership, checkQuizIdExistsGlobally
 };

@@ -742,7 +742,6 @@
 //     expect(getQuizInfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime + timeBufferSeconds);
 //   });
 // });
-
 test(' ', () => {
   expect(1).toEqual(1);
 });
