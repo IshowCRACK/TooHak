@@ -7,8 +7,9 @@ import YAML from 'yaml';
 import sui from 'swagger-ui-express';
 import fs from 'fs';
 
-import { adminAuthRegister, adminAuthLogin } from './auth';
+import { adminAuthRegister, adminAuthLogin, adminAuthLogout } from './auth';
 import { clear } from './other';
+import { formatError } from './helper';
 
 // Set up web app
 const app = express();
@@ -45,9 +46,10 @@ app.post('/v1/admin/auth/register', (req: Request, res: Response) => {
   const response = adminAuthRegister(email, password, nameFirst, nameLast);
 
   if ('error' in response) {
-    return res.status(400).json(response);
+    return res.status(response.statusCode).json(formatError(response));
   }
-  res.json(response);
+
+  res.status(200).json(response);
 });
 
 app.post('/v1/admin/auth/login', (req: Request, res: Response) => {
@@ -55,14 +57,26 @@ app.post('/v1/admin/auth/login', (req: Request, res: Response) => {
   const response = adminAuthLogin(email, password);
 
   if ('error' in response) {
-    return res.status(400).json(response);
+    return res.status(response.statusCode).json(formatError(response));
   }
-  res.json(response);
+
+  res.status(200).json(response);
 });
 
 app.delete('/v1/clear', (req: Request, res: Response) => {
   const response = clear();
   res.json(response);
+});
+
+app.post('/v1/admin/auth/logout', (req: Request, res: Response) => {
+  const { token } = req.body;
+  const response = adminAuthLogout(token);
+
+  if ('error' in response) {
+    return res.status(response.statusCode).json(formatError(response));
+  }
+
+  res.status(200).json(response);
 });
 
 // ====================================================================

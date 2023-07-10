@@ -173,3 +173,4 @@ dist/**/*
 
 # Debugging file
 src/debugging.js
+src/debugging.ts
