@@ -70,3 +70,37 @@ export const getTokenLogin = (userId: number): Token => {
 
   return token;
 };
+
+export const objToJwt = (obj: object): Jwt => {
+  return {
+    token: jsonwebtoken.sign(obj, SECRET_KEY) as string
+  };
+};
+
+export const checkJwtValid = (jwt: Jwt) => {
+  let output;
+
+  try {
+    const decode = jsonwebtoken.verify(jwt.token, SECRET_KEY) as JwtPayload;
+
+    if ('sessionId' in decode && 'userId' in decode && Object.keys(decode).length === 3) {
+      output = {
+        valid: true,
+        token: {
+          sessionId: decode.sessionId,
+          userId: decode.userId
+        }
+      };
+    } else {
+      output = {
+        valid: false
+      };
+    }
+  } catch {
+    output = {
+      valid: false
+    };
+  }
+
+  return output;
+};

@@ -36,6 +36,10 @@ export interface ErrorObj {
     error: string;
 }
 
+export interface OkObj {
+    
+}
+
 export interface ErrorAndStatusCode {
     error: string;
     statusCode: number;
