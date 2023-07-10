@@ -1,8 +1,8 @@
-import { AdminUserDetailsReturn, AdminUpdateUserDetailsReturn, adminUpdateUserPasswordReturn, Token, Jwt, ErrorAndStatusCode } from '../interfaces/interfaces';
+import { AdminUserDetailsReturn, AdminUpdateUserDetailsReturn, adminUpdateUserPasswordReturn, Token, Jwt, ErrorAndStatusCode, OkObj } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import { checkName, checkPassword, emailAlreadyUsed } from './helper';
 import validator from 'validator';
-import { addTokenToSession, createToken, getTokenLogin, tokenToJwt } from './token';
+import { addTokenToSession, checkJwtValid, createToken, getTokenLogin, tokenToJwt } from './token';
 
 /**
   * Register a user with an email, password, and names, then returns thier authUserId value
@@ -273,5 +273,31 @@ function adminUpdateUserPassword(authUserId: number, oldPassword: string, newPas
 
   return {};
 }
+
+export const adminAuthLogout = (jwt: Jwt): OkObj | ErrorAndStatusCode => {
+  const possibleToken = checkJwtValid(jwt);
+
+  if (possibleToken.valid === false) {
+    return {
+      error: 'Token is not a valid structure',
+      statusCode: 401
+    };
+  }
+
+  const data = getData();
+  const token = possibleToken.token as Token;
+
+  const index = data.session.findIndex(arrToken => JSON.stringify(arrToken) === JSON.stringify(token));
+
+  if (index !== -1) {
+    data.session.splice(index, 1);
+    return {};
+  }
+
+  return {
+    error: 'User has already logged out',
+    statusCode: 400
+  };
+};
 
 export { adminAuthLogin, adminAuthRegister, adminUserDetails, adminUpdateUserDetails, adminUpdateUserPassword };

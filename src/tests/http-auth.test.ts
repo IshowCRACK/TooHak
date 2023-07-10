@@ -255,7 +255,7 @@ describe('clear tests', () => {
 });
 
 // TESTS FOR LOGOUT //
-describe.skip('Tests related to logging out an admin', () => {
+describe('Tests related to logging out an admin', () => {
   let jwt: Jwt;
   beforeEach(() => {
     const token = registerUser('JohnSmith@gmail.com', 'Password123', 'Johnny', 'Jones') as Token;
@@ -282,9 +282,8 @@ describe.skip('Tests related to logging out an admin', () => {
 
     test('Token is not a valid structure', () => {
       const jwt2: Jwt = objToJwt({
-        sessionId: '234903',
-        userId: 8,
-        otherProperty: 9
+        something: '234903',
+        bye: 8,
       });
 
       expect(logoutUserHandler(jwt2)).toEqual({
