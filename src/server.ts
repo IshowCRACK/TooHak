@@ -90,6 +90,17 @@ app.post('/v1/admin/quiz', (req: Request, res: Response) => {
   res.status(200).json(response);
 });
 
+app.delete('/v1/admin/quiz/:quizId', (req: Request, res: Response) => {
+  const quizId = req.params.quizId;
+  const { token } = req.body;
+  const response = adminQuizCreate(token, quizId);
+  if ('error' in response) {
+    return res.status(response.statusCode).json(formatError(response));
+  }
+
+  res.status(200).json(response);
+});
+
 // ====================================================================
 //  ================= WORK IS DONE ABOVE THIS LINE ===================
 // ====================================================================
