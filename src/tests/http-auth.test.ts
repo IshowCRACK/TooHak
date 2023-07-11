@@ -318,5 +318,5 @@ describe('Tests related to logging out an admin', () => {
   });
 });
 
-export { registerUser };
+export { registerUser, logoutUserHandler };
 
