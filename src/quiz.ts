@@ -1,13 +1,14 @@
 import {
-  Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQuizCreateReturn, AdminQuizListReturn,
+  Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQuizListReturn,
   AdminQuizList, AdminQuizInfoReturn, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn, AdminQuizTransferReturn,
-  Token, Jwt, ErrorAndStatusCode, OkObj
+  Token, Jwt, ErrorAndStatusCode, AdminQuizCreate
 } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkAuthUserIdValid, checkQuizAndUserIdValid,
   checkQuizIdValid, checkQuizNameUsed, checkALLQuizOwnership, checkQuizIdExistsGlobally
 } from './helper';
+import { checkJwtValid, jwtToToken } from './token';
 
 /**
   * Update the description of the relevant quiz
@@ -122,19 +123,21 @@ function viewUserDeletedQuizzes(authUserId: number): viewUserDeletedQuizzesRetur
   *
   * @returns {{quizId: number} | {error: string}} - Returns an object containing the quizId
  */
-function adminQuizCreate (token: Token, name: string, description: string): AdminQuizCreateReturn {
+function adminQuizCreate (jwt: Jwt, name: string, description: string): AdminQuizCreate | ErrorAndStatusCode {
   const data = getData();
-
   // check valid structure
-  if (!token || typeof token !== 'string') {
-    return { error: 'Token is not a valid structure', status: 401 };
-  }
-  //check if valid for active sessions
-  if (!data.session.find((tokenSearch) => tokenSearch === token)) {
+  const possibleToken = checkJwtValid(jwt);
+
+  if (possibleToken.valid === false) {
     return {
-      error: "Token not for currently logged in session", statusCode: 403 };
+      error: 'Token is not a valid structure',
+      statusCode: 401
+    };
   }
-  
+  //  check if valid for active sessions
+  if ((data.session.find((token: Token) => token.userId === jwtToToken(jwt).userId)) === undefined) {
+    return { error: 'Token not for currently logged in session', statusCode: 403 };
+  }
   // check name length
   if (name === null || name === '') {
     return { error: 'A name must be entered', statusCode: 400 };
@@ -153,7 +156,7 @@ function adminQuizCreate (token: Token, name: string, description: string): Admi
   if (description.length > 100) {
     return { error: 'Description must be under 100 characters', statusCode: 400 };
   }
-
+  const authUserId: number = jwtToToken(jwt).userId;
   // check if quiz name already in use by this user
   if (checkQuizNameUsed(authUserId, name)) {
     return { error: 'Quiz name is already in use', statusCode: 400 };
