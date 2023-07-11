@@ -1,12 +1,14 @@
 import {
-  Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQuizCreateReturn, AdminQuizListReturn,
-  AdminQuizList, AdminQuizInfoReturn, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn, AdminQuizTransferReturn
+  Data, AdminQuizDescriptionUpdateReturn, AdminQuizRemoveReturn, AdminQuizListReturn,
+  AdminQuizList, AdminQuizInfoReturn, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn, AdminQuizTransferReturn,
+  Token, Jwt, ErrorAndStatusCode, AdminQuizCreate
 } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkAuthUserIdValid, checkQuizAndUserIdValid,
   checkQuizIdValid, checkQuizNameUsed, checkALLQuizOwnership, checkQuizIdExistsGlobally
 } from './helper';
+import { checkJwtValid, jwtToToken } from './token';
 
 /**
   * Update the description of the relevant quiz
@@ -114,44 +116,51 @@ function viewUserDeletedQuizzes(authUserId: number): viewUserDeletedQuizzesRetur
 /**
   * Given basic details about a new quiz, create one for the logged in user
   *
-  * @param {number} authUserId -  The unique Id for the user who is creating the quiz
+  * @param {number} token -  The token of the active session
   * @param {string} name - The name of new quiz
   * @param {string} description - The description for the new quiz
 
   *
   * @returns {{quizId: number} | {error: string}} - Returns an object containing the quizId
  */
-function adminQuizCreate (authUserId: number, name: string, description: string): AdminQuizCreateReturn {
-  // check valid userID
-  if (!checkAuthUserIdValid(authUserId)) {
-    return { error: 'AuthUserId is not a valid user' };
-  }
+function adminQuizCreate (jwt: Jwt, name: string, description: string): AdminQuizCreate | ErrorAndStatusCode {
+  const data = getData();
+  // check valid structure
+  const possibleToken = checkJwtValid(jwt);
 
+  if (possibleToken.valid === false) {
+    return {
+      error: 'Token is not a valid structure',
+      statusCode: 401
+    };
+  }
+  //  check if valid for active sessions
+  if ((data.session.find((token: Token) => token.userId === jwtToToken(jwt).userId)) === undefined) {
+    return { error: 'Token not for currently logged in session', statusCode: 403 };
+  }
   // check name length
   if (name === null || name === '') {
-    return { error: 'A name must be entered' };
+    return { error: 'A name must be entered', statusCode: 400 };
   }
 
   if (name.length < 3 || name.length > 30) {
-    return { error: 'Name must be between 3 and 30 characters' };
+    return { error: 'Name must be between 3 and 30 characters', statusCode: 400 };
   }
 
   // check name composition (alphanumeric and spaces)
   if (!checkAlphanumeric(name)) {
-    return { error: 'Must use only alphanumeric characters or spaces in name' };
+    return { error: 'Must use only alphanumeric characters or spaces in name', statusCode: 400 };
   }
 
   // check description length
   if (description.length > 100) {
-    return { error: 'Description must be under 100 characters' };
+    return { error: 'Description must be under 100 characters', statusCode: 400 };
   }
-
+  const authUserId: number = jwtToToken(jwt).userId;
   // check if quiz name already in use by this user
   if (checkQuizNameUsed(authUserId, name)) {
-    return { error: 'Quiz name is already in use' };
+    return { error: 'Quiz name is already in use', statusCode: 400 };
   }
-
-  const data = getData();
 
   let maxID = 0;
 
