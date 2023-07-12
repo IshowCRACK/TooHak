@@ -11,13 +11,9 @@ export interface User {
 }
 
 export type JwtToken = string;
-export interface Quiz {
-    quizId: number;
+
+export interface Quiz extends AdminQuizInfo {
     adminQuizId: number;
-    name: string;
-    timeCreated: number;
-    timeLastEdited: number;
-    description: string;
 }
 
 export interface Token { 
@@ -114,7 +110,37 @@ export interface AdminQuizInfo {
     timeCreated: number;
     timeLastEdited: number;
     description: string;
+    numQuestions: number;
+    questions: Question[];
+    duration: number;
 }
+
+interface Question {
+    questionId: number;
+    question: string;
+    duriation: number;
+    points: number;
+    answers: Answer[];
+}
+
+interface Answer {
+    answerId: number;
+    answer: string;
+    colour: string;
+    correct: boolean;
+}
+
+
+export interface AdminQuizInfoReturn {
+    quizId: number,
+    name: string;
+    timeCreated: number;
+    timeLastEdited: number;
+    description: string;
+    numQuestions: number;
+    questions: AdminQuizQuestion;
+}
+
 
 export interface AdminAuthRegister {
     authUserId: number;

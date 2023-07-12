@@ -191,7 +191,10 @@ function adminQuizCreate (jwt: Jwt, name: string, description: string): AdminQui
     name: name,
     timeCreated: Math.round(Date.now() / 1000),
     timeLastEdited: Math.round(Date.now() / 1000),
-    description: description
+    description: description,
+    numQuestions: 0,
+    questions: [],
+    duration: 0
   });
 
   setData(data);
@@ -319,7 +322,10 @@ function adminQuizInfo (authUserId: number, quizId: number): AdminQuizInfoReturn
         name: quiz.name,
         timeCreated: quiz.timeCreated,
         timeLastEdited: quiz.timeLastEdited,
-        description: quiz.description
+        description: quiz.description,
+        numQuestions: quiz.numQuestions,
+        questions: quiz.questions,
+        duration: quiz.duration
       };
     }
   }

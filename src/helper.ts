@@ -1,4 +1,4 @@
-import { AdminQuizList, AdminUserALLDetailsReturn, AdminQuizALLDetailsReturn, ErrorObj, Token, Jwt } from '../interfaces/interfaces';
+import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt } from '../interfaces/interfaces';
 import { getData } from './dataStore';
 import { adminQuizList } from './quiz';
 import { checkJwtValid, jwtToToken } from './token';
@@ -203,27 +203,27 @@ function adminUserALLDetails(authUserId: number): AdminUserALLDetailsReturn {
   * }>} | {error: string}} - An array of quizzes and its details
   *
   */
-function adminQuizALLDetails(quizId: number): AdminQuizALLDetailsReturn {
-  const data = getData();
+// function adminQuizALLDetails(quizId: number): AdminQuizALLDetailsReturn {
+//   const data = getData();
 
-  for (const quiz of data.quizzes) {
-    if (quiz.quizId === quizId) {
-      return {
-        quizzes: {
-          quizId: quiz.quizId,
-          adminQuizId: quiz.adminQuizId,
-          name: quiz.name,
-          timeCreated: quiz.timeCreated,
-          timeLastEdited: quiz.timeLastEdited,
-          description: quiz.description
-        }
-      };
-    }
-  }
-  return {
-    error: 'Quiz does not exist',
-  };
-}
+//   for (const quiz of data.quizzes) {
+//     if (quiz.quizId === quizId) {
+//       return {
+//         quizzes: {
+//           quizId: quiz.quizId,
+//           adminQuizId: quiz.adminQuizId,
+//           name: quiz.name,
+//           timeCreated: quiz.timeCreated,
+//           timeLastEdited: quiz.timeLastEdited,
+//           description: quiz.description
+//         }
+//       };
+//     }
+//   }
+//   return {
+//     error: 'Quiz does not exist',
+//   };
+// }
 
 /**
  * Checks if the user owns a quiz globally
@@ -308,5 +308,5 @@ function checkTokenValidSession(jwt: Jwt): boolean {
 
 export {
   checkName, checkPassword, checkAlphanumeric, checkAuthUserIdValid,
-  checkQuizIdValid, checkQuizAndUserIdValid, checkQuizNameUsed, emailAlreadyUsed, adminUserALLDetails, adminQuizALLDetails, checkALLQuizOwnership, checkQuizIdExistsGlobally, checkTokenValidSession, checkTokenValidStructure
+  checkQuizIdValid, checkQuizAndUserIdValid, checkQuizNameUsed, emailAlreadyUsed, adminUserALLDetails, checkALLQuizOwnership, checkQuizIdExistsGlobally, checkTokenValidSession, checkTokenValidStructure
 };
