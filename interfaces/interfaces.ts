@@ -1,4 +1,10 @@
 
+export interface Data {
+    users: User[];
+    quizzes: Quiz[];
+    session: Token[];
+}
+
 export interface User {
     authUserId: number;
     nameFirst: string;
@@ -19,13 +25,6 @@ export interface Quiz extends AdminQuizInfo {
 export interface Token { 
     sessionId: string;
     userId: number;
-}
-
-
-export interface Data {
-    users: User[];
-    quizzes: Quiz[];
-    session: Token[];
 }
 
 export interface ErrorObj {
@@ -130,16 +129,6 @@ interface Answer {
     correct: boolean;
 }
 
-
-export interface AdminQuizInfoReturn {
-    quizId: number,
-    name: string;
-    timeCreated: number;
-    timeLastEdited: number;
-    description: string;
-    numQuestions: number;
-    questions: AdminQuizQuestion;
-}
 
 
 export interface AdminAuthRegister {
