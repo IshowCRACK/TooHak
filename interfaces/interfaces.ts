@@ -31,7 +31,7 @@ export interface AdminQuizInfo {
     duration: number;
 }
 
-interface Question extends QuestionBody {
+export interface Question extends QuestionBody {
     questionId: number;
 }
 
@@ -42,7 +42,7 @@ export interface QuestionBody {
     answers: Answer[];
 }
 
-interface Answer {
+export interface Answer {
     answerId: number;
     answer: string;
     colour: string;

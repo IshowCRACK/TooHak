@@ -21,7 +21,7 @@ const createQuizQuestionHandler = (quizId: number, token: Token, questionBody: Q
     return parsedResponse;
 }
 
-describe.skip("Tests related to creating a Quiz Question", () => {
+describe("Tests related to creating a Quiz Question", () => {
     let userToken: Token;
     let quizId: number;
     let defaultQuestionBody: QuestionBody;

@@ -1,6 +1,9 @@
 import request from 'sync-request';
 import { AdminQuizCreate, ErrorObj, Jwt, OkObj, Token } from '../../interfaces/interfaces';
 import { jwtToToken } from '../token';
+import { getUrl } from '../helper';
+
+const URL: string = getUrl();
 
 export const registerUser = (email: string, password: string, nameFirst: string, nameLast:string): Token | ErrorObj => {
   const res = request(
