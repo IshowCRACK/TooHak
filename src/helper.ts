@@ -1,6 +1,7 @@
-import { AdminQuizList, AdminUserALLDetailsReturn, AdminQuizALLDetailsReturn, ErrorObj } from '../interfaces/interfaces';
+import { AdminQuizList, AdminUserALLDetailsReturn, AdminQuizALLDetailsReturn, ErrorObj, Token, Jwt } from '../interfaces/interfaces';
 import { getData } from './dataStore';
 import { adminQuizList } from './quiz';
+import { checkJwtValid, jwtToToken } from './token';
 import config from './config.json';
 
 /**
@@ -274,7 +275,38 @@ function checkQuizIdExistsGlobally(quizId: number): boolean {
   return quizExistsInQuizzes || quizExistsInDeletedQuizzes;
 }
 
+/**
+ * Checks for error: 401 Token is not a valid structure
+ * @param {Jwt} jwt - token unique id
+ *
+ * @returns {boolean} - Returns true if Token valid, otherwise false
+ */
+function checkTokenValidStructure(jwt: Jwt): boolean {
+  // check valid structure
+  const possibleToken = checkJwtValid(jwt);
+
+  if (possibleToken.valid === false) {
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Checks for these error: 403 Provided token is valid structure, but is not for a currently logged in session
+ * @param {Jwt} jwt - token unique id
+ *
+ * @returns {boolean} - Returns true if Token valid, otherwise false
+ */
+function checkTokenValidSession(jwt: Jwt): boolean {
+  const data = getData();
+  //  check if valid for active sessions
+  if ((data.session.find((token: Token) => token.userId === jwtToToken(jwt).userId)) === undefined) {
+    return false;
+  }
+  return true;
+}
+
 export {
   checkName, checkPassword, checkAlphanumeric, checkAuthUserIdValid,
-  checkQuizIdValid, checkQuizAndUserIdValid, checkQuizNameUsed, emailAlreadyUsed, adminUserALLDetails, adminQuizALLDetails, checkALLQuizOwnership, checkQuizIdExistsGlobally
+  checkQuizIdValid, checkQuizAndUserIdValid, checkQuizNameUsed, emailAlreadyUsed, adminUserALLDetails, adminQuizALLDetails, checkALLQuizOwnership, checkQuizIdExistsGlobally, checkTokenValidSession, checkTokenValidStructure
 };

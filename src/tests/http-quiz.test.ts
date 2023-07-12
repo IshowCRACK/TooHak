@@ -1,4 +1,4 @@
-import { ErrorObj, Jwt, Token, AdminQuizCreate } from '../../interfaces/interfaces';
+import { ErrorObj, Jwt, Token, AdminQuizCreate, OkObj } from '../../interfaces/interfaces';
 import { registerUser, logoutUserHandler } from './http-auth.test';
 import request from 'sync-request';
 import { getUrl } from '../helper';
@@ -34,6 +34,76 @@ const RequestCreateQuiz = (jwt: Jwt, name: string, description: string): AdminQu
   const parsedResponse: AdminQuizCreate | ErrorObj = JSON.parse(res.body.toString());
   return parsedResponse;
 };
+
+const RequestRemoveQuiz = (jwt: Jwt, quizId: number): OkObj | ErrorObj => {
+  const res = request(
+    'DELETE',
+    URL + `v1/admin/quiz/${quizId}`,
+    {
+      qs: {
+        token: jwt,
+      }
+    }
+  );
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+  return parsedResponse;
+};
+
+// TESTS FOR QUIZ REMOVE //
+describe('Quiz Remove', () => {
+  let token0: Token;
+  let token1: Token;
+  let quizId0: number;
+  let quizId1: number;
+  let quizId2: number;
+  let res: OkObj | ErrorObj;
+  let res0: OkObj | ErrorObj;
+
+  beforeEach(() => {
+    token0 = registerUser('JohnSmith@gmail.com', 'Password123', 'Johnny', 'Jones') as Token;
+    token1 = registerUser('JoeMama@gmail.com', 'Password456', 'Joe', 'Mama') as Token;
+    quizId0 = (RequestCreateQuiz(tokenToJwt(token0), 'Quiz0', 'Description 0') as AdminQuizCreate).quizId;
+    quizId1 = (RequestCreateQuiz(tokenToJwt(token0), 'Quiz1', 'Description 1') as AdminQuizCreate).quizId;
+    quizId2 = (RequestCreateQuiz(tokenToJwt(token1), 'Quiz2', 'Description 2') as AdminQuizCreate).quizId;
+    logoutUserHandler(tokenToJwt(token1));
+  });
+  describe('Successful Tests', () => {
+    test('1. Successfull Quiz Remove for User', () => {
+      res = RequestRemoveQuiz(tokenToJwt(token0), quizId0);
+      expect(res).toStrictEqual({
+
+      });
+    });
+
+    test('2. Successfull Quiz Create multiple for User', () => {
+      res = RequestRemoveQuiz(tokenToJwt(token0), quizId0);
+      res0 = RequestRemoveQuiz(tokenToJwt(token0), quizId1);
+      expect(res).toStrictEqual({
+
+      });
+      expect(res0).toStrictEqual({
+
+      });
+    });
+  });
+
+  describe('Unsuccessful Tests', () => {
+    test('3. Not token of an active session', () => {
+      res = RequestRemoveQuiz(tokenToJwt(token1), quizId1);
+      expect(res).toStrictEqual({ error: 'Token not for currently logged in session' });
+    });
+
+    test('4. Invalid QuizId ', () => {
+      res = RequestRemoveQuiz(tokenToJwt(token0), -99);
+      expect(res).toStrictEqual({ error: 'Quiz ID does not refer to a valid quiz' });
+    });
+
+    test('5. Quiz ID does not refer to a quiz that this user owns', () => {
+      res = RequestRemoveQuiz(tokenToJwt(token0), quizId2);
+      expect(res).toStrictEqual({ error: 'Quiz ID does not refer to a quiz that this user owns' });
+    });
+  });
+});
 
 // TESTS FOR QUIZ CREATE //
 describe('Quiz Create', () => {
