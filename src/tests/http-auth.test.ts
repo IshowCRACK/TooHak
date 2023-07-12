@@ -1,8 +1,9 @@
-import { ErrorObj, Jwt, OkObj, Token } from '../../interfaces/interfaces';
+import { AdminUserDetailsReturn, ErrorObj, Jwt, OkObj, Token } from '../../interfaces/interfaces';
 import request from 'sync-request';
 import { getUrl } from '../helper';
 import { jwtToToken, objToJwt, tokenToJwt } from '../token';
 import { checkTokenValid } from './testHelpers';
+import { TokenClass } from 'typescript';
 
 const URL: string = getUrl();
 
@@ -48,6 +49,22 @@ const loginUser = (email: string, password: string): Token | ErrorObj => {
   } else {
     return jwtToToken(parsedResponse);
   }
+};
+
+const getUser = (jwt: Jwt): AdminUserDetailsReturn | ErrorObj => {
+  const authUserId: number = jwtToToken(jwt).userId; 
+  const res = request(
+    'GET',
+    URL + 'v1/admin/user/details',
+    {
+      json: {
+        authUserId: authUserId
+      }
+    }
+  );
+  const parsedResponse: AdminUserDetailsReturn | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
 };
 
 function clearUsers (): void {
@@ -314,6 +331,89 @@ describe('Tests related to logging out an admin', () => {
       expect(logoutUserHandler(jwt)).toEqual({
 
       });
+    });
+  });
+});
+
+// TESTS FOR ADMIN USER DETAILS //
+describe('adminUserDetails test', () => {
+  let jwt: Jwt;
+  beforeEach(() => {
+    const token = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    jwt = tokenToJwt(token);
+  });
+
+  describe('Unsuccessful retrieval of user details', () => {
+    test('User does not exist', () => {
+      const jwt2: Token = {
+        sessionId: '',
+        userId: 12,
+      }
+      const userDetails = getUser(tokenToJwt(jwt2)) as ErrorObj;
+      const expectedResult: ErrorObj = {error: 'Token not for currently logged in session'};
+      expect(userDetails).toStrictEqual(expectedResult);
+    });
+  });
+
+  describe('Successful retrieval of user details', () => {
+    test('User logged in with no fail (Register counts as successful login)', () => {
+      loginUser('JohnSmith@gmail.com', 'Password123');
+      const expectedResult: AdminUserDetailsReturn = { user: { userId: 0, name: 'John Smith', email: 'JohnSmith@gmail.com', numSuccessfulLogins: 2, numFailedPasswordsSinceLastLogin: 0 } };
+      expect(getUser(jwt)).toStrictEqual(expectedResult);
+    });
+
+    test('User logged in with multiple fails', () => {
+      loginUser('JohnSmith@gmail.com', 'Password12');
+      loginUser('JohnSmith@gmail.com', 'Password12');
+      loginUser('JohnSmith@gmail.com', 'Password12');
+      loginUser('JohnSmith@gmail.com', 'Password123');
+      const expectedResult: AdminUserDetailsReturn = { user: { userId: 0, name: 'John Smith', email: 'JohnSmith@gmail.com', numSuccessfulLogins: 2, numFailedPasswordsSinceLastLogin: 0 } };
+      expect(getUser(jwt)).toStrictEqual(expectedResult);
+    });
+
+    test('Multple users created and multiple users failed login', () => {
+      loginUser('JohnSmith@gmail.com', 'Password12');
+      loginUser('JohnSmith@gmail.com', 'Password12');
+      loginUser('JohnSmith@gmail.com', 'Password12');
+      loginUser('JohnSmith@gmail.com', 'Password123');
+      const expectedResult1: AdminUserDetailsReturn = { user: { userId: 0, name: 'John Smith', email: 'JohnSmith@gmail.com', numSuccessfulLogins: 2, numFailedPasswordsSinceLastLogin: 0 } };
+      expect(getUser(jwt)).toStrictEqual(expectedResult1);
+
+      const token2 = registerUser('Connor@gmail.com', 'Password123', 'Connor', 'Mcgregor') as Token;
+      let jwt2: Jwt = tokenToJwt(token2);
+      loginUser('Connor@gmail.com', 'Password12');
+      loginUser('Connor@gmail.com', 'Password12');
+      loginUser('Connor@gmail.com', 'Password12');
+      loginUser('Connor@gmail.com', 'Password123');
+      const expectedResult2: AdminUserDetailsReturn = { user: { userId: 0, name: 'Connor Mcgregor', email: 'Connor@gmail.com', numSuccessfulLogins: 2, numFailedPasswordsSinceLastLogin: 0 } };
+      expect(getUser(jwt2)).toStrictEqual(expectedResult2);
+
+      const token3 = registerUser('John@gmail.com', 'Password123', 'John', 'Cena') as Token;
+      let jwt3: Jwt = tokenToJwt(token3);
+      loginUser('John@gmail.com', 'Password12');
+      loginUser('John@gmail.com', 'Password12');
+      loginUser('John@gmail.com', 'Password12');
+      loginUser('John@gmail.com', 'Password123');
+      const expectedResult3: AdminUserDetailsReturn = { user: { userId: 0, name: 'John Cena', email: 'John@gmail.com', numSuccessfulLogins: 2, numFailedPasswordsSinceLastLogin: 0 } };
+      expect(getUser(jwt3)).toStrictEqual(expectedResult3);
+    });
+
+    test('User successfully registers but unable to login', () => {
+      loginUser('JohnSmith@gmail.com', 'Password12');
+      loginUser('JohnSmith@gmail.com', 'Password12');
+      loginUser('JohnSmith@gmail.com', 'Password12');
+      loginUser('JohnSmith@gmail.com', 'Password12');
+      const expectedResult: AdminUserDetailsReturn = { user: { userId: 0, name: 'John Smith', email: 'JohnSmith@gmail.com', numSuccessfulLogins: 1, numFailedPasswordsSinceLastLogin: 4 } };
+      expect(getUser(jwt)).toStrictEqual(expectedResult);
+    });
+
+    test('User successfully registers but unable to login', () => {
+      loginUser('JohnSmith@gmail.com', 'Password12');
+      loginUser('JohnSmith@gmail.com', 'Password12');
+      loginUser('JohnSmith@gmail.com', 'Password12');
+      loginUser('JohnSmith@gmail.com', 'Password12');
+      const expectedResult: AdminUserDetailsReturn = { user: { userId: 0, name: 'John Smith', email: 'JohnSmith@gmail.com', numSuccessfulLogins: 1, numFailedPasswordsSinceLastLogin: 4 } };
+      expect(getUser(jwt)).toStrictEqual(expectedResult);
     });
   });
 });
