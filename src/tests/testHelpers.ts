@@ -53,7 +53,7 @@ export const clearUsers = (): void => {
     'DELETE',
     URL + 'v1/clear'
   );
-}
+};
 
 export const logoutUserHandler = (jwt: Jwt) => {
   const res = request(

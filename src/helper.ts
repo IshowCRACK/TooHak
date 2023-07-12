@@ -1,4 +1,4 @@
-import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Question, Answer } from '../interfaces/interfaces';
+import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer } from '../interfaces/interfaces';
 import { getData } from './dataStore';
 import { adminQuizList } from './quiz';
 import { checkJwtValid, jwtToToken } from './token';
@@ -308,36 +308,51 @@ export function checkTokenValidSession(jwt: Jwt): boolean {
 
 export function getQuiz(quizId: number): Quiz {
   const data = getData();
+  const res = data.quizzes.find((quiz: Quiz) => quiz.quizId === quizId
+  );
 
-  return data.quizzes.find((quiz: Quiz) => {
-      quiz.quizId === quizId
-  });
+  return res;
 }
 
 export function getTotalDuration(quiz: Quiz): number {
-  return quiz.questions.reduce((totalDuration: number, curQuestion: Question) => totalDuration + curQuestion.duration, 0);
+  let totalDuration = 0;
+  for (const question of quiz.questions) {
+    totalDuration += question.duration;
+  }
+
+  return totalDuration;
 }
 
 export function checkAnswerLengthValid(answers: Answer[]): boolean {
-  return !(answers.some((answer: Answer) => {
-      answer.answer.length < 1 || answer.answer.length > 30;
-  }));
+  return !(answers.some((answer: Answer) => answer.answer.length < 1 || answer.answer.length > 30));
 }
 
 export function checkQuestionAnswerNonDuplicate(answers: Answer[]): boolean {
   const encounteredAnswers = new Set();
 
-  for (let answerObj of answers) {
-      const answer = answerObj.answer;
+  for (const answerObj of answers) {
+    const answer = answerObj.answer;
 
-      if (encounteredAnswers.has(answer)) return true;
+    if (encounteredAnswers.has(answer)) return false;
 
-      encounteredAnswers.add(answer);
+    encounteredAnswers.add(answer);
   }
 
-  return false;
+  return true;
 }
 
 export function checkAnswerHasTrueValue(answers: Answer[]): boolean {
-  return !(answers.some((answer: Answer) => {answer.correct === true}));
+  return (answers.some((answer: Answer) => answer.correct === true));
+}
+
+export function createQuestionId(quiz: Quiz): number {
+  let questionId = -1;
+  // TODO: change this
+  for (const question of quiz.questions) {
+    if (question.questionId > questionId) questionId = question.questionId;
+  }
+
+  ++questionId;
+
+  return questionId;
 }

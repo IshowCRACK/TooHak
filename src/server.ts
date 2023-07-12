@@ -106,9 +106,9 @@ app.delete('/v1/admin/quiz/:quizId', (req: Request, res: Response) => {
 app.post('/v1/admin/quiz/:quizId/question', (req: Request, res: Response) => {
   const quizId = parseInt(req.params.quizId);
 
-  const {token, questionBody} = req.body;
+  const { token, questionBody } = req.body;
 
-  const response = quizCreateQuestion({token: token}, questionBody, quizId);
+  const response = quizCreateQuestion({ token: token }, questionBody, quizId);
 
   if ('error' in response) {
     return res.status(response.statusCode).json(formatError(response));
@@ -116,7 +116,6 @@ app.post('/v1/admin/quiz/:quizId/question', (req: Request, res: Response) => {
 
   res.status(200).json(response);
 });
-
 
 // For Debugging
 app.get('/debug', (req: Request, res: Response) => {

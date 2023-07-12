@@ -27,3 +27,11 @@ lint:
     - merge_requests
   script:
     - npm run lint
+
+typescript:
+  stage: checks
+  only: 
+    - master
+    - merge_requests
+  script:
+    - npm run tsc

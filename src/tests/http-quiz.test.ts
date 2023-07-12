@@ -1,11 +1,7 @@
-import { ErrorObj, Jwt, Token, AdminQuizCreate, OkObj } from '../../interfaces/interfaces';
+import { ErrorObj, Token, AdminQuizCreate, OkObj } from '../../interfaces/interfaces';
 import { registerUser, logoutUserHandler } from './http-auth.test';
-import request from 'sync-request';
-import { getUrl } from '../helper';
 import { tokenToJwt } from '../token';
 import { RequestCreateQuiz, RequestRemoveQuiz, clearUsers } from './testHelpers';
-
-const URL: string = getUrl();
 
 beforeEach(() => {
   clearUsers();

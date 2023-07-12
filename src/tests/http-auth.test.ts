@@ -1,10 +1,6 @@
-import { ErrorObj, Jwt, OkObj, Token } from '../../interfaces/interfaces';
-import request from 'sync-request';
-import { getUrl } from '../helper';
-import { jwtToToken, objToJwt, tokenToJwt } from '../token';
+import { ErrorObj, Jwt, Token } from '../../interfaces/interfaces';
+import { objToJwt, tokenToJwt } from '../token';
 import { checkTokenValid, clearUsers, loginUser, logoutUserHandler, registerUser } from './testHelpers';
-
-const URL: string = getUrl();
 
 beforeEach(() => {
   clearUsers();
