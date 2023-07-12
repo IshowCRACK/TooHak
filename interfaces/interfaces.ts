@@ -1,4 +1,10 @@
 
+export interface Data {
+    users: User[];
+    quizzes: Quiz[];
+    session: Token[];
+}
+
 export interface User {
     authUserId: number;
     nameFirst: string;
@@ -11,25 +17,14 @@ export interface User {
 }
 
 export type JwtToken = string;
-export interface Quiz {
-    quizId: number;
+
+export interface Quiz extends AdminQuizInfo {
     adminQuizId: number;
-    name: string;
-    timeCreated: number;
-    timeLastEdited: number;
-    description: string;
 }
 
 export interface Token { 
     sessionId: string;
     userId: number;
-}
-
-
-export interface Data {
-    users: User[];
-    quizzes: Quiz[];
-    session: Token[];
 }
 
 export interface ErrorObj {
@@ -114,7 +109,27 @@ export interface AdminQuizInfo {
     timeCreated: number;
     timeLastEdited: number;
     description: string;
+    numQuestions: number;
+    questions: Question[];
+    duration: number;
 }
+
+interface Question {
+    questionId: number;
+    question: string;
+    duriation: number;
+    points: number;
+    answers: Answer[];
+}
+
+interface Answer {
+    answerId: number;
+    answer: string;
+    colour: string;
+    correct: boolean;
+}
+
+
 
 export interface AdminAuthRegister {
     authUserId: number;

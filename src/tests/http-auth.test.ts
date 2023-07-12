@@ -63,7 +63,7 @@ const logoutUserHandler = (jwt: Jwt) => {
     URL + 'v1/admin/auth/logout',
     {
       json: {
-        token: jwt
+        token: jwt.token
       }
     }
   );

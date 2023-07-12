@@ -25,13 +25,14 @@ const RequestCreateQuiz = (jwt: Jwt, name: string, description: string): AdminQu
     URL + 'v1/admin/quiz',
     {
       json: {
-        token: jwt,
+        token: jwt.token,
         name: name,
         description: description,
       }
     }
   );
   const parsedResponse: AdminQuizCreate | ErrorObj = JSON.parse(res.body.toString());
+
   return parsedResponse;
 };
 
@@ -41,13 +42,83 @@ const RequestRemoveQuiz = (jwt: Jwt, quizId: number): OkObj | ErrorObj => {
     URL + `v1/admin/quiz/${quizId}`,
     {
       qs: {
-        token: jwt,
+        token: jwt.token,
       }
     }
   );
   const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
   return parsedResponse;
 };
+
+// const RequestInfoQuiz = (jwt: Jwt, quizId: number): AdminQuizInfo | ErrorObj => {
+//   const res = request(
+//     'GET',
+//     URL + `v1/admin/quiz/${quizId}`,
+//     {
+//       qs: {
+//         token: jwt,
+//       }
+//     }
+//   );
+//   const parsedResponse: AdminQuizInfo | ErrorObj = JSON.parse(res.body.toString());
+//   return parsedResponse;
+// };
+
+// TESTS FOR QUIZ INFO //
+// describe.skip('Quiz Info', () => {
+//   let token0: Token;
+//   let token1: Token;
+//   let quizId0: number;
+//   let quizId1: number;
+//   let quizId2: number;
+//   let res: OkObj | ErrorObj;
+//   let res0: OkObj | ErrorObj;
+
+//   beforeEach(() => {
+//     token0 = registerUser('JohnSmith@gmail.com', 'Password123', 'Johnny', 'Jones') as Token;
+//     token1 = registerUser('JoeMama@gmail.com', 'Password456', 'Joe', 'Mama') as Token;
+//     quizId0 = (RequestCreateQuiz(tokenToJwt(token0), 'Quiz0', 'Description 0') as AdminQuizCreate);
+//     quizId1 = (RequestCreateQuiz(tokenToJwt(token0), 'Quiz1', 'Description 1') as AdminQuizCreate);
+//     quizId2 = (RequestCreateQuiz(tokenToJwt(token1), 'Quiz2', 'Description 2') as AdminQuizCreate);
+//     logoutUserHandler(tokenToJwt(token1));
+//   });
+//   describe('Successful tests', () => {
+//     test('1. valid token and quizId for 1 owned quiz', () => {
+//       res = RequestInfoQuiz(tokenToJwt(token0), quizId0.quizId);
+//       expect(res).toStrictEqual({
+//         quizId: quizId0.quizId,
+//         name: quizId0.name,
+//         timeCreated: quizId0.timeCreated,
+//         timeLastEdited: quizId0.timeCreated,
+//         description: quizId0.description,
+//         numQuestions: quizId0.numQuestions,
+//         questions: quizId0.questions,
+//         duration: quizId0.number
+//       });
+//     });
+//   });
+
+//   describe('Unsuccessful tests', () => {
+//     test('1 Invalid QuizId ', () => {
+//       res = RequestInfoQuiz(tokenToJwt(token0), -99);
+//       expect(res).toStrictEqual({ error: 'Quiz ID does not refer to a valid quiz' });
+//     });
+
+//     test('2. Quiz ID does not refer to a quiz that this user owns', () => {
+//       res = RequestInfoQuiz(tokenToJwt(token0), quizId2);
+//       expect(res).toStrictEqual({ error: 'Quiz ID does not refer to a quiz that this user owns' });
+//     });
+//     test('3. Not token of an active session', () => {
+//       res = RequestInfoQuiz(tokenToJwt(token1), quizId1);
+//       expect(res).toStrictEqual({ error: 'Token not for currently logged in session' });
+//     });
+
+//     test('4. Token is not a valid structure', () => {
+//       res = RequestInfoQuiz('hi', quizId1);
+//       expect(res).toStrictEqual({ error: ' Token is not a valid structure' });
+//     });
+//   });
+// });
 
 // TESTS FOR QUIZ REMOVE //
 describe('Quiz Remove', () => {
@@ -68,7 +139,7 @@ describe('Quiz Remove', () => {
     logoutUserHandler(tokenToJwt(token1));
   });
   describe('Successful Tests', () => {
-    test('1. Successfull Quiz Remove for User', () => {
+    test('1. Successful Quiz Remove for User', () => {
       res = RequestRemoveQuiz(tokenToJwt(token0), quizId0);
       expect(res).toStrictEqual({
 

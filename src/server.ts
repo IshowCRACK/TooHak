@@ -11,6 +11,7 @@ import { adminAuthRegister, adminAuthLogin, adminAuthLogout } from './auth';
 import { adminQuizCreate, adminQuizRemove } from './quiz';
 import { clear } from './other';
 import { formatError } from './helper';
+import { getData } from './dataStore';
 
 // Set up web app
 const app = express();
@@ -71,7 +72,7 @@ app.delete('/v1/clear', (req: Request, res: Response) => {
 
 app.post('/v1/admin/auth/logout', (req: Request, res: Response) => {
   const { token } = req.body;
-  const response = adminAuthLogout(token);
+  const response = adminAuthLogout({ token: token });
 
   if ('error' in response) {
     return res.status(response.statusCode).json(formatError(response));
@@ -82,7 +83,7 @@ app.post('/v1/admin/auth/logout', (req: Request, res: Response) => {
 
 app.post('/v1/admin/quiz', (req: Request, res: Response) => {
   const { token, name, description } = req.body;
-  const response = adminQuizCreate(token, name, description);
+  const response = adminQuizCreate({ token: token }, name, description);
   if ('error' in response) {
     return res.status(response.statusCode).json(formatError(response));
   }
@@ -92,13 +93,20 @@ app.post('/v1/admin/quiz', (req: Request, res: Response) => {
 
 app.delete('/v1/admin/quiz/:quizId', (req: Request, res: Response) => {
   const quizId = parseInt(req.params.quizId);
-  const token = req.query.token;
-  const response = adminQuizRemove(token, quizId);
+  const token = req.query.token as string;
+  const response = adminQuizRemove({ token: token }, quizId);
   if ('error' in response) {
     return res.status(response.statusCode).json(formatError(response));
   }
 
   res.status(200).json(response);
+});
+
+// For Debugging
+app.get('/debug', (req: Request, res: Response) => {
+  const data = getData();
+
+  res.json(data);
 });
 
 // ====================================================================
