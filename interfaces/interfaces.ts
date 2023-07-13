@@ -179,3 +179,8 @@ export interface AdminAuthLogout {
 export interface QuizQuestionCreate {
     questionId: number;
 }
+
+export interface QuizTransfer {
+    token: string;
+    userEmail: string;
+}

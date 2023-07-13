@@ -1,7 +1,7 @@
 import {
   Data, AdminQuizDescriptionUpdateReturn, AdminQuizListReturn,
   AdminQuizList, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn, AdminQuizTransferReturn,
-  Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj, QuizToken, AdminQuizInfo
+  Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj, QuizToken, AdminQuizInfo, User
 
 } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
@@ -465,14 +465,14 @@ function adminQuizTransfer(jwt: Jwt, quizId: number, email: string): AdminQuizTr
     return { error: 'Quiz ID does not refer to a valid quiz' };
   }
 
-  const targetUser = data.users.find((user) => user.email === email);
+  const targetUser = data.users.find((user: User) => user.email === email);
 
   if (!targetUser) {
-    return { error: 'User email is not a registered user' };
+    return { error: 'userEmail is not a real user' };
   }
 
   if (targetUser.authUserId === jwtToToken(jwt).userId) {
-    return { error: 'User email is the same as the current logged-in user' };
+    return { error: 'userEmail is the current logged in user' };
   }
 
   if (!checkQuizAndUserIdValid(quizId, jwtToToken(jwt).userId)) {

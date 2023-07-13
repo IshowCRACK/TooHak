@@ -3,7 +3,7 @@ import { registerUser, logoutUserHandler } from './http-auth.test';
 import { tokenToJwt } from '../token';
 import request from 'sync-request';
 import { getUrl } from '../helper';
-import { RequestCreateQuiz, RequestRemoveQuiz, clearUsers, listQuiz } from './testHelpers';
+import { RequestCreateQuiz, RequestRemoveQuiz, clearUsers, listQuiz, quizTransferHandler } from './testHelpers';
 
 const URL: string = getUrl();
 
@@ -290,3 +290,63 @@ describe('adminQuizList tests', () => {
     });
   });
 });
+
+describe.skip('Quiz Transfer', () => {
+  let userJwt: Jwt;
+  let userJwt2: Jwt;
+  let userToken;
+  let userToken2: Token;
+  let quizId: number;
+
+  beforeEach(() => {
+    userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    userJwt = tokenToJwt(userToken);
+    userJwt2 = tokenToJwt(userToken);
+    userToken2 = registerUser('JaneAusten@gmail.com', 'Password123', 'Jane', 'Austen') as Token;
+    quizId = (RequestCreateQuiz(userJwt, 'Countries of the world', 'Quiz on all countries') as AdminQuizCreate).quizId;
+  });
+
+  describe('Unsuccessful Tests', () => {
+    test('Quiz ID does not refer to a valid quiz', () => {
+      expect(quizTransferHandler(userJwt, 'JaneAusten@gmail.com', quizId + 1)).toEqual(
+        'Quiz ID does not refer to a valid quiz'
+      );
+    });
+
+    test('Quiz ID does not refer to a quiz that this user owns', () => {
+      expect(quizTransferHandler(userJwt2, 'JaneAusten@gmail.com', quizId)).toEqual(
+        'Quiz ID does not refer to a quiz that this user owns' 
+      );   
+     });
+
+     test('Email is not a real user', () => {
+      expect(quizTransferHandler(userJwt2, 'JaneAusten@gmail.com', quizId)).toEqual(
+        'Quiz ID does not refer to a quiz that this user owns' 
+      );      
+    });
+
+    test('Email is not currently a logged in user', () => {
+      logoutUserHandler(userJwt);
+      expect(quizTransferHandler(userJwt, 'JohnSmith@gmail.com', quizId));
+    });
+
+    test('Quiz name is already used by user', () => {
+      const quizId2 = (RequestCreateQuiz(userJwt2, 'Countries of the world', 'Quiz on all countries V2') as AdminQuizCreate).quizId;
+      expect(quizTransferHandler(userJwt, 'JohnSmith@gmail.com', quizId2));
+    });
+  });
+
+  describe('Successful Tests', () => {
+    test('Single quiz transfer', () => {
+      expect(quizTransferHandler(userJwt2, 'JaneAusten@gmail.com', quizId)).toEqual({});
+    });
+
+    test('Multiple Quiz Transfers with Multiple Quizzes', () => {
+      const quizId2 = (RequestCreateQuiz(userJwt2, 'Flags of the world', 'Flags on all countries') as AdminQuizCreate).quizId;
+      expect(quizTransferHandler(userJwt2, 'JaneAusten@gmail.com', quizId)).toEqual({});
+      expect(quizTransferHandler(userJwt, 'JohnSmith@gmail.com', quizId)).toEqual({});
+      expect(quizTransferHandler(userJwt, 'JohnSmith@gmail.com', quizId2)).toEqual({});
+    });
+  });
+});
+

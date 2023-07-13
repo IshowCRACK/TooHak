@@ -145,6 +145,18 @@ app.post('/v1/admin/quiz/:quizId/question', (req: Request, res: Response) => {
   res.status(200).json(response);
 });
 
+app.post('/v1/admin/quiz/:quizId/transfer', (req: Request, res: Response) => {
+  const quizId = parseInt(req.params.quizId);
+  const {token, userEmail} = req.body;
+  const response = quizTransfer({token: token}, userEmail, quizId);
+
+  if ('error' in response) {
+    return res.status(response.status).json(formatError(response));
+  }
+
+  res.status(200).json(response);
+})
+
 // For Debugging
 app.get('/debug', (req: Request, res: Response) => {
   const data = getData();

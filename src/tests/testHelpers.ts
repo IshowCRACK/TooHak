@@ -136,3 +136,20 @@ export const listQuiz = (jwt: Jwt): AdminQuizListReturn | ErrorObj => {
 
   return parsedResponse;
 };
+
+export const quizTransferHandler = (jwt: Jwt, email: string, quizId: number): OkObj | ErrorObj => {
+  const res = request(
+    'POST',
+    URL + `v1/admin/quiz/${quizId}/transfer`,
+    {
+      json: {
+        token: jwt.token,
+        userEmail: email
+      }
+    }
+  );
+
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
+}
