@@ -17,14 +17,47 @@ export interface User {
 }
 
 export type JwtToken = string;
-
 export interface Quiz extends AdminQuizInfo {
     adminQuizId: number;
 }
+export interface AdminQuizInfo {
+    quizId: number;
+    name: string;
+    timeCreated: number;
+    timeLastEdited: number;
+    description: string;
+    numQuestions: number;
+    questions: Question[];
+    duration: number;
+}
+
+export interface Question extends QuestionBody {
+    questionId: number;
+}
+
+export interface QuestionBody {
+    question: string;
+    duration: number;
+    points: number;
+    answers: Answer[];
+}
+
+export interface Answer {
+    answerId: number;
+    answer: string;
+    colour: string;
+    correct: boolean;
+}
+
 
 export interface Token { 
     sessionId: string;
     userId: number;
+}
+
+export interface QuizToken {
+    jwt: Jwt;
+    name: string;
 }
 
 export interface ErrorObj {
@@ -43,12 +76,12 @@ export interface ErrorAndStatusCode {
 export type AdminQuizDescriptionUpdateReturn = AdminQuizDescriptionUpdate | ErrorObj;
 export type AdminQuizRemoveReturn = AdminQuizRemove | ErrorObj;
 export type AdminQuizCreateReturn = AdminQuizCreate | ErrorAndStatusCode;
-export type AdminQuizListReturn = AdminQuizList | ErrorObj;
+export type AdminQuizListReturn = AdminQuizList;
 export type AdminQuizNameUpdateReturn = AdminQuizNameUpdate | ErrorObj;
 export type AdminQuizInfoReturn = AdminQuizInfo | ErrorObj;
 export type AdminAuthLoginReturn = AdminAuthLogin | ErrorObj;
 export type AdminAuthRegisterReturn = AdminAuthRegister | ErrorObj;
-export type AdminUserDetailsReturn = AdminUserDetails | ErrorObj;
+export type AdminUserDetailsReturn = AdminUserDetails;
 export type AdminUserALLDetailsReturn = AdminUserALLDetails | ErrorObj;
 export type AdminQuizALLDetailsReturn = AdminQuizALLDetails | ErrorObj;
 export type AdminUpdateUserDetailsReturn = AdminUpdateUserDetails| ErrorObj;
@@ -103,34 +136,6 @@ export interface AdminQuizNameUpdate {
 
 }
 
-export interface AdminQuizInfo {
-    quizId: number;
-    name: string;
-    timeCreated: number;
-    timeLastEdited: number;
-    description: string;
-    numQuestions: number;
-    questions: Question[];
-    duration: number;
-}
-
-interface Question {
-    questionId: number;
-    question: string;
-    duriation: number;
-    points: number;
-    answers: Answer[];
-}
-
-interface Answer {
-    answerId: number;
-    answer: string;
-    colour: string;
-    correct: boolean;
-}
-
-
-
 export interface AdminAuthRegister {
     authUserId: number;
 }
@@ -169,4 +174,8 @@ export interface AdminUpdateUserPassword {
 
 export interface AdminAuthLogout {
 
+}
+
+export interface QuizQuestionCreate {
+    questionId: number;
 }

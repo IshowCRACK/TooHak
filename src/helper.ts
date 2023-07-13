@@ -1,4 +1,4 @@
-import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt } from '../interfaces/interfaces';
+import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer } from '../interfaces/interfaces';
 import { getData } from './dataStore';
 import { adminQuizList } from './quiz';
 import { checkJwtValid, jwtToToken } from './token';
@@ -24,7 +24,7 @@ export const formatError = (errorObj: ErrorObj) => { return { error: errorObj.er
   *
   * @returns {boolean} - Returns true or false if first name or last name satisfies the conditions
 */
-function checkName (name: string): boolean {
+export function checkName (name: string): boolean {
   return /^[a-zA-Z\s\-']+$/.test(name);
 }
 
@@ -35,7 +35,7 @@ function checkName (name: string): boolean {
   *
   * @returns {boolean} - Returns true or false if password satisfies the conditions
 */
-function checkPassword (password: string): boolean {
+export function checkPassword (password: string): boolean {
   return /^(?=.*[a-zA-Z])(?=.*[0-9])/.test(password);
 }
 
@@ -47,7 +47,7 @@ function checkPassword (password: string): boolean {
   * @returns {boolean} - Returns false if not made up of alphanumbers and spaces, else true
  */
 
-function checkAlphanumeric(name: string): boolean {
+export function checkAlphanumeric(name: string): boolean {
   if (!/^[a-zA-Z0-9\s]+$/.test(name)) {
     return false;
   }
@@ -62,7 +62,7 @@ function checkAlphanumeric(name: string): boolean {
   *
   * @returns {boolean} - returns true if userId is valid, false otherwise
  */
-function checkAuthUserIdValid (authUserId: number): boolean {
+export function checkAuthUserIdValid (authUserId: number): boolean {
   const data = getData();
 
   for (const user of data.users) {
@@ -79,7 +79,7 @@ function checkAuthUserIdValid (authUserId: number): boolean {
   *
   * @returns {boolean} - Returns true if userId is valid, false otherwise
  */
-function checkQuizIdValid (quizId: number): boolean {
+export function checkQuizIdValid (quizId: number): boolean {
   const data = getData();
 
   for (const quiz of data.quizzes) {
@@ -99,7 +99,7 @@ function checkQuizIdValid (quizId: number): boolean {
   *
   * @returns {boolean} - Returns true if user owns quiz, false otherwise
  */
-function checkQuizAndUserIdValid (quizId: number, authUserId: number): boolean {
+export function checkQuizAndUserIdValid (quizId: number, authUserId: number): boolean {
   const data = getData();
 
   for (const quiz of data.quizzes) {
@@ -119,8 +119,8 @@ function checkQuizAndUserIdValid (quizId: number, authUserId: number): boolean {
   *
   * @returns {boolean} - Returns true if quizname is already used, otherwise, false
  */
-function checkQuizNameUsed (authUserId: number, quizName: string): boolean {
-  const list = adminQuizList(authUserId) as AdminQuizList;
+export function checkQuizNameUsed (jwt: Jwt, quizName: string): boolean {
+  const list = adminQuizList(jwt) as AdminQuizList;
 
   for (const quiz of list.quizzes) {
     if (quizName === quiz.name) {
@@ -139,7 +139,7 @@ function checkQuizNameUsed (authUserId: number, quizName: string): boolean {
  *
  * @returns {boolean} - Returns true if email is already used, otherwise false
  */
-function emailAlreadyUsed(email: string, authUserId: number): boolean {
+export function emailAlreadyUsed(email: string, authUserId: number): boolean {
   const data = getData();
 
   for (const user of data.users) {
@@ -165,7 +165,7 @@ function emailAlreadyUsed(email: string, authUserId: number): boolean {
   *   numFailedPasswordsSinceLastLogin: integer,
   * }>} - Array of objects
   */
-function adminUserALLDetails(authUserId: number): AdminUserALLDetailsReturn {
+export function adminUserALLDetails(authUserId: number): AdminUserALLDetailsReturn {
   const data = getData();
 
   for (const user of data.users) {
@@ -233,7 +233,7 @@ function adminUserALLDetails(authUserId: number): AdminUserALLDetailsReturn {
  *
  * @returns {boolean} - Returns true if User owns quiz, otherwise false
  */
-function checkALLQuizOwnership(authUserId: number, quizId: number): boolean {
+export function checkALLQuizOwnership(authUserId: number, quizId: number): boolean {
   const data = getData();
 
   // Check if the quizId exists in quizzes
@@ -261,7 +261,7 @@ function checkALLQuizOwnership(authUserId: number, quizId: number): boolean {
  *
  * @returns {boolean} - Returns true if User owns quiz, otherwise false
  */
-function checkQuizIdExistsGlobally(quizId: number): boolean {
+export function checkQuizIdExistsGlobally(quizId: number): boolean {
   const data = getData();
   // Check if the quizId exists in the quizzes array
   const quizExistsInQuizzes = data.quizzes.some((quiz) => quiz.quizId === quizId);
@@ -281,7 +281,7 @@ function checkQuizIdExistsGlobally(quizId: number): boolean {
  *
  * @returns {boolean} - Returns true if Token valid, otherwise false
  */
-function checkTokenValidStructure(jwt: Jwt): boolean {
+export function checkTokenValidStructure(jwt: Jwt): boolean {
   // check valid structure
   const possibleToken = checkJwtValid(jwt);
 
@@ -297,7 +297,7 @@ function checkTokenValidStructure(jwt: Jwt): boolean {
  *
  * @returns {boolean} - Returns true if Token valid, otherwise false
  */
-function checkTokenValidSession(jwt: Jwt): boolean {
+export function checkTokenValidSession(jwt: Jwt): boolean {
   const data = getData();
   //  check if valid for active sessions
   if ((data.session.find((token: Token) => token.userId === jwtToToken(jwt).userId)) === undefined) {
@@ -306,7 +306,53 @@ function checkTokenValidSession(jwt: Jwt): boolean {
   return true;
 }
 
-export {
-  checkName, checkPassword, checkAlphanumeric, checkAuthUserIdValid,
-  checkQuizIdValid, checkQuizAndUserIdValid, checkQuizNameUsed, emailAlreadyUsed, adminUserALLDetails, checkALLQuizOwnership, checkQuizIdExistsGlobally, checkTokenValidSession, checkTokenValidStructure
-};
+export function getQuiz(quizId: number): Quiz {
+  const data = getData();
+  const res = data.quizzes.find((quiz: Quiz) => quiz.quizId === quizId
+  );
+
+  return res;
+}
+
+export function getTotalDuration(quiz: Quiz): number {
+  let totalDuration = 0;
+  for (const question of quiz.questions) {
+    totalDuration += question.duration;
+  }
+
+  return totalDuration;
+}
+
+export function checkAnswerLengthValid(answers: Answer[]): boolean {
+  return !(answers.some((answer: Answer) => answer.answer.length < 1 || answer.answer.length > 30));
+}
+
+export function checkQuestionAnswerNonDuplicate(answers: Answer[]): boolean {
+  const encounteredAnswers = new Set();
+
+  for (const answerObj of answers) {
+    const answer = answerObj.answer;
+
+    if (encounteredAnswers.has(answer)) return false;
+
+    encounteredAnswers.add(answer);
+  }
+
+  return true;
+}
+
+export function checkAnswerHasTrueValue(answers: Answer[]): boolean {
+  return (answers.some((answer: Answer) => answer.correct === true));
+}
+
+export function createQuestionId(quiz: Quiz): number {
+  let questionId = -1;
+  // TODO: change this
+  for (const question of quiz.questions) {
+    if (question.questionId > questionId) questionId = question.questionId;
+  }
+
+  ++questionId;
+
+  return questionId;
+}
