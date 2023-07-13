@@ -357,6 +357,15 @@ export function createQuestionId(quiz: Quiz): number {
   return questionId;
 }
 
+export function checkQuestionIdValid(questionId: number, quiz: Quiz): boolean {
+  for (const question of quiz.questions) {
+    if (question.questionId === questionId) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export function checkNameUsedInQuiz(quizId: number, userId: number): boolean {
   const data = getData();
 
