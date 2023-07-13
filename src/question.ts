@@ -39,13 +39,6 @@ export function quizCreateQuestion(jwt: Jwt, questionBody: QuestionBody, quizId:
     };
   }
 
-  // console.log('This is questionBody');
-  // console.log(questionBody);
-  // console.log(quizId);
-  // console.log(getData());
-  // console.log(quiz);
-  // console.log(token);
-
   if (questionBody.question.length < 5 || questionBody.question.length > 50) {
     return {
       error: 'Question string is less than 5 characters in length or greater than 50 characters in length',

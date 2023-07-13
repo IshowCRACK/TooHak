@@ -17,6 +17,7 @@ export interface User {
 }
 
 export type JwtToken = string;
+
 export interface Quiz extends AdminQuizInfo {
     adminQuizId: number;
 }
@@ -57,6 +58,11 @@ export interface Token {
 
 export interface QuizToken {
     jwt: Jwt;
+    name: string;
+}
+
+export interface UpdateQuizToken {
+    token: Jwt["token"];
     name: string;
 }
 
@@ -178,4 +184,9 @@ export interface AdminAuthLogout {
 
 export interface QuizQuestionCreate {
     questionId: number;
+}
+
+export interface QuizTransfer {
+    token: string;
+    userEmail: string;
 }
