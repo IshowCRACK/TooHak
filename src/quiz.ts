@@ -1,6 +1,6 @@
 import {
   Data, AdminQuizDescriptionUpdateReturn, AdminQuizListReturn,
-  AdminQuizList, AdminQuizInfoReturn, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn, AdminQuizTransferReturn,
+  AdminQuizList, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn, AdminQuizTransferReturn,
   Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj, QuizToken, AdminQuizInfo
 
 } from '../interfaces/interfaces';
@@ -322,31 +322,29 @@ function adminQuizInfo (jwt: Jwt, quizId: number): AdminQuizInfo | ErrorAndStatu
     };
   }
 
-      //  check if valid for active sessions
+  //  check if valid for active sessions
   if (!checkTokenValidSession(jwt)) {
     return {
       error: 'Token not for currently logged in session',
       statusCode: 403
     };
   }
-  
+
   const authUserId: number = jwtToToken(jwt).userId;
 
   // Quiz ID does not refer to a valid quiz
   if (!checkQuizIdValid(quizId)) {
-    return { 
-    error: 'Quiz ID does not refer to a valid quiz',
-    statusCode: 400
-
+    return {
+      error: 'Quiz ID does not refer to a valid quiz',
+      statusCode: 400
     };
   }
 
   // Quiz ID does not refer to a quiz that this user owns
   if (!checkQuizAndUserIdValid(quizId, authUserId)) {
-    return { 
+    return {
       error: 'Quiz ID does not refer to a quiz that this user owns',
       statusCode: 400
-    
     };
   }
 
@@ -366,7 +364,6 @@ function adminQuizInfo (jwt: Jwt, quizId: number): AdminQuizInfo | ErrorAndStatu
     }
   }
 }
-
 
 /**
   * Restores a Quiz from the Trash

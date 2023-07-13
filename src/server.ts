@@ -7,7 +7,7 @@ import YAML from 'yaml';
 import sui from 'swagger-ui-express';
 import fs from 'fs';
 import { adminAuthRegister, adminAuthLogin, adminAuthLogout, adminUserDetails } from './auth';
-import { adminQuizCreate, adminQuizRemove, adminQuizList,adminQuizInfo } from './quiz';
+import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo } from './quiz';
 import { clear } from './other';
 import { formatError } from './helper';
 import { getData } from './dataStore';
@@ -127,14 +127,13 @@ app.delete('/v1/admin/quiz/:quizId', (req: Request, res: Response) => {
 app.get('/v1/admin/quiz/:quizId', (req: Request, res: Response) => {
   const quizId = parseInt(req.params.quizId);
   const token = req.query.token as string;
-  const response = adminQuizInfo({token: token}, quizId);
+  const response = adminQuizInfo({ token: token }, quizId);
   if ('error' in response) {
     return res.status(response.statusCode).json(formatError(response));
   }
 
   res.status(200).json(response);
 });
-
 
 app.post('/v1/admin/quiz/:quizId/question', (req: Request, res: Response) => {
   const quizId = parseInt(req.params.quizId);
@@ -144,7 +143,6 @@ app.post('/v1/admin/quiz/:quizId/question', (req: Request, res: Response) => {
     return res.status(response.statusCode).json(formatError(response));
   }
   res.status(200).json(response);
-
 });
 
 // For Debugging

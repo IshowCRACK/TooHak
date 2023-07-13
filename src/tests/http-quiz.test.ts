@@ -1,17 +1,15 @@
-import { ErrorObj, Token, AdminQuizCreate, OkObj, Jwt, AdminQuizInfo} from '../../interfaces/interfaces';
+import { ErrorObj, Token, AdminQuizCreate, OkObj, Jwt, AdminQuizInfo } from '../../interfaces/interfaces';
 import { registerUser, logoutUserHandler } from './http-auth.test';
-import { tokenToJwt, jwtToToken } from '../token';
+import { tokenToJwt } from '../token';
 import request from 'sync-request';
 import { getUrl } from '../helper';
 import { RequestCreateQuiz, RequestRemoveQuiz, clearUsers, listQuiz } from './testHelpers';
-
 
 const URL: string = getUrl();
 
 beforeEach(() => {
   clearUsers();
 });
-
 
 // Wrapper functions
 
@@ -53,70 +51,66 @@ describe('Quiz Info', () => {
   });
 
   describe('Successful tests', () => {
-
     beforeEach(() => {
       quizCreationTime = Math.round(Date.now() / 1000);
     });
 
     test('1. valid token and quizId for 1 owned quiz', () => {
-
       res = RequestInfoQuiz(tokenToJwt(token0), quizId0) as AdminQuizInfo;
       expect(res).toEqual(
-                expect.objectContaining({
-                  quizId: quizId0,
-                  name: 'Quiz0',
-                  description: 'Description 0',
-                  numQuestions:0, 
-                  questions: [],
-                  duration: 0
-                })
-        );
+        expect.objectContaining({
+          quizId: quizId0,
+          name: 'Quiz0',
+          description: 'Description 0',
+          numQuestions: 0,
+          questions: [],
+          duration: 0
+        })
+      );
 
       expect(res.timeCreated).toBeLessThanOrEqual(quizCreationTime);
       expect(res.timeCreated).toBeGreaterThanOrEqual(quizCreationTime - timeBufferSeconds);
       expect(res.timeLastEdited).toBeLessThanOrEqual(quizCreationTime);
       expect(res.timeLastEdited).toBeGreaterThanOrEqual(quizCreationTime - timeBufferSeconds);
-  });
+    });
 
-  test('2. valid token and quizId for multiple owned quiz', () => {
+    test('2. valid token and quizId for multiple owned quiz', () => {
+      res = RequestInfoQuiz(tokenToJwt(token0), quizId0) as AdminQuizInfo;
+      res0 = RequestInfoQuiz(tokenToJwt(token0), quizId1) as AdminQuizInfo;
 
-    res = RequestInfoQuiz(tokenToJwt(token0), quizId0) as AdminQuizInfo;
-    res0 = RequestInfoQuiz(tokenToJwt(token0), quizId1) as AdminQuizInfo;
-    
-    expect(res).toEqual(
-              expect.objectContaining({
-                quizId: quizId0,
-                name: 'Quiz0',
-                description: 'Description 0',
-                numQuestions:0, 
-                questions: [],
-                duration: 0
-              })
+      expect(res).toEqual(
+        expect.objectContaining({
+          quizId: quizId0,
+          name: 'Quiz0',
+          description: 'Description 0',
+          numQuestions: 0,
+          questions: [],
+          duration: 0
+        })
       );
 
-    expect(res.timeCreated).toBeLessThanOrEqual(quizCreationTime);
-    expect(res.timeCreated).toBeGreaterThanOrEqual(quizCreationTime - timeBufferSeconds);
-    expect(res.timeLastEdited).toBeLessThanOrEqual(quizCreationTime);
-    expect(res.timeLastEdited).toBeGreaterThanOrEqual(quizCreationTime - timeBufferSeconds);
-    
-    expect(res0).toEqual(
-      expect.objectContaining({
-        quizId: quizId1,
-        name: 'Quiz1',
-        description: 'Description 1',
-        numQuestions:0, 
-        questions: [],
-        duration: 0
-      })
-    );
+      expect(res.timeCreated).toBeLessThanOrEqual(quizCreationTime);
+      expect(res.timeCreated).toBeGreaterThanOrEqual(quizCreationTime - timeBufferSeconds);
+      expect(res.timeLastEdited).toBeLessThanOrEqual(quizCreationTime);
+      expect(res.timeLastEdited).toBeGreaterThanOrEqual(quizCreationTime - timeBufferSeconds);
 
-    expect(res0.timeCreated).toBeLessThanOrEqual(quizCreationTime);
-    expect(res0.timeCreated).toBeGreaterThanOrEqual(quizCreationTime - timeBufferSeconds);
-    expect(res0.timeLastEdited).toBeLessThanOrEqual(quizCreationTime);
-    expect(res0.timeLastEdited).toBeGreaterThanOrEqual(quizCreationTime - timeBufferSeconds);
-});
+      expect(res0).toEqual(
+        expect.objectContaining({
+          quizId: quizId1,
+          name: 'Quiz1',
+          description: 'Description 1',
+          numQuestions: 0,
+          questions: [],
+          duration: 0
+        })
+      );
 
-});
+      expect(res0.timeCreated).toBeLessThanOrEqual(quizCreationTime);
+      expect(res0.timeCreated).toBeGreaterThanOrEqual(quizCreationTime - timeBufferSeconds);
+      expect(res0.timeLastEdited).toBeLessThanOrEqual(quizCreationTime);
+      expect(res0.timeLastEdited).toBeGreaterThanOrEqual(quizCreationTime - timeBufferSeconds);
+    });
+  });
 
   describe('Unsuccessful tests', () => {
     test('1 Invalid QuizId ', () => {
@@ -134,13 +128,11 @@ describe('Quiz Info', () => {
     });
 
     test('4. Token is not a valid structure', () => {
-      res = RequestInfoQuiz({token: '-1'}, quizId1);
+      res = RequestInfoQuiz({ token: '-1' }, quizId1);
       expect(res).toStrictEqual({ error: 'Token is not a valid structure' });
     });
   });
-
 });
-
 
 // TESTS FOR QUIZ REMOVE //
 describe('Quiz Remove', () => {
@@ -261,9 +253,7 @@ describe('Quiz Create', () => {
       expect(res).toStrictEqual({ error: 'Quiz name is already in use' });
     });
   });
-
 });
-
 
 // TESTS FOR QUIZ LIST //
 describe('adminQuizList tests', () => {
