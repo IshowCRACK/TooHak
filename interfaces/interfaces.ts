@@ -17,6 +17,7 @@ export interface User {
 }
 
 export type JwtToken = string;
+
 export interface Quiz extends AdminQuizInfo {
     adminQuizId: number;
 }

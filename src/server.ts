@@ -146,14 +146,13 @@ app.post('/v1/admin/quiz/:quizId/question', (req: Request, res: Response) => {
 });
 
 app.put('/v1/admin/quiz/:quizId/name', (req: Request, res: Response) => {
-  // const quizId = parseInt(req.params.quizId);
-  // const { token, name } = req.body; 
-  // const response = adminQuizNameUpdate({token: token}, name, quizId);
-  // if ('error' in response) {
-  //   return res.status(response.statusCode).json(formatError(response));
-  // }
-  // res.status(200).json(response);
-  res.status(200).json("stub");
+  const quizId = parseInt(req.params.quizId);
+  const { token, name } = req.body; 
+  const response = adminQuizNameUpdate({token: token}, name, quizId);
+  if ('error' in response) {
+    return res.status(response.statusCode).json(formatError(response));
+  }
+  res.status(200).json(response);
 });
 
 // For Debugging
