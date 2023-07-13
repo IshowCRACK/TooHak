@@ -1,8 +1,7 @@
 import {
   Data, AdminQuizDescriptionUpdateReturn, AdminQuizListReturn,
   AdminQuizList, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn,
-  Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj, QuizToken, AdminQuizInfo, User, Quiz,
-
+  Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj, AdminQuizInfo, User, Quiz,
 } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
@@ -257,43 +256,69 @@ function adminQuizList (jwt: Jwt): AdminQuizListReturn | ErrorAndStatusCode {
   *
   * @returns {{} | {error: string}} - Returns an empty object if valid
  */
-function adminQuizNameUpdate (quizToken: QuizToken, quizId: number) {
+function adminQuizNameUpdate (jwt: Jwt, name: string, quizId: number): OkObj | ErrorAndStatusCode {
   const data = getData();
 
-  // AuthUserId is not a valid user
-  const authUserId = jwtToToken(quizToken.jwt).userId;
-  if (!checkAuthUserIdValid(authUserId)) {
-    return { error: 'AuthUserId is not a valid user' };
+  //  check valid structure
+  if (!checkTokenValidStructure(jwt)) {
+    return {
+      error: 'Token is not a valid structure',
+      statusCode: 401
+    };
   }
+
+  //  check if valid for active sessions
+  if (!checkTokenValidSession(jwt)) {
+    return {
+      error: 'Token not for currently logged in session',
+      statusCode: 403
+    };
+  }
+  const authUserId: number = jwtToToken(jwt).userId;
 
   // Quiz ID does not refer to a valid quiz
   if (!checkQuizIdValid(quizId)) {
-    return { error: 'Quiz ID does not refer to a valid quiz' };
+    return {
+      error: 'Quiz ID does not refer to a valid quiz',
+      statusCode: 400
+    };
   }
 
-  // Quiz ID does not refer to a valid quizthat this user owns
+  // Quiz ID does not refer to a quiz that this user owns
   if (!checkQuizAndUserIdValid(quizId, authUserId)) {
-    return { error: 'Quiz ID does not refer to a quiz that this user owns' };
+    return {
+      error: 'Quiz ID does not refer to a quiz that this user owns',
+      statusCode: 400
+    };
   }
 
   // Check name composition (alphanumeric and spaces)
-  if (!checkAlphanumeric(quizToken.name)) {
-    return { error: 'Must use only alphanumeric characters or spaces in name' };
+  if (!checkAlphanumeric(name)) {
+    return {
+      error: 'Must use only alphanumeric characters or spaces in name',
+      statusCode: 400
+    };
   }
 
   // Check name length
-  if (quizToken.name.length < 3 || quizToken.name.length > 30) {
-    return { error: 'Name must be between 3 and 30 characters long!' };
+  if (name.length < 3 || name.length > 30) {
+    return {
+      error: 'Name must be between 3 and 30 characters',
+      statusCode: 400
+    };
   }
 
   // Check if quiz name is already used by user
-  if (checkQuizNameUsed(quizToken.jwt, quizToken.name)) {
-    return { error: 'Quiz name already in use' };
+  if (checkQuizNameUsed(jwt, name)) {
+    return {
+      error: 'Quiz name is already in use',
+      statusCode: 400
+    };
   }
 
   for (const quiz of data.quizzes) {
     if (quiz.quizId === quizId) {
-      quiz.name = quizToken.name;
+      quiz.name = name;
       quiz.timeLastEdited = Math.round(Date.now() / 1000);
     }
   }

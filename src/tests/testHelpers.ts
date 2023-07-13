@@ -1,5 +1,5 @@
 import request from 'sync-request';
-import { AdminQuizCreate, AdminQuizListReturn, AdminUserDetailsReturn, ErrorObj, Jwt, OkObj, Token } from '../../interfaces/interfaces';
+import { AdminQuizCreate, AdminQuizListReturn, AdminUserDetailsReturn, ErrorObj, Jwt, OkObj, Token, AdminQuizInfo } from '../../interfaces/interfaces';
 import { jwtToToken } from '../token';
 import { getUrl } from '../helper';
 
@@ -148,8 +148,37 @@ export const quizTransferHandler = (jwt: Jwt, email: string, quizId: number): Ok
       }
     }
   );
-
   const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
 
+  return parsedResponse;
+};
+
+export const infoQuiz = (jwt: Jwt, quizId: number): AdminQuizInfo | ErrorObj => {
+  const res = request(
+    'GET',
+    URL + `v1/admin/quiz/${quizId}`,
+    {
+      qs: {
+        token: jwt.token,
+      }
+    }
+  );
+
+  const parsedResponse: AdminQuizInfo | ErrorObj = JSON.parse(res.body.toString());
+  return parsedResponse;
+};
+
+export const updateNameQuiz = (jwt: Jwt, name: string, quizId: number): OkObj | ErrorObj => {
+  const res = request(
+    'PUT',
+    URL + `v1/admin/quiz/${quizId}/name`,
+    {
+      json: {
+        token: jwt.token,
+        name: name
+      }
+    }
+  );
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
   return parsedResponse;
 };

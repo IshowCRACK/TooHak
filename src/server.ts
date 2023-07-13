@@ -7,7 +7,7 @@ import YAML from 'yaml';
 import sui from 'swagger-ui-express';
 import fs from 'fs';
 import { adminAuthRegister, adminAuthLogin, adminAuthLogout, adminUserDetails } from './auth';
-import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer } from './quiz';
+import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate } from './quiz';
 import { clear } from './other';
 import { formatError } from './helper';
 import { getData } from './dataStore';
@@ -154,6 +154,16 @@ app.post('/v1/admin/quiz/:quizId/transfer', (req: Request, res: Response) => {
     return res.status(response.statusCode).json(formatError(response));
   }
 
+  res.status(200).json(response);
+});
+
+app.put('/v1/admin/quiz/:quizId/name', (req: Request, res: Response) => {
+  const quizId = parseInt(req.params.quizId);
+  const { token, name } = req.body;
+  const response = adminQuizNameUpdate({ token: token }, name, quizId);
+  if ('error' in response) {
+    return res.status(response.statusCode).json(formatError(response));
+  }
   res.status(200).json(response);
 });
 
