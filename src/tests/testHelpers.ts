@@ -136,3 +136,18 @@ export const listQuiz = (jwt: Jwt): AdminQuizListReturn | ErrorObj => {
 
   return parsedResponse;
 };
+
+export const deleteQuestion = (jwt: Jwt, quizId: number, questionId: number): OkObj | ErrorObj => {
+  const res = request(
+    'DELETE',
+    URL + `v1/admin/quiz/${quizId}/question/${questionId}`,
+    {
+      qs: {
+        token: jwt.token
+      }
+    }
+  );
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
+};
