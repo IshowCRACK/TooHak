@@ -1,11 +1,80 @@
 import { ErrorObj, Token, AdminQuizCreate, OkObj, Jwt, AdminQuizInfo } from '../../interfaces/interfaces';
 import { registerUser, logoutUserHandler } from './http-auth.test';
 import { tokenToJwt } from '../token';
-import { RequestCreateQuiz, RequestRemoveQuiz, clearUsers, listQuiz, updateNameQuiz, infoQuiz, quizTransferHandler } from './testHelpers';
+import { RequestCreateQuiz, RequestRemoveQuiz, clearUsers, listQuiz, updateNameQuiz, infoQuiz, quizTransferHandler , updateDescriptionQuiz } from './testHelpers';
 
 beforeEach(() => {
   clearUsers();
 });
+// TESTS FOR QUIZ UPDATE DESCRIPTION //
+describe('Quiz Update Description', () => {
+  let token0: Token;
+  let token1: Token;
+  let quizId0: number;
+  let quizId1: number;
+  let res: OkObj | ErrorObj;
+  let quizInfo: AdminQuizInfo;
+  //  Giving a 20 second buffer for tests to run
+  const timeBufferSeconds = 20;
+  let quizEditedTime: number;
+
+  beforeEach(() => {
+    token0 = registerUser('JohnSmith@gmail.com', 'Password123', 'Johnny', 'Jones') as Token;
+    token1 = registerUser('JoeMama@gmail.com', 'Password456', 'Joe', 'Mama') as Token;
+    quizId0 = (RequestCreateQuiz(tokenToJwt(token0), 'Quiz0', 'Description 0') as AdminQuizCreate).quizId;
+    quizId1 = (RequestCreateQuiz(tokenToJwt(token1), 'Quiz1', 'Description 1') as AdminQuizCreate).quizId;
+  });
+
+  describe('Successful test', () => {
+    beforeEach(() => {
+      quizEditedTime = Math.round(Date.now() / 1000);
+      res = updateDescriptionQuiz(tokenToJwt(token0), 'Updated description', quizId0) as OkObj;
+      quizInfo = infoQuiz(tokenToJwt(token0), quizId0) as AdminQuizInfo;
+    });
+
+    test('1. Updates the name of an existing quiz', () => {
+      expect(quizInfo.description).toStrictEqual('Updated description');
+      expect(res).toStrictEqual({});
+    });
+
+    test('2. Updates the time edited', () => {
+      expect(quizInfo.timeLastEdited).toBeGreaterThanOrEqual(quizEditedTime);
+      expect(quizInfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime + timeBufferSeconds);
+      expect(res).toEqual({});
+    });
+  });
+
+  describe('Unsuccessful test', () => {
+    test('1. Returns an error when Quiz ID does not refer to a valid quiz', () => {
+      res = updateDescriptionQuiz(tokenToJwt(token0), 'Updated description', -9);
+      expect(res).toStrictEqual({ error: 'Quiz ID does not refer to a valid quiz' });
+    });
+
+    test('2. Quiz ID does not refer to a quiz that this user owns', () => {
+      res = updateDescriptionQuiz(tokenToJwt(token0), 'Updated description', quizId1)
+      expect(res).toStrictEqual({ error: 'Quiz ID does not refer to a quiz that this user owns' });
+    });
+
+    test('3.Description is more than 100 characters in length', () => {
+      res = updateDescriptionQuiz(tokenToJwt(token0), 'This is a description that is more than 100 characters long. It should trigger an error. ?!@ #$& *%)_@ ;-))1', quizId0);
+      expect(res).toStrictEqual({ error: 'Description must be under 100 characters'});
+    });
+
+    test('6. Token is not a valid structure', () => {
+      res =   res = updateDescriptionQuiz({token: '-1'}, 'Updated description', quizId0)
+      expect(res).toStrictEqual({ error: 'Token is not a valid structure' });
+    });
+
+    test('7. Not token of an active session', () => {
+      logoutUserHandler(tokenToJwt(token1));
+      res = updateDescriptionQuiz(tokenToJwt(token1), 'Updated description', quizId1);
+      expect(res).toStrictEqual({ error: 'Token not for currently logged in session' });
+    });
+  });
+});
+
+
+
 
 // TESTS FOR QUIZ UPDATE NAME //
 describe('Quiz Update Name', () => {
