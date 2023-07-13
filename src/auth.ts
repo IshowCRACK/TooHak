@@ -97,6 +97,7 @@ function adminAuthRegister (email: string, password: string, nameFirst: string, 
 
   const token: Token = createToken(userID);
   addTokenToSession(token);
+
   return tokenToJwt(token);
 }
 

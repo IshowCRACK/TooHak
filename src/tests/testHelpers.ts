@@ -152,4 +152,4 @@ export const quizTransferHandler = (jwt: Jwt, email: string, quizId: number): Ok
   const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
 
   return parsedResponse;
-}
+};

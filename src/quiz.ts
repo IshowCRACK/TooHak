@@ -1,13 +1,13 @@
 import {
   Data, AdminQuizDescriptionUpdateReturn, AdminQuizListReturn,
-  AdminQuizList, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn, AdminQuizTransferReturn,
-  Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj, QuizToken, AdminQuizInfo, User
+  AdminQuizList, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn,
+  Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj, QuizToken, AdminQuizInfo, User, Quiz,
 
 } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkAuthUserIdValid, checkQuizAndUserIdValid,
-  checkQuizIdValid, checkQuizNameUsed, checkALLQuizOwnership, checkQuizIdExistsGlobally, checkTokenValidStructure, checkTokenValidSession
+  checkQuizIdValid, checkQuizNameUsed, checkALLQuizOwnership, checkQuizIdExistsGlobally, checkTokenValidStructure, checkTokenValidSession, checkNameUsedInQuiz
 } from './helper';
 import { jwtToToken } from './token';
 
@@ -458,40 +458,64 @@ function adminQuizEmptyTrash(authUserId: number, quizIds: number[]): AdminQuizEm
   *
   * @returns {{} | {error: string}} - Returns an empty object if valid
  */
-function adminQuizTransfer(jwt: Jwt, quizId: number, email: string): AdminQuizTransferReturn {
+function adminQuizTransfer(jwt: Jwt, email: string, quizId: number): OkObj | ErrorAndStatusCode {
   const data = getData();
-
-  if (!checkQuizIdValid(quizId)) {
-    return { error: 'Quiz ID does not refer to a valid quiz' };
-  }
-
   const targetUser = data.users.find((user: User) => user.email === email);
 
-  if (!targetUser) {
-    return { error: 'userEmail is not a real user' };
+  if (!checkTokenValidStructure(jwt)) {
+    return {
+      error: 'Token is not a valid structure',
+      statusCode: 401
+    };
   }
 
-  if (targetUser.authUserId === jwtToToken(jwt).userId) {
-    return { error: 'userEmail is the current logged in user' };
+  if (!checkTokenValidSession(jwt)) {
+    return {
+      error: 'Token not for currently logged in session',
+      statusCode: 403
+    };
+  }
+
+  if (!checkQuizIdValid(quizId)) {
+    return {
+      error: 'Quiz ID does not refer to a valid quiz',
+      statusCode: 400
+    };
   }
 
   if (!checkQuizAndUserIdValid(quizId, jwtToToken(jwt).userId)) {
-    return { error: 'Quiz ID does not refer to a quiz that this user owns' };
+    return {
+      error: 'Quiz ID does not refer to a quiz that this user owns',
+      statusCode: 400
+    };
   }
-  // NOTE FOR WHOEVER IS DOING TRANSFER //
-  // I COMMENTED THE SECTION OUT AS THIS FUNCTION HASNT BEEN CHANGED TO USE TOKENS AND WAS INTERFERING WITH MY TESTS FOR SOME REASON.
-  /*
-  const quizName = data.quizzes.find((quiz) => quiz.quizId === quizId)?.name;
-  if (quizName && checkQuizNameUsed(targetUser.authUserId, quizName)) {
-    return { error: 'Quiz ID refers to a quiz that has a name that is already used by the target user' };
+
+  if (!targetUser) {
+    return {
+      error: 'userEmail is not a real user',
+      statusCode: 400
+    };
   }
-  */
+
+  if (targetUser.authUserId === jwtToToken(jwt).userId) {
+    return {
+      error: 'userEmail is the current logged in user',
+      statusCode: 400
+    };
+  }
+
+  if (checkNameUsedInQuiz(quizId, targetUser.authUserId)) {
+    return {
+      error: 'Quiz ID refers to a quiz that has a name that is already used by the target user',
+      statusCode: 400
+    };
+  }
 
   // Update the adminQuizId to the target user's authUserId
-  const quizToUpdate = data.quizzes.find((quiz) => quiz.quizId === quizId);
+  const quizToUpdate = data.quizzes.find((quiz: Quiz) => quiz.quizId === quizId);
   quizToUpdate.adminQuizId = targetUser.authUserId;
 
-  setData(data);
+  // setData(data);
   return {};
 }
 
