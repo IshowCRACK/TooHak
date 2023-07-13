@@ -1,5 +1,5 @@
 import request from 'sync-request';
-import { AdminQuizCreate, ErrorObj, Jwt, OkObj, Token } from '../../interfaces/interfaces';
+import { AdminQuizCreate, AdminUserDetailsReturn, ErrorObj, Jwt, OkObj, Token } from '../../interfaces/interfaces';
 import { jwtToToken } from '../token';
 import { getUrl } from '../helper';
 
@@ -46,6 +46,21 @@ export const loginUser = (email: string, password: string): Token | ErrorObj => 
   } else {
     return jwtToToken(parsedResponse);
   }
+};
+
+export const getUser = (jwt: Jwt): AdminUserDetailsReturn | ErrorObj => {
+  const res = request(
+    'GET',
+    URL + 'v1/admin/user/details',
+    {
+      qs: {
+        token: jwt.token
+      }
+    }
+  );
+  const parsedResponse: AdminUserDetailsReturn | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
 };
 
 export const clearUsers = (): void => {

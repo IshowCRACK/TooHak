@@ -1,8 +1,8 @@
-import { AdminUserDetailsReturn, AdminUpdateUserDetailsReturn, adminUpdateUserPasswordReturn, Token, Jwt, ErrorAndStatusCode, OkObj } from '../interfaces/interfaces';
+import { AdminUserDetailsReturn, AdminUpdateUserDetailsReturn, adminUpdateUserPasswordReturn, Data, Token, Jwt, ErrorAndStatusCode, OkObj } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
-import { checkName, checkPassword, emailAlreadyUsed } from './helper';
+import { checkName, checkPassword, emailAlreadyUsed, checkTokenValidStructure, checkTokenValidSession } from './helper';
 import validator from 'validator';
-import { addTokenToSession, checkJwtValid, createToken, getTokenLogin, tokenToJwt } from './token';
+import { addTokenToSession, checkJwtValid, createToken, getTokenLogin, tokenToJwt, jwtToToken } from './token';
 
 /**
   * Register a user with an email, password, and names, then returns thier authUserId value
@@ -138,9 +138,24 @@ function adminAuthLogin (email: string, password: string): Jwt | ErrorAndStatusC
   *
   * @returns {{user: {userId: number, name: string, email: string, numSuccessfulLogins: number, numFailedPasswordsSinceLastLogin: number}} | {error: string}} - Returns an object of User details
 */
-function adminUserDetails (authUserId: number): AdminUserDetailsReturn {
-  const data = getData();
-
+function adminUserDetails (jwt: Jwt): AdminUserDetailsReturn | ErrorAndStatusCode {
+  const data: Data = getData();
+  // checking valid structure
+  if (!checkTokenValidStructure(jwt)) {
+    return {
+      error: 'Token is not a valid structure',
+      statusCode: 401
+    };
+  }
+  // check if valid for active sessions
+  if (!checkTokenValidSession(jwt)) {
+    return {
+      error: 'Token not for currently logged in session',
+      statusCode: 403
+    };
+  }
+  //
+  const authUserId: number = jwtToToken(jwt).userId;
   // Loop through users dataStore
   for (const user of data.users) {
     // if ID matched return the users ID
@@ -156,10 +171,6 @@ function adminUserDetails (authUserId: number): AdminUserDetailsReturn {
       };
     }
   }
-
-  return {
-    error: 'User does not exists'
-  };
 }
 
 /**
