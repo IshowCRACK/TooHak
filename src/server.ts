@@ -7,7 +7,7 @@ import YAML from 'yaml';
 import sui from 'swagger-ui-express';
 import fs from 'fs';
 
-import { adminAuthRegister, adminAuthLogin, adminAuthLogout } from './auth';
+import { adminAuthRegister, adminAuthLogin, adminAuthLogout, adminUserDetails } from './auth';
 import { adminQuizCreate, adminQuizRemove } from './quiz';
 import { clear } from './other';
 import { formatError } from './helper';
@@ -73,6 +73,17 @@ app.delete('/v1/clear', (req: Request, res: Response) => {
 app.post('/v1/admin/auth/logout', (req: Request, res: Response) => {
   const { token } = req.body;
   const response = adminAuthLogout({ token: token });
+
+  if ('error' in response) {
+    return res.status(response.statusCode).json(formatError(response));
+  }
+
+  res.status(200).json(response);
+});
+
+app.get('/v1/admin/user/details', (req: Request, res: Response) => {
+  const token = req.query.token as string;
+  const response = adminUserDetails({ token: token });
 
   if ('error' in response) {
     return res.status(response.statusCode).json(formatError(response));

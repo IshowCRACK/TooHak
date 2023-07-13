@@ -140,7 +140,7 @@ function adminAuthLogin (email: string, password: string): Jwt | ErrorAndStatusC
 */
 function adminUserDetails (jwt: Jwt): AdminUserDetailsReturn | ErrorAndStatusCode {
   const data: Data = getData();
-  // checking valid structure 
+  // checking valid structure
   if (!checkTokenValidStructure(jwt)) {
     return {
       error: 'Token is not a valid structure',
@@ -154,8 +154,8 @@ function adminUserDetails (jwt: Jwt): AdminUserDetailsReturn | ErrorAndStatusCod
       statusCode: 403
     };
   }
-  // 
-  const authUserId: number = jwtToToken(jwt).userId; 
+  //
+  const authUserId: number = jwtToToken(jwt).userId;
   // Loop through users dataStore
   for (const user of data.users) {
     // if ID matched return the users ID

@@ -3,7 +3,6 @@ import request from 'sync-request';
 import { getUrl } from '../helper';
 import { jwtToToken, objToJwt, tokenToJwt } from '../token';
 import { checkTokenValid } from './testHelpers';
-import { TokenClass } from 'typescript';
 
 const URL: string = getUrl();
 
@@ -52,13 +51,12 @@ const loginUser = (email: string, password: string): Token | ErrorObj => {
 };
 
 const getUser = (jwt: Jwt): AdminUserDetailsReturn | ErrorObj => {
-  const authUserId: number = jwtToToken(jwt).userId; 
   const res = request(
     'GET',
     URL + 'v1/admin/user/details',
     {
-      json: {
-        authUserId: authUserId
+      qs: {
+        token: jwt.token
       }
     }
   );
@@ -348,9 +346,9 @@ describe('adminUserDetails test', () => {
       const jwt2: Token = {
         sessionId: '',
         userId: 12,
-      }
+      };
       const userDetails = getUser(tokenToJwt(jwt2)) as ErrorObj;
-      const expectedResult: ErrorObj = {error: 'Token not for currently logged in session'};
+      const expectedResult: ErrorObj = { error: 'Token not for currently logged in session' };
       expect(userDetails).toStrictEqual(expectedResult);
     });
   });
@@ -380,21 +378,21 @@ describe('adminUserDetails test', () => {
       expect(getUser(jwt)).toStrictEqual(expectedResult1);
 
       const token2 = registerUser('Connor@gmail.com', 'Password123', 'Connor', 'Mcgregor') as Token;
-      let jwt2: Jwt = tokenToJwt(token2);
+      const jwt2: Jwt = tokenToJwt(token2);
       loginUser('Connor@gmail.com', 'Password12');
       loginUser('Connor@gmail.com', 'Password12');
       loginUser('Connor@gmail.com', 'Password12');
       loginUser('Connor@gmail.com', 'Password123');
-      const expectedResult2: AdminUserDetailsReturn = { user: { userId: 0, name: 'Connor Mcgregor', email: 'Connor@gmail.com', numSuccessfulLogins: 2, numFailedPasswordsSinceLastLogin: 0 } };
+      const expectedResult2: AdminUserDetailsReturn = { user: { userId: 1, name: 'Connor Mcgregor', email: 'Connor@gmail.com', numSuccessfulLogins: 2, numFailedPasswordsSinceLastLogin: 0 } };
       expect(getUser(jwt2)).toStrictEqual(expectedResult2);
 
       const token3 = registerUser('John@gmail.com', 'Password123', 'John', 'Cena') as Token;
-      let jwt3: Jwt = tokenToJwt(token3);
+      const jwt3: Jwt = tokenToJwt(token3);
       loginUser('John@gmail.com', 'Password12');
       loginUser('John@gmail.com', 'Password12');
       loginUser('John@gmail.com', 'Password12');
       loginUser('John@gmail.com', 'Password123');
-      const expectedResult3: AdminUserDetailsReturn = { user: { userId: 0, name: 'John Cena', email: 'John@gmail.com', numSuccessfulLogins: 2, numFailedPasswordsSinceLastLogin: 0 } };
+      const expectedResult3: AdminUserDetailsReturn = { user: { userId: 2, name: 'John Cena', email: 'John@gmail.com', numSuccessfulLogins: 2, numFailedPasswordsSinceLastLogin: 0 } };
       expect(getUser(jwt3)).toStrictEqual(expectedResult3);
     });
 
