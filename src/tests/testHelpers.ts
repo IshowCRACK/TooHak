@@ -1,5 +1,5 @@
 import request from 'sync-request';
-import { AdminQuizCreate, AdminQuizListReturn, AdminUserDetailsReturn, ErrorObj, Jwt, OkObj, Token, AdminQuizInfo,UpdateQuizToken } from '../../interfaces/interfaces';
+import { AdminQuizCreate, AdminQuizListReturn, AdminUserDetailsReturn, ErrorObj, Jwt, OkObj, Token, AdminQuizInfo } from '../../interfaces/interfaces';
 import { jwtToToken } from '../token';
 import { getUrl } from '../helper';
 
@@ -137,8 +137,6 @@ export const listQuiz = (jwt: Jwt): AdminQuizListReturn | ErrorObj => {
   return parsedResponse;
 };
 
-
-
 export const infoQuiz = (jwt: Jwt, quizId: number): AdminQuizInfo | ErrorObj => {
   const res = request(
     'GET',
@@ -154,7 +152,7 @@ export const infoQuiz = (jwt: Jwt, quizId: number): AdminQuizInfo | ErrorObj => 
   return parsedResponse;
 };
 
-export const updateNameQuiz = (jwt: Jwt, name: String, quizId: number): OkObj | ErrorObj => {
+export const updateNameQuiz = (jwt: Jwt, name: string, quizId: number): OkObj | ErrorObj => {
   const res = request(
     'PUT',
     URL + `v1/admin/quiz/${quizId}/name`,
@@ -165,6 +163,6 @@ export const updateNameQuiz = (jwt: Jwt, name: String, quizId: number): OkObj | 
       }
     }
   );
-  const parsedResponse:   OkObj | ErrorObj = JSON.parse(res.body.toString());
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
   return parsedResponse;
 };

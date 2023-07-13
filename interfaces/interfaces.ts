@@ -62,7 +62,7 @@ export interface QuizToken {
 }
 
 export interface UpdateQuizToken {
-    token: Jwt.token;
+    token: Jwt["token"];
     name: string;
 }
 

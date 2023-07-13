@@ -1,7 +1,7 @@
 import {
   Data, AdminQuizDescriptionUpdateReturn, AdminQuizListReturn,
   AdminQuizList, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn, AdminQuizTransferReturn,
-  Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj, QuizToken, AdminQuizInfo, UpdateQuizToken
+  Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj, AdminQuizInfo
 
 } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
@@ -268,13 +268,13 @@ function adminQuizNameUpdate (jwt: Jwt, name: string, quizId: number): OkObj | E
     };
   }
 
- //  check if valid for active sessions
- if (!checkTokenValidSession(jwt)) {
-  return {
-    error: 'Token not for currently logged in session',
-    statusCode: 403
-  };
-}
+  //  check if valid for active sessions
+  if (!checkTokenValidSession(jwt)) {
+    return {
+      error: 'Token not for currently logged in session',
+      statusCode: 403
+    };
+  }
   const authUserId: number = jwtToToken(jwt).userId;
 
   // Quiz ID does not refer to a valid quiz
@@ -295,7 +295,7 @@ function adminQuizNameUpdate (jwt: Jwt, name: string, quizId: number): OkObj | E
 
   // Check name composition (alphanumeric and spaces)
   if (!checkAlphanumeric(name)) {
-    return { 
+    return {
       error: 'Must use only alphanumeric characters or spaces in name',
       statusCode: 400
     };
@@ -303,7 +303,7 @@ function adminQuizNameUpdate (jwt: Jwt, name: string, quizId: number): OkObj | E
 
   // Check name length
   if (name.length < 3 || name.length > 30) {
-    return { 
+    return {
       error: 'Name must be between 3 and 30 characters',
       statusCode: 400
     };
@@ -311,7 +311,7 @@ function adminQuizNameUpdate (jwt: Jwt, name: string, quizId: number): OkObj | E
 
   // Check if quiz name is already used by user
   if (checkQuizNameUsed(jwt, name)) {
-    return { 
+    return {
       error: 'Quiz name is already in use',
       statusCode: 400
     };
