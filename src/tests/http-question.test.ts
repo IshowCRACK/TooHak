@@ -265,8 +265,8 @@ describe('Quiz Duplicate', () => {
     });
 
     test('2. Updates the time edited', () => {
-      expect(quizInfo.timeLastEdited).toBeGreaterThanOrEqual(quizEditedTime);
-      expect(quizInfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime + timeBufferSeconds);
+      expect(quizInfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime);
+      expect(quizInfo.timeLastEdited).toBeGreaterThanOrEqual(quizEditedTime - timeBufferSeconds);
       expect(res).toEqual({
         newQuestionId: 1
       });
