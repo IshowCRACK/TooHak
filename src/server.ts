@@ -7,7 +7,7 @@ import YAML from 'yaml';
 import sui from 'swagger-ui-express';
 import fs from 'fs';
 import { adminAuthRegister, adminAuthLogin, adminAuthLogout, adminUserDetails } from './auth';
-import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate } from './quiz';
+import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate } from './quiz';
 import { clear } from './other';
 import { formatError } from './helper';
 import { getData } from './dataStore';
@@ -168,16 +168,15 @@ app.put('/v1/admin/quiz/:quizId/name', (req: Request, res: Response) => {
 });
 
 app.put('/v1/admin/quiz/:quizId/description', (req: Request, res: Response) => {
-  // const quizId = parseInt(req.params.quizId);
-  // const { token, description } = req.body;
-  // const response = adminQuizNameUpdate({ token: token }, description, quizId);
-  // if ('error' in response) {
-  //   return res.status(response.statusCode).json(formatError(response));
-  // }
-  // res.status(200).json(response);
-  res.status(200).json('stub');
+  const quizId = parseInt(req.params.quizId);
+  const { token, description } = req.body;
+  const response = adminQuizDescriptionUpdate({ token: token }, description, quizId);
+  if ('error' in response) {
+    return res.status(response.statusCode).json(formatError(response));
+  }
+  res.status(200).json(response);
+  // res.status(200).json('stub');
 });
-
 
 // For Debugging
 app.get('/debug', (req: Request, res: Response) => {

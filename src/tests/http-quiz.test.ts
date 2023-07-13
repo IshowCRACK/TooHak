@@ -1,7 +1,7 @@
 import { ErrorObj, Token, AdminQuizCreate, OkObj, Jwt, AdminQuizInfo } from '../../interfaces/interfaces';
 import { registerUser, logoutUserHandler } from './http-auth.test';
 import { tokenToJwt } from '../token';
-import { RequestCreateQuiz, RequestRemoveQuiz, clearUsers, listQuiz, updateNameQuiz, infoQuiz, quizTransferHandler , updateDescriptionQuiz } from './testHelpers';
+import { RequestCreateQuiz, RequestRemoveQuiz, clearUsers, listQuiz, updateNameQuiz, infoQuiz, quizTransferHandler, updateDescriptionQuiz } from './testHelpers';
 
 beforeEach(() => {
   clearUsers();
@@ -51,17 +51,17 @@ describe('Quiz Update Description', () => {
     });
 
     test('2. Quiz ID does not refer to a quiz that this user owns', () => {
-      res = updateDescriptionQuiz(tokenToJwt(token0), 'Updated description', quizId1)
+      res = updateDescriptionQuiz(tokenToJwt(token0), 'Updated description', quizId1);
       expect(res).toStrictEqual({ error: 'Quiz ID does not refer to a quiz that this user owns' });
     });
 
     test('3.Description is more than 100 characters in length', () => {
       res = updateDescriptionQuiz(tokenToJwt(token0), 'This is a description that is more than 100 characters long. It should trigger an error. ?!@ #$& *%)_@ ;-))1', quizId0);
-      expect(res).toStrictEqual({ error: 'Description must be under 100 characters'});
+      expect(res).toStrictEqual({ error: 'Description must be under 100 characters' });
     });
 
     test('6. Token is not a valid structure', () => {
-      res =   res = updateDescriptionQuiz({token: '-1'}, 'Updated description', quizId0)
+      res = res = updateDescriptionQuiz({ token: '-1' }, 'Updated description', quizId0);
       expect(res).toStrictEqual({ error: 'Token is not a valid structure' });
     });
 
@@ -72,9 +72,6 @@ describe('Quiz Update Description', () => {
     });
   });
 });
-
-
-
 
 // TESTS FOR QUIZ UPDATE NAME //
 describe('Quiz Update Name', () => {
