@@ -1,6 +1,108 @@
-import { Token } from '../../interfaces/interfaces';
+import request from 'sync-request';
+import { AdminQuizCreate, ErrorObj, Jwt, OkObj, Token } from '../../interfaces/interfaces';
+import { jwtToToken } from '../token';
+import { getUrl } from '../helper';
+
+const URL: string = getUrl();
+
+export const registerUser = (email: string, password: string, nameFirst: string, nameLast:string): Token | ErrorObj => {
+  const res = request(
+    'POST',
+    URL + 'v1/admin/auth/register',
+    {
+      json: {
+        email: email,
+        password: password,
+        nameFirst: nameFirst,
+        nameLast: nameLast,
+      }
+    }
+  );
+  const parsedResponse: Jwt | ErrorObj = JSON.parse(res.body.toString());
+
+  if ('error' in parsedResponse) {
+    return parsedResponse;
+  } else {
+    return jwtToToken(parsedResponse);
+  }
+};
+
+export const loginUser = (email: string, password: string): Token | ErrorObj => {
+  const res = request(
+    'POST',
+    URL + 'v1/admin/auth/login',
+    {
+      json: {
+        email: email,
+        password: password,
+      }
+    }
+  );
+
+  const parsedResponse: Jwt | ErrorObj = JSON.parse(res.body.toString());
+
+  if ('error' in parsedResponse) {
+    return parsedResponse;
+  } else {
+    return jwtToToken(parsedResponse);
+  }
+};
+
+export const clearUsers = (): void => {
+  request(
+    'DELETE',
+    URL + 'v1/clear'
+  );
+};
+
+export const logoutUserHandler = (jwt: Jwt) => {
+  const res = request(
+    'POST',
+    URL + 'v1/admin/auth/logout',
+    {
+      json: {
+        token: jwt.token
+      }
+    }
+  );
+
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
+};
 
 export const checkTokenValid = (token: Token, authUserId: number): boolean => {
   if (parseInt(token.sessionId) < 0 || parseInt(token.sessionId) > 10e6 || token.userId !== authUserId) return false;
   return true;
+};
+
+export const RequestCreateQuiz = (jwt: Jwt, name: string, description: string): AdminQuizCreate | ErrorObj => {
+  const res = request(
+    'POST',
+    URL + 'v1/admin/quiz',
+    {
+      json: {
+        token: jwt.token,
+        name: name,
+        description: description,
+      }
+    }
+  );
+  const parsedResponse: AdminQuizCreate | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
+};
+
+export const RequestRemoveQuiz = (jwt: Jwt, quizId: number): OkObj | ErrorObj => {
+  const res = request(
+    'DELETE',
+    URL + `v1/admin/quiz/${quizId}`,
+    {
+      qs: {
+        token: jwt.token,
+      }
+    }
+  );
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+  return parsedResponse;
 };
