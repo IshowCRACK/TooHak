@@ -6,6 +6,7 @@ import { RequestCreateQuiz, RequestRemoveQuiz, clearUsers, listQuiz, updateNameQ
 beforeEach(() => {
   clearUsers();
 });
+
 // TESTS FOR QUIZ UPDATE DESCRIPTION //
 describe('Quiz Update Description', () => {
   let token0: Token;

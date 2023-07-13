@@ -1,7 +1,7 @@
 import request from 'sync-request';
-import { AdminQuizCreate, ErrorObj, Jwt, QuestionBody, QuizQuestionCreate, Token } from '../../interfaces/interfaces';
+import { AdminQuizCreate, ErrorObj, Jwt, QuestionBody, QuizQuestionCreate, Token, AdminQuestionDuplicate, AdminQuizInfo } from '../../interfaces/interfaces';
 import { getUrl } from '../helper';
-import { RequestCreateQuiz, clearUsers, registerUser } from './testHelpers';
+import { RequestCreateQuiz, clearUsers, registerUser, duplicateQuiz, infoQuiz, logoutUserHandler } from './testHelpers';
 import { tokenToJwt } from '../token';
 
 const URL: string = getUrl();
@@ -193,6 +193,115 @@ describe('Tests related to creating a Quiz Question', () => {
       expect(createQuizQuestionHandler(quizId2, userJwt, defaultQuestionBody)).toEqual({
         questionId: 0
       });
+    });
+  });
+});
+
+// TESTS FOR QUIZ DUPLICATE //
+describe('Quiz Duplicate', () => {
+  let userToken: Token;
+  let userJwt: Jwt;
+  let quizId: number;
+  let questionId: number;
+  let quizCreate: AdminQuizCreate;
+  let defaultQuestionBody: QuestionBody;
+  let quizInfo: AdminQuizInfo;
+  let quizEditedTime: number;
+  let res: AdminQuestionDuplicate | ErrorObj;
+  let timeBufferSeconds: number;
+
+  beforeEach(() => {
+    userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    userJwt = tokenToJwt(userToken);
+    quizCreate = (RequestCreateQuiz(tokenToJwt(userToken), 'Countries of the World', 'Quiz on Countries of the World') as AdminQuizCreate);
+    quizId = quizCreate.quizId;
+    timeBufferSeconds = 20;
+    defaultQuestionBody = {
+      question: 'What content is Russia in?',
+      duration: 5,
+      points: 1,
+      answers: [
+        {
+          answerId: 0,
+          answer: 'Asia',
+          colour: 'Red',
+          correct: true
+        },
+        {
+          answerId: 1,
+          answer: 'North America',
+          colour: 'Blue',
+          correct: false
+        },
+        {
+          answerId: 2,
+          answer: 'South America',
+          colour: 'Green',
+          correct: false
+        },
+        {
+          answerId: 3,
+          answer: 'Africa',
+          colour: 'Yellow',
+          correct: false
+        }
+      ]
+    };
+    questionId = (createQuizQuestionHandler(quizId, userJwt, defaultQuestionBody) as QuizQuestionCreate).questionId;
+  });
+  describe('Successful Tests', () => {
+    beforeEach(() => {
+      quizEditedTime = Math.round(Date.now() / 1000);
+      res = duplicateQuiz(userJwt, quizId, questionId) as AdminQuestionDuplicate;
+    });
+
+    test('1. duplicate a quiz', () => {
+      expect(res).toEqual({
+        newQuestionId: 1
+      });
+      quizInfo = infoQuiz(userJwt, quizId) as AdminQuizInfo;
+      expect(quizInfo.questions[0].questionId).toStrictEqual(0);
+      expect(quizInfo.questions[1].questionId).toStrictEqual(1);
+    });
+
+    test('2. Updates the time edited', () => {
+      expect(quizInfo.timeLastEdited).toBeGreaterThanOrEqual(quizEditedTime);
+      expect(quizInfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime + timeBufferSeconds);
+      expect(res).toEqual({
+        newQuestionId: 1
+      });
+    });
+  });
+
+  describe('Unsuccessful Tests', () => {
+    test('1. QuizId does not refer to valid quiz', () => {
+      expect(duplicateQuiz(userJwt, -9, questionId)).toEqual({
+        error: 'Quiz ID does not refer to a valid quiz'
+      });
+    });
+
+    test('2, QuizId does not refer to a valid quiz that this user owns', () => {
+      const userToken2: Token = registerUser('JaneAusten@gmail.com', 'Password123', 'Jane', 'Austen') as Token;
+      expect(duplicateQuiz(tokenToJwt(userToken2), quizId, questionId)).toEqual({
+        error: 'Quiz ID does not refer to a quiz that this user owns'
+      });
+    });
+
+    test('3. Question Id does not refer to a valid question within this quiz', () => {
+      expect(duplicateQuiz(userJwt, quizId, questionId + 2)).toEqual({
+        error: 'Question Id does not refer to a valid question within this quiz'
+      });
+    });
+
+    test('4. Token is not a valid structure', () => {
+      res = res = duplicateQuiz({ token: '-1' }, quizId, questionId);
+      expect(res).toStrictEqual({ error: 'Token is not a valid structure' });
+    });
+
+    test('5. Not token of an active session', () => {
+      logoutUserHandler(userJwt);
+      res = duplicateQuiz(userJwt, quizId, questionId);
+      expect(res).toStrictEqual({ error: 'Token not for currently logged in session' });
     });
   });
 });
