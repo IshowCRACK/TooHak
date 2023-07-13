@@ -190,3 +190,8 @@ export interface QuizTransfer {
     token: string;
     userEmail: string;
 }
+
+export interface AdminQuestionDuplicate {
+    newQuestionId: number;
+}
+
