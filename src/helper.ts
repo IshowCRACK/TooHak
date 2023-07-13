@@ -119,8 +119,8 @@ export function checkQuizAndUserIdValid (quizId: number, authUserId: number): bo
   *
   * @returns {boolean} - Returns true if quizname is already used, otherwise, false
  */
-export function checkQuizNameUsed (authUserId: number, quizName: string): boolean {
-  const list = adminQuizList(authUserId) as AdminQuizList;
+export function checkQuizNameUsed (jwt: Jwt, quizName: string): boolean {
+  const list = adminQuizList(jwt) as AdminQuizList;
 
   for (const quiz of list.quizzes) {
     if (quizName === quiz.name) {

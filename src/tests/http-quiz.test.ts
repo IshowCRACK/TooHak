@@ -201,7 +201,6 @@ describe('Quiz Create', () => {
 // TESTS FOR QUIZ LIST //
 describe('adminQuizList tests', () => {
   let jwt: Jwt;
-  let res: AdminQuizCreate | ErrorObj;
   beforeEach(() => {
     const token = registerUser('JohnSmith@gmail.com', 'Password123', 'Johnny', 'Jones') as Token;
     jwt = tokenToJwt(token);
@@ -233,5 +232,4 @@ describe('adminQuizList tests', () => {
       expect(listQuiz(jwt)).toStrictEqual({ quizzes: [{ quizId: 0, name: 'Countries of the world' }, { quizId: 1, name: 'Flags of the world' }] });
     });
   });
-})
-
+});
