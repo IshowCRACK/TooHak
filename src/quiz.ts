@@ -1,7 +1,7 @@
 import {
   Data, AdminQuizDescriptionUpdateReturn, AdminQuizListReturn,
   AdminQuizList, AdminQuizInfoReturn, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn, AdminQuizTransferReturn,
-  Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj
+  Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj, AdminQuizInfo
 } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
@@ -330,6 +330,7 @@ function adminQuizInfo (authUserId: number, quizId: number): AdminQuizInfoReturn
     }
   }
 }
+
 
 /**
   * Restores a Quiz from the Trash

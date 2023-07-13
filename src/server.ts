@@ -8,7 +8,7 @@ import sui from 'swagger-ui-express';
 import fs from 'fs';
 
 import { adminAuthRegister, adminAuthLogin, adminAuthLogout } from './auth';
-import { adminQuizCreate, adminQuizRemove } from './quiz';
+import { adminQuizCreate, adminQuizRemove, adminQuizInfo } from './quiz';
 import { clear } from './other';
 import { formatError } from './helper';
 import { getData } from './dataStore';
@@ -100,6 +100,18 @@ app.delete('/v1/admin/quiz/:quizId', (req: Request, res: Response) => {
   }
 
   res.status(200).json(response);
+});
+
+app.get('/v1/admin/quiz/:quizId', (req: Request, res: Response) => {
+  const quizId = parseInt(req.params.quizId);
+  const token = req.query.token as string;
+  const response = adminQuizInfo({token: token}, quizId);
+  if ('error' in response) {
+    return res.status(response.statusCode).json(formatError(response));
+  }
+
+  res.status(200).json(response);
+
 });
 
 // For Debugging
