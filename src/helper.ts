@@ -356,3 +356,15 @@ export function createQuestionId(quiz: Quiz): number {
 
   return questionId;
 }
+
+export function checkNameUsedInQuiz(quizId: number, userId: number): boolean {
+  const data = getData();
+
+  const curQuiz: Quiz = data.quizzes.find((quiz: Quiz) => quiz.quizId === quizId);
+
+  for (const quiz of data.quizzes) {
+    if (quiz.quizId !== quizId && quiz.adminQuizId === userId && quiz.name === curQuiz.name) return true;
+  }
+
+  return false;
+}
