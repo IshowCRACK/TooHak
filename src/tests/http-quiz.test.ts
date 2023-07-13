@@ -1,7 +1,7 @@
-import { ErrorObj, Token, AdminQuizCreate, OkObj } from '../../interfaces/interfaces';
+import { ErrorObj, Token, AdminQuizCreate, OkObj, Jwt } from '../../interfaces/interfaces';
 import { registerUser, logoutUserHandler } from './http-auth.test';
 import { tokenToJwt } from '../token';
-import { RequestCreateQuiz, RequestRemoveQuiz, clearUsers } from './testHelpers';
+import { RequestCreateQuiz, RequestRemoveQuiz, clearUsers, listQuiz } from './testHelpers';
 
 beforeEach(() => {
   clearUsers();
@@ -197,3 +197,41 @@ describe('Quiz Create', () => {
     });
   });
 });
+
+// TESTS FOR QUIZ LIST //
+describe('adminQuizList tests', () => {
+  let jwt: Jwt;
+  let res: AdminQuizCreate | ErrorObj;
+  beforeEach(() => {
+    const token = registerUser('JohnSmith@gmail.com', 'Password123', 'Johnny', 'Jones') as Token;
+    jwt = tokenToJwt(token);
+  });
+
+  describe('Unsuccessful test', () => {
+    test('Invalid user', () => {
+      const token: Token = {
+        sessionId: '',
+        userId: 1
+      };
+      expect(listQuiz(tokenToJwt(token))).toStrictEqual({ error: 'Token not for currently logged in session' });
+    });
+  });
+
+  describe('Successful tests', () => {
+    test('User with no owned quizzes', () => {
+      expect(listQuiz(jwt)).toStrictEqual({ quizzes: [] });
+    });
+
+    test('User with one owned quizzes', () => {
+      RequestCreateQuiz(jwt, 'Countries of the world', 'Quiz on all countries');
+      expect(listQuiz(jwt)).toStrictEqual({ quizzes: [{ quizId: 0, name: 'Countries of the world' }] });
+    });
+
+    test('User with multiple owned quizzes', () => {
+      RequestCreateQuiz(jwt, 'Countries of the world', 'Quiz on all countries');
+      RequestCreateQuiz(jwt, 'Flags of the world', 'Quiz on all flags');
+      expect(listQuiz(jwt)).toStrictEqual({ quizzes: [{ quizId: 0, name: 'Countries of the world' }, { quizId: 1, name: 'Flags of the world' }] });
+    });
+  });
+})
+

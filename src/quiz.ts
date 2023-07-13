@@ -211,10 +211,20 @@ function adminQuizCreate (jwt: Jwt, name: string, description: string): AdminQui
   *
   * @returns {{quizzes: Array<{quizId: number, name: string}>} | {error: string}} - An array of quizzes and its details
  */
-function adminQuizList (authUserId: number): AdminQuizListReturn {
-  // check valid UserId
-  if (!checkAuthUserIdValid(authUserId)) {
-    return { error: 'AuthUserId is not a valid user' };
+function adminQuizList (jwt: Jwt): AdminQuizListReturn | ErrorAndStatusCode {
+  // checking valid structure
+  if (!checkTokenValidStructure(jwt)) {
+    return {
+      error: 'Token is not a valid structure',
+      statusCode: 401
+    };
+  }
+  // check if valid for active sessions
+  if (!checkTokenValidSession(jwt)) {
+    return {
+      error: 'Token not for currently logged in session',
+      statusCode: 403
+    };
   }
 
   const data = getData();
@@ -226,7 +236,7 @@ function adminQuizList (authUserId: number): AdminQuizListReturn {
 
   // check all quizzes to see if its creater matches authUserId
   for (const quiz of data.quizzes) {
-    if (quiz.adminQuizId === authUserId) {
+    if (quiz.adminQuizId === jwtToToken(jwt).userId) {
       output.quizzes.push({
         quizId: quiz.quizId,
         name: quiz.name
