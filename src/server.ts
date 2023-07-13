@@ -11,7 +11,7 @@ import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQu
 import { clear } from './other';
 import { formatError } from './helper';
 import { getData } from './dataStore';
-import { quizCreateQuestion } from './question';
+import { quizCreateQuestion, adminQuizDelete } from './question';
 
 // Set up web app
 const app = express();
@@ -161,6 +161,17 @@ app.put('/v1/admin/quiz/:quizId/name', (req: Request, res: Response) => {
   const quizId = parseInt(req.params.quizId);
   const { token, name } = req.body;
   const response = adminQuizNameUpdate({ token: token }, name, quizId);
+  if ('error' in response) {
+    return res.status(response.statusCode).json(formatError(response));
+  }
+  res.status(200).json(response);
+});
+
+app.delete('/v1/admin/quiz/:quizId/question/:questionId', (req: Request, res: Response) => {
+  const quizId = parseInt(req.params.quizId);
+  const questionId = parseInt(req.params.questionId);
+  const token = req.query.token as string;
+  const response = adminQuizDelete({ token: token }, quizId, questionId);
   if ('error' in response) {
     return res.status(response.statusCode).json(formatError(response));
   }
