@@ -257,7 +257,7 @@ function adminQuizList (jwt: Jwt): AdminQuizListReturn | ErrorAndStatusCode {
   *
   * @returns {{} | {error: string}} - Returns an empty object if valid
  */
-function adminQuizNameUpdate (quizToken: QuizToken, quizId: number) {
+function adminQuizNameUpdate (quizToken: QuizToken, quizId: number): OkObj | ErrorAndStatusCode {
   const data = getData();
 
   // AuthUserId is not a valid user

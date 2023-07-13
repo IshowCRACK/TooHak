@@ -60,6 +60,11 @@ export interface QuizToken {
     name: string;
 }
 
+export interface UpdateQuizToken {
+    token: Jwt.token;
+    name: string;
+}
+
 export interface ErrorObj {
     error: string;
 }
