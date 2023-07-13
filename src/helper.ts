@@ -25,7 +25,7 @@ export const formatError = (errorObj: ErrorObj) => { return { error: errorObj.er
   * @returns {boolean} - Returns true or false if first name or last name satisfies the conditions
 */
 export function checkName (name: string): boolean {
-  return /^[a-zA-Z\s\-']+$/.test(name);
+  return /^[a-zA-Z\s\-']+$/.test(name) && name.length >= 2 && name.length <= 20;
 }
 
 /**

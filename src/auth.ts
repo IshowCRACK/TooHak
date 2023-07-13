@@ -184,39 +184,40 @@ function adminUserDetails (jwt: Jwt): AdminUserDetailsReturn | ErrorAndStatusCod
  *
  * @returns {{} | {error: string}} - Returns an empty object or Error
  */
-function adminUpdateUserDetails(authUserId: number, email: string, nameFirst: string, nameLast: string): AdminUpdateUserDetailsReturn {
+function adminUpdateUserDetails(jwt: Jwt, email: string, nameFirst: string, nameLast: string): AdminUpdateUserDetailsReturn | ErrorAndStatusCode {
   const data = getData();
-
+  const authUserId: number = jwtToToken(jwt).userId;
   // Find the user by authUserId
   const user = data.users.find((user) => user.authUserId === authUserId);
 
   if (user) {
-    let emailChanged = false;
-
+    let changes = false;
     // Check if email is provided and valid
     if (email) {
       // Check if email is valid and not used by another user
-      if (!validator.isEmail(email) || emailAlreadyUsed(email, authUserId)) {
+      if (!validator.isEmail(email) || emailAlreadyUsed(email, authUserId) === true ) {
         return {
           error: 'Invalid email or email is already in use'
         };
       }
 
       user.email = email;
-      emailChanged = true;
+      changes = true;
     }
 
     // Update the user's details if the inputs are valid
-    if (checkName(nameFirst) && nameFirst.length >= 2 && nameFirst.length <= 20) {
+    if (checkName(nameFirst) === true) {
       user.nameFirst = nameFirst;
+      changes = true;
     } else {
       return {
         error: 'Invalid first name'
       };
     }
 
-    if (checkName(nameLast) && nameLast.length >= 2 && nameLast.length <= 20) {
+    if (checkName(nameLast)) {
       user.nameLast = nameLast;
+      changes = true;
     } else {
       return {
         error: 'Invalid last name'
@@ -224,7 +225,7 @@ function adminUpdateUserDetails(authUserId: number, email: string, nameFirst: st
     }
 
     // Update data only if there were changes
-    if (emailChanged) {
+    if (changes === true) {
       setData(data);
     }
   } else {
@@ -232,7 +233,6 @@ function adminUpdateUserDetails(authUserId: number, email: string, nameFirst: st
       error: 'User doesnt exist'
     };
   }
-
   return {};
 }
 

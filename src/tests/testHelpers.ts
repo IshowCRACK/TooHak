@@ -1,5 +1,5 @@
 import request from 'sync-request';
-import { AdminQuizCreate, AdminQuizListReturn, AdminUserDetailsReturn, ErrorObj, Jwt, OkObj, Token, AdminQuizInfo } from '../../interfaces/interfaces';
+import { AdminQuizCreate, AdminQuizListReturn, AdminUserDetailsReturn, ErrorObj, Jwt, OkObj, Token, AdminQuizInfo, AdminUpdateUserDetailsReturn } from '../../interfaces/interfaces';
 import { jwtToToken } from '../token';
 import { getUrl } from '../helper';
 
@@ -85,6 +85,18 @@ export const logoutUserHandler = (jwt: Jwt) => {
 
   return parsedResponse;
 };
+
+export const updateUserDetails = (jwt: Jwt, email: string, nameFirst: string, nameLast: string) => {
+  const res = request(
+  'GET',
+  URL + '/v1/admin/user/details',
+    {
+      qs: {
+        token: jwt.token,
+      }
+    }
+  );
+}
 
 export const checkTokenValid = (token: Token, authUserId: number): boolean => {
   if (parseInt(token.sessionId) < 0 || parseInt(token.sessionId) > 10e6 || token.userId !== authUserId) return false;

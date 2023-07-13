@@ -1,7 +1,7 @@
 import { AdminUserDetailsReturn, ErrorObj, Jwt, Token } from '../../interfaces/interfaces';
 import { objToJwt, tokenToJwt } from '../token';
 // IMPORTING ALL WRAPPER FUNCTIONS
-import { checkTokenValid, clearUsers, loginUser, logoutUserHandler, registerUser, getUser } from './testHelpers';
+import { checkTokenValid, clearUsers, loginUser, logoutUserHandler, registerUser, getUser, updateUserDetails } from './testHelpers';
 
 // TESTS FOR REGISTER //
 beforeEach(() => {
@@ -246,6 +246,44 @@ describe('Tests related to logging out an admin', () => {
     });
   });
 });
+
+// TESTS FOR ADMIN USER DETAILS UPDATE //
+describe('adminUserUpdateDetails test', () => {
+  let jwt: Jwt;
+  beforeEach(() => {
+    const token = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    jwt = tokenToJwt(token);
+  });
+
+  describe('Unseccessful update of details', () => {
+    test('Token does not exit', () => {
+      const jwt2: Token = {
+        sessionId: '4',
+        userId: 12,
+      };
+    });
+    test('Email is not valid', () => {
+
+    });
+    test('First name is not valid', () => {
+
+    });
+    test('Last Name is not valid', () => {
+
+    });
+    test('User is not logged in', () => {
+
+    });
+  });
+
+  describe('Successful Update of details', () => {
+    test('All sections are successfully updated', () => {
+
+    });
+  });
+});
+
+
 
 // TESTS FOR ADMIN USER DETAILS //
 describe('adminUserDetails test', () => {
