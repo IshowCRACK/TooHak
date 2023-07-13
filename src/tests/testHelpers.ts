@@ -197,3 +197,18 @@ export const updateNameQuiz = (jwt: Jwt, name: string, quizId: number): OkObj | 
   const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
   return parsedResponse;
 };
+
+export const updateDescriptionQuiz = (jwt: Jwt, description: string, quizId: number): OkObj | ErrorObj => {
+  const res = request(
+    'PUT',
+    URL + `v1/admin/quiz/${quizId}/description`,
+    {
+      json: {
+        token: jwt.token,
+        description: description
+      }
+    }
+  );
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+  return parsedResponse;
+};

@@ -1,5 +1,5 @@
 import {
-  Data, AdminQuizDescriptionUpdateReturn, AdminQuizListReturn,
+  Data, AdminQuizListReturn,
   AdminQuizList, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn,
   Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj, AdminQuizInfo, User, Quiz,
 } from '../interfaces/interfaces';
@@ -19,25 +19,48 @@ import { jwtToToken } from './token';
   *
   * @returns {{} | {error: string}} - Returns an empty object if valid
  */
-function adminQuizDescriptionUpdate (authUserId: number, quizId: number, description: string): AdminQuizDescriptionUpdateReturn {
+function adminQuizDescriptionUpdate (jwt: Jwt, description: string, quizId: number): OkObj | ErrorAndStatusCode {
   const data: Data = getData();
-  // AuthUserId is not a valid user
-  if (!checkAuthUserIdValid(authUserId)) {
-    return { error: 'AuthUserId is not a valid user' };
+
+  //  check valid structure
+  if (!checkTokenValidStructure(jwt)) {
+    return {
+      error: 'Token is not a valid structure',
+      statusCode: 401
+    };
   }
+
+  //  check if valid for active sessions
+  if (!checkTokenValidSession(jwt)) {
+    return {
+      error: 'Token not for currently logged in session',
+      statusCode: 403
+    };
+  }
+
+  const authUserId: number = jwtToToken(jwt).userId;
 
   // Quiz ID does not refer to a valid quiz
   if (!checkQuizIdValid(quizId)) {
-    return { error: 'Quiz ID does not refer to a valid quiz' };
+    return {
+      error: 'Quiz ID does not refer to a valid quiz',
+      statusCode: 400
+    };
   }
 
   // Quiz ID does not refer to a quiz that this user owns
   if (!checkQuizAndUserIdValid(quizId, authUserId)) {
-    return { error: 'Quiz ID does not refer to a quiz that this user owns' };
+    return {
+      error: 'Quiz ID does not refer to a quiz that this user owns',
+      statusCode: 400
+    };
   }
 
   if (description.length > 100) {
-    return { error: 'Description must be under 100 characters' };
+    return {
+      error: 'Description must be under 100 characters',
+      statusCode: 400
+    };
   }
 
   for (const quiz of data.quizzes) {
