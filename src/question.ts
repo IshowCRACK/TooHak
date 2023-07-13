@@ -1,7 +1,9 @@
-import { ErrorAndStatusCode, Jwt, QuestionBody, QuizQuestionCreate, Token, Question } from '../interfaces/interfaces';
-import { checkAnswerHasTrueValue, checkAnswerLengthValid, checkQuestionAnswerNonDuplicate, checkQuizAndUserIdValid, checkQuizIdValid, checkTokenValidSession, checkTokenValidStructure, createQuestionId, getQuiz, getTotalDuration, checkQuestionIdIsValidInQuiz } from './helper';
+import { ErrorAndStatusCode, Jwt, QuestionBody, QuizQuestionCreate, Token, Question, Quiz, OkObj, AdminQuestionDuplicate } from '../interfaces/interfaces';
+import {
+  checkAnswerHasTrueValue, checkAnswerLengthValid, checkQuestionAnswerNonDuplicate, checkQuizAndUserIdValid, checkQuizIdValid,
+  checkTokenValidSession, checkTokenValidStructure, createQuestionId, getQuiz, getTotalDuration, checkQuestionIdIsValidInQuiz, checkQuestionIdValid
+} from './helper';
 import { jwtToToken } from './token';
-import { Quiz, AdminQuestionDuplicate } from '../interfaces/interfaces';
 import { getData } from './dataStore';
 
 export function quizCreateQuestion(jwt: Jwt, questionBody: QuestionBody, quizId: number): QuizQuestionCreate | ErrorAndStatusCode {
@@ -170,4 +172,67 @@ export function quizDuplicateQuestion(jwt: Jwt, quizId: number, questionId: numb
     newQuestionId: 1
   };
   return newQuestion;
+}
+
+/**
+ * Deletes a quiz question
+ *
+ * @param {number} quizId - The unique id of the quiz
+ * @param {number} questionId - The unique id of the quiz question
+ * @param {Jwt} jwt - Jwt token containing sessionId and userId
+*/
+
+export function adminQuizDelete(jwt: Jwt, quizId: number, questionId: number): OkObj | ErrorAndStatusCode {
+  if (!checkTokenValidStructure(jwt)) {
+    return {
+      error: 'Token is not a valid structure',
+      statusCode: 401
+    };
+  }
+
+  if (!checkTokenValidSession(jwt)) {
+    return {
+      error: 'Token not for currently logged in session',
+      statusCode: 403
+    };
+  }
+
+  // QuizId does not refer to a valid quiz
+  if (!checkQuizIdValid(quizId)) {
+    return {
+      error: 'Quiz ID does not refer to a valid quiz',
+      statusCode: 400
+    };
+  }
+
+  // QuizId does not refer to a quiz that this user owns
+  if (!checkQuizAndUserIdValid(quizId, jwtToToken(jwt).userId)) {
+    return {
+      error: 'Quiz ID does not refer to a quiz that this user owns',
+      statusCode: 400
+    };
+  }
+
+  const quiz: Quiz = getQuiz(quizId);
+  // QuestionId does not refer to a valid question within this quiz
+  if (!checkQuestionIdValid(questionId, quiz)) {
+    return {
+      error: 'Quiz ID does not refer to a valid question within this quiz',
+      statusCode: 400
+    };
+  }
+
+  const data = getData().quizzes;
+  const quizIndex: number = data.indexOf(quiz);
+  let questionIndex: number;
+  for (const question of data[quizIndex].questions) {
+    if (question.questionId === questionId) {
+      questionIndex = data[quizIndex].questions.indexOf(question);
+    }
+  }
+
+  if (questionIndex !== -1) {
+    data[quizIndex].questions.splice(questionIndex, 1);
+    return {};
+  }
 }

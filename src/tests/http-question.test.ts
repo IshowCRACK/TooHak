@@ -1,7 +1,7 @@
 import request from 'sync-request';
 import { AdminQuizCreate, ErrorObj, Jwt, QuestionBody, QuizQuestionCreate, Token, AdminQuestionDuplicate, AdminQuizInfo } from '../../interfaces/interfaces';
 import { getUrl } from '../helper';
-import { RequestCreateQuiz, clearUsers, registerUser, duplicateQuiz, infoQuiz, logoutUserHandler } from './testHelpers';
+import { RequestCreateQuiz, clearUsers, registerUser, duplicateQuiz, infoQuiz, logoutUserHandler, deleteQuestion } from './testHelpers';
 import { tokenToJwt } from '../token';
 
 const URL: string = getUrl();
@@ -302,6 +302,82 @@ describe('Quiz Duplicate', () => {
       logoutUserHandler(userJwt);
       res = duplicateQuiz(userJwt, quizId, questionId);
       expect(res).toStrictEqual({ error: 'Token not for currently logged in session' });
+    });
+  });
+});
+
+// TESTS FOR QUIZ DELETE //
+
+describe('Tests for adminQuizDelete', () => {
+  let userToken: Token;
+  let userJwt: Jwt;
+  let quizId: number;
+  let defaultQuestionBody: QuestionBody;
+  beforeEach(() => {
+    userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    userJwt = tokenToJwt(userToken);
+    quizId = (RequestCreateQuiz(tokenToJwt(userToken), 'Countries of the World', 'Quiz on Countries of the World') as AdminQuizCreate).quizId;
+
+    defaultQuestionBody = {
+      question: 'What continent is Russia in?',
+      duration: 5,
+      points: 1,
+      answers: [
+        {
+          answerId: 0,
+          answer: 'Asia',
+          colour: 'Red',
+          correct: true
+        },
+        {
+          answerId: 1,
+          answer: 'North America',
+          colour: 'Blue',
+          correct: false
+        },
+        {
+          answerId: 2,
+          answer: 'South America',
+          colour: 'Green',
+          correct: false
+        },
+        {
+          answerId: 3,
+          answer: 'Africa',
+          colour: 'Yellow',
+          correct: false
+        }
+      ]
+    };
+  });
+
+  describe('Unsuccessful Tests', () => {
+    test('token not for currently logged in session', () => {
+      const exampleToken: Token = {
+        sessionId: '',
+        userId: 5
+      };
+      expect(deleteQuestion(tokenToJwt(exampleToken), quizId, 5)).toStrictEqual({ error: 'Token not for currently logged in session' });
+    });
+
+    test('quizId does not refer to a quiz that this user owns', () => {
+      expect(deleteQuestion(userJwt, 5, 0)).toStrictEqual({ error: 'Quiz ID does not refer to a valid quiz' });
+    });
+
+    test('quizId does not refer to a quiz that this user owns', () => {
+      const token2 = registerUser('JohnCena@gmail.com', 'Password123', 'John', 'Cena') as Token;
+      expect(deleteQuestion(tokenToJwt(token2), 0, 0)).toStrictEqual({ error: 'Quiz ID does not refer to a quiz that this user owns' });
+    });
+
+    test('quizId does not refer to a valid question within the quiz', () => {
+      expect(deleteQuestion(userJwt, quizId, 0)).toStrictEqual({ error: 'Quiz ID does not refer to a valid question within this quiz' });
+    });
+  });
+
+  describe('Successful Tests', () => {
+    test('Successfully deleted question', () => {
+      createQuizQuestionHandler(quizId, userJwt, defaultQuestionBody);
+      expect(deleteQuestion(userJwt, quizId, 0)).toStrictEqual({});
     });
   });
 });
