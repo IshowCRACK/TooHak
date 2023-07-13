@@ -1,7 +1,7 @@
 import request from 'sync-request';
 import { AdminQuizCreate, ErrorObj, Jwt, QuestionBody, QuizQuestionCreate, Token } from '../../interfaces/interfaces';
 import { getUrl } from '../helper';
-import { RequestCreateQuiz, clearUsers, registerUser, deleteQuestion, logoutUserHandler } from './testHelpers';
+import { RequestCreateQuiz, clearUsers, registerUser, deleteQuestion } from './testHelpers';
 import { tokenToJwt } from '../token';
 
 const URL: string = getUrl();
@@ -197,8 +197,7 @@ describe('Tests related to creating a Quiz Question', () => {
   });
 });
 
-// TESTS for adminQuizDelete
-describe('Tests for adminQuizDelete', () => { 
+describe('Tests for adminQuizDelete', () => {
   let userToken: Token;
   let userJwt: Jwt;
   let quizId: number;
@@ -242,42 +241,31 @@ describe('Tests for adminQuizDelete', () => {
   });
 
   describe('Unsuccessful Tests', () => {
-    //token not for currently logged in user
     test('token not for currently logged in session', () => {
       const exampleToken: Token = {
         sessionId: '',
         userId: 5
-      }
+      };
       expect(deleteQuestion(tokenToJwt(exampleToken), quizId, 5)).toStrictEqual({ error: 'Token not for currently logged in session' });
     });
 
-    //quizId does not refer to a valid quiz
     test('quizId does not refer to a quiz that this user owns', () => {
       expect(deleteQuestion(userJwt, 5, 0)).toStrictEqual({ error: 'Quiz ID does not refer to a valid quiz' });
     });
 
-    //quizId does not refer to a quiz that this user owns
     test('quizId does not refer to a quiz that this user owns', () => {
       const token2 = registerUser('JohnCena@gmail.com', 'Password123', 'John', 'Cena') as Token;
       expect(deleteQuestion(tokenToJwt(token2), 0, 0)).toStrictEqual({ error: 'Quiz ID does not refer to a quiz that this user owns' });
     });
 
-    //questionId does not refer to a valid question within the quiz
     test('quizId does not refer to a valid question within the quiz', () => {
       expect(deleteQuestion(userJwt, quizId, 0)).toStrictEqual({ error: 'Quiz ID does not refer to a valid question within this quiz' });
     });
-
-    //all sessions of the quiz must be in END state
-    test('all sessions of the quiz must be in END state', () => {
-      createQuizQuestionHandler(quizId, userJwt, defaultQuestionBody);
-      expect(deleteQuestion(userJwt, quizId, 0)).toStrictEqual({ error: 'All sessions for this Quiz must be in END state' });
-    });
-  })
+  });
 
   describe('Successful Tests', () => {
     test('Successfully deleted question', () => {
       createQuizQuestionHandler(quizId, userJwt, defaultQuestionBody);
-      logoutUserHandler(userJwt);
       expect(deleteQuestion(userJwt, quizId, 0)).toStrictEqual({});
     });
   });

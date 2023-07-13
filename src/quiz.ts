@@ -495,16 +495,4 @@ function adminQuizTransfer(jwt: Jwt, quizId: number, email: string): AdminQuizTr
   return {};
 }
 
-/**
- * Deletes a quiz question
- * 
- * @param {number} quizId - The unique id of the quiz
- * @param {number} questionId - The unique id of the quiz question
- * @param {Jwt} jwt - Jwt token containing sessionId and userId
-*/
-
-function adminQuizDelete(jwt: Jwt, quizId: number, questionId: number): OkObj | ErrorAndStatusCode {
-  return;
-}
-
 export { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo, viewUserDeletedQuizzes, adminQuizRestore, adminQuizEmptyTrash, adminQuizTransfer };
