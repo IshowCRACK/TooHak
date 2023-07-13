@@ -1,10 +1,7 @@
 import { AdminUserDetailsReturn, ErrorObj, Jwt, Token } from '../../interfaces/interfaces';
 import { objToJwt, tokenToJwt } from '../token';
-import { getUrl } from '../helper';
 // IMPORTING ALL WRAPPER FUNCTIONS
 import { checkTokenValid, clearUsers, loginUser, logoutUserHandler, registerUser, getUser } from './testHelpers';
-
-const URL: string = getUrl();
 
 // TESTS FOR REGISTER //
 beforeEach(() => {
