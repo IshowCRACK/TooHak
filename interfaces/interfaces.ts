@@ -55,6 +55,11 @@ export interface Token {
     userId: number;
 }
 
+export interface QuizToken {
+    jwt: Jwt;
+    name: string;
+}
+
 export interface ErrorObj {
     error: string;
 }
@@ -71,7 +76,7 @@ export interface ErrorAndStatusCode {
 export type AdminQuizDescriptionUpdateReturn = AdminQuizDescriptionUpdate | ErrorObj;
 export type AdminQuizRemoveReturn = AdminQuizRemove | ErrorObj;
 export type AdminQuizCreateReturn = AdminQuizCreate | ErrorAndStatusCode;
-export type AdminQuizListReturn = AdminQuizList | ErrorObj;
+export type AdminQuizListReturn = AdminQuizList;
 export type AdminQuizNameUpdateReturn = AdminQuizNameUpdate | ErrorObj;
 export type AdminQuizInfoReturn = AdminQuizInfo | ErrorObj;
 export type AdminAuthLoginReturn = AdminAuthLogin | ErrorObj;
