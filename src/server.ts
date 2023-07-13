@@ -186,7 +186,18 @@ app.put('/v1/admin/quiz/:quizId/description', (req: Request, res: Response) => {
     return res.status(response.statusCode).json(formatError(response));
   }
   res.status(200).json(response);
-  // res.status(200).json('stub');
+});
+
+app.post('/v1/admin/quiz/:quizId/question/:questionId/duplicate', (req: Request, res: Response) => {
+  // const quizId = parseInt(req.params.quizId);
+  // const questionId = parseInt(req.params.questionId);
+  // const { token } = req.body;
+  // const response = quizDuplicateQuestion({ token: token }, quizId, questionId);
+  // if ('error' in response) {
+  //   return res.status(response.statusCode).json(formatError(response));
+  // }
+  // res.status(200).json(response);
+  res.status(200).json('stub');
 });
 
 // For Debugging
