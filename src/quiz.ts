@@ -299,19 +299,43 @@ function adminQuizNameUpdate (authUserId: number, quizId: number, name: string) 
   *
   * @returns {{quizId: number, name: string, timeCreated: number, timeLastEdited: number, description: string}} - An array of quizzes and its details
  */
-function adminQuizInfo (authUserId: number, quizId: number): AdminQuizInfoReturn {
+function adminQuizInfo (jwt: Jwt, quizId: number): AdminQuizInfo | ErrorAndStatusCode {
   const data = getData();
 
-  if (!checkAuthUserIdValid(authUserId)) {
-    return { error: 'AuthUserId is not a valid user' };
+  //  check valid structure
+  if (!checkTokenValidStructure(jwt)) {
+    return {
+      error: 'Token is not a valid structure',
+      statusCode: 401
+    };
   }
 
+      //  check if valid for active sessions
+  if (!checkTokenValidSession(jwt)) {
+    return {
+      error: 'Token not for currently logged in session',
+      statusCode: 403
+    };
+  }
+  
+  const authUserId: number = jwtToToken(jwt).userId;
+
+  // Quiz ID does not refer to a valid quiz
   if (!checkQuizIdValid(quizId)) {
-    return { error: 'Quiz ID does not refer to a valid quiz' };
+    return { 
+    error: 'Quiz ID does not refer to a valid quiz',
+    statusCode: 400
+
+    };
   }
 
+  // Quiz ID does not refer to a quiz that this user owns
   if (!checkQuizAndUserIdValid(quizId, authUserId)) {
-    return { error: 'Quiz ID does not refer to a quiz that this user owns' };
+    return { 
+      error: 'Quiz ID does not refer to a quiz that this user owns',
+      statusCode: 400
+    
+    };
   }
 
   // If no errors
