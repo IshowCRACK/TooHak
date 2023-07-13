@@ -1,95 +1,12 @@
-import { AdminUserDetailsReturn, ErrorObj, Jwt, OkObj, Token } from '../../interfaces/interfaces';
-import request from 'sync-request';
+import { AdminUserDetailsReturn, ErrorObj, Jwt, Token } from '../../interfaces/interfaces';
+import { objToJwt, tokenToJwt } from '../token';
 import { getUrl } from '../helper';
-import { jwtToToken, objToJwt, tokenToJwt } from '../token';
-import { checkTokenValid } from './testHelpers';
+// IMPORTING ALL WRAPPER FUNCTIONS
+import { checkTokenValid, clearUsers, loginUser, logoutUserHandler, registerUser, getUser } from './testHelpers';
 
 const URL: string = getUrl();
 
-// Wrapper functions
-const registerUser = (email: string, password: string, nameFirst: string, nameLast:string): Token | ErrorObj => {
-  const res = request(
-    'POST',
-    URL + 'v1/admin/auth/register',
-    {
-      json: {
-        email: email,
-        password: password,
-        nameFirst: nameFirst,
-        nameLast: nameLast,
-      }
-    }
-  );
-  const parsedResponse: Jwt | ErrorObj = JSON.parse(res.body.toString());
-
-  if ('error' in parsedResponse) {
-    return parsedResponse;
-  } else {
-    return jwtToToken(parsedResponse);
-  }
-};
-
-const loginUser = (email: string, password: string): Token | ErrorObj => {
-  const res = request(
-    'POST',
-    URL + 'v1/admin/auth/login',
-    {
-      json: {
-        email: email,
-        password: password,
-      }
-    }
-  );
-
-  const parsedResponse: Jwt | ErrorObj = JSON.parse(res.body.toString());
-
-  if ('error' in parsedResponse) {
-    return parsedResponse;
-  } else {
-    return jwtToToken(parsedResponse);
-  }
-};
-
-const getUser = (jwt: Jwt): AdminUserDetailsReturn | ErrorObj => {
-  const res = request(
-    'GET',
-    URL + 'v1/admin/user/details',
-    {
-      qs: {
-        token: jwt.token
-      }
-    }
-  );
-  const parsedResponse: AdminUserDetailsReturn | ErrorObj = JSON.parse(res.body.toString());
-
-  return parsedResponse;
-};
-
-function clearUsers (): void {
-  request(
-    'DELETE',
-    URL + 'v1/clear'
-  );
-}
-
-const logoutUserHandler = (jwt: Jwt) => {
-  const res = request(
-    'POST',
-    URL + 'v1/admin/auth/logout',
-    {
-      json: {
-        token: jwt.token
-      }
-    }
-  );
-
-  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
-
-  return parsedResponse;
-};
-
 // TESTS FOR REGISTER //
-
 beforeEach(() => {
   clearUsers();
 });

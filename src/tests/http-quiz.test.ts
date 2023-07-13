@@ -1,54 +1,11 @@
-import { ErrorObj, Jwt, Token, AdminQuizCreate, OkObj } from '../../interfaces/interfaces';
+import { ErrorObj, Token, AdminQuizCreate, OkObj } from '../../interfaces/interfaces';
 import { registerUser, logoutUserHandler } from './http-auth.test';
-import request from 'sync-request';
-import { getUrl } from '../helper';
 import { tokenToJwt } from '../token';
-
-const URL: string = getUrl();
-
-// CLEAR //
-function clearUsers (): void {
-  request(
-    'DELETE',
-    URL + 'v1/clear'
-  );
-}
+import { RequestCreateQuiz, RequestRemoveQuiz, clearUsers } from './testHelpers';
 
 beforeEach(() => {
   clearUsers();
 });
-
-// Wrapper functions
-const RequestCreateQuiz = (jwt: Jwt, name: string, description: string): AdminQuizCreate | ErrorObj => {
-  const res = request(
-    'POST',
-    URL + 'v1/admin/quiz',
-    {
-      json: {
-        token: jwt.token,
-        name: name,
-        description: description,
-      }
-    }
-  );
-  const parsedResponse: AdminQuizCreate | ErrorObj = JSON.parse(res.body.toString());
-
-  return parsedResponse;
-};
-
-const RequestRemoveQuiz = (jwt: Jwt, quizId: number): OkObj | ErrorObj => {
-  const res = request(
-    'DELETE',
-    URL + `v1/admin/quiz/${quizId}`,
-    {
-      qs: {
-        token: jwt.token,
-      }
-    }
-  );
-  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
-  return parsedResponse;
-};
 
 // const RequestInfoQuiz = (jwt: Jwt, quizId: number): AdminQuizInfo | ErrorObj => {
 //   const res = request(
