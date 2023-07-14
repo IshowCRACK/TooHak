@@ -194,6 +194,7 @@ export function adminQuizCreate (jwt: Jwt, name: string, description: string): A
   }
 
   const quizId = createQuizId();
+  data.metaData.totalQuizzes++;
 
   data.quizzes.push({
     quizId: quizId,
@@ -559,6 +560,7 @@ export function adminQuizTransfer(jwt: Jwt, email: string, quizId: number): OkOb
   // Update the adminQuizId to the target user's authUserId
   const quizToUpdate = data.quizzes.find((quiz: Quiz) => quiz.quizId === quizId);
   quizToUpdate.adminQuizId = targetUser.authUserId;
+  setData(data);
 
   return {};
 }

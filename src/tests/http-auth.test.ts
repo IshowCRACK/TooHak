@@ -8,6 +8,10 @@ beforeEach(() => {
   clearUsers();
 });
 
+afterEach(() => {
+  clearUsers();
+});
+
 describe('adminAuthRegister tests', () => {
   test('Check successful Register', () => {
     const res: Token | ErrorObj = registerUser('example@email.com', 'Password123', 'First', 'Last');

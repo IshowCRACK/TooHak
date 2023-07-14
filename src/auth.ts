@@ -82,9 +82,11 @@ function adminAuthRegister (email: string, password: string, nameFirst: string, 
 
   // else if every parameter is valid push into users database
   const userID = createUserId();
+  data.metaData.totalUsers++;
+
   data.users.push({
-    email,
-    password,
+    email: email,
+    password: password,
     nameFirst: nameFirst,
     nameLast: nameLast,
     authUserId: userID,
@@ -97,6 +99,7 @@ function adminAuthRegister (email: string, password: string, nameFirst: string, 
   setData(data);
 
   const token: Token = createToken(userID);
+
   addTokenToSession(token);
 
   return tokenToJwt(token);
@@ -117,16 +120,21 @@ function adminAuthLogin (email: string, password: string): Jwt | ErrorAndStatusC
   for (const user of data.users) {
     if (user.email === email && user.password === password) {
       // add successful logins for all times & change failed password
+      console.log('EEYEYYE');
+      console.log(data);
       user.numSuccessLogins++;
+      console.log(data);
       user.numFailedPasswordsSinceLastLogin = 0;
+      setData(data);
 
       const token: Token = getTokenLogin(user.authUserId);
-      addTokenToSession(token);
 
+      addTokenToSession(token);
       return tokenToJwt(token);
     } else {
       // Add on to how many times user has failed before a successful login
       user.numFailedPasswordsSinceLastLogin++;
+      setData(data);
     }
   }
 
@@ -313,6 +321,7 @@ export const adminAuthLogout = (jwt: Jwt): OkObj | ErrorAndStatusCode => {
 
   if (index !== -1) {
     data.session.splice(index, 1);
+    setData(data);
     return {};
   }
 
