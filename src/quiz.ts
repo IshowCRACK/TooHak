@@ -1,5 +1,5 @@
 import {
-  Data, AdminQuizListReturn, AdminQuizList,Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj,
+  Data, AdminQuizListReturn, AdminQuizList, Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj,
   AdminQuizInfo, User, Quiz, QuizTrashReturn, Token,
 } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
@@ -67,7 +67,6 @@ export function adminQuizDescriptionUpdate (jwt: Jwt, description: string, quizI
   return {};
 }
 
-
 // Given a particular quiz, permanently remove the quiz
 export function adminQuizRemove (jwt: Jwt, quizId: number): OkObj | ErrorAndStatusCode {
   const data = getData();
@@ -106,7 +105,7 @@ export function adminQuizRemove (jwt: Jwt, quizId: number): OkObj | ErrorAndStat
 
   if (!user.deletedQuizzes) {
     // Initialize deletedQuizzes array if it doesn't exist
-    user.deletedQuizzes = []; 
+    user.deletedQuizzes = [];
   }
 
   user.deletedQuizzes.push(deletedQuiz);
