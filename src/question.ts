@@ -168,7 +168,7 @@ export function quizDuplicateQuestion(jwt: Jwt, quizId: number, questionId: numb
     }
   }
   const newQuestion: AdminQuestionDuplicate = {
-    newQuestionId: 1
+    newQuestionId: newQuestionId
   };
 
   setData(data);
