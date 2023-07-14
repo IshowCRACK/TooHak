@@ -156,11 +156,9 @@ export function quizDuplicateQuestion(jwt: Jwt, quizId: number, questionId: numb
   const qId = quiz.questions.findIndex(({ questionId: id }) => id === questionId);
   const result = quiz.questions.find(({ questionId: id }) => id === questionId) as Question;
 
-  
-    const newQuestionId = createQuestionId(quiz);
-    const duplicatedQuestion = { ...result, questionId: newQuestionId };
-    quiz.questions.splice(qId + 1, 0, duplicatedQuestion);
-  
+  const newQuestionId = createQuestionId(quiz);
+  const duplicatedQuestion = { ...result, questionId: newQuestionId };
+  quiz.questions.splice(qId + 1, 0, duplicatedQuestion);
 
   // updates the time edited
   for (const q of data) {

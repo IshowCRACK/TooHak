@@ -1,7 +1,7 @@
-import { ErrorObj, Token, AdminQuizCreate, OkObj, Jwt, AdminQuizInfo, AdminQuizList } from '../../interfaces/interfaces';
+import { ErrorObj, Token, AdminQuizCreate, OkObj, Jwt, AdminQuizInfo, AdminQuizList, QuizTrashReturn } from '../../interfaces/interfaces';
 import { registerUser, logoutUserHandler } from './http-auth.test';
 import { tokenToJwt } from '../token';
-import { RequestCreateQuiz, RequestRemoveQuiz, clearUsers, listQuiz, updateNameQuiz, infoQuiz, quizTransferHandler, updateDescriptionQuiz } from './testHelpers';
+import { RequestCreateQuiz, RequestRemoveQuiz, clearUsers, listQuiz, updateNameQuiz, infoQuiz, quizTransferHandler, updateDescriptionQuiz, viewQuizTrashHandler } from './testHelpers';
 
 beforeEach(() => {
   clearUsers();
@@ -423,7 +423,7 @@ describe('adminQuizList tests', () => {
 describe('Quiz Transfer', () => {
   let userJwt: Jwt;
   let userJwt2: Jwt;
-  let userToken;
+  let userToken: Token;
   let userToken2: Token;
   let quizId: number;
 
@@ -483,34 +483,95 @@ describe('Quiz Transfer', () => {
   });
 });
 
+describe('View Quiz Trash', () => {
+  let userJwt: Jwt;
+  let userJwt2: Jwt;
+  let userToken: Token;
+  let userToken2: Token;
+  let quizId: number;
+  beforeEach(() => {
+    userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    userJwt = tokenToJwt(userToken);
+    userToken2 = registerUser('JaneAusten@gmail.com', 'Password123', 'Jane', 'Austen') as Token;
+    userJwt2 = tokenToJwt(userToken2);
+    quizId = (RequestCreateQuiz(userJwt, 'Countries of the world', 'Quiz on all countries') as AdminQuizCreate).quizId;
+  });
+
+  describe('Unsuccessful tests', () => {
+    test('Invalid token structure', () => {
+      expect(viewQuizTrashHandler({ token: '0' })).toEqual({
+        error: 'Token is not a valid structure'
+      });
+    });
+
+    test('Token is not logged in', () => {
+      logoutUserHandler(userJwt);
+      expect(viewQuizTrashHandler(userJwt)).toEqual({
+        error: 'Provided token is valid structure, but is not for a currently logged in session'
+      });
+    });
+  });
+
+  describe('Successful tests', () => {
+    test('Empty Trash', () => {
+      expect(viewQuizTrashHandler(userJwt)).toEqual({
+        quizzes: []
+      });
+
+      expect(viewQuizTrashHandler(userJwt2)).toEqual({
+        quizzes: []
+      });
+    });
+
+    test('Non empty trash', () => {
+      const quizId2 = (RequestCreateQuiz(userJwt2, 'Flags of the world', 'Flags on all countries') as AdminQuizCreate).quizId;
+
+      RequestRemoveQuiz(userJwt, quizId);
+      expect(viewQuizTrashHandler(userJwt)).toEqual({
+        quizzes: [
+          {
+            quizId: quizId,
+            name: 'Countries of the world'
+          }
+        ]
+      });
+
+      RequestRemoveQuiz(userJwt2, quizId2);
+
+      expect(viewQuizTrashHandler(userJwt2)).toEqual({
+        quizzes: [
+          {
+            quizId: quizId2,
+            name: 'Flags of the world'
+          }
+        ]
+      });
+    });
+  });
+});
 
 // TESTS FOR INTERACTION OF QUIZ FUNCTIONS //
-test.skip('Test for all Quiz', () => { 
-  let token0: Token;
-  let token1: Token;
-  let res: AdminQuizCreate | ErrorObj;
-  let res0: AdminQuizCreate | ErrorObj;
-  let quizId0: number;
-  let quizId1: number;
+test('Test for all Quiz', () => {
+  // make 2 quizzes for token0
+  const token0: Token = registerUser('JohnSmith@gmail.com', 'Password123', 'Johnny', 'Jones') as Token;
+  const token1: Token = registerUser('JoeMama@gmail.com', 'Password456', 'Joe', 'Mama') as Token;
+  const quizId0: number = (RequestCreateQuiz(tokenToJwt(token0), 'Quiz0', 'Description0') as AdminQuizCreate).quizId;
+  const quizId1: number = (RequestCreateQuiz(tokenToJwt(token0), 'Quiz1', 'Description1') as AdminQuizCreate).quizId;
+  expect(quizId0).toStrictEqual(0);
+  expect(quizId1).toStrictEqual(1);
 
-  // make 2 quizzes for token0 
-  token0 = registerUser('JohnSmith@gmail.com', 'Password123', 'Johnny', 'Jones') as Token;
-  token1 = registerUser('JoeMama@gmail.com', 'Password456', 'Joe', 'Mama') as Token;
-  quizId0 = (RequestCreateQuiz(tokenToJwt(token0), 'Quiz0', 'Description0') as AdminQuizCreate).quizId
-  quizId1 = (RequestCreateQuiz(tokenToJwt(token0), 'Quiz1', 'Description1') as AdminQuizCreate).quizId
-  expect(quizId0).toStrictEqual({ quizId: 0 });
-  expect(quizId1).toStrictEqual({ quizId: 1 });
-
-  // view trash that should be empty 
-  expect(viewQuizTrashHandler(tokenToJwt(token0)).toEqual({
+  // view trash that should be empty
+  let trash0 = viewQuizTrashHandler(tokenToJwt(token0)) as QuizTrashReturn;
+  expect(trash0).toStrictEqual({
     quizzes: []
-  }));
+  });
 
   // remove quizId0
   RequestRemoveQuiz(tokenToJwt(token0), quizId0);
 
   // view trash should have quizId0 in it
-  expect(viewQuizTrashHandler(tokenToJwt(token0)).toEqual(
+  trash0 = viewQuizTrashHandler(tokenToJwt(token0)) as QuizTrashReturn;
+  expect(trash0).toEqual(
     {
       quizzes: [
         {
@@ -519,24 +580,17 @@ test.skip('Test for all Quiz', () => {
         }
       ]
     }
-  ));
+  );
 
-
-
-
-     // TO DO ///////////////////
-  // restore quiz0 from trash 
-    // TO DO ////////////////////////
-
-
-
+  // TO DO ///////////////////
+  // restore quiz0 from trash
+  // TO DO ////////////////////////
 
   // transfer quiz1
-  quizTransferHandler(tokenToJwt(token0), 'JoeMama@@gmail.com', quizId1);
+  quizTransferHandler(tokenToJwt(token0), 'JoeMama@gmail.com', quizId1);
 
-  //check if it worked using quizlist 
-  let list0 = listQuiz(tokenToJwt(token0)) as AdminQuizList;
-  let list1 = listQuiz(tokenToJwt(token1)) as AdminQuizList;
+  // check if it worked using quizlist
+  // const list0 = listQuiz(tokenToJwt(token0)) as AdminQuizList;
   // expect(list0).toStrictEqual(
   //   {
   //     quizzes: [
@@ -547,6 +601,8 @@ test.skip('Test for all Quiz', () => {
   //     ]
   //   }
   // );
+
+  const list1 = listQuiz(tokenToJwt(token1)) as AdminQuizList;
   expect(list1).toStrictEqual(
     {
       quizzes: [
@@ -557,8 +613,4 @@ test.skip('Test for all Quiz', () => {
       ]
     }
   );
-
 });
-
-
-
