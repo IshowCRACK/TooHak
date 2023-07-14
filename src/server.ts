@@ -6,7 +6,7 @@ import cors from 'cors';
 import YAML from 'yaml';
 import sui from 'swagger-ui-express';
 import fs from 'fs';
-import { adminAuthRegister, adminAuthLogin, adminAuthLogout, adminUserDetails, adminUpdateUserPassword, adminUpdateUserDetails } from './auth';
+import { adminAuthRegister, adminAuthLogin, adminAuthLogout, adminUserDetails, /*adminUpdateUserPassword, adminUpdateUserDetails */} from './auth';
 import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash, adminQuizRestore } from './quiz';
 import { clear } from './other';
 import { formatError } from './helper';
