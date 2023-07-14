@@ -27,6 +27,7 @@ const createQuizQuestionHandler = (quizId: number, jwt: Jwt, questionBody: Quest
   return parsedResponse;
 };
 
+// TESTS FOR CREATE QUESTION // 
 describe('Tests related to creating a Quiz Question', () => {
   let userToken: Token;
   let userJwt: Jwt;
@@ -306,6 +307,8 @@ describe('Quiz Duplicate', () => {
   });
 });
 
+
+
 // TESTS FOR QUIZ DELETE //
 
 describe('Tests for adminQuizDelete', () => {
@@ -381,3 +384,176 @@ describe('Tests for adminQuizDelete', () => {
     });
   });
 });
+
+
+// ADVANCED TESTS OF FUNCTION INTERACTIONS //  
+
+test('Tests for successful interaction and implementation of create, duplicate, update, move, delete', () => {
+  let userToken: Token;
+  let userJwt: Jwt;
+  let quizId: number;
+  let questionId0: number;
+  let questionId1: number;
+  let questionId2: number;
+  let quizCreate: AdminQuizCreate;
+  let QuestionBody0: QuestionBody;
+  let QuestionBody1: QuestionBody;
+  let QuestionBody2: QuestionBody;
+  let quizInfo: AdminQuizInfo;
+  let quizEditedTime: number;
+  let res: AdminQuestionDuplicate | ErrorObj;
+  let timeBufferSeconds: number;
+
+    userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    userJwt = tokenToJwt(userToken);
+    timeBufferSeconds = 20;
+    quizId = (RequestCreateQuiz(tokenToJwt(userToken), 'Countries of the World', 'Quiz on Countries of the World') as AdminQuizCreate).quizId;
+    QuestionBody0 = {
+      question: 'What continent is Russia in?',
+      duration: 5,
+      points: 1,
+      answers: [
+        {
+          answerId: 0,
+          answer: 'Asia',
+          colour: 'Red',
+          correct: true
+        },
+        {
+          answerId: 1,
+          answer: 'North America',
+          colour: 'Blue',
+          correct: false
+        },
+        {
+          answerId: 2,
+          answer: 'South America',
+          colour: 'Green',
+          correct: false
+        },
+        {
+          answerId: 3,
+          answer: 'Africa',
+          colour: 'Yellow',
+          correct: false
+        }
+      ]
+    };
+    QuestionBody1 = {
+      question: 'What continent is Japan in?',
+      duration: 5,
+      points: 1,
+      answers: [
+        {
+          answerId: 0,
+          answer: 'Asia',
+          colour: 'Red',
+          correct: true
+        },
+        {
+          answerId: 1,
+          answer: 'North America',
+          colour: 'Blue',
+          correct: false
+        },
+        {
+          answerId: 2,
+          answer: 'South America',
+          colour: 'Green',
+          correct: false
+        },
+        {
+          answerId: 3,
+          answer: 'Africa',
+          colour: 'Yellow',
+          correct: false
+        }
+      ]
+    };
+    QuestionBody2 = {
+      question: 'What continent is South Africa in?',
+      duration: 5,
+      points: 1,
+      answers: [
+        {
+          answerId: 0,
+          answer: 'Asia',
+          colour: 'Red',
+          correct: false
+        },
+        {
+          answerId: 1,
+          answer: 'North America',
+          colour: 'Blue',
+          correct: false
+        },
+        {
+          answerId: 2,
+          answer: 'South America',
+          colour: 'Green',
+          correct: false
+        },
+        {
+          answerId: 3,
+          answer: 'Africa',
+          colour: 'Yellow',
+          correct: true
+        }
+      ]
+    };
+
+  // create 3 questions 
+    quizEditedTime = Math.round(Date.now() / 1000);
+    // create 3 questions 
+    questionId0 = (createQuizQuestionHandler(quizId, userJwt, QuestionBody0) as QuizQuestionCreate).questionId;
+    questionId1 = (createQuizQuestionHandler(quizId, userJwt, QuestionBody1) as QuizQuestionCreate).questionId;
+    questionId2 = (createQuizQuestionHandler(quizId, userJwt, QuestionBody2) as QuizQuestionCreate).questionId;
+    quizInfo = infoQuiz(userJwt, quizId) as AdminQuizInfo;
+    expect(quizInfo.questions[0].questionId).toStrictEqual(0);
+    expect(quizInfo.questions[1].questionId).toStrictEqual(1);
+    expect(quizInfo.questions[2].questionId).toStrictEqual(2);
+
+    // duplicate questionId1 
+    res = duplicateQuiz(userJwt, quizId, questionId1) as AdminQuestionDuplicate;
+    expect(res).toEqual({
+      newQuestionId: 3
+    });
+    // check its inserted right after q1 
+    quizInfo = infoQuiz(userJwt, quizId) as AdminQuizInfo;
+    expect(quizInfo.questions[0].questionId).toStrictEqual(0);
+    expect(quizInfo.questions[1].questionId).toStrictEqual(1);
+    expect(quizInfo.questions[2].questionId).toStrictEqual(3);
+    expect(quizInfo.questions[3].questionId).toStrictEqual(2);
+    //check it copied q1 question 
+    expect(quizInfo.questions[2].question).toStrictEqual(quizInfo.questions[1].question);
+    // check it updated quizTimeEdited
+    expect(quizInfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime);
+    expect(quizInfo.timeLastEdited).toBeGreaterThanOrEqual(quizEditedTime - timeBufferSeconds);
+
+
+
+   // TO DO //////////////////////////////
+  // update questionId1
+  // move questionId3 to the start 
+   // TO DO //////////////////////////////
+
+
+  // delete questionId1 
+  expect(deleteQuestion(userJwt, quizId, questionId1)).toStrictEqual({});
+  quizInfo = infoQuiz(userJwt, quizId) as AdminQuizInfo;
+  expect(quizInfo.questions[0].questionId).toStrictEqual(0);
+  expect(quizInfo.questions[1].questionId).toStrictEqual(3);
+  expect(quizInfo.questions[2].questionId).toStrictEqual(2);
+});
+
+
+
+  
+
+
+
+
+
+
+
+
