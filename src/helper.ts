@@ -1,5 +1,5 @@
 import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer, Question, User } from '../interfaces/interfaces';
-import { getData } from './dataStore';
+import { getData, setData } from './dataStore';
 import { adminQuizList } from './quiz';
 import { checkJwtValid, jwtToToken } from './token';
 import config from './config.json';
@@ -369,6 +369,28 @@ export function createQuestionId(quiz: Quiz): number {
   const newQuestionId = maxQuestionId + 1;
 
   return newQuestionId;
+}
+
+export function createQuizId(): number {
+  const data = getData();
+
+  const quizId: number = data.metaData.totalQuizzes;
+
+  data.metaData.totalQuizzes++;
+  setData(data);
+  return quizId;
+}
+
+export function createUserId(): number {
+  const data = getData();
+
+  const userId: number = data.metaData.totalUsers;
+
+  // increase user count by 1
+  data.metaData.totalUsers++;
+  setData(data);
+
+  return userId;
 }
 
 export function checkQuestionIdValid(questionId: number, quiz: Quiz): boolean {

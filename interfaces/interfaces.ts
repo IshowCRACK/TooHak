@@ -3,8 +3,13 @@ export interface Data {
     users: User[];
     quizzes: Quiz[];
     session: Token[];
+    metaData: MetaData;
 }
 
+export interface MetaData {
+    totalUsers: number;
+    totalQuizzes: number;
+}
 export interface User {
     authUserId: number;
     nameFirst: string;

@@ -13,6 +13,8 @@ function clear (): ClearReturn {
   data.users = [];
   data.quizzes = [];
   data.session = [];
+  data.metaData.totalUsers = 0;
+  data.metaData.totalQuizzes = 0;
 
   // Sets the new empty data object
   setData(data);

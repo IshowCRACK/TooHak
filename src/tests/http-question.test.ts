@@ -1,7 +1,7 @@
 import request from 'sync-request';
 import { AdminQuizCreate, ErrorObj, Jwt, QuestionBody, QuizQuestionCreate, Token, AdminQuizInfo, AdminQuestionDuplicate } from '../../interfaces/interfaces';
 import { getUrl } from '../helper';
-import { RequestCreateQuiz, clearUsers, registerUser, duplicateQuiz, infoQuiz, logoutUserHandler, deleteQuestion, updateQuiz } from './testHelpers';
+import { RequestCreateQuiz, clearUsers, registerUser, duplicateQuiz, infoQuiz, logoutUserHandler, deleteQuestion, updateQuiz} from './testHelpers';
 import { tokenToJwt } from '../token';
 
 const URL: string = getUrl();
@@ -589,6 +589,7 @@ describe('Tests to update question', () => {
   });
 });
 
+
 // ADVANCED TESTS OF FUNCTION INTERACTIONS //
 
 test('Tests for successful interaction and implementation of create, duplicate, update, move, delete', () => {
@@ -719,11 +720,12 @@ test('Tests for successful interaction and implementation of create, duplicate, 
   expect(quizInfo.timeLastEdited).toBeGreaterThanOrEqual(quizEditedTime);
   expect(quizInfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime + timeBufferSeconds);
 
-  // update questionId1 from questionbody1 to questionbody0
+
+  // update questionId1 from questionbody1 to questionbody0 
   updateQuiz(userJwt, questionBody0, quizId, questionId1);
   quizInfo = infoQuiz(userJwt, quizId) as AdminQuizInfo;
   expect(quizInfo.questions[1].question).toStrictEqual(questionBody0.question);
-
+  
   // TO DO //////////////////////////////
   // move questionId3 to the start
   // TO DO //////////////////////////////
