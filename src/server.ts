@@ -7,7 +7,7 @@ import YAML from 'yaml';
 import sui from 'swagger-ui-express';
 import fs from 'fs';
 import { adminAuthRegister, adminAuthLogin, adminAuthLogout, adminUserDetails } from './auth';
-import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash, adminQuizRestore, adminQuizEmptyTrash } from './quiz';
+import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash, adminQuizRestore } from './quiz';
 import { clear } from './other';
 import { formatError } from './helper';
 import { getData } from './dataStore';
@@ -80,7 +80,7 @@ app.post('/v1/admin/auth/logout', (req: Request, res: Response) => {
 
   res.status(200).json(response);
 });
-
+// it1 user details 
 app.get('/v1/admin/user/details', (req: Request, res: Response) => {
   const token = req.query.token as string;
   const response = adminUserDetails({ token: token });
@@ -91,6 +91,19 @@ app.get('/v1/admin/user/details', (req: Request, res: Response) => {
 
   res.status(200).json(response);
 });
+
+// it2 update user details 
+app.put('/v1/admin/user/details', (req: Request, res: Response) => {
+  
+  // const { token, email, nameFirst, nameLast } = req.body;
+  // const response = adminupdateDetailsAuthHandler({ token: token }, email, nameFirst, nameLast);
+  // if ('error' in response) {
+  //   return res.status(response.statusCode).json(formatError(response));
+  // }
+  // res.status(200).json(response);
+  res.status(200).json("stub");
+});
+
 
 app.post('/v1/admin/quiz', (req: Request, res: Response) => {
   const { token, name, description } = req.body;
@@ -222,6 +235,7 @@ app.post('/v1/admin/quiz/:quizId/question/:questionId/duplicate', (req: Request,
   res.status(200).json(response);
 });
 
+
 app.post('/v1/admin/quiz/:quizId/restore', (req: Request, res: Response) => {
   const quizId = parseInt(req.params.quizId);
   const { token } = req.body;
@@ -233,18 +247,6 @@ app.post('/v1/admin/quiz/:quizId/restore', (req: Request, res: Response) => {
   res.status(200).json(response);
 });
 
-app.delete('/v1/admin/quiz/trash/empty', (req: Request, res: Response) => {
-  const token: string = req.query.token as string;
-  const quizIdsString = req.query.quizIds as string[];
-  const quizIds = quizIdsString.map((item: string) => parseInt(item));
-
-  const response = adminQuizEmptyTrash({ token: token }, quizIds);
-
-  if ('error' in response) {
-    return res.status(response.statusCode).json(formatError(response));
-  }
-  res.status(200).json(response);
-});
 
 // For Debugging
 app.get('/debug', (req: Request, res: Response) => {

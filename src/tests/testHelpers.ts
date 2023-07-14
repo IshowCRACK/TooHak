@@ -213,6 +213,23 @@ export const updateDescriptionQuiz = (jwt: Jwt, description: string, quizId: num
   return parsedResponse;
 };
 
+export const updateDetailsAuthHandler = (jwt: Jwt, email: string, nameFirst: string, nameLast: string): OkObj | ErrorObj => {
+  const res = request(
+    'PUT',
+    URL + `v1/admin/user/details`,
+    {
+      json: {
+          token: jwt.token,
+          email: email,
+          nameFirst: nameFirst,
+          nameLast: nameLast
+      }
+    }
+  );
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+  return parsedResponse;
+};
+
 export const duplicateQuiz = (jwt: Jwt, quizId: number, questionId: number): AdminQuestionDuplicate | ErrorObj => {
   const res = request(
     'POST',

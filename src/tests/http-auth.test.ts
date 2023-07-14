@@ -1,7 +1,7 @@
 import { AdminUserDetailsReturn, ErrorObj, Jwt, Token } from '../../interfaces/interfaces';
 import { objToJwt, tokenToJwt } from '../token';
 // IMPORTING ALL WRAPPER FUNCTIONS
-import { checkTokenValid, clearUsers, loginUser, logoutUserHandler, registerUser, getUser } from './testHelpers';
+import { checkTokenValid, clearUsers, loginUser, logoutUserHandler, registerUser, getUser, updateDetailsAuthHandler } from './testHelpers';
 
 // TESTS FOR REGISTER //
 beforeEach(() => {
@@ -247,6 +247,8 @@ describe('Tests related to logging out an admin', () => {
   });
 });
 
+
+
 // TESTS FOR ADMIN USER DETAILS //
 describe('adminUserDetails test', () => {
   let jwt: Jwt;
@@ -328,6 +330,40 @@ describe('adminUserDetails test', () => {
       expect(getUser(jwt)).toStrictEqual(expectedResult);
     });
   });
+});
+
+// TEST FOR ADMIN USER UPDATE DETAILS //
+describe('adminUserUpdateDetails test', () => {
+  let jwt: Jwt;
+  beforeEach(() => {
+    const token = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    jwt = tokenToJwt(token);
+  });
+
+  describe('Unseccessful update of details', () => {
+    test('Token does not exit', () => {
+      const jwt2: Token = {
+        sessionId: '4',
+        userId: 12,
+      };
+      const userDetails = getUser(tokenToJwt(jwt2)) as ErrorObj;
+      const expectedResult: ErrorObj = { error: 'Token not for currently logged in session' };
+      expect(userDetails).toStrictEqual(expectedResult);
+    });
+    test('Email is not valid', () => {
+      const change = updateDetailsAuthHandler(jwt, 'JohnSmith123gmail.com', 'Johnny', 'Smithy');
+      expect(change).toStrictEqual({ error: 'Invalid email or email is already in use' });
+    });
+    test('First name is not valid', () => {
+      const change = updateDetailsAuthHandler(jwt, 'JohnSmith123@gmail.com', 'Johnny123', 'Smithy');
+      expect(change).toStrictEqual({ error: 'Invalid first name' });
+    });
+    test('Last Name is not valid', () => {
+      const change = updateDetailsAuthHandler(jwt, 'JohnSmith123@gmail.com', 'Johnny', 'S');
+      expect(change).toStrictEqual({ error: 'Invalid last name' });
+    });
+  });
+
 });
 
 export { registerUser, logoutUserHandler };

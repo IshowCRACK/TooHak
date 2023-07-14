@@ -1,4 +1,4 @@
-import { AdminUserDetailsReturn, AdminUpdateUserDetailsReturn, adminUpdateUserPasswordReturn, Data, Token, Jwt, ErrorAndStatusCode, OkObj } from '../interfaces/interfaces';
+import { AdminUserDetailsReturn, adminUpdateUserPasswordReturn, Data, Token, Jwt, ErrorAndStatusCode, OkObj } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import { checkName, checkPassword, emailAlreadyUsed, checkTokenValidStructure, checkTokenValidSession, createUserId } from './helper';
 import validator from 'validator';
@@ -90,7 +90,8 @@ function adminAuthRegister (email: string, password: string, nameFirst: string, 
     authUserId: userID,
     numSuccessLogins: 1,
     numFailedPasswordsSinceLastLogin: 0,
-    deletedQuizzes: []
+    deletedQuizzes: [],
+    prevPassword: [password],
   });
 
   setData(data);
@@ -184,54 +185,55 @@ function adminUserDetails (jwt: Jwt): AdminUserDetailsReturn | ErrorAndStatusCod
  *
  * @returns {{} | {error: string}} - Returns an empty object or Error
  */
-function adminUpdateUserDetails(authUserId: number, email: string, nameFirst: string, nameLast: string): AdminUpdateUserDetailsReturn {
-  const data = getData();
 
-  // Find the user by authUserId
-  const user = data.users.find((user) => user.authUserId === authUserId);
+function adminUpdateUserDetails(authUserId: number, email: string, nameFirst: string, nameLast: string): OkObj | ErrorAndStatusCode {
+//   const data = getData();
 
-  if (user) {
-    let emailChanged = false;
+//   // Find the user by authUserId
+//   const user = data.users.find((user) => user.authUserId === authUserId);
 
-    // Check if email is provided and valid
-    if (email) {
-      // Check if email is valid and not used by another user
-      if (!validator.isEmail(email) || emailAlreadyUsed(email, authUserId)) {
-        return {
-          error: 'Invalid email or email is already in use'
-        };
-      }
+//   if (user) {
+//     let emailChanged = false;
 
-      user.email = email;
-      emailChanged = true;
-    }
+//     // Check if email is provided and valid
+//     if (email) {
+//       // Check if email is valid and not used by another user
+//       if (!validator.isEmail(email) || emailAlreadyUsed(email, authUserId)) {
+//         return {
+//           error: 'Invalid email or email is already in use'
+//         };
+//       }
 
-    // Update the user's details if the inputs are valid
-    if (checkName(nameFirst) && nameFirst.length >= 2 && nameFirst.length <= 20) {
-      user.nameFirst = nameFirst;
-    } else {
-      return {
-        error: 'Invalid first name'
-      };
-    }
+//       user.email = email;
+//       emailChanged = true;
+//     }
 
-    if (checkName(nameLast) && nameLast.length >= 2 && nameLast.length <= 20) {
-      user.nameLast = nameLast;
-    } else {
-      return {
-        error: 'Invalid last name'
-      };
-    }
+//     // Update the user's details if the inputs are valid
+//     if (checkName(nameFirst) && nameFirst.length >= 2 && nameFirst.length <= 20) {
+//       user.nameFirst = nameFirst;
+//     } else {
+//       return {
+//         error: 'Invalid first name'
+//       };
+//     }
 
-    // Update data only if there were changes
-    if (emailChanged) {
-      setData(data);
-    }
-  } else {
-    return {
-      error: 'User doesnt exist'
-    };
-  }
+//     if (checkName(nameLast) && nameLast.length >= 2 && nameLast.length <= 20) {
+//       user.nameLast = nameLast;
+//     } else {
+//       return {
+//         error: 'Invalid last name'
+//       };
+//     }
+
+//     // Update data only if there were changes
+//     if (emailChanged) {
+//       setData(data);
+//     }
+//   } else {
+//     return {
+//       error: 'User doesnt exist'
+//     };
+//   }
 
   return {};
 }
