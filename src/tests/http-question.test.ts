@@ -485,12 +485,17 @@ describe('Tests for quizMoveQuestion', () => {
 
     test('newPosition is less than 0', () => {
       createQuizQuestionHandler(quizId, userJwt, defaultQuestionBody);
-      expect(moveQuestion(quizId, 0, -1, userJwt)).toStrictEqual({ error: 'New Position is less than 0 or New Position is greater than n-1 where n is the number of questions' });
+      expect(moveQuestion(quizId, 0, -1, userJwt)).toStrictEqual({ error: 'New Position is less than 0 or New Position is greater than the number of questions' });
     });
 
     test('newPosition is greater than n-1 where n is the number of questions', () => {
       createQuizQuestionHandler(quizId, userJwt, defaultQuestionBody);
-      expect(moveQuestion(quizId, 0, 5, userJwt)).toStrictEqual({ error: 'New Position is less than 0 or New Position is greater than n-1 where n is the number of questions' });
+      expect(moveQuestion(quizId, 0, 5, userJwt)).toStrictEqual({ error: 'New Position is less than 0 or New Position is greater than the number of questions' });
+    });
+
+    test('newPosition is the position of the current question', () => {
+      createQuizQuestionHandler(quizId, userJwt, defaultQuestionBody);
+      expect(moveQuestion(quizId, 0, 0, userJwt)).toStrictEqual({ error: 'New Position is the position of the current question' });
     });
   });
 

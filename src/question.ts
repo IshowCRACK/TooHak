@@ -286,8 +286,38 @@ export function quizMoveQuestion(quizId: number, questionId: number, newPosition
   }
 
   // newPosition is less than 0 or newPosition is greater than n-1 where n is the number of questions
+  if (newPosition < 0 || newPosition > quiz.questions.length) {
+    return {
+      error: 'New Position is less than 0 or New Position is greater than the number of questions',
+      statusCode: 400
+    };
+  }
   
-  // newPosition is the position of the current question 
+  // obtaining question index according to questionId 
+  const data = getData().quizzes;
+  const quizIndex: number = data.indexOf(quiz);
+  let questionIndex: number;
+  let movedQuestion: Question;
+  for (const question of data[quizIndex].questions) {
+    if (question.questionId === questionId) {
+      questionIndex = data[quizIndex].questions.indexOf(question);
+      movedQuestion = question;
+    }
+  }
 
-  return;
+  // newPosition is the position of the current question 
+  if(newPosition === questionIndex) {
+    return {
+      error: 'New Position is the position of the current question',
+      statusCode: 400
+    };
+  }
+
+  //removing original question from position
+  data[quizIndex].questions.splice(questionIndex, 1);
+
+  //putting original question to new position
+  data[quizIndex].questions.splice(newPosition, 0, movedQuestion); 
+
+  return {};
 }

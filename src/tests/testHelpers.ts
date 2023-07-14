@@ -256,7 +256,7 @@ export function moveQuestion(quizId: number, questionId: number, newPosition: nu
     }
   );
 
-  const parsedResponse: QuizTrashReturn | ErrorObj = JSON.parse(res.body.toString());
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
 
   return parsedResponse;
 };
