@@ -1,4 +1,4 @@
-import { AdminUserDetailsReturn, adminUpdateUserPasswordReturn, Data, Token, Jwt, ErrorAndStatusCode, OkObj } from '../interfaces/interfaces';
+import { AdminUserDetailsReturn, adminUpdateUserPasswordReturn, Data, Token, Jwt, ErrorAndStatusCode, OkObj, User } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import { checkName, checkPassword, emailAlreadyUsed, checkTokenValidStructure, checkTokenValidSession, createUserId } from './helper';
 import validator from 'validator';
@@ -186,54 +186,62 @@ function adminUserDetails (jwt: Jwt): AdminUserDetailsReturn | ErrorAndStatusCod
  * @returns {{} | {error: string}} - Returns an empty object or Error
  */
 
-function adminUpdateUserDetails(authUserId: number, email: string, nameFirst: string, nameLast: string): OkObj | ErrorAndStatusCode {
-//   const data = getData();
+function adminUpdateUserDetails(jwt: Jwt, email: string, nameFirst: string, nameLast: string): OkObj | ErrorAndStatusCode {
+  const data = getData();
+  const token: Token = jwtToToken(jwt);
+  const authUserId: number = token.userId;
 
-//   // Find the user by authUserId
-//   const user = data.users.find((user) => user.authUserId === authUserId);
+  if (!checkTokenValidStructure(jwt)) {
+    return {
+      error: 'Token is not a valid structure',
+      statusCode: 401
+    };
+  }
 
-//   if (user) {
-//     let emailChanged = false;
+  if (!checkTokenValidSession(jwt)) {
+    return {
+      error: 'Token not for currently logged in session',
+      statusCode: 403
+    };
+  }
 
-//     // Check if email is provided and valid
-//     if (email) {
-//       // Check if email is valid and not used by another user
-//       if (!validator.isEmail(email) || emailAlreadyUsed(email, authUserId)) {
-//         return {
-//           error: 'Invalid email or email is already in use'
-//         };
-//       }
+  // Check if email is valid and not used by another user
+  if (!validator.isEmail(email) || emailAlreadyUsed(email, authUserId)) {
+    return {
+      error: 'Invalid email or email is already in use',
+      statusCode: 400
+    };
+  }
 
-//       user.email = email;
-//       emailChanged = true;
-//     }
+  // Check if user's nameFirst is valid
+  if (nameFirst.length <= 2 || nameFirst.length >= 20) {
+    return {
+      error: 'Invalid first name',
+      statusCode: 400
+    };
+  }
+  if (!checkName(nameFirst) || !checkName(nameLast)) {
+    return {
+      error: 'Name can only contain alphanumeric symbols',
+      statusCode: 400
+    };
+  }
 
-//     // Update the user's details if the inputs are valid
-//     if (checkName(nameFirst) && nameFirst.length >= 2 && nameFirst.length <= 20) {
-//       user.nameFirst = nameFirst;
-//     } else {
-//       return {
-//         error: 'Invalid first name'
-//       };
-//     }
+  if (nameLast.length <= 2 || nameLast.length >= 20) {
+    return {
+      error: 'Invalid last name',
+      statusCode: 400
+    };
+  }
 
-//     if (checkName(nameLast) && nameLast.length >= 2 && nameLast.length <= 20) {
-//       user.nameLast = nameLast;
-//     } else {
-//       return {
-//         error: 'Invalid last name'
-//       };
-//     }
+  // Update data only if there were changes
 
-//     // Update data only if there were changes
-//     if (emailChanged) {
-//       setData(data);
-//     }
-//   } else {
-//     return {
-//       error: 'User doesnt exist'
-//     };
-//   }
+  const updateDetail = data.users.find(({ authUserId: id }) => id === authUserId) as User;
+  updateDetail.nameFirst = nameFirst;
+  updateDetail.nameLast = nameLast;
+  updateDetail.email = email;
+
+  setData(data);
 
   return {};
 }
