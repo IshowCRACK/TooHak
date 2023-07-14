@@ -7,7 +7,7 @@ import YAML from 'yaml';
 import sui from 'swagger-ui-express';
 import fs from 'fs';
 import { adminAuthRegister, adminAuthLogin, adminAuthLogout, adminUserDetails } from './auth';
-import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash } from './quiz';
+import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash, adminQuizRestore } from './quiz';
 import { clear } from './other';
 import { formatError } from './helper';
 import { getData } from './dataStore';
@@ -205,6 +205,17 @@ app.post('/v1/admin/quiz/:quizId/question/:questionId/duplicate', (req: Request,
   const questionId = parseInt(req.params.questionId);
   const { token } = req.body;
   const response = quizDuplicateQuestion({ token: token }, quizId, questionId);
+  if ('error' in response) {
+    return res.status(response.statusCode).json(formatError(response));
+  }
+  res.status(200).json(response);
+});
+
+app.post('/v1/admin/quiz/:quizId/restore', (req: Request, res: Response) => {
+  const quizId = parseInt(req.params.quizId);
+  const { token } = req.body;
+  const response = adminQuizRestore({ token: token }, quizId);
+
   if ('error' in response) {
     return res.status(response.statusCode).json(formatError(response));
   }

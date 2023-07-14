@@ -243,3 +243,19 @@ export const viewQuizTrashHandler = (jwt: Jwt): QuizTrashReturn | ErrorObj => {
 
   return parsedResponse;
 };
+
+export const trashRestoreQuizHandler = (jwt: Jwt, quizId: number): OkObj | ErrorObj => {
+  const res = request(
+    'POST',
+    URL + `v1/admin/quiz/${quizId}/restore`,
+    {
+      json: {
+        token: jwt.token
+      }
+    }
+  );
+
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
+};
