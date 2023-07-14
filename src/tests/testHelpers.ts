@@ -244,6 +244,23 @@ export const viewQuizTrashHandler = (jwt: Jwt): QuizTrashReturn | ErrorObj => {
   return parsedResponse;
 };
 
+export function moveQuestion(quizId: number, questionId: number, newPosition: number, jwt: Jwt) {
+  const res = request(
+    'PUT',
+    URL + `v1/admin/quiz/${quizId}/question/${questionId}/move`,
+    {
+      json: {
+        token: jwt.token,
+        newPosition: newPosition
+      }
+    }
+  );
+
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
+}
+
 export const updateQuiz = (
   jwt: Jwt, questionBody: QuestionBody, quizId: number, questionId: number
 ): OkObj | ErrorObj => {
