@@ -191,3 +191,15 @@ export interface QuizTransfer {
     token: string;
     userEmail: string;
 }
+
+export interface AdminQuestionDuplicate {
+    newQuestionId: number;
+}
+
+export interface QuizTrashReturn {
+    quizzes: QuizTrashItemReturn[];
+}
+export interface QuizTrashItemReturn {
+    quizId: number;
+    name: string;
+}

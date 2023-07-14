@@ -1,5 +1,5 @@
 import request from 'sync-request';
-import { AdminQuizCreate, AdminQuizListReturn, AdminUserDetailsReturn, ErrorObj, Jwt, OkObj, Token, AdminQuizInfo, AdminUpdateUserDetailsReturn } from '../../interfaces/interfaces';
+import { AdminQuizCreate, AdminQuizListReturn, AdminUserDetailsReturn, ErrorObj, Jwt, OkObj, Token, AdminQuizInfo, AdminQuestionDuplicate, QuizTrashReturn, adminUpdateUserPasswordReturn, AdminUpdateUserDetailsReturn } from '../../interfaces/interfaces';
 import { jwtToToken } from '../token';
 import { getUrl } from '../helper';
 
@@ -85,32 +85,35 @@ export const logoutUserHandler = (jwt: Jwt) => {
 
   return parsedResponse;
 };
-
-export const updateUserDetails = (jwt: Jwt, email: string, nameFirst: string, nameLast: string) => {
+/*
+export const updateUserDetails = (jwt: Jwt, email: string, nameFirst: string, nameLast: string): AdminUpdateUserDetailsReturn | ErrorObj => {
   const res = request(
-  'GET',
-  URL + '/v1/admin/user/details',
+    'GET',
+    URL + '/v1/admin/user/details',
     {
       qs: {
         token: jwt.token,
       }
     }
   );
-}
+  const parsedResponse: AdminUpdateUserDetailsReturn | ErrorObj = JSON.parse(res.body.toString());
+  return parsedResponse;
+};
 
-export const updateUserDetailsPassword = (jwt: Jwt, oldPassword: string, newPassword: string) => {
+export const updateUserDetailsPassword = (jwt: Jwt, oldPassword: string, newPassword: string): adminUpdateUserPasswordReturn | ErrorObj => {
   const res = request(
     'GET',
     URL + '/v1/admin/user/password',
-      {
-        qs: {
-          token: jwt.token
-        }
+    {
+      qs: {
+        token: jwt.token
       }
+    }
   );
-}
-
-
+  const parsedResponse: adminUpdateUserPasswordReturn | ErrorObj = JSON.parse(res.body.toString());
+  return parsedResponse;
+};
+*/
 export const checkTokenValid = (token: Token, authUserId: number): boolean => {
   if (parseInt(token.sessionId) < 0 || parseInt(token.sessionId) > 10e6 || token.userId !== authUserId) return false;
   return true;
@@ -235,5 +238,36 @@ export const updateDescriptionQuiz = (jwt: Jwt, description: string, quizId: num
     }
   );
   const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+  return parsedResponse;
+};
+
+export const duplicateQuiz = (jwt: Jwt, quizId: number, questionId: number): AdminQuestionDuplicate | ErrorObj => {
+  const res = request(
+    'POST',
+    URL + `v1/admin/quiz/${quizId}/question/${questionId}/duplicate`,
+    {
+      json: {
+        token: jwt.token
+      }
+    }
+  );
+  const parsedResponse: AdminQuestionDuplicate | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
+};
+
+export const viewQuizTrashHandler = (jwt: Jwt): QuizTrashReturn | ErrorObj => {
+  const res = request(
+    'GET',
+    URL + 'v1/admin/quiz/trash',
+    {
+      qs: {
+        token: jwt.token
+      }
+    }
+  );
+
+  const parsedResponse: QuizTrashReturn | ErrorObj = JSON.parse(res.body.toString());
+
   return parsedResponse;
 };

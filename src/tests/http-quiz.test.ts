@@ -1,7 +1,7 @@
 import { ErrorObj, Token, AdminQuizCreate, OkObj, Jwt, AdminQuizInfo } from '../../interfaces/interfaces';
 import { registerUser, logoutUserHandler } from './http-auth.test';
 import { tokenToJwt } from '../token';
-import { RequestCreateQuiz, RequestRemoveQuiz, clearUsers, listQuiz, updateNameQuiz, infoQuiz, quizTransferHandler, updateDescriptionQuiz } from './testHelpers';
+import { RequestCreateQuiz, RequestRemoveQuiz, clearUsers, listQuiz, updateNameQuiz, infoQuiz, quizTransferHandler, updateDescriptionQuiz, viewQuizTrashHandler } from './testHelpers';
 
 beforeEach(() => {
   clearUsers();
@@ -423,7 +423,7 @@ describe('adminQuizList tests', () => {
 describe('Quiz Transfer', () => {
   let userJwt: Jwt;
   let userJwt2: Jwt;
-  let userToken;
+  let userToken: Token;
   let userToken2: Token;
   let quizId: number;
 
@@ -479,6 +479,73 @@ describe('Quiz Transfer', () => {
       expect(quizTransferHandler(userJwt, 'JaneAusten@gmail.com', quizId)).toEqual({});
       expect(quizTransferHandler(userJwt2, 'JohnSmith@gmail.com', quizId)).toEqual({});
       expect(quizTransferHandler(userJwt2, 'JohnSmith@gmail.com', quizId2)).toEqual({});
+    });
+  });
+});
+
+describe('View Quiz Trash', () => {
+  let userJwt: Jwt;
+  let userJwt2: Jwt;
+  let userToken: Token;
+  let userToken2: Token;
+  let quizId: number;
+  beforeEach(() => {
+    userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    userJwt = tokenToJwt(userToken);
+    userToken2 = registerUser('JaneAusten@gmail.com', 'Password123', 'Jane', 'Austen') as Token;
+    userJwt2 = tokenToJwt(userToken2);
+    quizId = (RequestCreateQuiz(userJwt, 'Countries of the world', 'Quiz on all countries') as AdminQuizCreate).quizId;
+  });
+
+  describe('Unsuccessful tests', () => {
+    test('Invalid token structure', () => {
+      expect(viewQuizTrashHandler({ token: '0' })).toEqual({
+        error: 'Token is not a valid structure'
+      });
+    });
+
+    test('Token is not logged in', () => {
+      logoutUserHandler(userJwt);
+      expect(viewQuizTrashHandler(userJwt)).toEqual({
+        error: 'Provided token is valid structure, but is not for a currently logged in session'
+      });
+    });
+  });
+
+  describe('Successful tests', () => {
+    test('Empty Trash', () => {
+      expect(viewQuizTrashHandler(userJwt)).toEqual({
+        quizzes: []
+      });
+
+      expect(viewQuizTrashHandler(userJwt2)).toEqual({
+        quizzes: []
+      });
+    });
+
+    test('Non empty trash', () => {
+      const quizId2 = (RequestCreateQuiz(userJwt2, 'Flags of the world', 'Flags on all countries') as AdminQuizCreate).quizId;
+
+      RequestRemoveQuiz(userJwt, quizId);
+      expect(viewQuizTrashHandler(userJwt)).toEqual({
+        quizzes: [
+          {
+            quizId: quizId,
+            name: 'Countries of the world'
+          }
+        ]
+      });
+
+      RequestRemoveQuiz(userJwt2, quizId2);
+
+      expect(viewQuizTrashHandler(userJwt2)).toEqual({
+        quizzes: [
+          {
+            quizId: quizId2,
+            name: 'Flags of the world'
+          }
+        ]
+      });
     });
   });
 });

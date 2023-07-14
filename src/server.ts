@@ -7,11 +7,11 @@ import YAML from 'yaml';
 import sui from 'swagger-ui-express';
 import fs from 'fs';
 import { adminAuthRegister, adminAuthLogin, adminAuthLogout, adminUserDetails } from './auth';
-import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate } from './quiz';
+import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash } from './quiz';
 import { clear } from './other';
 import { formatError } from './helper';
 import { getData } from './dataStore';
-import { quizCreateQuestion, adminQuizDelete } from './question';
+import { quizCreateQuestion, adminQuizDelete, quizDuplicateQuestion } from './question';
 
 // Set up web app
 const app = express();
@@ -124,6 +124,18 @@ app.delete('/v1/admin/quiz/:quizId', (req: Request, res: Response) => {
   res.status(200).json(response);
 });
 
+app.get('/v1/admin/quiz/trash', (req: Request, res: Response) => {
+  const jwtToken = req.query.token as string;
+
+  const response = quizTrash({ token: jwtToken });
+
+  if ('error' in response) {
+    return res.status(response.statusCode).json(formatError(response));
+  }
+
+  res.status(200).json(response);
+});
+
 app.get('/v1/admin/quiz/:quizId', (req: Request, res: Response) => {
   const quizId = parseInt(req.params.quizId);
   const token = req.query.token as string;
@@ -186,7 +198,17 @@ app.put('/v1/admin/quiz/:quizId/description', (req: Request, res: Response) => {
     return res.status(response.statusCode).json(formatError(response));
   }
   res.status(200).json(response);
-  // res.status(200).json('stub');
+});
+
+app.post('/v1/admin/quiz/:quizId/question/:questionId/duplicate', (req: Request, res: Response) => {
+  const quizId = parseInt(req.params.quizId);
+  const questionId = parseInt(req.params.questionId);
+  const { token } = req.body;
+  const response = quizDuplicateQuestion({ token: token }, quizId, questionId);
+  if ('error' in response) {
+    return res.status(response.statusCode).json(formatError(response));
+  }
+  res.status(200).json(response);
 });
 
 // For Debugging

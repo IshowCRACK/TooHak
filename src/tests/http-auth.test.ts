@@ -1,7 +1,7 @@
 import { AdminUserDetailsReturn, ErrorObj, Jwt, Token } from '../../interfaces/interfaces';
 import { objToJwt, tokenToJwt } from '../token';
 // IMPORTING ALL WRAPPER FUNCTIONS
-import { checkTokenValid, clearUsers, loginUser, logoutUserHandler, registerUser, getUser, updateUserDetails, updateUserDetailsPassword } from './testHelpers';
+import { checkTokenValid, clearUsers, loginUser, logoutUserHandler, registerUser, getUser, /*updateUserDetails, updateUserDetailsPassword */} from './testHelpers';
 
 // TESTS FOR REGISTER //
 beforeEach(() => {
@@ -246,7 +246,7 @@ describe('Tests related to logging out an admin', () => {
     });
   });
 });
-
+/*
 // TESTS FOR ADMIN USER DETAILS UPDATE //
 describe('adminUserUpdateDetails test', () => {
   let jwt: Jwt;
@@ -261,24 +261,28 @@ describe('adminUserUpdateDetails test', () => {
         sessionId: '4',
         userId: 12,
       };
+      const userDetails = getUser(tokenToJwt(jwt2)) as ErrorObj;
+      const expectedResult: ErrorObj = { error: 'Token not for currently logged in session' };
+      expect(userDetails).toStrictEqual(expectedResult);
     });
     test('Email is not valid', () => {
-
+      const change = updateUserDetails(jwt, 'JohnSmith123gmail.com', 'Johnny', 'Smithy');
+      expect(change).toStrictEqual({ error: 'Invalid email or email is already in use' });
     });
     test('First name is not valid', () => {
-
+      const change = updateUserDetails(jwt, 'JohnSmith123@gmail.com', 'Johnny123', 'Smithy');
+      expect(change).toStrictEqual({ error: 'Invalid first name' });
     });
     test('Last Name is not valid', () => {
-
-    });
-    test('User is not logged in', () => {
-
+      const change = updateUserDetails(jwt, 'JohnSmith123@gmail.com', 'Johnny', 'S');
+      expect(change).toStrictEqual({ error: 'Invalid last name' });
     });
   });
 
   describe('Successful Update of details', () => {
     test('All sections are successfully updated', () => {
-
+      const change = updateUserDetails(jwt, 'JohnSmith123@gmail.com', 'Johnny', 'Smithy');
+      expect(change).toStrictEqual({});
     });
   });
 });
@@ -297,28 +301,31 @@ describe('adminUserUpdateDetailsPassword test', () => {
         sessionId: '4',
         userId: 12,
       };
+      const change = updateUserDetailsPassword(tokenToJwt(jwt2), 'Password123', 'Password1234');
+      expect(change).toStrictEqual({ error: 'Token is not for currently logged in session' });
     });
     test('Password does not match with old password', () => {
-
+      const change = updateUserDetailsPassword(jwt, 'Password12', 'Password1234');
+      expect(change).toStrictEqual({ error: 'Old password is not correct' });
     });
     test('Password does not match with criteria', () => {
-
+      const change = updateUserDetailsPassword(jwt, 'Password123', 'P4');
+      expect(change).toStrictEqual({ error: 'New password must be at least 8 characters long and contain at least one number and one letter' });
     });
     test('Password has already been used', () => {
-
-    });
-    test('User is not logged in', () => {
-
+      const change = updateUserDetailsPassword(jwt, 'Password123', 'Password123');
+      expect(change).toStrictEqual({ error: 'New password cannot be the same as the old password' });
     });
   });
 
   describe('Successful Update of Password', () => {
     test('Password has been changed successfully', () => {
-
+      const change = updateUserDetailsPassword(jwt, 'Password123', 'Password1234');
+      expect(change).toStrictEqual({});
     });
   });
 });
-
+*/
 // TESTS FOR ADMIN USER DETAILS //
 describe('adminUserDetails test', () => {
   let jwt: Jwt;

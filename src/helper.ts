@@ -1,4 +1,4 @@
-import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer } from '../interfaces/interfaces';
+import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer, Question } from '../interfaces/interfaces';
 import { getData } from './dataStore';
 import { adminQuizList } from './quiz';
 import { checkJwtValid, jwtToToken } from './token';
@@ -346,16 +346,30 @@ export function checkAnswerHasTrueValue(answers: Answer[]): boolean {
   return (answers.some((answer: Answer) => answer.correct === true));
 }
 
+// export function createQuestionId(quiz: Quiz): number {
+//   let questionId = -1;
+//   // TODO: change this
+//   for (const question of quiz.questions) {
+//     if (question.questionId > questionId) questionId = question.questionId;
+//   }
+
+//   ++questionId;
+
+//   return questionId;
+// }
+
 export function createQuestionId(quiz: Quiz): number {
-  let questionId = -1;
-  // TODO: change this
+  let maxQuestionId = -1;
+
   for (const question of quiz.questions) {
-    if (question.questionId > questionId) questionId = question.questionId;
+    if (question.questionId > maxQuestionId) {
+      maxQuestionId = question.questionId;
+    }
   }
 
-  ++questionId;
+  const newQuestionId = maxQuestionId + 1;
 
-  return questionId;
+  return newQuestionId;
 }
 
 export function checkQuestionIdValid(questionId: number, quiz: Quiz): boolean {
@@ -377,4 +391,9 @@ export function checkNameUsedInQuiz(quizId: number, userId: number): boolean {
   }
 
   return false;
+}
+
+export function checkQuestionIdIsValidInQuiz(questions: Question[], questionId: number): boolean {
+  const foundQuestion = questions.find((question) => question.questionId === questionId);
+  return !!foundQuestion; // Convert the foundQuestion to a boolean value
 }

@@ -185,6 +185,7 @@ function adminUserDetails (jwt: Jwt): AdminUserDetailsReturn | ErrorAndStatusCod
  *
  * @returns {{} | {error: string}} - Returns an empty object or Error
  */
+/*
 function adminUpdateUserDetails(jwt: Jwt, email: string, nameFirst: string, nameLast: string): AdminUpdateUserDetailsReturn | ErrorAndStatusCode {
   const data = getData();
   const authUserId: number = jwtToToken(jwt).userId;
@@ -210,7 +211,7 @@ function adminUpdateUserDetails(jwt: Jwt, email: string, nameFirst: string, name
     // Check if email is provided and valid
     if (email) {
       // Check if email is valid and not used by another user
-      if (!validator.isEmail(email) || emailAlreadyUsed(email, authUserId) === true ) {
+      if (!validator.isEmail(email) || emailAlreadyUsed(email, authUserId) === true) {
         return {
           error: 'Invalid email or email is already in use',
           statusCode: 400,
@@ -249,7 +250,7 @@ function adminUpdateUserDetails(jwt: Jwt, email: string, nameFirst: string, name
   }
   return {};
 }
-
+*/
 /**
   * Update a Users password with a new password, then returns empty object
   *
@@ -259,7 +260,8 @@ function adminUpdateUserDetails(jwt: Jwt, email: string, nameFirst: string, name
   *
  * @returns {{} | {error: string}} - Returns an empty object or Error
 */
-function adminUpdateUserPassword(jwt: Jwt, oldPassword: string, newPassword: string): adminUpdateUserPasswordReturn {
+/*
+function adminUpdateUserPassword(jwt: Jwt, oldPassword: string, newPassword: string): adminUpdateUserPasswordReturn | ErrorAndStatusCode  {
   const data = getData();
   const authUserId: number = jwtToToken(jwt).userId;
   // Find the user by authUserId
@@ -275,7 +277,7 @@ function adminUpdateUserPassword(jwt: Jwt, oldPassword: string, newPassword: str
   // check if valid for active sessions
   if (!checkTokenValidSession(jwt)) {
     return {
-      error: 'Token not for currently logged in session',
+      error: 'Token is not for currently logged in session',
       statusCode: 403
     };
   }
@@ -299,9 +301,9 @@ function adminUpdateUserPassword(jwt: Jwt, oldPassword: string, newPassword: str
     // Check password has not been used before by this user
     if (user.prevPassword.includes(newPassword) === true) {
       return {
-        error: 'New passwrod has been previously used',
+        error: 'New password cannot be the same as the old password',
         statusCode: 400,
-      }
+      };
     }
 
     // Check if the new password meets the requirements
@@ -320,7 +322,7 @@ function adminUpdateUserPassword(jwt: Jwt, oldPassword: string, newPassword: str
 
   return {};
 }
-
+*/
 export const adminAuthLogout = (jwt: Jwt): OkObj | ErrorAndStatusCode => {
   const possibleToken = checkJwtValid(jwt);
 
@@ -347,4 +349,4 @@ export const adminAuthLogout = (jwt: Jwt): OkObj | ErrorAndStatusCode => {
   };
 };
 
-export { adminAuthLogin, adminAuthRegister, adminUserDetails, adminUpdateUserDetails, adminUpdateUserPassword };
+export { adminAuthLogin, adminAuthRegister, adminUserDetails, /*adminUpdateUserDetails, adminUpdateUserPassword*/ };
