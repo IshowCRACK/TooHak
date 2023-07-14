@@ -236,3 +236,58 @@ export function adminQuizDelete(jwt: Jwt, quizId: number, questionId: number): O
     return {};
   }
 }
+
+/**
+ * This function moves a question from one particular position in the quiz to another,
+ * timeLastEdited is updated
+ * @param {number} quizId - unique quizId
+ * @param {number} questionId - unique questionId in quiz
+ * @param {number} newPosition - new position where element will be moved
+ * @param {Jwt} jwt - Jwt token containing sessionId and user Id
+ */
+export function quizMoveQuestion(quizId: number, questionId: number, newPosition: number, jwt: Jwt): OkObj | ErrorAndStatusCode {
+  if (!checkTokenValidStructure(jwt)) {
+    return {
+      error: 'Token is not a valid structure',
+      statusCode: 401
+    };
+  }
+
+  if (!checkTokenValidSession(jwt)) {
+    return {
+      error: 'Token not for currently logged in session',
+      statusCode: 403
+    };
+  }
+  
+  // QuizId does not refer to a valid quiz
+  if (!checkQuizIdValid(quizId)) {
+    return {
+      error: 'Quiz ID does not refer to a valid quiz',
+      statusCode: 400
+    };
+  }
+
+  // QuizId does not refer to a quiz that this user owns
+  if (!checkQuizAndUserIdValid(quizId, jwtToToken(jwt).userId)) {
+    return {
+      error: 'Quiz ID does not refer to a quiz that this user owns',
+      statusCode: 400
+    };
+  }
+
+  const quiz: Quiz = getQuiz(quizId);
+  // QuestionId does not refer to a valid question within this quiz
+  if (!checkQuestionIdValid(questionId, quiz)) {
+    return {
+      error: 'Quiz ID does not refer to a valid question within this quiz',
+      statusCode: 400
+    };
+  }
+
+  // newPosition is less than 0 or newPosition is greater than n-1 where n is the number of questions
+  
+  // newPosition is the position of the current question 
+
+  return;
+}
