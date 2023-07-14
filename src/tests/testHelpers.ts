@@ -98,6 +98,19 @@ export const updateUserDetails = (jwt: Jwt, email: string, nameFirst: string, na
   );
 }
 
+export const updateUserDetailsPassword = (jwt: Jwt, oldPassword: string, newPassword: string) => {
+  const res = request(
+    'GET',
+    URL + '/v1/admin/user/password',
+      {
+        qs: {
+          token: jwt.token
+        }
+      }
+  );
+}
+
+
 export const checkTokenValid = (token: Token, authUserId: number): boolean => {
   if (parseInt(token.sessionId) < 0 || parseInt(token.sessionId) > 10e6 || token.userId !== authUserId) return false;
   return true;

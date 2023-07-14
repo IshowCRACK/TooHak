@@ -36,7 +36,7 @@ export function checkName (name: string): boolean {
   * @returns {boolean} - Returns true or false if password satisfies the conditions
 */
 export function checkPassword (password: string): boolean {
-  return /^(?=.*[a-zA-Z])(?=.*[0-9])/.test(password);
+  return /^(?=.*[a-zA-Z])(?=.*[0-9])/.test(password) && password.length < 8;
 }
 
 /**
@@ -179,7 +179,8 @@ export function adminUserALLDetails(authUserId: number): AdminUserALLDetailsRetu
           password: user.password,
           numSuccessLogins: user.numSuccessLogins,
           numFailedPasswordsSinceLastLogin: user.numFailedPasswordsSinceLastLogin,
-          deletedQuizzes: user.deletedQuizzes
+          deletedQuizzes: user.deletedQuizzes,
+          prevPassword: []
         }
       };
     }

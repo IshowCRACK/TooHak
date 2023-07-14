@@ -84,13 +84,14 @@ function adminAuthRegister (email: string, password: string, nameFirst: string, 
   const userID = data.users.length;
   data.users.push({
     email,
-    password,
+    password: password,
     nameFirst: nameFirst,
     nameLast: nameLast,
     authUserId: userID,
     numSuccessLogins: 1,
     numFailedPasswordsSinceLastLogin: 0,
-    deletedQuizzes: []
+    deletedQuizzes: [],
+    prevPassword: [password],
   });
 
   setData(data);
@@ -190,6 +191,20 @@ function adminUpdateUserDetails(jwt: Jwt, email: string, nameFirst: string, name
   // Find the user by authUserId
   const user = data.users.find((user) => user.authUserId === authUserId);
 
+  // checking valid token structure
+  if (!checkTokenValidStructure(jwt)) {
+    return {
+      error: 'Token is not a valid structure',
+      statusCode: 401
+    };
+  }
+  // check if valid for active sessions
+  if (!checkTokenValidSession(jwt)) {
+    return {
+      error: 'Token not for currently logged in session',
+      statusCode: 403
+    };
+  }
   if (user) {
     let changes = false;
     // Check if email is provided and valid
@@ -197,7 +212,8 @@ function adminUpdateUserDetails(jwt: Jwt, email: string, nameFirst: string, name
       // Check if email is valid and not used by another user
       if (!validator.isEmail(email) || emailAlreadyUsed(email, authUserId) === true ) {
         return {
-          error: 'Invalid email or email is already in use'
+          error: 'Invalid email or email is already in use',
+          statusCode: 400,
         };
       }
 
@@ -211,7 +227,8 @@ function adminUpdateUserDetails(jwt: Jwt, email: string, nameFirst: string, name
       changes = true;
     } else {
       return {
-        error: 'Invalid first name'
+        error: 'Invalid first name',
+        statusCode: 400,
       };
     }
 
@@ -220,7 +237,8 @@ function adminUpdateUserDetails(jwt: Jwt, email: string, nameFirst: string, name
       changes = true;
     } else {
       return {
-        error: 'Invalid last name'
+        error: 'Invalid last name',
+        statusCode: 400,
       };
     }
 
@@ -228,10 +246,6 @@ function adminUpdateUserDetails(jwt: Jwt, email: string, nameFirst: string, name
     if (changes === true) {
       setData(data);
     }
-  } else {
-    return {
-      error: 'User doesnt exist'
-    };
   }
   return {};
 }
@@ -245,42 +259,63 @@ function adminUpdateUserDetails(jwt: Jwt, email: string, nameFirst: string, name
   *
  * @returns {{} | {error: string}} - Returns an empty object or Error
 */
-function adminUpdateUserPassword(authUserId: number, oldPassword: string, newPassword: string): adminUpdateUserPasswordReturn {
+function adminUpdateUserPassword(jwt: Jwt, oldPassword: string, newPassword: string): adminUpdateUserPasswordReturn {
   const data = getData();
-
+  const authUserId: number = jwtToToken(jwt).userId;
   // Find the user by authUserId
   const user = data.users.find((user) => user.authUserId === authUserId);
+
+  // checking valid token structure
+  if (!checkTokenValidStructure(jwt)) {
+    return {
+      error: 'Token is not a valid structure',
+      statusCode: 401
+    };
+  }
+  // check if valid for active sessions
+  if (!checkTokenValidSession(jwt)) {
+    return {
+      error: 'Token not for currently logged in session',
+      statusCode: 403
+    };
+  }
 
   if (user) {
     // Check if the old password matches the user's current password
     if (user.password !== oldPassword) {
       return {
-        error: 'Old password is not correct'
+        error: 'Old password is not correct',
+        statusCode: 400,
       };
     }
 
     // Check if the new password has been used before by this user
     if (user.password === newPassword) {
       return {
-        error: 'New password cannot be the same as the old password'
+        error: 'New password cannot be the same as the old password',
+        statusCode: 400,
       };
+    }
+    // Check password has not been used before by this user
+    if (user.prevPassword.includes(newPassword) === true) {
+      return {
+        error: 'New passwrod has been previously used',
+        statusCode: 400,
+      }
     }
 
     // Check if the new password meets the requirements
-    if (newPassword.length < 8 || !checkPassword(newPassword)) {
+    if (!checkPassword(newPassword)) {
       return {
-        error: 'New password must be at least 8 characters long and contain at least one number and one letter'
+        error: 'New password must be at least 8 characters long and contain at least one number and one letter',
+        statusCode: 400,
       };
     }
 
     // Update the user's password
     user.password = newPassword;
-
+    user.prevPassword.push(newPassword);
     setData(data);
-  } else {
-    return {
-      error: 'User doenst exist'
-    };
   }
 
   return {};

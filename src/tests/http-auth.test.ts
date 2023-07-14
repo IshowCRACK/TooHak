@@ -1,7 +1,7 @@
 import { AdminUserDetailsReturn, ErrorObj, Jwt, Token } from '../../interfaces/interfaces';
 import { objToJwt, tokenToJwt } from '../token';
 // IMPORTING ALL WRAPPER FUNCTIONS
-import { checkTokenValid, clearUsers, loginUser, logoutUserHandler, registerUser, getUser, updateUserDetails } from './testHelpers';
+import { checkTokenValid, clearUsers, loginUser, logoutUserHandler, registerUser, getUser, updateUserDetails, updateUserDetailsPassword } from './testHelpers';
 
 // TESTS FOR REGISTER //
 beforeEach(() => {
@@ -283,7 +283,41 @@ describe('adminUserUpdateDetails test', () => {
   });
 });
 
+// TESTS FOR ADMIN USER PASSWORD UPDATE //
+describe('adminUserUpdateDetailsPassword test', () => {
+  let jwt: Jwt;
+  beforeEach(() => {
+    const token = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    jwt = tokenToJwt(token);
+  });
 
+  describe('Unseccessful update of Password', () => {
+    test('Token does not exit', () => {
+      const jwt2: Token = {
+        sessionId: '4',
+        userId: 12,
+      };
+    });
+    test('Password does not match with old password', () => {
+
+    });
+    test('Password does not match with criteria', () => {
+
+    });
+    test('Password has already been used', () => {
+
+    });
+    test('User is not logged in', () => {
+
+    });
+  });
+
+  describe('Successful Update of Password', () => {
+    test('Password has been changed successfully', () => {
+
+    });
+  });
+});
 
 // TESTS FOR ADMIN USER DETAILS //
 describe('adminUserDetails test', () => {

@@ -14,6 +14,7 @@ export interface User {
     numSuccessLogins: number;
     numFailedPasswordsSinceLastLogin: number;
     deletedQuizzes: Quiz[];
+    prevPassword: string[];
 }
 
 export type JwtToken = string;
