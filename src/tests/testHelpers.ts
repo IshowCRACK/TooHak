@@ -231,7 +231,7 @@ export const duplicateQuiz = (jwt: Jwt, quizId: number, questionId: number): Adm
 export const viewQuizTrashHandler = (jwt: Jwt): QuizTrashReturn | ErrorObj => {
   const res = request(
     'GET',
-    URL + `v1/admin/quiz/trash`,
+    URL + 'v1/admin/quiz/trash',
     {
       qs: {
         token: jwt.token
@@ -242,4 +242,4 @@ export const viewQuizTrashHandler = (jwt: Jwt): QuizTrashReturn | ErrorObj => {
   const parsedResponse: QuizTrashReturn | ErrorObj = JSON.parse(res.body.toString());
 
   return parsedResponse;
-}
+};

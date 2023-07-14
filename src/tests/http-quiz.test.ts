@@ -423,7 +423,7 @@ describe('adminQuizList tests', () => {
 describe('Quiz Transfer', () => {
   let userJwt: Jwt;
   let userJwt2: Jwt;
-  let userToken;
+  let userToken: Token;
   let userToken2: Token;
   let quizId: number;
 
@@ -483,10 +483,10 @@ describe('Quiz Transfer', () => {
   });
 });
 
-describe.skip('View Quiz Trash', () => {
+describe('View Quiz Trash', () => {
   let userJwt: Jwt;
   let userJwt2: Jwt;
-  let userToken;
+  let userToken: Token;
   let userToken2: Token;
   let quizId: number;
   beforeEach(() => {
@@ -499,13 +499,13 @@ describe.skip('View Quiz Trash', () => {
 
   describe('Unsuccessful tests', () => {
     test('Invalid token structure', () => {
-      expect(viewQuizTrashHandler({token: '0'})).toEqual({
+      expect(viewQuizTrashHandler({ token: '0' })).toEqual({
         error: 'Token is not a valid structure'
       });
     });
 
     test('Token is not logged in', () => {
-      logoutUserHandler(userJwt2);
+      logoutUserHandler(userJwt);
       expect(viewQuizTrashHandler(userJwt)).toEqual({
         error: 'Provided token is valid structure, but is not for a currently logged in session'
       });
@@ -515,34 +515,31 @@ describe.skip('View Quiz Trash', () => {
   describe('Successful tests', () => {
     test('Empty Trash', () => {
       expect(viewQuizTrashHandler(userJwt)).toEqual({
-        "quizzes": []
+        quizzes: []
       });
 
       expect(viewQuizTrashHandler(userJwt2)).toEqual({
-        "quizzes": []
+        quizzes: []
       });
     });
 
     test('Non empty trash', () => {
+      const quizId2 = (RequestCreateQuiz(userJwt2, 'Flags of the world', 'Flags on all countries') as AdminQuizCreate).quizId;
+
       RequestRemoveQuiz(userJwt, quizId);
       expect(viewQuizTrashHandler(userJwt)).toEqual({
-        "quizzes": [
+        quizzes: [
           {
             quizId: quizId,
-            name: 'Countries of the World'
+            name: 'Countries of the world'
           }
         ]
       });
 
-      const quizId2 = (RequestCreateQuiz(userJwt2, 'Flags of the world', 'Flags on all countries') as AdminQuizCreate).quizId;
       RequestRemoveQuiz(userJwt2, quizId2);
 
       expect(viewQuizTrashHandler(userJwt2)).toEqual({
-        "quizzes": [
-          {
-            quizId: quizId,
-            name: 'Countries of the World'
-          },
+        quizzes: [
           {
             quizId: quizId2,
             name: 'Flags of the world'

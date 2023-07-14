@@ -1,7 +1,7 @@
 import {
   Data, AdminQuizListReturn,
-  AdminQuizList, viewUserDeletedQuizzesReturn, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn,
-  Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj, AdminQuizInfo, User, Quiz,
+  AdminQuizList, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn,
+  Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj, AdminQuizInfo, User, Quiz, QuizTrashReturn,
 } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
@@ -135,16 +135,36 @@ function adminQuizRemove (jwt: Jwt, quizId: number): OkObj | ErrorAndStatusCode 
   *
   * @returns {Quiz[] | {error: string}} - Returns array if valid
  */
-function viewUserDeletedQuizzes(authUserId: number): viewUserDeletedQuizzesReturn {
-  const data = getData();
-
-  if (!checkAuthUserIdValid(authUserId)) {
-    return { error: 'AuthUserId is not a valid user' };
+export function quizTrash(jwt: Jwt): QuizTrashReturn | ErrorAndStatusCode {
+  //  check valid structure
+  if (!checkTokenValidStructure(jwt)) {
+    return {
+      error: 'Token is not a valid structure',
+      statusCode: 401
+    };
+  }
+  //  check if valid for active sessions
+  if (!checkTokenValidSession(jwt)) {
+    return {
+      error: 'Provided token is valid structure, but is not for a currently logged in session',
+      statusCode: 403
+    };
   }
 
-  const user = data.users.find((user) => user.authUserId === authUserId);
+  const data = getData();
 
-  return user.deletedQuizzes;
+  const user = data.users.find((user) => user.authUserId === jwtToToken(jwt).userId);
+
+  const userDeletedQuizzes = user.deletedQuizzes.map((quiz: Quiz) => {
+    return {
+      quizId: quiz.adminQuizId,
+      name: quiz.name
+    };
+  });
+
+  return {
+    quizzes: userDeletedQuizzes
+  };
 }
 
 /**
@@ -567,4 +587,4 @@ function adminQuizTransfer(jwt: Jwt, email: string, quizId: number): OkObj | Err
   return {};
 }
 
-export { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo, viewUserDeletedQuizzes, adminQuizRestore, adminQuizEmptyTrash, adminQuizTransfer };
+export { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo, adminQuizRestore, adminQuizEmptyTrash, adminQuizTransfer };
