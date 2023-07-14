@@ -1,6 +1,6 @@
 import { AdminUserDetailsReturn, AdminUpdateUserDetailsReturn, adminUpdateUserPasswordReturn, Data, Token, Jwt, ErrorAndStatusCode, OkObj } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
-import { checkName, checkPassword, emailAlreadyUsed, checkTokenValidStructure, checkTokenValidSession } from './helper';
+import { checkName, checkPassword, emailAlreadyUsed, checkTokenValidStructure, checkTokenValidSession, createUserId } from './helper';
 import validator from 'validator';
 import { addTokenToSession, checkJwtValid, createToken, getTokenLogin, tokenToJwt, jwtToToken } from './token';
 
@@ -81,7 +81,7 @@ function adminAuthRegister (email: string, password: string, nameFirst: string, 
   }
 
   // else if every parameter is valid push into users database
-  const userID = data.users.length;
+  const userID = createUserId();
   data.users.push({
     email,
     password,

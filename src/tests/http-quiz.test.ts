@@ -1,11 +1,12 @@
 import { ErrorObj, Token, AdminQuizCreate, OkObj, Jwt, AdminQuizInfo } from '../../interfaces/interfaces';
 import { registerUser, logoutUserHandler } from './http-auth.test';
-import { jwtToToken, tokenToJwt } from '../token';
+import { tokenToJwt } from '../token';
 import { RequestCreateQuiz, RequestRemoveQuiz, clearUsers, listQuiz, updateNameQuiz, infoQuiz, quizTransferHandler, updateDescriptionQuiz, viewQuizTrashHandler, trashRestoreQuizHandler, emptyTrashHandler } from './testHelpers';
 
 beforeEach(() => {
   clearUsers();
 });
+
 // TESTS FOR QUIZ UPDATE DESCRIPTION //
 describe('Quiz Update Description', () => {
   let token0: Token;
@@ -624,7 +625,7 @@ describe('Trash Restore Quiz', () => {
   });
 });
 
-describe.skip('Empty Trash', () => {
+describe('Empty Trash', () => {
   let userJwt: Jwt;
   let userJwt2: Jwt;
   let userToken: Token;
@@ -696,4 +697,3 @@ describe.skip('Empty Trash', () => {
     });
   });
 });
-
