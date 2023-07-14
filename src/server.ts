@@ -11,7 +11,7 @@ import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQu
 import { clear } from './other';
 import { formatError } from './helper';
 import { getData } from './dataStore';
-import { quizCreateQuestion, adminQuizDelete, quizDuplicateQuestion, quizMoveQuestion, quizUpdateQuestion } from './question';
+import { quizCreateQuestion, adminQuizDelete, quizDuplicateQuestion, quizmoveQuestionHandler, quizUpdateQuestion } from './question';
 
 // Set up web app
 const app = express();
@@ -226,7 +226,7 @@ app.put('/v1/admin/quiz/:quizId/question/:questionId/move', (req: Request, res: 
   const quizId = parseInt(req.params.quizId);
   const questionId = parseInt(req.params.questionId);
   const { token, newPosition } = req.body;
-  const response = quizMoveQuestion(quizId, questionId, newPosition, { token: token });
+  const response = quizmoveQuestionHandler(quizId, questionId, newPosition, { token: token });
   if ('error' in response) {
     return res.status(response.statusCode).json(formatError(response));
   }

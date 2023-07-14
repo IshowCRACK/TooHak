@@ -1,14 +1,14 @@
 import request from 'sync-request';
 import { AdminQuizCreate, ErrorObj, Jwt, QuestionBody, QuizQuestionCreate, Token, AdminQuizInfo, AdminQuestionDuplicate } from '../../interfaces/interfaces';
 import { getUrl } from '../helper';
-import { RequestCreateQuiz, clearUsers, registerUser, duplicateQuiz, infoQuiz, logoutUserHandler, deleteQuestion, moveQuestion, updateQuiz } from './testHelpers';
+import { createQuizHandler, clearUsersHandler, registerUserHandler, duplicateQuizQuestionHandler, infoQuizHandler, logoutUserHandler, deleteQuestionHandler, moveQuestionHandler, updateQuizHandler } from './testHelpers';
 import { tokenToJwt } from '../token';
 // import { token } from 'morgan';
 
 const URL: string = getUrl();
 
 beforeEach(() => {
-  clearUsers();
+  clearUsersHandler();
 });
 
 const createQuizQuestionHandler = (quizId: number, jwt: Jwt, questionBody: QuestionBody) => {
@@ -34,9 +34,9 @@ describe('Tests related to creating a Quiz Question', () => {
   let quizId: number;
   let defaultQuestionBody: QuestionBody;
   beforeEach(() => {
-    userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    userToken = registerUserHandler('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
     userJwt = tokenToJwt(userToken);
-    quizId = (RequestCreateQuiz(tokenToJwt(userToken), 'Countries of the World', 'Quiz on Countries of the World') as AdminQuizCreate).quizId;
+    quizId = (createQuizHandler(tokenToJwt(userToken), 'Countries of the World', 'Quiz on Countries of the World') as AdminQuizCreate).quizId;
 
     defaultQuestionBody = {
       question: 'What content is Russia in?',
@@ -79,7 +79,7 @@ describe('Tests related to creating a Quiz Question', () => {
     });
 
     test('QuizId does not refer to a valid quiz that this user owns', () => {
-      const userToken2: Token = registerUser('JaneAusten@gmail.com', 'Password123', 'Jane', 'Austen') as Token;
+      const userToken2: Token = registerUserHandler('JaneAusten@gmail.com', 'Password123', 'Jane', 'Austen') as Token;
       expect(createQuizQuestionHandler(quizId, tokenToJwt(userToken2), defaultQuestionBody)).toEqual({
         error: 'Quiz ID does not refer to a quiz that this user owns'
       });
@@ -190,7 +190,7 @@ describe('Tests related to creating a Quiz Question', () => {
         questionId: 1
       });
 
-      const quizId2: number = (RequestCreateQuiz(tokenToJwt(userToken), 'Flags of the World', 'Quiz on Flags of the World') as AdminQuizCreate).quizId;
+      const quizId2: number = (createQuizHandler(tokenToJwt(userToken), 'Flags of the World', 'Quiz on Flags of the World') as AdminQuizCreate).quizId;
       expect(createQuizQuestionHandler(quizId2, userJwt, defaultQuestionBody)).toEqual({
         questionId: 0
       });
@@ -212,9 +212,9 @@ describe('Quiz Duplicate', () => {
   let timeBufferSeconds: number;
 
   beforeEach(() => {
-    userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    userToken = registerUserHandler('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
     userJwt = tokenToJwt(userToken);
-    quizCreate = (RequestCreateQuiz(tokenToJwt(userToken), 'Countries of the World', 'Quiz on Countries of the World') as AdminQuizCreate);
+    quizCreate = (createQuizHandler(tokenToJwt(userToken), 'Countries of the World', 'Quiz on Countries of the World') as AdminQuizCreate);
     quizId = quizCreate.quizId;
     timeBufferSeconds = 20;
     defaultQuestionBody = {
@@ -253,14 +253,14 @@ describe('Quiz Duplicate', () => {
   describe('Successful Tests', () => {
     beforeEach(() => {
       quizEditedTime = Math.round(Date.now() / 1000);
-      res = duplicateQuiz(userJwt, quizId, questionId) as AdminQuestionDuplicate;
+      res = duplicateQuizQuestionHandler(userJwt, quizId, questionId) as AdminQuestionDuplicate;
     });
 
     test('1. duplicate a quiz', () => {
       expect(res).toEqual({
         newQuestionId: 1
       });
-      quizInfo = infoQuiz(userJwt, quizId) as AdminQuizInfo;
+      quizInfo = infoQuizHandler(userJwt, quizId) as AdminQuizInfo;
       expect(quizInfo.questions[0].questionId).toStrictEqual(0);
       expect(quizInfo.questions[1].questionId).toStrictEqual(1);
     });
@@ -276,32 +276,32 @@ describe('Quiz Duplicate', () => {
 
   describe('Unsuccessful Tests', () => {
     test('1. QuizId does not refer to valid quiz', () => {
-      expect(duplicateQuiz(userJwt, -9, questionId)).toEqual({
+      expect(duplicateQuizQuestionHandler(userJwt, -9, questionId)).toEqual({
         error: 'Quiz ID does not refer to a valid quiz'
       });
     });
 
     test('2, QuizId does not refer to a valid quiz that this user owns', () => {
-      const userToken2: Token = registerUser('JaneAusten@gmail.com', 'Password123', 'Jane', 'Austen') as Token;
-      expect(duplicateQuiz(tokenToJwt(userToken2), quizId, questionId)).toEqual({
+      const userToken2: Token = registerUserHandler('JaneAusten@gmail.com', 'Password123', 'Jane', 'Austen') as Token;
+      expect(duplicateQuizQuestionHandler(tokenToJwt(userToken2), quizId, questionId)).toEqual({
         error: 'Quiz ID does not refer to a quiz that this user owns'
       });
     });
 
     test('3. Question Id does not refer to a valid question within this quiz', () => {
-      expect(duplicateQuiz(userJwt, quizId, questionId + 2)).toEqual({
+      expect(duplicateQuizQuestionHandler(userJwt, quizId, questionId + 2)).toEqual({
         error: 'Question Id does not refer to a valid question within this quiz'
       });
     });
 
     test('4. Token is not a valid structure', () => {
-      res = res = duplicateQuiz({ token: '-1' }, quizId, questionId);
+      res = res = duplicateQuizQuestionHandler({ token: '-1' }, quizId, questionId);
       expect(res).toStrictEqual({ error: 'Token is not a valid structure' });
     });
 
     test('5. Not token of an active session', () => {
       logoutUserHandler(userJwt);
-      res = duplicateQuiz(userJwt, quizId, questionId);
+      res = duplicateQuizQuestionHandler(userJwt, quizId, questionId);
       expect(res).toStrictEqual({ error: 'Token not for currently logged in session' });
     });
   });
@@ -315,9 +315,9 @@ describe('Tests for adminQuizDelete', () => {
   let quizId: number;
   let defaultQuestionBody: QuestionBody;
   beforeEach(() => {
-    userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    userToken = registerUserHandler('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
     userJwt = tokenToJwt(userToken);
-    quizId = (RequestCreateQuiz(tokenToJwt(userToken), 'Countries of the World', 'Quiz on Countries of the World') as AdminQuizCreate).quizId;
+    quizId = (createQuizHandler(tokenToJwt(userToken), 'Countries of the World', 'Quiz on Countries of the World') as AdminQuizCreate).quizId;
 
     defaultQuestionBody = {
       question: 'What continent is Russia in?',
@@ -358,43 +358,43 @@ describe('Tests for adminQuizDelete', () => {
         sessionId: '',
         userId: 5
       };
-      expect(deleteQuestion(tokenToJwt(exampleToken), quizId, 5)).toStrictEqual({ error: 'Token not for currently logged in session' });
+      expect(deleteQuestionHandler(tokenToJwt(exampleToken), quizId, 5)).toStrictEqual({ error: 'Token not for currently logged in session' });
     });
 
     test('quizId does not refer to a valid quiz', () => {
-      expect(deleteQuestion(userJwt, 5, 0)).toStrictEqual({ error: 'Quiz ID does not refer to a valid quiz' });
+      expect(deleteQuestionHandler(userJwt, 5, 0)).toStrictEqual({ error: 'Quiz ID does not refer to a valid quiz' });
     });
 
     test('quizId does not refer to a quiz that this user owns', () => {
-      const token2 = registerUser('JohnCena@gmail.com', 'Password123', 'John', 'Cena') as Token;
-      expect(deleteQuestion(tokenToJwt(token2), 0, 0)).toStrictEqual({ error: 'Quiz ID does not refer to a quiz that this user owns' });
+      const token2 = registerUserHandler('JohnCena@gmail.com', 'Password123', 'John', 'Cena') as Token;
+      expect(deleteQuestionHandler(tokenToJwt(token2), 0, 0)).toStrictEqual({ error: 'Quiz ID does not refer to a quiz that this user owns' });
     });
 
     test('quizId does not refer to a valid question within the quiz', () => {
-      expect(deleteQuestion(userJwt, quizId, 0)).toStrictEqual({ error: 'Quiz ID does not refer to a valid question within this quiz' });
+      expect(deleteQuestionHandler(userJwt, quizId, 0)).toStrictEqual({ error: 'Quiz ID does not refer to a valid question within this quiz' });
     });
   });
 
   describe('Successful Tests', () => {
     test('Successfully deleted question', () => {
       createQuizQuestionHandler(quizId, userJwt, defaultQuestionBody);
-      expect(deleteQuestion(userJwt, quizId, 0)).toStrictEqual({});
+      expect(deleteQuestionHandler(userJwt, quizId, 0)).toStrictEqual({});
     });
   });
 });
 
 // TEST FOR QUIZ MOVE QUESTION //
 
-describe('Tests for quizMoveQuestion', () => {
+describe('Tests for quizmoveQuestionHandler', () => {
   let userToken: Token;
   let userJwt: Jwt;
   let quizId: number;
   let defaultQuestionBody: QuestionBody;
   let secondQuestionBody: QuestionBody;
   beforeEach(() => {
-    userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    userToken = registerUserHandler('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
     userJwt = tokenToJwt(userToken);
-    quizId = (RequestCreateQuiz(tokenToJwt(userToken), 'Countries of the World', 'Quiz on Countries of the World') as AdminQuizCreate).quizId;
+    quizId = (createQuizHandler(tokenToJwt(userToken), 'Countries of the World', 'Quiz on Countries of the World') as AdminQuizCreate).quizId;
 
     defaultQuestionBody = {
       question: 'What continent is Russia in?',
@@ -467,35 +467,35 @@ describe('Tests for quizMoveQuestion', () => {
         sessionId: '',
         userId: 5
       };
-      expect(moveQuestion(quizId, 0, 1, tokenToJwt(exampleToken))).toStrictEqual({ error: 'Token not for currently logged in session' });
+      expect(moveQuestionHandler(quizId, 0, 1, tokenToJwt(exampleToken))).toStrictEqual({ error: 'Token not for currently logged in session' });
     });
 
     test('quizId does not refer to a valid quiz', () => {
-      expect(moveQuestion(5, 0, 1, userJwt)).toStrictEqual({ error: 'Quiz ID does not refer to a valid quiz' });
+      expect(moveQuestionHandler(5, 0, 1, userJwt)).toStrictEqual({ error: 'Quiz ID does not refer to a valid quiz' });
     });
 
     test('quizId does not refer to a quiz that this user owns', () => {
-      const token2 = registerUser('JohnCena@gmail.com', 'Password123', 'John', 'Cena') as Token;
-      expect(moveQuestion(quizId, 0, 1, tokenToJwt(token2))).toStrictEqual({ error: 'Quiz ID does not refer to a quiz that this user owns' });
+      const token2 = registerUserHandler('JohnCena@gmail.com', 'Password123', 'John', 'Cena') as Token;
+      expect(moveQuestionHandler(quizId, 0, 1, tokenToJwt(token2))).toStrictEqual({ error: 'Quiz ID does not refer to a quiz that this user owns' });
     });
 
     test('quizId does not refer to a valid question within the quiz', () => {
-      expect(moveQuestion(quizId, 0, 1, userJwt)).toStrictEqual({ error: 'Quiz ID does not refer to a valid question within this quiz' });
+      expect(moveQuestionHandler(quizId, 0, 1, userJwt)).toStrictEqual({ error: 'Quiz ID does not refer to a valid question within this quiz' });
     });
 
     test('newPosition is less than 0', () => {
       createQuizQuestionHandler(quizId, userJwt, defaultQuestionBody);
-      expect(moveQuestion(quizId, 0, -1, userJwt)).toStrictEqual({ error: 'New Position is less than 0 or New Position is greater than the number of questions' });
+      expect(moveQuestionHandler(quizId, 0, -1, userJwt)).toStrictEqual({ error: 'New Position is less than 0 or New Position is greater than the number of questions' });
     });
 
     test('newPosition is greater than n-1 where n is the number of questions', () => {
       createQuizQuestionHandler(quizId, userJwt, defaultQuestionBody);
-      expect(moveQuestion(quizId, 0, 5, userJwt)).toStrictEqual({ error: 'New Position is less than 0 or New Position is greater than the number of questions' });
+      expect(moveQuestionHandler(quizId, 0, 5, userJwt)).toStrictEqual({ error: 'New Position is less than 0 or New Position is greater than the number of questions' });
     });
 
     test('newPosition is the position of the current question', () => {
       createQuizQuestionHandler(quizId, userJwt, defaultQuestionBody);
-      expect(moveQuestion(quizId, 0, 0, userJwt)).toStrictEqual({ error: 'New Position is the position of the current question' });
+      expect(moveQuestionHandler(quizId, 0, 0, userJwt)).toStrictEqual({ error: 'New Position is the position of the current question' });
     });
   });
 
@@ -503,13 +503,13 @@ describe('Tests for quizMoveQuestion', () => {
     test('moving elements forwards', () => {
       createQuizQuestionHandler(quizId, userJwt, defaultQuestionBody);
       createQuizQuestionHandler(quizId, userJwt, secondQuestionBody);
-      expect(moveQuestion(quizId, 0, 1, userJwt)).toStrictEqual({});
+      expect(moveQuestionHandler(quizId, 0, 1, userJwt)).toStrictEqual({});
     });
 
     test('moving elements backwards', () => {
       createQuizQuestionHandler(quizId, userJwt, defaultQuestionBody);
       createQuizQuestionHandler(quizId, userJwt, secondQuestionBody);
-      expect(moveQuestion(quizId, 1, 0, userJwt)).toStrictEqual({});
+      expect(moveQuestionHandler(quizId, 1, 0, userJwt)).toStrictEqual({});
     });
   });
 });
@@ -526,9 +526,9 @@ describe('Tests to update question', () => {
   let quizInfo: AdminQuizInfo;
 
   beforeEach(() => {
-    userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    userToken = registerUserHandler('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
     userJwt = tokenToJwt(userToken);
-    quizId = (RequestCreateQuiz(tokenToJwt(userToken), 'Countries of the World', 'Quiz on Countries of the World') as AdminQuizCreate).quizId;
+    quizId = (createQuizHandler(tokenToJwt(userToken), 'Countries of the World', 'Quiz on Countries of the World') as AdminQuizCreate).quizId;
 
     beforeQuestionBody = {
       question: 'What continent is China in?',
@@ -597,31 +597,31 @@ describe('Tests to update question', () => {
 
   describe('Unsuccessful Tests', () => {
     test('QuizId does not refer to valid quiz', () => {
-      expect(updateQuiz(userJwt, defaultQuestionBody, -1, questionId)).toEqual({
+      expect(updateQuizHandler(userJwt, defaultQuestionBody, -1, questionId)).toEqual({
         error: 'Quiz ID does not refer to a valid quiz'
       });
     });
 
     test('QuizId does not refer to a valid quiz that this user owns', () => {
-      const userToken2: Token = registerUser('JaneAusten@gmail.com', 'Password123', 'Jane', 'Austen') as Token;
-      expect(updateQuiz(tokenToJwt(userToken2), defaultQuestionBody, quizId, questionId)).toEqual({
+      const userToken2: Token = registerUserHandler('JaneAusten@gmail.com', 'Password123', 'Jane', 'Austen') as Token;
+      expect(updateQuizHandler(tokenToJwt(userToken2), defaultQuestionBody, quizId, questionId)).toEqual({
         error: 'Quiz ID does not refer to a quiz that this user owns'
       });
     });
     test('3. Question Id does not refer to a valid question within this quiz', () => {
-      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId + 3)).toEqual({
+      expect(updateQuizHandler(userJwt, defaultQuestionBody, quizId, questionId + 3)).toEqual({
         error: 'Question Id does not refer to a valid question within this quiz'
       });
     });
 
     test('Question string is wrong format ', () => {
       defaultQuestionBody.question = 'abcd';
-      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
+      expect(updateQuizHandler(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
         error: 'Question string is less than 5 characters in length or greater than 50 characters in length'
       });
 
       defaultQuestionBody.question = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz';
-      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
+      expect(updateQuizHandler(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
         error: 'Question string is less than 5 characters in length or greater than 50 characters in length'
       });
     });
@@ -636,29 +636,29 @@ describe('Tests to update question', () => {
         });
       }
 
-      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
+      expect(updateQuizHandler(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
         error: 'The question has more than 6 answers or less than 2 answers'
       });
 
       defaultQuestionBody.answers = [];
 
-      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
+      expect(updateQuizHandler(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
         error: 'The question has more than 6 answers or less than 2 answers'
       });
     });
 
     test('Question duration is negative', () => {
       defaultQuestionBody.duration = -1;
-      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
+      expect(updateQuizHandler(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
         error: 'The question duration is not a positive number'
       });
     });
 
     test('Question duration is too long', () => {
       defaultQuestionBody.duration = 151;
-      updateQuiz(userJwt, defaultQuestionBody, quizId, questionId);
+      updateQuizHandler(userJwt, defaultQuestionBody, quizId, questionId);
 
-      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
+      expect(updateQuizHandler(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
         error: 'The sum of the question durations in the quiz exceeds 3 minutes'
       });
     });
@@ -666,38 +666,38 @@ describe('Tests to update question', () => {
     test('Question points are invalid', () => {
       defaultQuestionBody.points = 0;
 
-      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
+      expect(updateQuizHandler(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
         error: 'The points awarded for the question are less than 1 or greater than 10'
       });
 
       defaultQuestionBody.points = 11;
-      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
+      expect(updateQuizHandler(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
         error: 'The points awarded for the question are less than 1 or greater than 10'
       });
     });
 
     test('Invalid answer length', () => {
       defaultQuestionBody.answers[0].answer = '';
-      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
+      expect(updateQuizHandler(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
         error: 'The length of any answer is shorter than 1 character long, or longer than 30 characters long'
       });
 
       defaultQuestionBody.answers[0].answer = 'abcdefghijklmnopqrstuvwxyzabcde';
-      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
+      expect(updateQuizHandler(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
         error: 'The length of any answer is shorter than 1 character long, or longer than 30 characters long'
       });
     });
 
     test('Answer string are duplicates', () => {
       defaultQuestionBody.answers[0].answer = 'North America';
-      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
+      expect(updateQuizHandler(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
         error: 'Any answer strings are duplicates of one another (within the same question)'
       });
     });
 
     test('There is no correct answers', () => {
       defaultQuestionBody.answers[0].correct = false;
-      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
+      expect(updateQuizHandler(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
         error: 'There are no correct answers'
       });
     });
@@ -705,14 +705,14 @@ describe('Tests to update question', () => {
 
   describe('Successful Tests', () => {
     test('update quiz', () => {
-      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toStrictEqual({});
-      quizInfo = infoQuiz(userJwt, quizId) as AdminQuizInfo;
+      expect(updateQuizHandler(userJwt, defaultQuestionBody, quizId, questionId)).toStrictEqual({});
+      quizInfo = infoQuizHandler(userJwt, quizId) as AdminQuizInfo;
       expect(quizInfo.questions[0].question).toStrictEqual(defaultQuestionBody.question);
     });
 
     test('update time edited', () => {
       const timeBufferSeconds = 20;
-      quizInfo = infoQuiz(userJwt, quizId) as AdminQuizInfo;
+      quizInfo = infoQuizHandler(userJwt, quizId) as AdminQuizInfo;
       quizEditedTime = Math.round(Date.now() / 1000);
       expect(quizInfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime);
       expect(quizInfo.timeLastEdited).toBeGreaterThanOrEqual(quizEditedTime - timeBufferSeconds);

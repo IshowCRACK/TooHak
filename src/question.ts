@@ -358,7 +358,7 @@ export function quizUpdateQuestion(jwt: Jwt, questionBody: QuestionBody, quizId:
  * @param {number} newPosition - new position where element will be moved
  * @param {Jwt} jwt - Jwt token containing sessionId and user Id
  */
-export function quizMoveQuestion(quizId: number, questionId: number, newPosition: number, jwt: Jwt): OkObj | ErrorAndStatusCode {
+export function quizmoveQuestionHandler(quizId: number, questionId: number, newPosition: number, jwt: Jwt): OkObj | ErrorAndStatusCode {
   if (!checkTokenValidStructure(jwt)) {
     return {
       error: 'Token is not a valid structure',

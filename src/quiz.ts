@@ -505,7 +505,7 @@ export function adminQuizEmptyTrash(jwt: Jwt, quizIds: number[]): OkObj | ErrorA
 // Transfers Quiz Ownership to another user
 export function adminQuizTransfer(jwt: Jwt, email: string, quizId: number): OkObj | ErrorAndStatusCode {
   const data = getData();
-  const targetUser = data.users.find((user: User) => user.email === email);
+  const targetUserHandler = data.users.find((user: User) => user.email === email);
 
   if (!checkTokenValidStructure(jwt)) {
     return {
@@ -535,21 +535,21 @@ export function adminQuizTransfer(jwt: Jwt, email: string, quizId: number): OkOb
     };
   }
 
-  if (!targetUser) {
+  if (!targetUserHandler) {
     return {
       error: 'userEmail is not a real user',
       statusCode: 400
     };
   }
 
-  if (targetUser.authUserId === jwtToToken(jwt).userId) {
+  if (targetUserHandler.authUserId === jwtToToken(jwt).userId) {
     return {
       error: 'userEmail is the current logged in user',
       statusCode: 400
     };
   }
 
-  if (checkNameUsedInQuiz(quizId, targetUser.authUserId)) {
+  if (checkNameUsedInQuiz(quizId, targetUserHandler.authUserId)) {
     return {
       error: 'Quiz ID refers to a quiz that has a name that is already used by the target user',
       statusCode: 400
@@ -558,7 +558,7 @@ export function adminQuizTransfer(jwt: Jwt, email: string, quizId: number): OkOb
 
   // Update the adminQuizId to the target user's authUserId
   const quizToUpdate = data.quizzes.find((quiz: Quiz) => quiz.quizId === quizId);
-  quizToUpdate.adminQuizId = targetUser.authUserId;
+  quizToUpdate.adminQuizId = targetUserHandler.authUserId;
 
   return {};
 }
