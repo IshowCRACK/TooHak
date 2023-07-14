@@ -92,6 +92,22 @@ app.get('/v1/admin/user/details', (req: Request, res: Response) => {
   res.status(200).json(response);
 });
 
+
+
+app.put('/v1/admin/user/password', (req: Request, res: Response) => {
+  // const { token, oldPassword, newPassword } = req.body;
+  // const response = adminUpdateUserPassword({ token: token }, oldPassword, newPassword);
+  // if ('error' in response) {
+  //   return res.status(response.statusCode).json(formatError(response));
+  // }
+
+  // res.status(200).json(response);
+  res.status(200).json('stub');
+});
+
+
+
+
 app.post('/v1/admin/quiz', (req: Request, res: Response) => {
   const { token, name, description } = req.body;
   const response = adminQuizCreate({ token: token }, name, description);

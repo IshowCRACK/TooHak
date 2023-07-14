@@ -1,7 +1,7 @@
 import { AdminUserDetailsReturn, ErrorObj, Jwt, Token } from '../../interfaces/interfaces';
 import { objToJwt, tokenToJwt } from '../token';
 // IMPORTING ALL WRAPPER FUNCTIONS
-import { checkTokenValid, clearUsers, loginUser, logoutUserHandler, registerUser, getUser } from './testHelpers';
+import { checkTokenValid, clearUsers, loginUser, logoutUserHandler, registerUser, getUser,updateUserDetailsPassword } from './testHelpers';
 
 // TESTS FOR REGISTER //
 beforeEach(() => {
@@ -329,5 +329,46 @@ describe('adminUserDetails test', () => {
     });
   });
 });
+
+
+// TESTS FOR ADMIN USER PASSWORD UPDATE //
+describe('adminUserUpdateDetailsPassword test', () => {
+  let jwt: Jwt;
+  beforeEach(() => {
+    const token = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    jwt = tokenToJwt(token);
+  });
+
+  describe('Unseccessful update of Password', () => {
+    test('Token does not exit', () => {
+      const jwt2: Token = {
+        sessionId: '4',
+        userId: 12,
+      };
+      const change = updateUserDetailsPassword(tokenToJwt(jwt2), 'Password123', 'Password1234');
+      expect(change).toStrictEqual({ error: 'Token is not for currently logged in session' });
+    });
+    test('Password does not match with old password', () => {
+      const change = updateUserDetailsPassword(jwt, 'Password12', 'Password1234');
+      expect(change).toStrictEqual({ error: 'Old password is not correct' });
+    });
+    test('Password does not match with criteria', () => {
+      const change = updateUserDetailsPassword(jwt, 'Password123', 'P4');
+      expect(change).toStrictEqual({ error: 'New password must be at least 8 characters long and contain at least one number and one letter' });
+    });
+    test('Password has already been used', () => {
+      const change = updateUserDetailsPassword(jwt, 'Password123', 'Password123');
+      expect(change).toStrictEqual({ error: 'New password cannot be the same as the old password' });
+    });
+  });
+
+  describe('Successful Update of Password', () => {
+    test('Password has been changed successfully', () => {
+      const change = updateUserDetailsPassword(jwt, 'Password123', 'Password1234');
+      expect(change).toStrictEqual({});
+    });
+  });
+});
+
 
 export { registerUser, logoutUserHandler };

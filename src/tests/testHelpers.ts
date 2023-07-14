@@ -311,3 +311,21 @@ export const emptyTrashHandler = (jwt: Jwt, quizIds: number[]): OkObj | ErrorObj
 
   return parsedResponse;
 };
+
+
+export const updateUserDetailsPassword = (jwt: Jwt, oldPassword: string, newPassword: string): OkObj | ErrorObj => {
+  const res = request(
+    'PUT',
+    URL + 'v1/admin/user/password',
+    {
+      json: {
+        token: jwt.token,
+        oldPassword: oldPassword,
+        newPassword: newPassword
+      }
+    }
+  );
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+  return parsedResponse;
+
+};
