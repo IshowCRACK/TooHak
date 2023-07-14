@@ -1,7 +1,6 @@
 import { ErrorObj, Token, AdminQuizCreate, OkObj, Jwt, AdminQuizInfo } from '../../interfaces/interfaces';
-import { registerUser, logoutUserHandler } from './http-auth.test';
 import { tokenToJwt } from '../token';
-import { RequestCreateQuiz, RequestRemoveQuiz, clearUsers, listQuiz, updateNameQuiz, infoQuiz, quizTransferHandler, updateDescriptionQuiz, viewQuizTrashHandler, trashRestoreQuizHandler, emptyTrashHandler } from './testHelpers';
+import { registerUser, logoutUserHandler, RequestCreateQuiz, RequestRemoveQuiz, clearUsers, listQuiz, updateNameQuiz, infoQuiz, quizTransferHandler, updateDescriptionQuiz, viewQuizTrashHandler, trashRestoreQuizHandler, emptyTrashHandler } from './testHelpers';
 
 beforeEach(() => {
   clearUsers();
