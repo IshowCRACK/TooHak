@@ -550,7 +550,7 @@ describe('View Quiz Trash', () => {
   });
 });
 
-// TESTS FOR TRASH RESTORE // 
+// TESTS FOR TRASH RESTORE //
 describe('Trash Restore Quiz', () => {
   let userJwt: Jwt;
   let userJwt2: Jwt;
@@ -623,9 +623,7 @@ describe('Trash Restore Quiz', () => {
       });
     });
   });
-
 });
-
 
 // TESTS FOR ALL QUIZ FUNCTION INTERACTIONS TOGETHER //
 test('Test for all Quiz', () => {
@@ -661,23 +659,23 @@ test('Test for all Quiz', () => {
 
   // TO DO ///////////////////
   // restore quiz0 from trash
-  // TO DO ////////////////////////
+  trashRestoreQuizHandler(tokenToJwt(token0), quizId0);
 
   // transfer quiz1
   quizTransferHandler(tokenToJwt(token0), 'JoeMama@gmail.com', quizId1);
 
-  // check if it worked using quizlist
-  // const list0 = listQuiz(tokenToJwt(token0)) as AdminQuizList;
-  // expect(list0).toStrictEqual(
-  //   {
-  //     quizzes: [
-  //       {
-  //         quizId: quizId0,
-  //         name: 'Quiz0'
-  //       }
-  //     ]
-  //   }
-  // );
+  // check if it worked on both sides using quizlist
+  const list0 = listQuiz(tokenToJwt(token0)) as AdminQuizList;
+  expect(list0).toStrictEqual(
+    {
+      quizzes: [
+        {
+          quizId: quizId0,
+          name: 'Quiz0'
+        }
+      ]
+    }
+  );
 
   const list1 = listQuiz(tokenToJwt(token1)) as AdminQuizList;
   expect(list1).toStrictEqual(

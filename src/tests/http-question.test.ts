@@ -1,7 +1,7 @@
 import request from 'sync-request';
 import { AdminQuizCreate, ErrorObj, Jwt, QuestionBody, QuizQuestionCreate, Token, AdminQuizInfo, AdminQuestionDuplicate } from '../../interfaces/interfaces';
 import { getUrl } from '../helper';
-import { RequestCreateQuiz, clearUsers, registerUser, duplicateQuiz, infoQuiz, logoutUserHandler, deleteQuestion } from './testHelpers';
+import { RequestCreateQuiz, clearUsers, registerUser, duplicateQuiz, infoQuiz, logoutUserHandler, deleteQuestion, updateQuiz } from './testHelpers';
 import { tokenToJwt } from '../token';
 
 const URL: string = getUrl();
@@ -307,7 +307,7 @@ describe('Quiz Duplicate', () => {
   });
 });
 
-// TESTS FOR QUIZ DELETE //
+// TESTS FOR QUESTION DELETE //
 
 describe('Tests for adminQuizDelete', () => {
   let userToken: Token;
@@ -383,6 +383,212 @@ describe('Tests for adminQuizDelete', () => {
   });
 });
 
+// TEST FOR QUESTION UPDATE
+describe('Tests to update question', () => {
+  let userToken: Token;
+  let userJwt: Jwt;
+  let quizId: number;
+  let defaultQuestionBody: QuestionBody;
+  let beforeQuestionBody: QuestionBody;
+  let questionId: number;
+  let quizEditedTime:number;
+  let quizInfo: AdminQuizInfo;
+
+  beforeEach(() => {
+    userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    userJwt = tokenToJwt(userToken);
+    quizId = (RequestCreateQuiz(tokenToJwt(userToken), 'Countries of the World', 'Quiz on Countries of the World') as AdminQuizCreate).quizId;
+
+    beforeQuestionBody = {
+      question: 'What continent is China in?',
+      duration: 5,
+      points: 1,
+      answers: [
+        {
+          answerId: 0,
+          answer: 'Asia',
+          colour: 'Red',
+          correct: true
+        },
+        {
+          answerId: 1,
+          answer: 'North America',
+          colour: 'Blue',
+          correct: false
+        },
+        {
+          answerId: 2,
+          answer: 'South America',
+          colour: 'Green',
+          correct: false
+        },
+        {
+          answerId: 3,
+          answer: 'Africa',
+          colour: 'Yellow',
+          correct: false
+        }
+      ]
+    };
+    defaultQuestionBody = {
+      question: 'What continent is Russia in?',
+      duration: 5,
+      points: 1,
+      answers: [
+        {
+          answerId: 0,
+          answer: 'Asia',
+          colour: 'Red',
+          correct: true
+        },
+        {
+          answerId: 1,
+          answer: 'North America',
+          colour: 'Blue',
+          correct: false
+        },
+        {
+          answerId: 2,
+          answer: 'South America',
+          colour: 'Green',
+          correct: false
+        },
+        {
+          answerId: 3,
+          answer: 'Africa',
+          colour: 'Yellow',
+          correct: false
+        }
+      ]
+    };
+    questionId = (createQuizQuestionHandler(quizId, userJwt, beforeQuestionBody) as QuizQuestionCreate).questionId;
+  });
+
+  describe('Unsuccessful Tests', () => {
+    test('QuizId does not refer to valid quiz', () => {
+      expect(updateQuiz(userJwt, defaultQuestionBody, -1, questionId)).toEqual({
+        error: 'Quiz ID does not refer to a valid quiz'
+      });
+    });
+
+    test('QuizId does not refer to a valid quiz that this user owns', () => {
+      const userToken2: Token = registerUser('JaneAusten@gmail.com', 'Password123', 'Jane', 'Austen') as Token;
+      expect(updateQuiz(tokenToJwt(userToken2), defaultQuestionBody, quizId, questionId)).toEqual({
+        error: 'Quiz ID does not refer to a quiz that this user owns'
+      });
+    });
+    test('3. Question Id does not refer to a valid question within this quiz', () => {
+      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId + 3)).toEqual({
+        error: 'Question Id does not refer to a valid question within this quiz'
+      });
+    });
+
+    test('Question string is wrong format ', () => {
+      defaultQuestionBody.question = 'abcd';
+      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
+        error: 'Question string is less than 5 characters in length or greater than 50 characters in length'
+      });
+
+      defaultQuestionBody.question = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz';
+      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
+        error: 'Question string is less than 5 characters in length or greater than 50 characters in length'
+      });
+    });
+
+    test('The Quesiton has incorrect number of answers', () => {
+      for (let i = 0; i < 5; i++) {
+        defaultQuestionBody.answers.push({
+          answerId: 5,
+          answer: 'Australia',
+          colour: 'Pink',
+          correct: false
+        });
+      }
+
+      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
+        error: 'The question has more than 6 answers or less than 2 answers'
+      });
+
+      defaultQuestionBody.answers = [];
+
+      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
+        error: 'The question has more than 6 answers or less than 2 answers'
+      });
+    });
+
+    test('Question duration is negative', () => {
+      defaultQuestionBody.duration = -1;
+      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
+        error: 'The question duration is not a positive number'
+      });
+    });
+
+    test('Question duration is too long', () => {
+      defaultQuestionBody.duration = 151;
+      updateQuiz(userJwt, defaultQuestionBody, quizId, questionId);
+
+      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
+        error: 'The sum of the question durations in the quiz exceeds 3 minutes'
+      });
+    });
+
+    test('Question points are invalid', () => {
+      defaultQuestionBody.points = 0;
+
+      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
+        error: 'The points awarded for the question are less than 1 or greater than 10'
+      });
+
+      defaultQuestionBody.points = 11;
+      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
+        error: 'The points awarded for the question are less than 1 or greater than 10'
+      });
+    });
+
+    test('Invalid answer length', () => {
+      defaultQuestionBody.answers[0].answer = '';
+      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
+        error: 'The length of any answer is shorter than 1 character long, or longer than 30 characters long'
+      });
+
+      defaultQuestionBody.answers[0].answer = 'abcdefghijklmnopqrstuvwxyzabcde';
+      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
+        error: 'The length of any answer is shorter than 1 character long, or longer than 30 characters long'
+      });
+    });
+
+    test('Answer string are duplicates', () => {
+      defaultQuestionBody.answers[0].answer = 'North America';
+      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
+        error: 'Any answer strings are duplicates of one another (within the same question)'
+      });
+    });
+
+    test('There is no correct answers', () => {
+      defaultQuestionBody.answers[0].correct = false;
+      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
+        error: 'There are no correct answers'
+      });
+    });
+  });
+
+  describe('Successful Tests', () => {
+    test('update quiz', () => {
+      expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toStrictEqual({});
+      quizInfo = infoQuiz(userJwt, quizId) as AdminQuizInfo;
+      expect(quizInfo.questions[0].question).toStrictEqual(defaultQuestionBody.question);
+    });
+
+    test('update time edited', () => {
+      const timeBufferSeconds = 20;
+      quizInfo = infoQuiz(userJwt, quizId) as AdminQuizInfo;
+      quizEditedTime = Math.round(Date.now() / 1000);
+      expect(quizInfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime);
+      expect(quizInfo.timeLastEdited).toBeGreaterThanOrEqual(quizEditedTime - timeBufferSeconds);
+    });
+  });
+});
+
 // ADVANCED TESTS OF FUNCTION INTERACTIONS //
 
 test('Tests for successful interaction and implementation of create, duplicate, update, move, delete', () => {
@@ -391,7 +597,7 @@ test('Tests for successful interaction and implementation of create, duplicate, 
   const userToken: Token = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
   const userJwt: Jwt = tokenToJwt(userToken);
   const quizId: number = (RequestCreateQuiz(tokenToJwt(userToken), 'Countries of the World', 'Quiz on Countries of the World') as AdminQuizCreate).quizId;
-  const QuestionBody0: QuestionBody = {
+  const questionBody0: QuestionBody = {
     question: 'What continent is Russia in?',
     duration: 5,
     points: 1,
@@ -422,7 +628,7 @@ test('Tests for successful interaction and implementation of create, duplicate, 
       }
     ]
   };
-  const QuestionBody1: QuestionBody = {
+  const questionBody1: QuestionBody = {
     question: 'What continent is Japan in?',
     duration: 5,
     points: 1,
@@ -453,7 +659,7 @@ test('Tests for successful interaction and implementation of create, duplicate, 
       }
     ]
   };
-  const QuestionBody2: QuestionBody = {
+  const questionBody2: QuestionBody = {
     question: 'What continent is South Africa in?',
     duration: 5,
     points: 1,
@@ -488,9 +694,9 @@ test('Tests for successful interaction and implementation of create, duplicate, 
   // create 3 questions
   const quizEditedTime: number = Math.round(Date.now() / 1000);
   // create 3 questions
-  const questionId0: number = (createQuizQuestionHandler(quizId, userJwt, QuestionBody0) as QuizQuestionCreate).questionId;
-  const questionId1: number = (createQuizQuestionHandler(quizId, userJwt, QuestionBody1) as QuizQuestionCreate).questionId;
-  const questionId2: number = (createQuizQuestionHandler(quizId, userJwt, QuestionBody2) as QuizQuestionCreate).questionId;
+  const questionId0: number = (createQuizQuestionHandler(quizId, userJwt, questionBody0) as QuizQuestionCreate).questionId;
+  const questionId1: number = (createQuizQuestionHandler(quizId, userJwt, questionBody1) as QuizQuestionCreate).questionId;
+  const questionId2: number = (createQuizQuestionHandler(quizId, userJwt, questionBody2) as QuizQuestionCreate).questionId;
   quizInfo = infoQuiz(userJwt, quizId) as AdminQuizInfo;
   expect(quizInfo.questions[0].questionId).toStrictEqual(questionId0);
   expect(quizInfo.questions[1].questionId).toStrictEqual(questionId1);
@@ -513,8 +719,12 @@ test('Tests for successful interaction and implementation of create, duplicate, 
   expect(quizInfo.timeLastEdited).toBeGreaterThanOrEqual(quizEditedTime);
   expect(quizInfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime + timeBufferSeconds);
 
+  // update questionId1 from questionbody1 to questionbody0
+  updateQuiz(userJwt, questionBody0, quizId, questionId1);
+  quizInfo = infoQuiz(userJwt, quizId) as AdminQuizInfo;
+  expect(quizInfo.questions[1].question).toStrictEqual(questionBody0.question);
+
   // TO DO //////////////////////////////
-  // update questionId1
   // move questionId3 to the start
   // TO DO //////////////////////////////
 
