@@ -349,4 +349,4 @@ export const adminAuthLogout = (jwt: Jwt): OkObj | ErrorAndStatusCode => {
   };
 };
 
-export { adminAuthLogin, adminAuthRegister, adminUserDetails, /*adminUpdateUserDetails, adminUpdateUserPassword*/ };
+export { adminAuthLogin, adminAuthRegister, adminUserDetails /* adminUpdateUserDetails, adminUpdateUserPassword */ };
