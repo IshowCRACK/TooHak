@@ -1,9 +1,9 @@
 import request from 'sync-request';
-import { AdminQuizCreate, ErrorObj, Jwt, QuestionBody, QuizQuestionCreate, Token, AdminQuizInfo, AdminQuestionDuplicate, Question } from '../../interfaces/interfaces';
+import { AdminQuizCreate, ErrorObj, Jwt, QuestionBody, QuizQuestionCreate, Token, AdminQuizInfo, AdminQuestionDuplicate } from '../../interfaces/interfaces';
 import { getUrl } from '../helper';
 import { RequestCreateQuiz, clearUsers, registerUser, duplicateQuiz, infoQuiz, logoutUserHandler, deleteQuestion, moveQuestion } from './testHelpers';
 import { tokenToJwt } from '../token';
-import { token } from 'morgan';
+// import { token } from 'morgan';
 
 const URL: string = getUrl();
 

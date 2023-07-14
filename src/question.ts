@@ -259,7 +259,7 @@ export function quizMoveQuestion(quizId: number, questionId: number, newPosition
       statusCode: 403
     };
   }
-  
+
   // QuizId does not refer to a valid quiz
   if (!checkQuizIdValid(quizId)) {
     return {
@@ -292,8 +292,8 @@ export function quizMoveQuestion(quizId: number, questionId: number, newPosition
       statusCode: 400
     };
   }
-  
-  // obtaining question index according to questionId 
+
+  // obtaining question index according to questionId
   const data = getData().quizzes;
   const quizIndex: number = data.indexOf(quiz);
   let questionIndex: number;
@@ -305,19 +305,18 @@ export function quizMoveQuestion(quizId: number, questionId: number, newPosition
     }
   }
 
-  // newPosition is the position of the current question 
-  if(newPosition === questionIndex) {
+  // newPosition is the position of the current question
+  if (newPosition === questionIndex) {
     return {
       error: 'New Position is the position of the current question',
       statusCode: 400
     };
   }
 
-  //removing original question from position
+  // removing original question from position
   data[quizIndex].questions.splice(questionIndex, 1);
-
-  //putting original question to new position
-  data[quizIndex].questions.splice(newPosition, 0, movedQuestion); 
+  // putting original question to new position
+  data[quizIndex].questions.splice(newPosition, 0, movedQuestion);
 
   return {};
 }
