@@ -258,4 +258,4 @@ export const trashRestoreQuizHandler = (jwt: Jwt, quizId: number): OkObj | Error
   const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
 
   return parsedResponse;
-}
+};

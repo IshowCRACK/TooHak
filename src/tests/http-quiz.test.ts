@@ -550,7 +550,7 @@ describe('View Quiz Trash', () => {
   });
 });
 
-describe.skip('Trash Restore Quiz', () => {
+describe('Trash Restore Quiz', () => {
   let userJwt: Jwt;
   let userJwt2: Jwt;
   let userToken: Token;
@@ -569,12 +569,12 @@ describe.skip('Trash Restore Quiz', () => {
 
   describe('Unsuccessful tests', () => {
     test('Token is not a valid structure', () => {
-      expect(trashRestoreQuizHandler({token: 'some token'}, quizId2)).toEqual({
+      expect(trashRestoreQuizHandler({ token: 'some token' }, quizId2)).toEqual({
         error: 'Token is not a valid structure'
       });
     });
 
-    test('Token is not a valid structure', () => {
+    test('User is not logged in', () => {
       logoutUserHandler(userJwt2);
       expect(trashRestoreQuizHandler(userJwt2, quizId2)).toEqual({
         error: 'Provided token is valid structure, but is not for a currently logged in session'
@@ -590,10 +590,10 @@ describe.skip('Trash Restore Quiz', () => {
     test('Quiz ID does not refer to a valid quiz that the user owns', () => {
       expect(trashRestoreQuizHandler(userJwt2, quizId)).toEqual({
         error: 'Quiz ID does not refer to a quiz that this user owns'
-      });   
+      });
     });
 
-    test('Quiz ID does not refer to quiz currently in trash', () => {
+    test('Quiz ID refers to quiz not currently in trash', () => {
       expect(trashRestoreQuizHandler(userJwt, quizId)).toEqual({
         error: 'Quiz ID refers to a quiz that is not currently in the trash'
       });
