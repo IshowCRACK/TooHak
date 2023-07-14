@@ -6,7 +6,7 @@ import cors from 'cors';
 import YAML from 'yaml';
 import sui from 'swagger-ui-express';
 import fs from 'fs';
-import { adminAuthRegister, adminAuthLogin, adminAuthLogout, adminUserDetails } from './auth';
+import { adminAuthRegister, adminAuthLogin, adminAuthLogout, adminUserDetails, adminUpdateUserPassword } from './auth';
 import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash, adminQuizRestore, adminQuizEmptyTrash } from './quiz';
 import { clear } from './other';
 import { formatError } from './helper';
@@ -92,21 +92,15 @@ app.get('/v1/admin/user/details', (req: Request, res: Response) => {
   res.status(200).json(response);
 });
 
-
-
 app.put('/v1/admin/user/password', (req: Request, res: Response) => {
-  // const { token, oldPassword, newPassword } = req.body;
-  // const response = adminUpdateUserPassword({ token: token }, oldPassword, newPassword);
-  // if ('error' in response) {
-  //   return res.status(response.statusCode).json(formatError(response));
-  // }
+  const { token, oldPassword, newPassword } = req.body;
+  const response = adminUpdateUserPassword({ token: token }, oldPassword, newPassword);
+  if ('error' in response) {
+    return res.status(response.statusCode).json(formatError(response));
+  }
 
-  // res.status(200).json(response);
-  res.status(200).json('stub');
+  res.status(200).json(response);
 });
-
-
-
 
 app.post('/v1/admin/quiz', (req: Request, res: Response) => {
   const { token, name, description } = req.body;
