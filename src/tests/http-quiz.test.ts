@@ -1,7 +1,7 @@
 import { ErrorObj, Token, AdminQuizCreate, OkObj, Jwt, AdminQuizInfo } from '../../interfaces/interfaces';
 import { registerUser, logoutUserHandler } from './http-auth.test';
 import { tokenToJwt } from '../token';
-import { RequestCreateQuiz, RequestRemoveQuiz, clearUsers, listQuiz, updateNameQuiz, infoQuiz, quizTransferHandler, updateDescriptionQuiz, viewQuizTrashHandler } from './testHelpers';
+import { RequestCreateQuiz, RequestRemoveQuiz, clearUsers, listQuiz, updateNameQuiz, infoQuiz, quizTransferHandler, updateDescriptionQuiz, viewQuizTrashHandler, trashRestoreQuizHandler } from './testHelpers';
 
 beforeEach(() => {
   clearUsers();
@@ -545,6 +545,80 @@ describe('View Quiz Trash', () => {
             name: 'Flags of the world'
           }
         ]
+      });
+    });
+  });
+});
+
+describe.skip('Trash Restore Quiz', () => {
+  let userJwt: Jwt;
+  let userJwt2: Jwt;
+  let userToken: Token;
+  let userToken2: Token;
+  let quizId: number;
+  let quizId2: number;
+  beforeEach(() => {
+    userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    userJwt = tokenToJwt(userToken);
+    userToken2 = registerUser('JaneAusten@gmail.com', 'Password123', 'Jane', 'Austen') as Token;
+    userJwt2 = tokenToJwt(userToken2);
+    quizId = (RequestCreateQuiz(userJwt, 'Countries of the world', 'Quiz on all countries') as AdminQuizCreate).quizId;
+    quizId2 = (RequestCreateQuiz(userJwt2, 'Flags of the world', 'Flags on all countries') as AdminQuizCreate).quizId;
+    RequestRemoveQuiz(userJwt2, quizId2);
+  });
+
+  describe('Unsuccessful tests', () => {
+    test('Token is not a valid structure', () => {
+      expect(trashRestoreQuizHandler({token: 'some token'}, quizId2)).toEqual({
+        error: 'Token is not a valid structure'
+      });
+    });
+
+    test('Token is not a valid structure', () => {
+      logoutUserHandler(userJwt2);
+      expect(trashRestoreQuizHandler(userJwt2, quizId2)).toEqual({
+        error: 'Provided token is valid structure, but is not for a currently logged in session'
+      });
+    });
+
+    test('Quiz ID is invalid', () => {
+      expect(trashRestoreQuizHandler(userJwt, quizId + 5)).toEqual({
+        error: 'Quiz ID does not refer to a valid quiz'
+      });
+    });
+
+    test('Quiz ID does not refer to a valid quiz that the user owns', () => {
+      expect(trashRestoreQuizHandler(userJwt2, quizId)).toEqual({
+        error: 'Quiz ID does not refer to a quiz that this user owns'
+      });   
+    });
+
+    test('Quiz ID does not refer to quiz currently in trash', () => {
+      expect(trashRestoreQuizHandler(userJwt, quizId)).toEqual({
+        error: 'Quiz ID refers to a quiz that is not currently in the trash'
+      });
+    });
+  });
+
+  describe('Successful tests', () => {
+    test('Restoring 1 quiz', () => {
+      expect(trashRestoreQuizHandler(userJwt2, quizId2)).toEqual({});
+      expect(viewQuizTrashHandler(userJwt2)).toEqual({
+        quizzes: []
+      });
+    });
+
+    test('Restoring multiple quizzes', () => {
+      RequestRemoveQuiz(userJwt, quizId);
+      expect(trashRestoreQuizHandler(userJwt2, quizId2)).toEqual({});
+      expect(trashRestoreQuizHandler(userJwt, quizId)).toEqual({});
+
+      expect(viewQuizTrashHandler(userJwt)).toEqual({
+        quizzes: []
+      });
+
+      expect(viewQuizTrashHandler(userJwt2)).toEqual({
+        quizzes: []
       });
     });
   });
