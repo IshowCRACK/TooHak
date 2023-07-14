@@ -185,8 +185,9 @@ function adminUserDetails (jwt: Jwt): AdminUserDetailsReturn | ErrorAndStatusCod
  *
  * @returns {{} | {error: string}} - Returns an empty object or Error
  */
-/*
+
 function adminUpdateUserDetails(jwt: Jwt, email: string, nameFirst: string, nameLast: string): AdminUpdateUserDetailsReturn | ErrorAndStatusCode {
+  /*
   const data = getData();
   const authUserId: number = jwtToToken(jwt).userId;
   // Find the user by authUserId
@@ -247,10 +248,10 @@ function adminUpdateUserDetails(jwt: Jwt, email: string, nameFirst: string, name
     if (changes === true) {
       setData(data);
     }
-  }
+  } */
   return {};
 }
-*/
+
 /**
   * Update a Users password with a new password, then returns empty object
   *
@@ -260,9 +261,9 @@ function adminUpdateUserDetails(jwt: Jwt, email: string, nameFirst: string, name
   *
  * @returns {{} | {error: string}} - Returns an empty object or Error
 */
-/*
-function adminUpdateUserPassword(jwt: Jwt, oldPassword: string, newPassword: string): adminUpdateUserPasswordReturn | ErrorAndStatusCode  {
-  const data = getData();
+
+function adminUpdateUserPassword(jwt: Jwt, oldPassword: string, newPassword: string): adminUpdateUserPasswordReturn | ErrorAndStatusCode {
+  /* const data = getData();
   const authUserId: number = jwtToToken(jwt).userId;
   // Find the user by authUserId
   const user = data.users.find((user) => user.authUserId === authUserId);
@@ -319,10 +320,10 @@ function adminUpdateUserPassword(jwt: Jwt, oldPassword: string, newPassword: str
     user.prevPassword.push(newPassword);
     setData(data);
   }
-
+  */
   return {};
 }
-*/
+
 export const adminAuthLogout = (jwt: Jwt): OkObj | ErrorAndStatusCode => {
   const possibleToken = checkJwtValid(jwt);
 
@@ -349,4 +350,4 @@ export const adminAuthLogout = (jwt: Jwt): OkObj | ErrorAndStatusCode => {
   };
 };
 
-export { adminAuthLogin, adminAuthRegister, adminUserDetails /* adminUpdateUserDetails, adminUpdateUserPassword */ };
+export { adminAuthLogin, adminAuthRegister, adminUserDetails, adminUpdateUserDetails, adminUpdateUserPassword };

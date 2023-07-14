@@ -6,8 +6,8 @@ import cors from 'cors';
 import YAML from 'yaml';
 import sui from 'swagger-ui-express';
 import fs from 'fs';
-import { adminAuthRegister, adminAuthLogin, adminAuthLogout, adminUserDetails } from './auth';
-import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash } from './quiz';
+import { adminAuthRegister, adminAuthLogin, adminAuthLogout, adminUserDetails, adminUpdateUserPassword, adminUpdateUserDetails } from './auth';
+import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash, adminQuizRestore } from './quiz';
 import { clear } from './other';
 import { formatError } from './helper';
 import { getData } from './dataStore';
@@ -209,6 +209,39 @@ app.post('/v1/admin/quiz/:quizId/question/:questionId/duplicate', (req: Request,
     return res.status(response.statusCode).json(formatError(response));
   }
   res.status(200).json(response);
+});
+
+app.post('/v1/admin/quiz/:quizId/restore', (req: Request, res: Response) => {
+  const quizId = parseInt(req.params.quizId);
+  const { token } = req.body;
+  const response = adminQuizRestore({ token: token }, quizId);
+
+  if ('error' in response) {
+    return res.status(response.statusCode).json(formatError(response));
+  }
+  res.status(200).json(response);
+});
+
+app.put('/v1/admin/user/password', (req: Request, res: Response) => {
+  /*
+  const { token, oldPassword, newPassword } = req.body;
+  const response = adminUpdateUserPassword({ token: token }, oldPassword, newPassword);
+  if ('error' in response) {
+    return res.status(response.statusCode).json(formatError(response));
+  }
+  res.status(200).json(response);
+  */
+});
+
+app.put('/v1/admin/user/details', (req: Request, res: Response) => {
+  /*
+  const { token, email, nameFirst, nameLast } = req.body;
+  const response = adminUpdateUserDetails({ token: token }, email, nameFirst, nameLast);
+  if ('error' in response) {
+    return res.status(response.statusCode).json(formatError(response));
+  }
+  res.status(200).json(response);
+  */
 });
 
 // For Debugging

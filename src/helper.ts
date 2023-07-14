@@ -1,4 +1,4 @@
-import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer, Question } from '../interfaces/interfaces';
+import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer, Question, User } from '../interfaces/interfaces';
 import { getData } from './dataStore';
 import { adminQuizList } from './quiz';
 import { checkJwtValid, jwtToToken } from './token';
@@ -396,4 +396,27 @@ export function checkNameUsedInQuiz(quizId: number, userId: number): boolean {
 export function checkQuestionIdIsValidInQuiz(questions: Question[], questionId: number): boolean {
   const foundQuestion = questions.find((question) => question.questionId === questionId);
   return !!foundQuestion; // Convert the foundQuestion to a boolean value
+}
+export function checkQuizIdValidAndTrash(quizId: number): boolean {
+  const data = getData();
+
+  if (checkQuizIdValid(quizId)) return true;
+
+  for (const user of data.users) {
+    if (user.deletedQuizzes.find((quiz: Quiz) => quiz.quizId === quizId) !== undefined) return true;
+  }
+
+  return false;
+}
+
+export function checkQuizIdAndUserIdValidAndTrash(quizId: number, userId: number): boolean {
+  if (checkQuizAndUserIdValid(quizId, userId)) return true;
+
+  const data = getData();
+
+  const user = data.users.find((user: User) => user.authUserId === userId);
+
+  if (user.deletedQuizzes.find((quiz: Quiz) => quiz.quizId === quizId) !== undefined) return true;
+
+  return false;
 }

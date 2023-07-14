@@ -88,7 +88,7 @@ export const logoutUserHandler = (jwt: Jwt) => {
 /*
 export const updateUserDetails = (jwt: Jwt, email: string, nameFirst: string, nameLast: string): AdminUpdateUserDetailsReturn | ErrorObj => {
   const res = request(
-    'GET',
+    'PUT',
     URL + '/v1/admin/user/details',
     {
       qs: {
@@ -102,7 +102,7 @@ export const updateUserDetails = (jwt: Jwt, email: string, nameFirst: string, na
 
 export const updateUserDetailsPassword = (jwt: Jwt, oldPassword: string, newPassword: string): adminUpdateUserPasswordReturn | ErrorObj => {
   const res = request(
-    'GET',
+    'PUT',
     URL + '/v1/admin/user/password',
     {
       qs: {
@@ -268,6 +268,22 @@ export const viewQuizTrashHandler = (jwt: Jwt): QuizTrashReturn | ErrorObj => {
   );
 
   const parsedResponse: QuizTrashReturn | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
+};
+
+export const trashRestoreQuizHandler = (jwt: Jwt, quizId: number): OkObj | ErrorObj => {
+  const res = request(
+    'POST',
+    URL + `v1/admin/quiz/${quizId}/restore`,
+    {
+      json: {
+        token: jwt.token
+      }
+    }
+  );
+
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
 
   return parsedResponse;
 };
