@@ -1,6 +1,6 @@
 import { Data } from '../interfaces/interfaces';
 import fs from 'fs';
-import config from './config.json'
+import config from './config.json';
 
 const DATA_URL = config.dataUrl;
 
@@ -68,7 +68,6 @@ function getData (): Data {
 function setData (newData: Data): void {
   data = newData;
   save();
-  
 }
 
 function save() {
@@ -76,7 +75,7 @@ function save() {
 }
 
 function load() {
-  data = JSON.parse(String(fs.readFileSync(DATA_URL))) as Data; 
+  data = JSON.parse(String(fs.readFileSync(DATA_URL))) as Data;
 }
 
 export { getData, setData };

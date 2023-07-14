@@ -7,6 +7,10 @@ beforeEach(() => {
   clearUsers();
 });
 
+afterEach(() => {
+  clearUsers();
+});
+
 // TESTS FOR QUIZ UPDATE DESCRIPTION //
 describe('Quiz Update Description', () => {
   let token0: Token;

@@ -1,7 +1,7 @@
 import { ErrorAndStatusCode, Jwt, QuestionBody, QuizQuestionCreate, Token, Question, Quiz, OkObj, AdminQuestionDuplicate } from '../interfaces/interfaces';
 import {
   checkAnswerHasTrueValue, checkAnswerLengthValid, checkQuestionAnswerNonDuplicate, checkQuizAndUserIdValid, checkQuizIdValid,
-  checkTokenValidSession, checkTokenValidStructure, createQuestionId, getQuiz, getTotalDuration, checkQuestionIdIsValidInQuiz, checkQuestionIdValid
+  checkTokenValidSession, checkTokenValidStructure, createQuestionId, getTotalDuration, checkQuestionIdIsValidInQuiz, checkQuestionIdValid
 } from './helper';
 import { jwtToToken } from './token';
 import { getData, setData } from './dataStore';
@@ -129,7 +129,7 @@ export function quizDuplicateQuestion(jwt: Jwt, quizId: number, questionId: numb
   const authUserId: number = token.userId;
   const data = getData();
   const quiz = data.quizzes.find((quiz: Quiz) => quiz.quizId === quizId);
-  
+
   if (!checkQuizIdValid(quizId)) {
     return {
       error: 'Quiz ID does not refer to a valid quiz',
@@ -394,7 +394,6 @@ export function quizMoveQuestion(quizId: number, questionId: number, newPosition
 
   const data = getData();
   const quiz = data.quizzes.find((quiz: Quiz) => quiz.quizId === quizId);
-  
 
   // QuestionId does not refer to a valid question within this quiz
   if (!checkQuestionIdValid(questionId, quiz)) {

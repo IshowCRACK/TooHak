@@ -1,1 +1,1 @@
-{"users":[{"email":"JohnSmith@gmail.com","password":"Password123","nameFirst":"John","nameLast":"Smith","authUserId":0,"numSuccessLogins":1,"numFailedPasswordsSinceLastLogin":4,"deletedQuizzes":[]}],"quizzes":[],"session":[{"sessionId":"2938624","userId":0}],"metaData":{"totalUsers":1,"totalQuizzes":0}}
+{"users":[],"quizzes":[],"session":[],"metaData":{"totalUsers":0,"totalQuizzes":0}}

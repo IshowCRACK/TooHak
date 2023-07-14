@@ -179,7 +179,8 @@ export function adminUserALLDetails(authUserId: number): AdminUserALLDetailsRetu
           password: user.password,
           numSuccessLogins: user.numSuccessLogins,
           numFailedPasswordsSinceLastLogin: user.numFailedPasswordsSinceLastLogin,
-          deletedQuizzes: user.deletedQuizzes
+          deletedQuizzes: user.deletedQuizzes,
+          prevPassword: user.prevPassword
         }
       };
     }
