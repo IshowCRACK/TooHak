@@ -1,12 +1,12 @@
 import {
   Data, AdminQuizListReturn,
-  AdminQuizList, AdminQuizEmptyTrashReturn,
+  AdminQuizList,
   Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj, AdminQuizInfo, User, Quiz, QuizTrashReturn, Token,
 } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkQuizAndUserIdValid,
-  checkQuizIdValid, checkQuizNameUsed, checkALLQuizOwnership, checkQuizIdExistsGlobally, checkTokenValidStructure, checkTokenValidSession, checkNameUsedInQuiz, checkQuizIdAndUserIdValidAndTrash, checkQuizIdValidAndTrash
+  checkQuizIdValid, checkQuizNameUsed, checkTokenValidStructure, checkTokenValidSession, checkNameUsedInQuiz, checkQuizIdAndUserIdValidAndTrash, checkQuizIdValidAndTrash, createQuizId
 } from './helper';
 import { jwtToToken } from './token';
 
@@ -157,7 +157,7 @@ export function quizTrash(jwt: Jwt): QuizTrashReturn | ErrorAndStatusCode {
 
   const userDeletedQuizzes = user.deletedQuizzes.map((quiz: Quiz) => {
     return {
-      quizId: quiz.adminQuizId,
+      quizId: quiz.quizId,
       name: quiz.name
     };
   });
@@ -217,19 +217,10 @@ function adminQuizCreate (jwt: Jwt, name: string, description: string): AdminQui
     return { error: 'Quiz name is already in use', statusCode: 400 };
   }
 
-  let maxID = 0;
-
-  if (data.quizzes.length !== 0) {
-    for (const quiz of data.quizzes) {
-      if (quiz.quizId > maxID) {
-        maxID = quiz.quizId;
-      }
-    }
-    maxID = maxID + 1;
-  }
+  const quizId = createQuizId();
 
   data.quizzes.push({
-    quizId: maxID,
+    quizId: quizId,
     adminQuizId: authUserId,
     name: name,
     timeCreated: Math.round(Date.now() / 1000),
@@ -243,7 +234,7 @@ function adminQuizCreate (jwt: Jwt, name: string, description: string): AdminQui
   setData(data);
 
   return {
-    quizId: maxID
+    quizId: quizId
   };
 }
 
@@ -442,7 +433,6 @@ function adminQuizInfo (jwt: Jwt, quizId: number): AdminQuizInfo | ErrorAndStatu
   * @returns {{} | {error: string}} - Returns an empty object if valid
  */
 function adminQuizRestore(jwt: Jwt, quizId: number): OkObj | ErrorAndStatusCode {
-  console.log('YEEE HAWWW');
   //  check valid structure
   if (!checkTokenValidStructure(jwt)) {
     return {
@@ -508,42 +498,65 @@ function adminQuizRestore(jwt: Jwt, quizId: number): OkObj | ErrorAndStatusCode 
   *
   * @returns {{} | {error: string}} - Returns an empty object if valid
  */
-function adminQuizEmptyTrash(authUserId: number, quizIds: number[]): AdminQuizEmptyTrashReturn {
+function adminQuizEmptyTrash(jwt: Jwt, quizIds: number[]): OkObj | ErrorAndStatusCode {
+  // todo: ask about if theres an error, you don't delete any of them
+
+  //  check valid structure
+  if (!checkTokenValidStructure(jwt)) {
+    return {
+      error: 'Token is not a valid structure',
+      statusCode: 401
+    };
+  }
+
+  //  check if valid for active sessions
+  if (!checkTokenValidSession(jwt)) {
+    return {
+      error: 'Provided token is valid structure, but is not for a currently logged in session',
+      statusCode: 403
+    };
+  }
+
+  const token: Token = jwtToToken(jwt);
   const data = getData();
 
-  // Find the user in the users array
-  const userIndex = data.users.findIndex((user) => user.authUserId === authUserId);
-
-  if (userIndex !== -1) {
-    const user = data.users[userIndex];
-
-    for (const quizId of quizIds) {
-      // Check if the specified quizId is a valid quiz
-      if (!checkQuizIdExistsGlobally(quizId)) {
-        return { error: 'One or more of the Quiz IDs is not a valid quiz' };
-      }
-
-      // Check if the user owns the specified quiz
-      if (!checkALLQuizOwnership(authUserId, quizId)) {
-        return {
-          error: 'One or more of the Quiz IDs refers to a quiz that this current user does not own',
-        };
-      }
-
-      // Find the quiz in the deletedQuizzes array
-      const quizIndex = user.deletedQuizzes.findIndex((quiz) => quiz.quizId === quizId);
-
-      // Check if the specified quizId is currently in the trash
-      if (quizIndex === -1) {
-        return { error: 'One or more of the Quiz IDs is not currently in the trash' };
-      }
-
-      // Remove the specified quizId from the user's deletedQuizzes array
-      user.deletedQuizzes.splice(quizIndex, 1);
-    }
-  } else {
-    return { error: 'AuthUserId is not a valid user' };
+  // if at least one quiz doesn't have a valid quizId
+  if (quizIds.find((quizId: number) => !checkQuizIdValidAndTrash(quizId)) !== undefined) {
+    return {
+      error: 'One or more of the Quiz IDs is not a valid quiz',
+      statusCode: 400
+    };
   }
+
+  // if at least one quiz doesn't have a valid correspondent user
+  if (quizIds.find((quizId: number) => !checkQuizIdAndUserIdValidAndTrash(quizId, token.userId)) !== undefined) {
+    return {
+      error: 'One or more of the Quiz IDs refers to a quiz that this current user does not own',
+      statusCode: 400
+    };
+  }
+
+  const user: User = data.users.find((user) => user.authUserId === token.userId);
+
+  for (const quizId of quizIds) {
+    // check if each quiz is in deleted quizzes
+    if (user.deletedQuizzes.find((deletedQuiz: Quiz) => deletedQuiz.quizId === quizId) === undefined) {
+      // returns error if at least one quiz isn't in deleted quizes
+      return {
+        error: 'One or more of the Quiz IDs is not currently in the trash',
+        statusCode: 400
+      };
+    }
+  }
+
+  for (const quizId of quizIds) {
+    // Find the quiz in the deletedQuizzes array
+    const quizIndex = user.deletedQuizzes.findIndex((quiz) => quiz.quizId === quizId);
+
+    // Remove the specified quizId from the user's deletedQuizzes array
+    user.deletedQuizzes.splice(quizIndex, 1);
+  }
+
   setData(data);
   return {};
 }

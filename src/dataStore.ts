@@ -3,7 +3,11 @@ import { Data } from '../interfaces/interfaces';
 let data: Data = {
   users: [],
   quizzes: [],
-  session: []
+  session: [],
+  metaData: {
+    totalUsers: 0,
+    totalQuizzes: 0
+  }
 };
 
 /**

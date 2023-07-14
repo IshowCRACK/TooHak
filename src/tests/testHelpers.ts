@@ -277,3 +277,20 @@ export const trashRestoreQuizHandler = (jwt: Jwt, quizId: number): OkObj | Error
 
   return parsedResponse;
 };
+
+export const emptyTrashHandler = (jwt: Jwt, quizIds: number[]): OkObj | ErrorObj => {
+  const res = request(
+    'DELETE',
+    URL + 'v1/admin/quiz/trash/empty',
+    {
+      qs: {
+        token: jwt.token,
+        quizIds: quizIds
+      }
+    }
+  );
+
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
+};
