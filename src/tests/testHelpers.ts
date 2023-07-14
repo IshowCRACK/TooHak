@@ -1,5 +1,5 @@
 import request from 'sync-request';
-import { AdminQuizCreate, AdminQuizListReturn, AdminUserDetailsReturn, ErrorObj, Jwt, OkObj, Token, AdminQuizInfo, AdminQuestionDuplicate } from '../../interfaces/interfaces';
+import { AdminQuizCreate, AdminQuizListReturn, AdminUserDetailsReturn, ErrorObj, Jwt, OkObj, Token, AdminQuizInfo, AdminQuestionDuplicate, QuizTrashReturn } from '../../interfaces/interfaces';
 import { jwtToToken } from '../token';
 import { getUrl } from '../helper';
 
@@ -227,3 +227,19 @@ export const duplicateQuiz = (jwt: Jwt, quizId: number, questionId: number): Adm
 
   return parsedResponse;
 };
+
+export const viewQuizTrashHandler = (jwt: Jwt): QuizTrashReturn | ErrorObj => {
+  const res = request(
+    'GET',
+    URL + `v1/admin/quiz/trash`,
+    {
+      qs: {
+        token: jwt.token
+      }
+    }
+  );
+
+  const parsedResponse: QuizTrashReturn | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
+}
