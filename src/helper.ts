@@ -1,5 +1,5 @@
 import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer, Question, User } from '../interfaces/interfaces';
-import { getData, setData } from './dataStore';
+import { getData } from './dataStore';
 import { adminQuizList } from './quiz';
 import { checkJwtValid, jwtToToken } from './token';
 import config from './config.json';
@@ -179,7 +179,8 @@ export function adminUserALLDetails(authUserId: number): AdminUserALLDetailsRetu
           password: user.password,
           numSuccessLogins: user.numSuccessLogins,
           numFailedPasswordsSinceLastLogin: user.numFailedPasswordsSinceLastLogin,
-          deletedQuizzes: user.deletedQuizzes
+          deletedQuizzes: user.deletedQuizzes,
+          prevPassword: user.prevPassword
         }
       };
     }
@@ -376,8 +377,6 @@ export function createQuizId(): number {
 
   const quizId: number = data.metaData.totalQuizzes;
 
-  data.metaData.totalQuizzes++;
-  setData(data);
   return quizId;
 }
 
@@ -385,10 +384,6 @@ export function createUserId(): number {
   const data = getData();
 
   const userId: number = data.metaData.totalUsers;
-
-  // increase user count by 1
-  data.metaData.totalUsers++;
-  setData(data);
 
   return userId;
 }

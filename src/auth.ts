@@ -1,19 +1,14 @@
-import { AdminUserDetailsReturn, AdminUpdateUserDetailsReturn, adminUpdateUserPasswordReturn, Data, Token, Jwt, ErrorAndStatusCode, OkObj } from '../interfaces/interfaces';
+import { AdminUserDetailsReturn, adminUpdateUserPasswordReturn, Data, Token, Jwt, ErrorAndStatusCode, OkObj, User } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import { checkName, checkPassword, emailAlreadyUsed, checkTokenValidStructure, checkTokenValidSession, createUserId } from './helper';
 import validator from 'validator';
 import { addTokenToSession, checkJwtValid, createToken, getTokenLogin, tokenToJwt, jwtToToken } from './token';
 
 /**
-  * Register a user with an email, password, and names, then returns thier authUserId value
+  * Register a user with an email, password, and names, then returns a token
   *
-  * @param {string} email - Users email
-  * @param {string} password - Users password with at least 1 number and 1 letter and is 8 characters long
-  * @param {string} nameFirst - Users first name
-  * @param {string} nameLast - Users last name
-  * @returns {{authUserId: number} | {error: string}} - Returns an integer, authUserId that is unique to the user
-*/
-function adminAuthRegister (email: string, password: string, nameFirst: string, nameLast: string): Jwt | ErrorAndStatusCode {
+**/
+export function adminAuthRegister (email: string, password: string, nameFirst: string, nameLast: string): Jwt | ErrorAndStatusCode {
   const data = getData();
 
   // checking if any parts are null
@@ -82,50 +77,56 @@ function adminAuthRegister (email: string, password: string, nameFirst: string, 
 
   // else if every parameter is valid push into users database
   const userID = createUserId();
+  data.metaData.totalUsers++;
+
   data.users.push({
-    email,
-    password,
+    email: email,
+    password: password,
     nameFirst: nameFirst,
     nameLast: nameLast,
     authUserId: userID,
     numSuccessLogins: 1,
     numFailedPasswordsSinceLastLogin: 0,
-    deletedQuizzes: []
+    deletedQuizzes: [],
+    prevPassword: [password],
   });
 
   setData(data);
 
   const token: Token = createToken(userID);
+
   addTokenToSession(token);
 
   return tokenToJwt(token);
 }
 
-/**
-  * Given a registered user's email and password returns their authUserId value
+
+  /**
+  * Given a registered user's email and password returns their jwt value
   *
-  * @param {string} email - Users email
-  * @param {string} password - Users password with at least 1 number and 1 letter and is 8 characters long
-  *
-  * @returns {{authUserId: number} | {error: string}} - returns an integer, authUserId that is unique to the user
-*/
-function adminAuthLogin (email: string, password: string): Jwt | ErrorAndStatusCode {
+**/
+export function adminAuthLogin (email: string, password: string): Jwt | ErrorAndStatusCode {
   const data = getData();
 
   // loop through users array from dataStore
   for (const user of data.users) {
     if (user.email === email && user.password === password) {
       // add successful logins for all times & change failed password
+      console.log('EEYEYYE');
+      console.log(data);
       user.numSuccessLogins++;
+      console.log(data);
       user.numFailedPasswordsSinceLastLogin = 0;
+      setData(data);
 
       const token: Token = getTokenLogin(user.authUserId);
-      addTokenToSession(token);
 
+      addTokenToSession(token);
       return tokenToJwt(token);
     } else {
       // Add on to how many times user has failed before a successful login
       user.numFailedPasswordsSinceLastLogin++;
+      setData(data);
     }
   }
 
@@ -133,13 +134,10 @@ function adminAuthLogin (email: string, password: string): Jwt | ErrorAndStatusC
 }
 
 /**
-  * Given an admin user's authUserId, return details about the user
+  * Given an admin user's token object, return details about the user
   *
-  * @param {number} authUserId - Unique Id for a user to help identify them
-  *
-  * @returns {{user: {userId: number, name: string, email: string, numSuccessfulLogins: number, numFailedPasswordsSinceLastLogin: number}} | {error: string}} - Returns an object of User details
 */
-function adminUserDetails (jwt: Jwt): AdminUserDetailsReturn | ErrorAndStatusCode {
+export function adminUserDetails (jwt: Jwt): AdminUserDetailsReturn | ErrorAndStatusCode {
   const data: Data = getData();
   // checking valid structure
   if (!checkTokenValidStructure(jwt)) {
@@ -175,77 +173,74 @@ function adminUserDetails (jwt: Jwt): AdminUserDetailsReturn | ErrorAndStatusCod
 }
 
 /**
- * Update a User's details with an email, password, or names, then returns an empty object.
- *
- * @param {number} authUserId - User's unique ID
- * @param {string} email - User's email
- * @param {string} nameFirst - User's first name
- * @param {string} nameLast - User's last name
- *
- * @returns {{} | {error: string}} - Returns an empty object or Error
- */
-function adminUpdateUserDetails(authUserId: number, email: string, nameFirst: string, nameLast: string): AdminUpdateUserDetailsReturn {
+ * Update a User's details with an token object, email, password, or names, then returns an empty object.
+ * 
+ **/
+
+export function adminUpdateUserDetails(jwt: Jwt, email: string, nameFirst: string, nameLast: string): OkObj | ErrorAndStatusCode {
   const data = getData();
+  const token: Token = jwtToToken(jwt);
+  const authUserId: number = token.userId;
 
-  // Find the user by authUserId
-  const user = data.users.find((user) => user.authUserId === authUserId);
-
-  if (user) {
-    let emailChanged = false;
-
-    // Check if email is provided and valid
-    if (email) {
-      // Check if email is valid and not used by another user
-      if (!validator.isEmail(email) || emailAlreadyUsed(email, authUserId)) {
-        return {
-          error: 'Invalid email or email is already in use'
-        };
-      }
-
-      user.email = email;
-      emailChanged = true;
-    }
-
-    // Update the user's details if the inputs are valid
-    if (checkName(nameFirst) && nameFirst.length >= 2 && nameFirst.length <= 20) {
-      user.nameFirst = nameFirst;
-    } else {
-      return {
-        error: 'Invalid first name'
-      };
-    }
-
-    if (checkName(nameLast) && nameLast.length >= 2 && nameLast.length <= 20) {
-      user.nameLast = nameLast;
-    } else {
-      return {
-        error: 'Invalid last name'
-      };
-    }
-
-    // Update data only if there were changes
-    if (emailChanged) {
-      setData(data);
-    }
-  } else {
+  if (!checkTokenValidStructure(jwt)) {
     return {
-      error: 'User doesnt exist'
+      error: 'Token is not a valid structure',
+      statusCode: 401
     };
   }
+
+  if (!checkTokenValidSession(jwt)) {
+    return {
+      error: 'Token not for currently logged in session',
+      statusCode: 403
+    };
+  }
+
+  // Check if email is valid and not used by another user
+  if (!validator.isEmail(email) || emailAlreadyUsed(email, authUserId)) {
+    return {
+      error: 'Invalid email or email is already in use',
+      statusCode: 400
+    };
+  }
+
+  // Check if user's nameFirst is valid
+  if (nameFirst.length <= 2 || nameFirst.length >= 20) {
+    return {
+      error: 'Invalid first name',
+      statusCode: 400
+    };
+  }
+  if (!checkName(nameFirst) || !checkName(nameLast)) {
+    return {
+      error: 'Name can only contain alphanumeric symbols',
+      statusCode: 400
+    };
+  }
+
+  if (nameLast.length <= 2 || nameLast.length >= 20) {
+    return {
+      error: 'Invalid last name',
+      statusCode: 400
+    };
+  }
+
+  // Update data only if there were changes
+
+  const updateDetail = data.users.find(({ authUserId: id }) => id === authUserId) as User;
+  updateDetail.nameFirst = nameFirst;
+  updateDetail.nameLast = nameLast;
+  updateDetail.email = email;
+
+  setData(data);
 
   return {};
 }
 
 /**
   * Update a Users password with a new password, then returns empty object
-  *
-  * @param {number} authUserId - Users Id
-  * @param {string} oldPassword - Users old password
-  * @param {string} newPassword - Users new password
-  *
- * @returns {{} | {error: string}} - Returns an empty object or Error
 */
-function adminUpdateUserPassword(authUserId: number, oldPassword: string, newPassword: string): adminUpdateUserPasswordReturn {
+export function adminUpdateUserPassword(authUserId: number, oldPassword: string, newPassword: string): adminUpdateUserPasswordReturn {
   const data = getData();
 
   // Find the user by authUserId
@@ -286,6 +281,9 @@ function adminUpdateUserPassword(authUserId: number, oldPassword: string, newPas
   return {};
 }
 
+/**
+  * Takes in a token object and returns an empty object, signalling user has logged out 
+*/
 export const adminAuthLogout = (jwt: Jwt): OkObj | ErrorAndStatusCode => {
   const possibleToken = checkJwtValid(jwt);
 
@@ -303,6 +301,7 @@ export const adminAuthLogout = (jwt: Jwt): OkObj | ErrorAndStatusCode => {
 
   if (index !== -1) {
     data.session.splice(index, 1);
+    setData(data);
     return {};
   }
 
@@ -311,5 +310,3 @@ export const adminAuthLogout = (jwt: Jwt): OkObj | ErrorAndStatusCode => {
     statusCode: 400
   };
 };
-
-export { adminAuthLogin, adminAuthRegister, adminUserDetails, adminUpdateUserDetails, adminUpdateUserPassword };

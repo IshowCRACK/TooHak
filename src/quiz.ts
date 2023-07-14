@@ -1,28 +1,26 @@
 import {
-  Data, AdminQuizListReturn,
-  AdminQuizList,
-  Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj, AdminQuizInfo, User, Quiz, QuizTrashReturn, Token,
+  Data, AdminQuizListReturn, AdminQuizList, Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj,
+  AdminQuizInfo, User, Quiz, QuizTrashReturn, Token,
 } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
-  checkAlphanumeric, checkQuizAndUserIdValid,
-  checkQuizIdValid, checkQuizNameUsed, checkTokenValidStructure, checkTokenValidSession, checkNameUsedInQuiz, checkQuizIdAndUserIdValidAndTrash, checkQuizIdValidAndTrash, createQuizId
+  checkAlphanumeric, checkQuizAndUserIdValid, checkQuizIdValid, checkQuizNameUsed,
+  checkTokenValidStructure, checkTokenValidSession, checkNameUsedInQuiz, checkQuizIdAndUserIdValidAndTrash,
+  checkQuizIdValidAndTrash, createQuizId
 } from './helper';
 import { jwtToToken } from './token';
 
+
+
+
 /**
-  * Update the description of the relevant quiz
-  *
-  * @param {number} authUserId - A unique Id for the user who owns the quiz
-  * @param {number} quizId - A unique Id for the specified quiz
-  * @param {string} description - Quiz description
-  *
-  * @returns {{} | {error: string}} - Returns an empty object if valid
- */
-function adminQuizDescriptionUpdate (jwt: Jwt, description: string, quizId: number): OkObj | ErrorAndStatusCode {
+  * Update the description of the relevant quiz taking in a token object, description, quizId and returning empty object
+**/
+
+export function adminQuizDescriptionUpdate (jwt: Jwt, description: string, quizId: number): OkObj | ErrorAndStatusCode {
   const data: Data = getData();
 
-  //  check valid structure
+  // Check valid structure
   if (!checkTokenValidStructure(jwt)) {
     return {
       error: 'Token is not a valid structure',
@@ -30,7 +28,7 @@ function adminQuizDescriptionUpdate (jwt: Jwt, description: string, quizId: numb
     };
   }
 
-  //  check if valid for active sessions
+  // Check if valid for active sessions
   if (!checkTokenValidSession(jwt)) {
     return {
       error: 'Token not for currently logged in session',
@@ -75,25 +73,23 @@ function adminQuizDescriptionUpdate (jwt: Jwt, description: string, quizId: numb
   return {};
 }
 
+
+
+
 /**
-  * Given a particular quiz, permanently remove the quiz
-  *
-  * @param {Jwt} jwt - A unique session Id
-  * @param {number} quizId - A unique Id for the specified quiz
-  *
-  * @returns {{} | {error: string}} - Returns empty object if valid
- */
-function adminQuizRemove (jwt: Jwt, quizId: number): OkObj | ErrorAndStatusCode {
+  * Given a particular token object and quizId, permanently remove the quiz and return empty object
+**/
+export function adminQuizRemove (jwt: Jwt, quizId: number): OkObj | ErrorAndStatusCode {
   const data = getData();
 
-  //  check valid structure
+  // Check valid structure
   if (!checkTokenValidStructure(jwt)) {
     return {
       error: 'Token is not a valid structure',
       statusCode: 401
     };
   }
-  //  check if valid for active sessions
+  // Check if valid for active sessions
   if (!checkTokenValidSession(jwt)) {
     return {
       error: 'Token not for currently logged in session',
@@ -119,31 +115,34 @@ function adminQuizRemove (jwt: Jwt, quizId: number): OkObj | ErrorAndStatusCode 
   const user = data.users[userIndex];
 
   if (!user.deletedQuizzes) {
-    user.deletedQuizzes = []; // Initialize deletedQuizzes array if it doesn't exist
+    // Initialize deletedQuizzes array if it doesn't exist
+    user.deletedQuizzes = [];
   }
 
   user.deletedQuizzes.push(deletedQuiz);
   data.quizzes.splice(quizIndex, 1);
   setData(data);
+
   return {};
 }
 
+
+
+
+
 /**
-  * Given a UserId, view the deleted quizes
-  *
-  * @param {number} authUserId - A unique Id for the user who owns the quiz
-  *
-  * @returns {Quiz[] | {error: string}} - Returns array if valid
- */
+  * // Given a token object , view the deleted quizes of that user 
+**/
+
 export function quizTrash(jwt: Jwt): QuizTrashReturn | ErrorAndStatusCode {
-  //  check valid structure
+  // Check valid structure
   if (!checkTokenValidStructure(jwt)) {
     return {
       error: 'Token is not a valid structure',
       statusCode: 401
     };
   }
-  //  check if valid for active sessions
+  // Check if valid for active sessions
   if (!checkTokenValidSession(jwt)) {
     return {
       error: 'Provided token is valid structure, but is not for a currently logged in session',
@@ -167,33 +166,33 @@ export function quizTrash(jwt: Jwt): QuizTrashReturn | ErrorAndStatusCode {
   };
 }
 
-/**
-  * Given basic details about a new quiz, create one for the logged in user
-  *
-  * @param {number} token -  The token of the active session
-  * @param {string} name - The name of new quiz
-  * @param {string} description - The description for the new quiz
 
-  *
-  * @returns {{quizId: number} | {error: string}} - Returns an object containing the quizId
- */
-function adminQuizCreate (jwt: Jwt, name: string, description: string): AdminQuizCreate | ErrorAndStatusCode {
+
+
+
+/**
+  * /Takes in token object, name and description about a new quiz, and creates one for the logged in user
+**/
+
+export function adminQuizCreate (jwt: Jwt, name: string, description: string): AdminQuizCreate | ErrorAndStatusCode {
   const data = getData();
-  // check valid structure
+  // Check valid structure
   if (!checkTokenValidStructure(jwt)) {
     return {
       error: 'Token is not a valid structure',
       statusCode: 401
     };
   }
-  //  check if valid for active sessions
+
+  //  Check if valid for active sessions
   if (!checkTokenValidSession(jwt)) {
     return {
       error: 'Token not for currently logged in session',
       statusCode: 403
     };
   }
-  // check name length
+
+  // Check name length
   if (name === null || name === '') {
     return { error: 'A name must be entered', statusCode: 400 };
   }
@@ -202,22 +201,25 @@ function adminQuizCreate (jwt: Jwt, name: string, description: string): AdminQui
     return { error: 'Name must be between 3 and 30 characters', statusCode: 400 };
   }
 
-  // check name composition (alphanumeric and spaces)
+  // Check name composition (alphanumeric and spaces)
   if (!checkAlphanumeric(name)) {
     return { error: 'Must use only alphanumeric characters or spaces in name', statusCode: 400 };
   }
 
-  // check description length
+  // Check description length
   if (description.length > 100) {
     return { error: 'Description must be under 100 characters', statusCode: 400 };
   }
+
   const authUserId: number = jwtToToken(jwt).userId;
-  // check if quiz name already in use by this user
+
+  // Check if quiz name already in use by this user
   if (checkQuizNameUsed(jwt, name)) {
     return { error: 'Quiz name is already in use', statusCode: 400 };
   }
 
   const quizId = createQuizId();
+  data.metaData.totalQuizzes++;
 
   data.quizzes.push({
     quizId: quizId,
@@ -238,14 +240,13 @@ function adminQuizCreate (jwt: Jwt, name: string, description: string): AdminQui
   };
 }
 
+
+
 /**
-  * Provides a list of all quizzes that are owned by the currently logged in user
-  *
-  * @param {number} authUserId - The unique Id for the user who owns the quiz
-  *
-  * @returns {{quizzes: Array<{quizId: number, name: string}>} | {error: string}} - An array of quizzes and its details
- */
-function adminQuizList (jwt: Jwt): AdminQuizListReturn | ErrorAndStatusCode {
+  * Provides a list of all quizzes that are owned by the currently logged in user 
+**/
+
+export function adminQuizList (jwt: Jwt): AdminQuizListReturn | ErrorAndStatusCode {
   // checking valid structure
   if (!checkTokenValidStructure(jwt)) {
     return {
@@ -253,6 +254,7 @@ function adminQuizList (jwt: Jwt): AdminQuizListReturn | ErrorAndStatusCode {
       statusCode: 401
     };
   }
+
   // check if valid for active sessions
   if (!checkTokenValidSession(jwt)) {
     return {
@@ -281,16 +283,14 @@ function adminQuizList (jwt: Jwt): AdminQuizListReturn | ErrorAndStatusCode {
   return output;
 }
 
+
+
+
 /**
-  * Update the name of the relevant quiz
-  *
-  * @param {number} authUserId - The unique Id for the user who owns the quiz
-  * @param {number} quizId - The unique Id for the specified quiz
-  * @param {string} name - The name that you want to change the quizzes name into
-  *
-  * @returns {{} | {error: string}} - Returns an empty object if valid
- */
-function adminQuizNameUpdate (jwt: Jwt, name: string, quizId: number): OkObj | ErrorAndStatusCode {
+  *  Update the name of the relevant quiz and returns empty object if successful
+**/
+
+export function adminQuizNameUpdate (jwt: Jwt, name: string, quizId: number): OkObj | ErrorAndStatusCode {
   const data = getData();
 
   //  check valid structure
@@ -362,18 +362,17 @@ function adminQuizNameUpdate (jwt: Jwt, name: string, quizId: number): OkObj | E
   return {};
 }
 
+
+
+
 /**
-  * Get all of the relevant information about the current quiz
-  *
-  * @param {number} authUserId - The unique id of the registered user
-  * @param {number} quizId - The unique id of the quiz
-  *
-  * @returns {{quizId: number, name: string, timeCreated: number, timeLastEdited: number, description: string}} - An array of quizzes and its details
- */
-function adminQuizInfo (jwt: Jwt, quizId: number): AdminQuizInfo | ErrorAndStatusCode {
+  * Get all of the relevant information about the current quiz 
+**/
+
+export function adminQuizInfo (jwt: Jwt, quizId: number): AdminQuizInfo | ErrorAndStatusCode {
   const data = getData();
 
-  //  check valid structure
+  // Check valid structure
   if (!checkTokenValidStructure(jwt)) {
     return {
       error: 'Token is not a valid structure',
@@ -381,7 +380,7 @@ function adminQuizInfo (jwt: Jwt, quizId: number): AdminQuizInfo | ErrorAndStatu
     };
   }
 
-  //  check if valid for active sessions
+  // Check if valid for active sessions
   if (!checkTokenValidSession(jwt)) {
     return {
       error: 'Token not for currently logged in session',
@@ -407,7 +406,7 @@ function adminQuizInfo (jwt: Jwt, quizId: number): AdminQuizInfo | ErrorAndStatu
     };
   }
 
-  // If no errors
+  // if no errors
   for (const quiz of data.quizzes) {
     if (quiz.quizId === quizId) {
       return {
@@ -424,16 +423,15 @@ function adminQuizInfo (jwt: Jwt, quizId: number): AdminQuizInfo | ErrorAndStatu
   }
 }
 
+
+
+
 /**
-  * Restores a Quiz from the Trash
-  *
-  * @param {number} authUserId - The unique id of the registered user
-  * @param {number} quizId - The unique id of the quiz
-  *
-  * @returns {{} | {error: string}} - Returns an empty object if valid
- */
-function adminQuizRestore(jwt: Jwt, quizId: number): OkObj | ErrorAndStatusCode {
-  //  check valid structure
+ * Restores a Quiz from the Trash and returns empty object if successful
+ */ 
+
+export function adminQuizRestore(jwt: Jwt, quizId: number): OkObj | ErrorAndStatusCode {
+  // check valid structure
   if (!checkTokenValidStructure(jwt)) {
     return {
       error: 'Token is not a valid structure',
@@ -441,7 +439,7 @@ function adminQuizRestore(jwt: Jwt, quizId: number): OkObj | ErrorAndStatusCode 
     };
   }
 
-  //  check if valid for active sessions
+  // check if valid for active sessions
   if (!checkTokenValidSession(jwt)) {
     return {
       error: 'Provided token is valid structure, but is not for a currently logged in session',
@@ -484,24 +482,22 @@ function adminQuizRestore(jwt: Jwt, quizId: number): OkObj | ErrorAndStatusCode 
 
   // Add the quiz back to the quizzes array
   data.quizzes.push(deletedQuiz);
-
   setData(data);
 
   return {};
 }
 
-/**
-  * Permanently clears 'deletedQuizzes'
-  *
-  * @param {number} authUserId - The unique id of the registered user
-  * @param {number[]} quizIds - An array of quizId's to be deleted from the trash
-  *
-  * @returns {{} | {error: string}} - Returns an empty object if valid
- */
-function adminQuizEmptyTrash(jwt: Jwt, quizIds: number[]): OkObj | ErrorAndStatusCode {
-  // todo: ask about if theres an error, you don't delete any of them
 
-  //  check valid structure
+
+
+/**
+ *  Permanently clears 'deletedQuizzes' after taking in token object and quizId and returns empty 
+ *  object if successful
+ */
+
+export function adminQuizEmptyTrash(jwt: Jwt, quizIds: number[]): OkObj | ErrorAndStatusCode {
+  // todo: ask about if theres an error, you don't delete any of them
+  // Check valid structure
   if (!checkTokenValidStructure(jwt)) {
     return {
       error: 'Token is not a valid structure',
@@ -509,7 +505,7 @@ function adminQuizEmptyTrash(jwt: Jwt, quizIds: number[]): OkObj | ErrorAndStatu
     };
   }
 
-  //  check if valid for active sessions
+  // Check if valid for active sessions
   if (!checkTokenValidSession(jwt)) {
     return {
       error: 'Provided token is valid structure, but is not for a currently logged in session',
@@ -539,9 +535,9 @@ function adminQuizEmptyTrash(jwt: Jwt, quizIds: number[]): OkObj | ErrorAndStatu
   const user: User = data.users.find((user) => user.authUserId === token.userId);
 
   for (const quizId of quizIds) {
-    // check if each quiz is in deleted quizzes
+    // Check if each quiz is in deleted quizzes
     if (user.deletedQuizzes.find((deletedQuiz: Quiz) => deletedQuiz.quizId === quizId) === undefined) {
-      // returns error if at least one quiz isn't in deleted quizes
+      // Returns error if at least one quiz isn't in deleted quizes
       return {
         error: 'One or more of the Quiz IDs is not currently in the trash',
         statusCode: 400
@@ -558,18 +554,18 @@ function adminQuizEmptyTrash(jwt: Jwt, quizIds: number[]): OkObj | ErrorAndStatu
   }
 
   setData(data);
+
   return {};
 }
 
+
+
+
 /**
-  * Transfers Quiz Ownership to another user
-  * @param {number} authUserId - The unique id of the user in session
-  * @param {number} quizId - The unique id of the quiz to be transfered
-  * @param {string} email - email of target user (quiz is being transfered to this user)
-  *
-  * @returns {{} | {error: string}} - Returns an empty object if valid
+ * Transfers Quiz Ownership to another user
  */
-function adminQuizTransfer(jwt: Jwt, email: string, quizId: number): OkObj | ErrorAndStatusCode {
+
+export function adminQuizTransfer(jwt: Jwt, email: string, quizId: number): OkObj | ErrorAndStatusCode {
   const data = getData();
   const targetUser = data.users.find((user: User) => user.email === email);
 
@@ -625,9 +621,7 @@ function adminQuizTransfer(jwt: Jwt, email: string, quizId: number): OkObj | Err
   // Update the adminQuizId to the target user's authUserId
   const quizToUpdate = data.quizzes.find((quiz: Quiz) => quiz.quizId === quizId);
   quizToUpdate.adminQuizId = targetUser.authUserId;
+  setData(data);
 
-  // setData(data);
   return {};
 }
-
-export { adminQuizDescriptionUpdate, adminQuizRemove, adminQuizNameUpdate, adminQuizList, adminQuizCreate, adminQuizInfo, adminQuizRestore, adminQuizEmptyTrash, adminQuizTransfer };

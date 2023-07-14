@@ -1,10 +1,10 @@
 import { ErrorAndStatusCode, Jwt, QuestionBody, QuizQuestionCreate, Token, Question, Quiz, OkObj, AdminQuestionDuplicate } from '../interfaces/interfaces';
 import {
   checkAnswerHasTrueValue, checkAnswerLengthValid, checkQuestionAnswerNonDuplicate, checkQuizAndUserIdValid, checkQuizIdValid,
-  checkTokenValidSession, checkTokenValidStructure, createQuestionId, getQuiz, getTotalDuration, checkQuestionIdIsValidInQuiz, checkQuestionIdValid
+  checkTokenValidSession, checkTokenValidStructure, createQuestionId, getTotalDuration, checkQuestionIdIsValidInQuiz, checkQuestionIdValid
 } from './helper';
 import { jwtToToken } from './token';
-import { getData } from './dataStore';
+import { getData, setData } from './dataStore';
 
 export function quizCreateQuestion(jwt: Jwt, questionBody: QuestionBody, quizId: number): QuizQuestionCreate | ErrorAndStatusCode {
   if (!checkTokenValidStructure(jwt)) {
@@ -23,7 +23,8 @@ export function quizCreateQuestion(jwt: Jwt, questionBody: QuestionBody, quizId:
 
   const token: Token = jwtToToken(jwt);
   const authUserId: number = token.userId;
-  const quiz: Quiz = getQuiz(quizId);
+  const data = getData();
+  const quiz = data.quizzes.find((quiz: Quiz) => quiz.quizId === quizId);
 
   if (!checkQuizIdValid(quizId)) {
     return {
@@ -59,10 +60,6 @@ export function quizCreateQuestion(jwt: Jwt, questionBody: QuestionBody, quizId:
       statusCode: 400
     };
   }
-
-  // console.log('Hi');
-  // console.log(getTotalDuration);
-  // console.log(questionBody.duration);
 
   if (getTotalDuration(quiz) + questionBody.duration > 180) {
     return {
@@ -106,6 +103,8 @@ export function quizCreateQuestion(jwt: Jwt, questionBody: QuestionBody, quizId:
     ...questionBody
   });
 
+  setData(data);
+
   return {
     questionId: questionId
   };
@@ -128,7 +127,8 @@ export function quizDuplicateQuestion(jwt: Jwt, quizId: number, questionId: numb
 
   const token: Token = jwtToToken(jwt);
   const authUserId: number = token.userId;
-  const quiz: Quiz = getQuiz(quizId);
+  const data = getData();
+  const quiz = data.quizzes.find((quiz: Quiz) => quiz.quizId === quizId);
 
   if (!checkQuizIdValid(quizId)) {
     return {
@@ -152,7 +152,6 @@ export function quizDuplicateQuestion(jwt: Jwt, quizId: number, questionId: numb
   }
 
   // if successful
-  const data = getData().quizzes;
   const qId = quiz.questions.findIndex(({ questionId: id }) => id === questionId);
   const result = quiz.questions.find(({ questionId: id }) => id === questionId) as Question;
 
@@ -161,7 +160,7 @@ export function quizDuplicateQuestion(jwt: Jwt, quizId: number, questionId: numb
   quiz.questions.splice(qId + 1, 0, duplicatedQuestion);
 
   // updates the time edited
-  for (const q of data) {
+  for (const q of data.quizzes) {
     if (q.quizId === quizId) {
       q.timeLastEdited = Math.round(Date.now() / 1000);
     }
@@ -169,6 +168,8 @@ export function quizDuplicateQuestion(jwt: Jwt, quizId: number, questionId: numb
   const newQuestion: AdminQuestionDuplicate = {
     newQuestionId: newQuestionId
   };
+
+  setData(data);
   return newQuestion;
 }
 
@@ -211,7 +212,8 @@ export function adminQuizDelete(jwt: Jwt, quizId: number, questionId: number): O
     };
   }
 
-  const quiz: Quiz = getQuiz(quizId);
+  const data = getData();
+  const quiz = data.quizzes.find((quiz: Quiz) => quiz.quizId === quizId);
   // QuestionId does not refer to a valid question within this quiz
   if (!checkQuestionIdValid(questionId, quiz)) {
     return {
@@ -220,17 +222,17 @@ export function adminQuizDelete(jwt: Jwt, quizId: number, questionId: number): O
     };
   }
 
-  const data = getData().quizzes;
-  const quizIndex: number = data.indexOf(quiz);
+  const quizIndex: number = data.quizzes.indexOf(quiz);
   let questionIndex: number;
-  for (const question of data[quizIndex].questions) {
+  for (const question of data.quizzes[quizIndex].questions) {
     if (question.questionId === questionId) {
-      questionIndex = data[quizIndex].questions.indexOf(question);
+      questionIndex = data.quizzes[quizIndex].questions.indexOf(question);
     }
   }
 
   if (questionIndex !== -1) {
-    data[quizIndex].questions.splice(questionIndex, 1);
+    data.quizzes[quizIndex].questions.splice(questionIndex, 1);
+    setData(data);
     return {};
   }
 }
@@ -250,10 +252,10 @@ export function quizUpdateQuestion(jwt: Jwt, questionBody: QuestionBody, quizId:
     };
   }
 
+  const data = getData();
   const token: Token = jwtToToken(jwt);
   const authUserId: number = token.userId;
-  const quiz: Quiz = getQuiz(quizId);
-
+  const quiz = data.quizzes.find((quiz: Quiz) => quiz.quizId === quizId);
   if (!checkQuizIdValid(quizId)) {
     return {
       error: 'Quiz ID does not refer to a valid quiz',
@@ -332,7 +334,6 @@ export function quizUpdateQuestion(jwt: Jwt, questionBody: QuestionBody, quizId:
   }
 
   // if sucessful
-  const data = getData().quizzes;
   const updateQ = quiz.questions.find(({ questionId: id }) => id === questionId) as Question;
   updateQ.question = questionBody.question;
   updateQ.duration = questionBody.duration;
@@ -340,10 +341,98 @@ export function quizUpdateQuestion(jwt: Jwt, questionBody: QuestionBody, quizId:
   updateQ.answers = questionBody.answers;
 
   // updates the time edited
-  for (const q of data) {
+  for (const q of data.quizzes) {
     if (q.quizId === quizId) {
       q.timeLastEdited = Math.round(Date.now() / 1000);
     }
   }
+
+  setData(data);
+  return {};
+}
+
+/**
+ * This function moves a question from one particular position in the quiz to another,
+ * timeLastEdited is updated
+ * @param {number} quizId - unique quizId
+ * @param {number} questionId - unique questionId in quiz
+ * @param {number} newPosition - new position where element will be moved
+ * @param {Jwt} jwt - Jwt token containing sessionId and user Id
+ */
+export function quizMoveQuestion(quizId: number, questionId: number, newPosition: number, jwt: Jwt): OkObj | ErrorAndStatusCode {
+  if (!checkTokenValidStructure(jwt)) {
+    return {
+      error: 'Token is not a valid structure',
+      statusCode: 401
+    };
+  }
+
+  if (!checkTokenValidSession(jwt)) {
+    return {
+      error: 'Token not for currently logged in session',
+      statusCode: 403
+    };
+  }
+
+  // QuizId does not refer to a valid quiz
+  if (!checkQuizIdValid(quizId)) {
+    return {
+      error: 'Quiz ID does not refer to a valid quiz',
+      statusCode: 400
+    };
+  }
+
+  // QuizId does not refer to a quiz that this user owns
+  if (!checkQuizAndUserIdValid(quizId, jwtToToken(jwt).userId)) {
+    return {
+      error: 'Quiz ID does not refer to a quiz that this user owns',
+      statusCode: 400
+    };
+  }
+
+  const data = getData();
+  const quiz = data.quizzes.find((quiz: Quiz) => quiz.quizId === quizId);
+
+  // QuestionId does not refer to a valid question within this quiz
+  if (!checkQuestionIdValid(questionId, quiz)) {
+    return {
+      error: 'Quiz ID does not refer to a valid question within this quiz',
+      statusCode: 400
+    };
+  }
+
+  // newPosition is less than 0 or newPosition is greater than n-1 where n is the number of questions
+  if (newPosition < 0 || newPosition > quiz.questions.length) {
+    return {
+      error: 'New Position is less than 0 or New Position is greater than the number of questions',
+      statusCode: 400
+    };
+  }
+
+  // obtaining question index according to questionId
+  const quizIndex: number = data.quizzes.indexOf(quiz);
+  let questionIndex: number;
+  let movedQuestion: Question;
+  for (const question of data.quizzes[quizIndex].questions) {
+    if (question.questionId === questionId) {
+      questionIndex = data.quizzes[quizIndex].questions.indexOf(question);
+      movedQuestion = question;
+    }
+  }
+
+  // newPosition is the position of the current question
+  if (newPosition === questionIndex) {
+    return {
+      error: 'New Position is the position of the current question',
+      statusCode: 400
+    };
+  }
+
+  // removing original question from position
+  data.quizzes[quizIndex].questions.splice(questionIndex, 1);
+  // putting original question to new position
+  data.quizzes[quizIndex].questions.splice(newPosition, 0, movedQuestion);
+  data.quizzes[quizIndex].timeLastEdited = Math.round(Date.now() / 1000);
+  setData(data);
   return {};
 }
