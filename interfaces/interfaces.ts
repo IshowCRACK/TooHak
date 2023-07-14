@@ -96,7 +96,7 @@ export type AdminAuthRegisterReturn = AdminAuthRegister | ErrorObj;
 export type AdminUserDetailsReturn = AdminUserDetails;
 export type AdminUserALLDetailsReturn = AdminUserALLDetails | ErrorObj;
 export type AdminQuizALLDetailsReturn = AdminQuizALLDetails | ErrorObj;
-export type AdminUpdateUserDetailsReturn = AdminUpdateUserDetails| ErrorObj;
+export type AdminupdateDetailsAuthHandlerReturn = AdminupdateDetailsAuthHandler| ErrorObj;
 export type adminUpdateUserPasswordReturn = AdminUpdateUserPassword| ErrorObj;
 export type AdminQuizRestoreReturn = AdminQuizRestore| ErrorObj;
 export type AdminQuizEmptyTrashReturn = AdminQuizEmptyTrash| ErrorObj;
@@ -176,7 +176,7 @@ export interface AdminAuthLogin {
     authUserId: number;
 }
 
-export interface AdminUpdateUserDetails {
+export interface AdminupdateDetailsAuthHandler {
 
 }
 

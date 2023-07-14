@@ -11,6 +11,10 @@ beforeEach(() => {
   clearUsers();
 });
 
+afterEach(() => {
+  clearUsers();
+});
+
 const createQuizQuestionHandler = (quizId: number, jwt: Jwt, questionBody: QuestionBody) => {
   const res = request(
     'POST',
