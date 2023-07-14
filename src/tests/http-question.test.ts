@@ -382,17 +382,16 @@ describe('Tests for adminQuizDelete', () => {
   });
 });
 
-// TEST FOR QUESTION UPDATE 
+// TEST FOR QUESTION UPDATE
 describe('Tests to update question', () => {
   let userToken: Token;
   let userJwt: Jwt;
   let quizId: number;
   let defaultQuestionBody: QuestionBody;
   let beforeQuestionBody: QuestionBody;
-  let questionId: number; 
-  let quizEditedTime:number; 
+  let questionId: number;
+  let quizEditedTime:number;
   let quizInfo: AdminQuizInfo;
-
 
   beforeEach(() => {
     userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
@@ -464,7 +463,6 @@ describe('Tests to update question', () => {
     questionId = (createQuizQuestionHandler(quizId, userJwt, beforeQuestionBody) as QuizQuestionCreate).questionId;
   });
 
-
   describe('Unsuccessful Tests', () => {
     test('QuizId does not refer to valid quiz', () => {
       expect(updateQuiz(userJwt, defaultQuestionBody, -1, questionId)).toEqual({
@@ -526,7 +524,7 @@ describe('Tests to update question', () => {
 
     test('Question duration is too long', () => {
       defaultQuestionBody.duration = 151;
-      updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)
+      updateQuiz(userJwt, defaultQuestionBody, quizId, questionId);
 
       expect(updateQuiz(userJwt, defaultQuestionBody, quizId, questionId)).toEqual({
         error: 'The sum of the question durations in the quiz exceeds 3 minutes'
@@ -581,13 +579,11 @@ describe('Tests to update question', () => {
     });
 
     test('update time edited', () => {
-      const timeBufferSeconds:number = 20;
+      const timeBufferSeconds = 20;
       quizInfo = infoQuiz(userJwt, quizId) as AdminQuizInfo;
       quizEditedTime = Math.round(Date.now() / 1000);
       expect(quizInfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime);
       expect(quizInfo.timeLastEdited).toBeGreaterThanOrEqual(quizEditedTime - timeBufferSeconds);
     });
-
   });
-
 });

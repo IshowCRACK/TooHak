@@ -237,9 +237,7 @@ export function adminQuizDelete(jwt: Jwt, quizId: number, questionId: number): O
   }
 }
 
-
 export function quizUpdateQuestion(jwt: Jwt, questionBody: QuestionBody, quizId: number, questionId: number): OkObj | ErrorAndStatusCode {
-
   if (!checkTokenValidStructure(jwt)) {
     return {
       error: 'Token is not a valid structure',
@@ -335,20 +333,19 @@ export function quizUpdateQuestion(jwt: Jwt, questionBody: QuestionBody, quizId:
     };
   }
 
-  // if sucessful 
+  // if sucessful
   const data = getData().quizzes;
-  const qId = quiz.questions.findIndex(({ questionId: id }) => id === questionId);
-  const result = quiz.questions.find(({ questionId: id }) => id === questionId) as Question;
-  result.question = questionBody.question;
-  result.duration = questionBody.duration;
-  result.points = questionBody.points;
-  result.answers = questionBody.answers;
+  const updateQ = quiz.questions.find(({ questionId: id }) => id === questionId) as Question;
+  updateQ.question = questionBody.question;
+  updateQ.duration = questionBody.duration;
+  updateQ.points = questionBody.points;
+  updateQ.answers = questionBody.answers;
 
-    // updates the time edited
-    for (const q of data) {
-      if (q.quizId === quizId) {
-        q.timeLastEdited = Math.round(Date.now() / 1000);
-      }
+  // updates the time edited
+  for (const q of data) {
+    if (q.quizId === quizId) {
+      q.timeLastEdited = Math.round(Date.now() / 1000);
     }
-    return {};
+  }
+  return {};
 }

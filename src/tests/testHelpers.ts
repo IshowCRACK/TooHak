@@ -245,9 +245,8 @@ export const viewQuizTrashHandler = (jwt: Jwt): QuizTrashReturn | ErrorObj => {
 };
 
 export const updateQuiz = (
- jwt: Jwt, questionBody: QuestionBody, quizId: number, questionId: number
-  ): OkObj | ErrorObj => {
-
+  jwt: Jwt, questionBody: QuestionBody, quizId: number, questionId: number
+): OkObj | ErrorObj => {
   const res = request(
     'PUT',
     URL + `v1/admin/quiz/${quizId}/question/${questionId}`,
@@ -258,6 +257,22 @@ export const updateQuiz = (
       }
     }
   );
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
+};
+
+export const trashRestoreQuizHandler = (jwt: Jwt, quizId: number): OkObj | ErrorObj => {
+  const res = request(
+    'POST',
+    URL + `v1/admin/quiz/${quizId}/restore`,
+    {
+      json: {
+        token: jwt.token
+      }
+    }
+  );
+
   const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
 
   return parsedResponse;
