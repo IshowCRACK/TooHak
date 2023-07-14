@@ -230,6 +230,23 @@ export const updateDescriptionQuizHandler = (jwt: Jwt, description: string, quiz
   return parsedResponse;
 };
 
+export const updateDetailsAuthHandler = (jwt: Jwt, email: string, nameFirst: string, nameLast: string): OkObj | ErrorObj => {
+  const res = request(
+    'PUT',
+    URL + 'v1/admin/user/details',
+    {
+      json: {
+        token: jwt.token,
+        email: email,
+        nameFirst: nameFirst,
+        nameLast: nameLast
+      }
+    }
+  );
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+  return parsedResponse;
+};
+
 // Passing request to route for quizDuplicateQuestion
 export const duplicateQuizQuestionHandler = (jwt: Jwt, quizId: number, questionId: number): AdminQuestionDuplicate | ErrorObj => {
   const res = request(
