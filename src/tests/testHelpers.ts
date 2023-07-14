@@ -1,5 +1,5 @@
 import request from 'sync-request';
-import { AdminQuizCreate, AdminQuizListReturn, AdminUserDetailsReturn, ErrorObj, Jwt, OkObj, Token, AdminQuizInfo, AdminQuestionDuplicate, QuizTrashReturn } from '../../interfaces/interfaces';
+import { AdminQuizCreate, AdminQuizListReturn, AdminUserDetailsReturn, ErrorObj, Jwt, OkObj, Token, AdminQuizInfo, AdminQuestionDuplicate, QuizTrashReturn, QuestionBody } from '../../interfaces/interfaces';
 import { jwtToToken } from '../token';
 import { getUrl } from '../helper';
 
@@ -260,3 +260,54 @@ export function moveQuestion(quizId: number, questionId: number, newPosition: nu
 
   return parsedResponse;
 }
+
+export const updateQuiz = (
+  jwt: Jwt, questionBody: QuestionBody, quizId: number, questionId: number
+): OkObj | ErrorObj => {
+  const res = request(
+    'PUT',
+    URL + `v1/admin/quiz/${quizId}/question/${questionId}`,
+    {
+      json: {
+        token: jwt.token,
+        questionBody: questionBody
+      }
+    }
+  );
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
+};
+
+export const trashRestoreQuizHandler = (jwt: Jwt, quizId: number): OkObj | ErrorObj => {
+  const res = request(
+    'POST',
+    URL + `v1/admin/quiz/${quizId}/restore`,
+    {
+      json: {
+        token: jwt.token
+      }
+    }
+  );
+
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
+};
+
+export const emptyTrashHandler = (jwt: Jwt, quizIds: number[]): OkObj | ErrorObj => {
+  const res = request(
+    'DELETE',
+    URL + 'v1/admin/quiz/trash/empty',
+    {
+      qs: {
+        token: jwt.token,
+        quizIds: quizIds
+      }
+    }
+  );
+
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
+};

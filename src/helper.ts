@@ -1,5 +1,5 @@
-import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer, Question } from '../interfaces/interfaces';
-import { getData } from './dataStore';
+import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer, Question, User } from '../interfaces/interfaces';
+import { getData, setData } from './dataStore';
 import { adminQuizList } from './quiz';
 import { checkJwtValid, jwtToToken } from './token';
 import config from './config.json';
@@ -371,6 +371,28 @@ export function createQuestionId(quiz: Quiz): number {
   return newQuestionId;
 }
 
+export function createQuizId(): number {
+  const data = getData();
+
+  const quizId: number = data.metaData.totalQuizzes;
+
+  data.metaData.totalQuizzes++;
+  setData(data);
+  return quizId;
+}
+
+export function createUserId(): number {
+  const data = getData();
+
+  const userId: number = data.metaData.totalUsers;
+
+  // increase user count by 1
+  data.metaData.totalUsers++;
+  setData(data);
+
+  return userId;
+}
+
 export function checkQuestionIdValid(questionId: number, quiz: Quiz): boolean {
   for (const question of quiz.questions) {
     if (question.questionId === questionId) {
@@ -395,4 +417,28 @@ export function checkNameUsedInQuiz(quizId: number, userId: number): boolean {
 export function checkQuestionIdIsValidInQuiz(questions: Question[], questionId: number): boolean {
   const foundQuestion = questions.find((question) => question.questionId === questionId);
   return !!foundQuestion; // Convert the foundQuestion to a boolean value
+}
+
+export function checkQuizIdValidAndTrash(quizId: number): boolean {
+  const data = getData();
+
+  if (checkQuizIdValid(quizId)) return true;
+
+  for (const user of data.users) {
+    if (user.deletedQuizzes.find((quiz: Quiz) => quiz.quizId === quizId) !== undefined) return true;
+  }
+
+  return false;
+}
+
+export function checkQuizIdAndUserIdValidAndTrash(quizId: number, userId: number): boolean {
+  if (checkQuizAndUserIdValid(quizId, userId)) return true;
+
+  const data = getData();
+
+  const user = data.users.find((user: User) => user.authUserId === userId);
+
+  if (user.deletedQuizzes.find((quiz: Quiz) => quiz.quizId === quizId) !== undefined) return true;
+
+  return false;
 }
