@@ -1,12 +1,12 @@
 import {
   Data, AdminQuizListReturn,
-  AdminQuizList, AdminQuizRestoreReturn, AdminQuizEmptyTrashReturn,
-  Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj, AdminQuizInfo, User, Quiz, QuizTrashReturn,
+  AdminQuizList, AdminQuizEmptyTrashReturn,
+  Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj, AdminQuizInfo, User, Quiz, QuizTrashReturn, Token,
 } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
-  checkAlphanumeric, checkAuthUserIdValid, checkQuizAndUserIdValid,
-  checkQuizIdValid, checkQuizNameUsed, checkALLQuizOwnership, checkQuizIdExistsGlobally, checkTokenValidStructure, checkTokenValidSession, checkNameUsedInQuiz
+  checkAlphanumeric, checkQuizAndUserIdValid,
+  checkQuizIdValid, checkQuizNameUsed, checkALLQuizOwnership, checkQuizIdExistsGlobally, checkTokenValidStructure, checkTokenValidSession, checkNameUsedInQuiz, checkQuizIdAndUserIdValidAndTrash, checkQuizIdValidAndTrash
 } from './helper';
 import { jwtToToken } from './token';
 
@@ -441,26 +441,56 @@ function adminQuizInfo (jwt: Jwt, quizId: number): AdminQuizInfo | ErrorAndStatu
   *
   * @returns {{} | {error: string}} - Returns an empty object if valid
  */
-function adminQuizRestore(authUserId: number, quizId: number): AdminQuizRestoreReturn {
+function adminQuizRestore(jwt: Jwt, quizId: number): OkObj | ErrorAndStatusCode {
+  console.log('YEEE HAWWW');
+  //  check valid structure
+  if (!checkTokenValidStructure(jwt)) {
+    return {
+      error: 'Token is not a valid structure',
+      statusCode: 401
+    };
+  }
+
+  //  check if valid for active sessions
+  if (!checkTokenValidSession(jwt)) {
+    return {
+      error: 'Provided token is valid structure, but is not for a currently logged in session',
+      statusCode: 403
+    };
+  }
+  const token: Token = jwtToToken(jwt);
   const data = getData();
 
-  // Check if authUserId is valid
-  if (!checkAuthUserIdValid(authUserId)) {
-    return { error: 'AuthUserId is not a valid user' };
+  if (!checkQuizIdValidAndTrash(quizId)) {
+    return {
+      error: 'Quiz ID does not refer to a valid quiz',
+      statusCode: 400
+    };
   }
 
-  const userIndex = data.users.findIndex((user) => user.authUserId === authUserId);
-  const deletedQuizIndex = data.users[userIndex].deletedQuizzes.findIndex(
+  if (!checkQuizIdAndUserIdValidAndTrash(quizId, token.userId)) {
+    return {
+      error: 'Quiz ID does not refer to a quiz that this user owns',
+      statusCode: 400
+    };
+  }
+
+  const user: User = data.users.find((user) => user.authUserId === token.userId);
+  const deletedQuizIndex = user.deletedQuizzes.findIndex(
     (quiz) => quiz.quizId === quizId
   );
+
   if (deletedQuizIndex === -1) {
-    return { error: 'Quiz ID refers to a quiz that is not currently in the trash or invalid Quiz ID' };
+    return {
+      error: 'Quiz ID refers to a quiz that is not currently in the trash',
+      statusCode: 400
+    };
   }
 
-  const deletedQuiz = data.users[userIndex].deletedQuizzes[deletedQuizIndex];
+  const deletedQuiz = user.deletedQuizzes[deletedQuizIndex];
 
   // Remove the quiz from the deletedQuizzes array
-  data.users[userIndex].deletedQuizzes.splice(deletedQuizIndex, 1);
+  user.deletedQuizzes.splice(deletedQuizIndex, 1);
 
   // Add the quiz back to the quizzes array
   data.quizzes.push(deletedQuiz);
