@@ -396,4 +396,21 @@ export const updateDetailsAuthHandlerV2 = (jwt: Jwt, email: string, nameFirst: s
   return parsedResponse;
 };
 
+export const updateUserDetailsPasswordV2 = (jwt: Jwt, oldPassword: string, newPassword: string): OkObj | ErrorObj => {
+  const res = request(
+    'PUT',
+    URL + 'v2/admin/user/password',
+    {
+      json: {
+        oldPassword: oldPassword,
+        newPassword: newPassword
+      },
+      headers: {
+        token: jwt.token,
+      }
+    }
+  );
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+  return parsedResponse;
+};
 

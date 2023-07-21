@@ -311,15 +311,17 @@ app.put('/v2/admin/user/details', (req: Request, res: Response) => {
   res.status(200).json(response);
 });
 
-app.post('/v1/admin/quiz', (req: Request, res: Response) => {
-  const { token, name, description } = req.body;
-  const response = adminQuizCreate({ token: token }, name, description);
+app.put('/v2/admin/user/password', (req: Request, res: Response) => {
+  const { token } = req.headers
+  const { oldPassword, newPassword } = req.body;
+  const response = adminUpdateUserPassword({ token: token }, oldPassword, newPassword);
   if ('error' in response) {
     return res.status(response.statusCode).json(formatError(response));
   }
 
   res.status(200).json(response);
 });
+
 
 // ====================================================================
 //  ================= WORK IS DONE ABOVE THIS LINE ===================
