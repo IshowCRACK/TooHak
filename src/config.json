@@ -1,6 +1,0 @@
-{
-    "url": "http://localhost",
-    "port": "3211",
-    "expandDocs": false,
-    "dataUrl": "./dbstore.json"
-}

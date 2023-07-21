@@ -1,0 +1,1484 @@
+
+> start
+> ts-node -T src/server.ts
+
+⚡️ Server started on port 48237 at localhost
+[0mDELETE /v1/clear [32m200[0m 5.573 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 14.569 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 8.649 ms - 160[0m
+[0mPOST /v1/admin/quiz [32m200[0m 11.034 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 12.377 ms - 12[0m
+[0mPUT /v1/admin/quiz/0/description [32m200[0m 7.542 ms - 2[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIyNDY1NzA4IiwidXNlcklkIjowLCJpYXQiOjE2ODk2Njg5OTl9.M4JDA-6j4PB3h92kKnPeBDdxUrF8_4dG-Hcxl0zF4AU [32m200[0m 6.025 ms - 161[0m
+[0mDELETE /v1/clear [32m200[0m 2.023 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.504 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.200 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.722 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.393 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 11.251 ms - 12[0m
+[0mPUT /v1/admin/quiz/0/description [32m200[0m 6.587 ms - 2[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI3NDE2NDMzIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMDB9.czhETsJMF6y9Ot8tVU32jSnpKCqzuAkBPN7lFSYqNGs [32m200[0m 5.079 ms - 161[0m
+[0mDELETE /v1/clear [32m200[0m 1.936 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.190 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.651 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.066 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.086 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 11.314 ms - 12[0m
+[0mPUT /v1/admin/quiz/-9/description [33m400[0m 4.778 ms - 50[0m
+[0mDELETE /v1/clear [32m200[0m 2.463 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.634 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.094 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.975 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.502 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 11.572 ms - 12[0m
+[0mPUT /v1/admin/quiz/1/description [33m400[0m 5.067 ms - 64[0m
+[0mDELETE /v1/clear [32m200[0m 2.349 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.462 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.960 ms - 160[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.063 ms - 157[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.432 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 11.514 ms - 12[0m
+[0mPUT /v1/admin/quiz/0/description [33m400[0m 4.992 ms - 52[0m
+[0mDELETE /v1/clear [32m200[0m 2.317 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.426 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.985 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.958 ms - 159[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.652 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 11.273 ms - 12[0m
+[0mPUT /v1/admin/quiz/0/description [33m401[0m 1.174 ms - 42[0m
+[0mDELETE /v1/clear [32m200[0m 2.070 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.420 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.665 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.744 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.395 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 12.147 ms - 12[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.413 ms - 2[0m
+[0mPUT /v1/admin/quiz/1/description [33m403[0m 3.484 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 1.938 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.183 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.912 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.629 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.619 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 11.266 ms - 12[0m
+[0mPUT /v1/admin/quiz/0/name [32m200[0m 25.733 ms - 2[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI4Nzc0NDQyIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMDF9.XHZVZIi8aGcS2VUHJH_mc-yET6bmaCjTdY3OEpqe4ZU [32m200[0m 5.019 ms - 164[0m
+[0mDELETE /v1/clear [32m200[0m 2.058 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.226 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.558 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.519 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.763 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 10.912 ms - 12[0m
+[0mPUT /v1/admin/quiz/0/name [32m200[0m 13.313 ms - 2[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI4OTE3MTA2IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMDF9.kku8_4TFCFM6QyX2fyvKNhWoplZoR8g6oXZ11ss-7Eo [32m200[0m 5.375 ms - 164[0m
+[0mDELETE /v1/clear [32m200[0m 2.201 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.304 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.573 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.766 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.021 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 12.469 ms - 12[0m
+[0mPUT /v1/admin/quiz/-9/name [33m400[0m 5.214 ms - 50[0m
+[0mDELETE /v1/clear [32m200[0m 2.144 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.640 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.757 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.659 ms - 160[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.093 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 11.423 ms - 12[0m
+[0mPUT /v1/admin/quiz/1/name [33m400[0m 5.131 ms - 64[0m
+[0mDELETE /v1/clear [32m200[0m 2.528 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.668 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.285 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.970 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.902 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 11.608 ms - 12[0m
+[0mPUT /v1/admin/quiz/0/name [33m400[0m 5.287 ms - 67[0m
+[0mDELETE /v1/clear [32m200[0m 2.494 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.600 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.265 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.992 ms - 160[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.342 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 11.692 ms - 12[0m
+[0mPUT /v1/admin/quiz/0/name [33m400[0m 5.214 ms - 52[0m
+[0mDELETE /v1/clear [32m200[0m 1.974 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.186 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.407 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 7.241 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.088 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 10.844 ms - 12[0m
+[0mPUT /v1/admin/quiz/0/name [33m400[0m 5.183 ms - 52[0m
+[0mDELETE /v1/clear [32m200[0m 1.950 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.078 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.364 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.279 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.256 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 10.814 ms - 12[0m
+[0mPUT /v1/admin/quiz/0/name [32m200[0m 10.826 ms - 2[0m
+[0mPUT /v1/admin/quiz/0/name [33m400[0m 11.104 ms - 39[0m
+[0mDELETE /v1/clear [32m200[0m 2.000 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.088 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.543 ms - 160[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.717 ms - 160[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.132 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 11.263 ms - 12[0m
+[0mPUT /v1/admin/quiz/0/name [33m401[0m 1.092 ms - 42[0m
+[0mDELETE /v1/clear [32m200[0m 2.351 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.282 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.184 ms - 160[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.733 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.048 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 11.241 ms - 12[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.561 ms - 2[0m
+[0mPUT /v1/admin/quiz/1/name [33m403[0m 3.651 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 2.100 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.268 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.773 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.677 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.576 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 10.349 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 13.694 ms - 12[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.282 ms - 2[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI1MDI5NjIwIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMDR9.xl-8GUrdplhoNKEDtCbuNTlwB_s4PmhA1GaMOgdoS5o [32m200[0m 5.375 ms - 155[0m
+[0mDELETE /v1/clear [32m200[0m 2.055 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.319 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.823 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.520 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.991 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.514 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 11.834 ms - 12[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.421 ms - 2[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzNjIxMTY2IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMDR9.eKQ0ytjCu0tXTfuKYG8lhwFSglewEF1giDHYH3rE8EY [32m200[0m 5.162 ms - 155[0m
+[0mGET /v1/admin/quiz/1?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzNjIxMTY2IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMDR9.eKQ0ytjCu0tXTfuKYG8lhwFSglewEF1giDHYH3rE8EY [32m200[0m 4.722 ms - 155[0m
+[0mDELETE /v1/clear [32m200[0m 2.106 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.220 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.626 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.415 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.086 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.724 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 13.259 ms - 12[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.472 ms - 2[0m
+[0mGET /v1/admin/quiz/-99?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI5NTQ3MzE2IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMDR9.YARxFzM0a9RrMMiwQU142QDhPoIgBEioNApEB4d3hiE [33m400[0m 4.951 ms - 50[0m
+[0mDELETE /v1/clear [32m200[0m 2.500 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.753 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.045 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.090 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.498 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 12.127 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 12.766 ms - 12[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.952 ms - 2[0m
+[0mGET /v1/admin/quiz/2?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI3NjY4NTYwIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMDV9.flPPhh5-xz9pUtnb8OGUO6VmBuJ1rKC3RoTrHxB8OiA [33m400[0m 5.146 ms - 64[0m
+[0mDELETE /v1/clear [32m200[0m 2.173 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.568 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.388 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.318 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.400 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.247 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 12.662 ms - 12[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.769 ms - 2[0m
+[0mGET /v1/admin/quiz/1?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI3NDYzMzk5IiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwMDV9.LMdE1oUef96pIkcCgCwvfydqkbjwCB1F6NcoWJvndhE [33m403[0m 3.111 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 2.167 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.678 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.314 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.379 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.643 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.418 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 10.835 ms - 12[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.439 ms - 2[0m
+[0mGET /v1/admin/quiz/1?token=-1 [33m401[0m 1.098 ms - 42[0m
+[0mDELETE /v1/clear [32m200[0m 2.482 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.584 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.284 ms - 160[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.315 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.123 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.951 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 11.081 ms - 12[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.912 ms - 2[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2MDA0NjEiLCJ1c2VySWQiOjAsImlhdCI6MTY4OTY2OTAwNX0.1agwyd92cf-S5jhz-0TnwZEenBVVJ2ijMQFFMJYsrH0 [32m200[0m 6.275 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.717 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.742 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.203 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.823 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.317 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.248 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 10.812 ms - 12[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.593 ms - 2[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2NTQ4Nzc4IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMDZ9.y1U6IpI5bIMSNXNUldnyLVgF5fuaWxLWrEpCyzG6EoU [32m200[0m 6.006 ms - 2[0m
+[0mDELETE /v1/admin/quiz/1?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2NTQ4Nzc4IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMDZ9.y1U6IpI5bIMSNXNUldnyLVgF5fuaWxLWrEpCyzG6EoU [32m200[0m 5.979 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.745 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.524 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.108 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.979 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.149 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.091 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 10.868 ms - 12[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.699 ms - 2[0m
+[0mDELETE /v1/admin/quiz/1?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIyMTU3NTcxIiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwMDZ9.oiLvpXoxr5SP0ZugDtcGIzvnUH_Qnzfv_ewNX35HDu8 [33m403[0m 3.263 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 2.068 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.320 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.805 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.477 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.764 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.542 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 11.422 ms - 12[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.182 ms - 2[0m
+[0mDELETE /v1/admin/quiz/-99?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI4MDI4MTA0IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMDZ9.P4N31uG2qIhwsWfG6Go1ZuQCYg3Ff74flnBzai83O9U [33m400[0m 5.088 ms - 50[0m
+[0mDELETE /v1/clear [32m200[0m 2.789 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.308 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.577 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.395 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.198 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.493 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 10.540 ms - 12[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.252 ms - 2[0m
+[0mDELETE /v1/admin/quiz/2?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI4NDAxMzQzIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMDd9.mg7lxBbjvQo9QF73I1X9aA_VZIp70YyBitRDJj1vfsc [33m400[0m 4.025 ms - 64[0m
+[0mDELETE /v1/clear [32m200[0m 1.800 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.228 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.178 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.849 ms - 159[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.619 ms - 2[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.816 ms - 12[0m
+[0mDELETE /v1/clear [32m200[0m 2.719 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.688 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.325 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.940 ms - 161[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.471 ms - 2[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.981 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.394 ms - 12[0m
+[0mDELETE /v1/clear [32m200[0m 2.514 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.746 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.993 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.518 ms - 161[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.372 ms - 2[0m
+[0mPOST /v1/admin/quiz [33m403[0m 3.069 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 1.715 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.291 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.405 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.711 ms - 161[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.262 ms - 2[0m
+[0mPOST /v1/admin/quiz [33m400[0m 3.014 ms - 34[0m
+[0mDELETE /v1/clear [32m200[0m 1.924 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.359 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.532 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.323 ms - 161[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.246 ms - 2[0m
+[0mPOST /v1/admin/quiz [33m400[0m 3.178 ms - 52[0m
+[0mDELETE /v1/clear [32m200[0m 1.951 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.349 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.647 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.985 ms - 161[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.218 ms - 2[0m
+[0mPOST /v1/admin/quiz [33m400[0m 3.110 ms - 52[0m
+[0mDELETE /v1/clear [32m200[0m 1.823 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.324 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.506 ms - 160[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.303 ms - 161[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.985 ms - 2[0m
+[0mPOST /v1/admin/quiz [33m400[0m 3.192 ms - 67[0m
+[0mDELETE /v1/clear [32m200[0m 1.706 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.136 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.251 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.215 ms - 161[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 2.994 ms - 2[0m
+[0mPOST /v1/admin/quiz [33m400[0m 2.980 ms - 52[0m
+[0mDELETE /v1/clear [32m200[0m 1.769 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.150 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.600 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.286 ms - 160[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.014 ms - 2[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.230 ms - 12[0m
+[0mPOST /v1/admin/quiz [33m400[0m 6.390 ms - 39[0m
+[0mDELETE /v1/clear [32m200[0m 2.109 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.520 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.842 ms - 161[0m
+[0mGET /v1/admin/quiz/list?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIiLCJ1c2VySWQiOjEsImlhdCI6MTY4OTY2OTAwOH0.kCKQ7Jzvs-9PZwxiBqk1JPhzq-GYX1ApdUi7ZR7u_Tc [33m403[0m 2.579 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 3.089 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.210 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.545 ms - 161[0m
+[0mGET /v1/admin/quiz/list?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2NDA5MTY5IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMDh9.5oA4RS4nRaQg_IkIMgEXJ8I7J63S-Ps8GvQjxySHJUU [32m200[0m 2.971 ms - 14[0m
+[0mDELETE /v1/clear [32m200[0m 2.138 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.457 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.854 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.099 ms - 12[0m
+[0mGET /v1/admin/quiz/list?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI4OTc3MzcwIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMDl9.8Ks1TquTyG_jVHr5e3adi3SZFSPdX8pVL7hIBkQ2X6g [32m200[0m 4.134 ms - 58[0m
+[0mDELETE /v1/clear [32m200[0m 1.965 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.461 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.910 ms - 160[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.099 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.608 ms - 12[0m
+[0mGET /v1/admin/quiz/list?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzMTcxMTEiLCJ1c2VySWQiOjAsImlhdCI6MTY4OTY2OTAwOX0.Rgr1oOEYonw7SV1tMbw3OGqu0FEqq4HiA4VP6fKgito [32m200[0m 4.710 ms - 99[0m
+[0mDELETE /v1/clear [32m200[0m 2.005 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.502 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.982 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.033 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.094 ms - 12[0m
+[0mPOST /v1/admin/quiz/1/transfer [33m400[0m 3.307 ms - 50[0m
+[0mDELETE /v1/clear [32m200[0m 2.124 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.574 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.944 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.755 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.520 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/transfer [33m400[0m 5.252 ms - 64[0m
+[0mDELETE /v1/clear [32m200[0m 2.156 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.449 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.959 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.161 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.553 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/transfer [33m400[0m 5.185 ms - 64[0m
+[0mDELETE /v1/clear [32m200[0m 2.144 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.547 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.193 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.283 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.668 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/transfer [33m400[0m 4.970 ms - 51[0m
+[0mDELETE /v1/clear [32m200[0m 2.185 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.717 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.068 ms - 160[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.765 ms - 160[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.105 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 10.025 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/transfer [33m400[0m 5.048 ms - 92[0m
+[0mDELETE /v1/clear [32m200[0m 2.092 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.513 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.014 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.650 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.557 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/transfer [32m200[0m 6.616 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 3.019 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.889 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.033 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.037 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.293 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 10.175 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/transfer [32m200[0m 7.084 ms - 2[0m
+[0mPOST /v1/admin/quiz/0/transfer [32m200[0m 7.461 ms - 2[0m
+[0mPOST /v1/admin/quiz/1/transfer [32m200[0m 7.654 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.913 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.737 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.709 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.592 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.867 ms - 12[0m
+[0mGET /v1/admin/quiz/trash?token=0 [33m401[0m 0.480 ms - 42[0m
+[0mDELETE /v1/clear [32m200[0m 2.307 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.309 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.168 ms - 159[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.112 ms - 160[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.350 ms - 12[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.165 ms - 2[0m
+[0mGET /v1/admin/quiz/trash?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIxODk3MSIsInVzZXJJZCI6MCwiaWF0IjoxNjg5NjY5MDExfQ.5YsgleuebCTJ0ILl1urEQ1SUcU_9--MpUCCsM6VKVGQ [33m403[0m 2.613 ms - 91[0m
+[0mDELETE /v1/clear [32m200[0m 1.627 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.059 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.158 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 4.927 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.649 ms - 12[0m
+[0mGET /v1/admin/quiz/trash?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2MTEyNjMyIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMTF9.b8uCL2kzCMLE3ZMYQgf1uQ08huEp4NKPFPJ8f2pUG5w [32m200[0m 3.843 ms - 14[0m
+[0mGET /v1/admin/quiz/trash?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI0NDcyMTA3IiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwMTF9.1hC_kGnHugAFsMG-82GzArbOi-VwIuOvP3tBHbhgOfA [32m200[0m 4.562 ms - 14[0m
+[0mDELETE /v1/clear [32m200[0m 1.696 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.020 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.506 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.118 ms - 160[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.798 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 10.135 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI5MjUwNzM2IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMTF9.I-q_9bKAa-7AjXtDXC2nmKVkZ4uAta8UcKV2gGloKrM [32m200[0m 5.646 ms - 2[0m
+[0mGET /v1/admin/quiz/trash?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI5MjUwNzM2IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMTF9.I-q_9bKAa-7AjXtDXC2nmKVkZ4uAta8UcKV2gGloKrM [32m200[0m 4.025 ms - 58[0m
+[0mDELETE /v1/admin/quiz/1?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI0MTE3MTMiLCJ1c2VySWQiOjEsImlhdCI6MTY4OTY2OTAxMX0.28qOUy42ycQYJzqeZzM4QqnzNbnlXMtryGgxCOIu154 [32m200[0m 5.488 ms - 2[0m
+[0mGET /v1/admin/quiz/trash?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI0MTE3MTMiLCJ1c2VySWQiOjEsImlhdCI6MTY4OTY2OTAxMX0.28qOUy42ycQYJzqeZzM4QqnzNbnlXMtryGgxCOIu154 [32m200[0m 5.526 ms - 54[0m
+[0mDELETE /v1/clear [32m200[0m 1.944 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.365 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.775 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 7.162 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.559 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 10.283 ms - 12[0m
+[0mDELETE /v1/admin/quiz/1?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIyNTMyMjQ2IiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwMTF9.H5ZOw4SLddof1CtHBHM9CBjxcnwe7F4ObBlOh5Jh7Yw [32m200[0m 7.251 ms - 2[0m
+[0mPOST /v1/admin/quiz/1/restore [33m401[0m 0.682 ms - 42[0m
+[0mDELETE /v1/clear [32m200[0m 2.757 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.675 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.425 ms - 160[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.531 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.250 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.973 ms - 12[0m
+[0mDELETE /v1/admin/quiz/1?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIyNzM4NzQ4IiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwMTJ9.BufG75crbNBKJZQJpgwBel7wNzEROnTJ0jyaVJn1Zww [32m200[0m 6.526 ms - 2[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.686 ms - 2[0m
+[0mPOST /v1/admin/quiz/1/restore [33m403[0m 3.072 ms - 91[0m
+[0mDELETE /v1/clear [32m200[0m 2.457 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.557 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.836 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.830 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.165 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 10.087 ms - 12[0m
+[0mDELETE /v1/admin/quiz/1?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI4MDgyNjc3IiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwMTJ9.zgpy_wAXrSH8zZrMRtgjkFAl0msvArHX9ehSjTYScOs [32m200[0m 6.725 ms - 2[0m
+[0mPOST /v1/admin/quiz/5/restore [33m400[0m 4.221 ms - 50[0m
+[0mDELETE /v1/clear [32m200[0m 1.820 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.491 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.510 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 4.890 ms - 159[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.585 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.286 ms - 12[0m
+[0mDELETE /v1/admin/quiz/1?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI0OTYzNSIsInVzZXJJZCI6MSwiaWF0IjoxNjg5NjY5MDEyfQ.dfJnzeOH0X-0G8MczbXa0hhLfXjHsFZvrBbzSbow47M [32m200[0m 5.846 ms - 2[0m
+[0mPOST /v1/admin/quiz/0/restore [33m400[0m 5.066 ms - 64[0m
+[0mDELETE /v1/clear [32m200[0m 1.653 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.517 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.179 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 4.861 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.579 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.351 ms - 12[0m
+[0mDELETE /v1/admin/quiz/1?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2MzE2Mzk0IiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwMTJ9.ybsSsvCzyNYmlIEsNz_699k9514DN6UdjYj-felkHKo [32m200[0m 5.935 ms - 2[0m
+[0mPOST /v1/admin/quiz/0/restore [33m400[0m 3.884 ms - 71[0m
+[0mDELETE /v1/clear [32m200[0m 1.712 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.100 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.331 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.089 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.914 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.349 ms - 12[0m
+[0mDELETE /v1/admin/quiz/1?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzNDQ3Mjc0IiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwMTN9.By3KrbGj6rca4r4PFET7o_S0Fv0mjxJwtuIvKGaDQsI [32m200[0m 6.002 ms - 2[0m
+[0mPOST /v1/admin/quiz/1/restore [32m200[0m 6.403 ms - 2[0m
+[0mGET /v1/admin/quiz/trash?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzNDQ3Mjc0IiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwMTN9.By3KrbGj6rca4r4PFET7o_S0Fv0mjxJwtuIvKGaDQsI [32m200[0m 5.463 ms - 14[0m
+[0mDELETE /v1/clear [32m200[0m 1.676 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.180 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.529 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.094 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.089 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.803 ms - 12[0m
+[0mDELETE /v1/admin/quiz/1?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI4OTI3Nzg1IiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwMTN9.84CRbIcMs_C2P6UHaXNDPeDW8Az5LHnJNt4igjLNZN8 [32m200[0m 6.209 ms - 2[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzOTI0NzkyIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMTN9.t0KC9q4cccDuU9oAVTdbBRbh7K84HtycPItjNvyhWKs [32m200[0m 5.444 ms - 2[0m
+[0mPOST /v1/admin/quiz/1/restore [32m200[0m 6.287 ms - 2[0m
+[0mPOST /v1/admin/quiz/0/restore [32m200[0m 5.398 ms - 2[0m
+[0mGET /v1/admin/quiz/trash?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzOTI0NzkyIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMTN9.t0KC9q4cccDuU9oAVTdbBRbh7K84HtycPItjNvyhWKs [32m200[0m 3.835 ms - 14[0m
+[0mGET /v1/admin/quiz/trash?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI4OTI3Nzg1IiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwMTN9.84CRbIcMs_C2P6UHaXNDPeDW8Az5LHnJNt4igjLNZN8 [32m200[0m 4.524 ms - 14[0m
+[0mDELETE /v1/clear [32m200[0m 1.674 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 1.992 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.175 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.935 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.708 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.746 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 10.427 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI1NTAyNzQzIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMTN9.-m1caNKBhfHer_Ff118rdbzL5HFwmVHA_oKW9Esepr4 [32m200[0m 5.259 ms - 2[0m
+[0mDELETE /v1/admin/quiz/1?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI1NTAyNzQzIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMTN9.-m1caNKBhfHer_Ff118rdbzL5HFwmVHA_oKW9Esepr4 [32m200[0m 5.565 ms - 2[0m
+[0mDELETE /v1/admin/quiz/2?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI1NzE5NDQ2IiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwMTN9.KSE9cWxqfslavaStfmoMei3r4Y1U2shA2fkPyNYniz0 [32m200[0m 6.003 ms - 2[0m
+[0mPOST /v1/admin/quiz/1/restore [33m401[0m 0.284 ms - 42[0m
+[0mDELETE /v1/clear [32m200[0m 2.577 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.370 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.514 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.804 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.979 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.012 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 10.333 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzNjkyMTcyIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMTR9.VGqYJ0MZqw3Eo1RbGNmBup4zeYeRwZo_GDMgPm-bQVg [32m200[0m 5.192 ms - 2[0m
+[0mDELETE /v1/admin/quiz/1?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzNjkyMTcyIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMTR9.VGqYJ0MZqw3Eo1RbGNmBup4zeYeRwZo_GDMgPm-bQVg [32m200[0m 5.519 ms - 2[0m
+[0mDELETE /v1/admin/quiz/2?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2MzcyNTE3IiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwMTR9.ErlwScv5KbyZ3uogv-hgG6ueBheAHSr29RpfOZc3vL4 [32m200[0m 6.086 ms - 2[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.296 ms - 2[0m
+[0mPOST /v1/admin/quiz/1/restore [33m403[0m 2.639 ms - 91[0m
+[0mDELETE /v1/clear [32m200[0m 1.868 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.205 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.438 ms - 160[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 4.738 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.509 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.593 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 10.090 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2OTc5NTciLCJ1c2VySWQiOjAsImlhdCI6MTY4OTY2OTAxNH0.PIUA9foElaMEC2m1e_2TeU_9I9hygJkFmuW2XPa7npg [32m200[0m 5.344 ms - 2[0m
+[0mDELETE /v1/admin/quiz/1?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2OTc5NTciLCJ1c2VySWQiOjAsImlhdCI6MTY4OTY2OTAxNH0.PIUA9foElaMEC2m1e_2TeU_9I9hygJkFmuW2XPa7npg [32m200[0m 5.056 ms - 2[0m
+[0mDELETE /v1/admin/quiz/2?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzNzc1Njc1IiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwMTR9.ldGYG2y5V1MOYIzKaVVnXCeE4uful-eG5NyLAvD2MdU [32m200[0m 6.180 ms - 2[0m
+[0mDELETE /v1/admin/quiz/trash/empty?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2OTc5NTciLCJ1c2VySWQiOjAsImlhdCI6MTY4OTY2OTAxNH0.PIUA9foElaMEC2m1e_2TeU_9I9hygJkFmuW2XPa7npg&quizIds%5B0%5D=0&quizIds%5B1%5D=1&quizIds%5B2%5D=5 [33m400[0m 4.676 ms - 59[0m
+[0mDELETE /v1/clear [32m200[0m 1.669 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.098 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.812 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.414 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.100 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.344 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 10.184 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2MTY2ODQzIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMTR9.JQGIefT9z20sorzdOYnW6sICcp-E6TySN0HQIcjEhKM [32m200[0m 5.315 ms - 2[0m
+[0mDELETE /v1/admin/quiz/1?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2MTY2ODQzIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMTR9.JQGIefT9z20sorzdOYnW6sICcp-E6TySN0HQIcjEhKM [32m200[0m 5.161 ms - 2[0m
+[0mDELETE /v1/admin/quiz/2?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2MTUzNDM2IiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwMTR9.T7pRj18xlg03goHe66ZTwooAQiu1iI4QV6-2XVlltUc [32m200[0m 6.695 ms - 2[0m
+[0mDELETE /v1/admin/quiz/trash/empty?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2MTUzNDM2IiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwMTR9.T7pRj18xlg03goHe66ZTwooAQiu1iI4QV6-2XVlltUc&quizIds%5B0%5D=0&quizIds%5B1%5D=1 [33m400[0m 5.216 ms - 92[0m
+[0mDELETE /v1/admin/quiz/trash/empty?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2MTUzNDM2IiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwMTR9.T7pRj18xlg03goHe66ZTwooAQiu1iI4QV6-2XVlltUc&quizIds%5B0%5D=0&quizIds%5B1%5D=2 [33m400[0m 4.314 ms - 92[0m
+[0mDELETE /v1/clear [32m200[0m 1.934 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.149 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.266 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.056 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.289 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.047 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 10.319 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzMjU4MDQxIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMTV9.tYPqTSKoX5QIEYKDoU1uhBiVknxsGGP5MiPzr6RdOvc [32m200[0m 5.551 ms - 2[0m
+[0mDELETE /v1/admin/quiz/1?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzMjU4MDQxIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMTV9.tYPqTSKoX5QIEYKDoU1uhBiVknxsGGP5MiPzr6RdOvc [32m200[0m 5.571 ms - 2[0m
+[0mDELETE /v1/admin/quiz/2?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIyODQ3OTE0IiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwMTV9.-qi6r_HaVJg1XIlND0DALBJkUX4TDglykDEq801_MEU [32m200[0m 6.206 ms - 2[0m
+[0mPOST /v1/admin/quiz/0/restore [32m200[0m 9.590 ms - 2[0m
+[0mDELETE /v1/admin/quiz/trash/empty?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzMjU4MDQxIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMTV9.tYPqTSKoX5QIEYKDoU1uhBiVknxsGGP5MiPzr6RdOvc&quizIds%5B0%5D=0&quizIds%5B1%5D=1 [33m400[0m 6.705 ms - 69[0m
+[0mDELETE /v1/clear [32m200[0m 2.140 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.800 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.975 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.536 ms - 159[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.166 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.235 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 11.587 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI5NDkwMzgxIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMTV9.v4AEDZTyZ_g4zwKQ_Ds95P18tbPKr1NoSN6WL0C_h68 [32m200[0m 6.260 ms - 2[0m
+[0mDELETE /v1/admin/quiz/1?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI5NDkwMzgxIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMTV9.v4AEDZTyZ_g4zwKQ_Ds95P18tbPKr1NoSN6WL0C_h68 [32m200[0m 6.217 ms - 2[0m
+[0mDELETE /v1/admin/quiz/2?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIxOTQ3NyIsInVzZXJJZCI6MSwiaWF0IjoxNjg5NjY5MDE1fQ.ikqKdduOBkI1QA2YHQWxoMX5n21jfWuOO2W5YIR4CvA [32m200[0m 6.591 ms - 2[0m
+[0mDELETE /v1/admin/quiz/trash/empty?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIxOTQ3NyIsInVzZXJJZCI6MSwiaWF0IjoxNjg5NjY5MDE1fQ.ikqKdduOBkI1QA2YHQWxoMX5n21jfWuOO2W5YIR4CvA&quizIds%5B0%5D=2 [32m200[0m 6.745 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.267 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.001 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.469 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.365 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.785 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.721 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.782 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI0MzE5OTQwIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMTV9.pgkjJ9YvSCPeYUSm38SdmUSePOPp1PY1HBdDaqd-va4 [32m200[0m 5.283 ms - 2[0m
+[0mDELETE /v1/admin/quiz/1?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI0MzE5OTQwIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMTV9.pgkjJ9YvSCPeYUSm38SdmUSePOPp1PY1HBdDaqd-va4 [32m200[0m 5.188 ms - 2[0m
+[0mDELETE /v1/admin/quiz/2?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI4OTczMTI5IiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwMTV9.NL9Lr74cfz60qEyIVjaZBoelPswgwEST-TJcfD0SQI4 [32m200[0m 6.033 ms - 2[0m
+[0mDELETE /v1/admin/quiz/trash/empty?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI4OTczMTI5IiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwMTV9.NL9Lr74cfz60qEyIVjaZBoelPswgwEST-TJcfD0SQI4&quizIds%5B0%5D=2 [32m200[0m 6.042 ms - 2[0m
+[0mDELETE /v1/admin/quiz/trash/empty?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI0MzE5OTQwIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMTV9.pgkjJ9YvSCPeYUSm38SdmUSePOPp1PY1HBdDaqd-va4&quizIds%5B0%5D=0&quizIds%5B1%5D=1 [32m200[0m 5.811 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.003 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.405 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.410 ms - 159[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.084 ms - 12[0m
+[0mPOST /v1/admin/quiz/5/question [33m400[0m 4.175 ms - 50[0m
+[0mDELETE /v1/clear [32m200[0m 1.666 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.035 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.577 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.531 ms - 12[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.745 ms - 160[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 4.359 ms - 64[0m
+[0mDELETE /v1/clear [32m200[0m 1.882 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.084 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.157 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.687 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 3.882 ms - 103[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 3.155 ms - 103[0m
+[0mDELETE /v1/clear [32m200[0m 1.707 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.055 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.828 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.938 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 4.037 ms - 71[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 3.218 ms - 71[0m
+[0mDELETE /v1/clear [32m200[0m 1.719 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.126 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.130 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.445 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 3.793 ms - 58[0m
+[0mDELETE /v1/clear [32m200[0m 2.223 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.289 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.288 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.516 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.777 ms - 16[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 3.900 ms - 75[0m
+[0mDELETE /v1/clear [32m200[0m 2.138 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.319 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.664 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.706 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 3.729 ms - 82[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 3.091 ms - 82[0m
+[0mDELETE /v1/clear [32m200[0m 1.863 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.031 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.940 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.017 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 3.954 ms - 104[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 3.171 ms - 104[0m
+[0mDELETE /v1/clear [32m200[0m 2.025 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.319 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.761 ms - 160[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.813 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 3.837 ms - 87[0m
+[0mDELETE /v1/clear [32m200[0m 2.030 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.549 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.714 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.948 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 3.809 ms - 40[0m
+[0mDELETE /v1/clear [32m200[0m 1.674 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.686 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.889 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.360 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.440 ms - 16[0m
+[0mDELETE /v1/clear [32m200[0m 2.566 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.577 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.979 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.156 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.508 ms - 16[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.520 ms - 16[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.445 ms - 12[0m
+[0mPOST /v1/admin/quiz/1/question [32m200[0m 5.778 ms - 16[0m
+[0mDELETE /v1/clear [32m200[0m 2.597 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.664 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.958 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.052 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.410 ms - 16[0m
+[0mPOST /v1/admin/quiz/0/question/0/duplicate [32m200[0m 5.606 ms - 19[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI5NzI5NjIyIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMTl9.Vxog4emnfpQ_JL7e8sRIIwk8JtQHibNueq078MdYPhU [32m200[0m 4.051 ms - 920[0m
+[0mDELETE /v1/clear [32m200[0m 1.624 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.008 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.134 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.921 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 6.862 ms - 16[0m
+[0mPOST /v1/admin/quiz/0/question/0/duplicate [32m200[0m 5.335 ms - 19[0m
+[0mDELETE /v1/clear [32m200[0m 2.024 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.147 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.977 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.016 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.422 ms - 16[0m
+[0mPOST /v1/admin/quiz/-9/question/0/duplicate [33m400[0m 3.812 ms - 50[0m
+[0mDELETE /v1/clear [32m200[0m 1.735 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.570 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.141 ms - 160[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.065 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.209 ms - 16[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.459 ms - 161[0m
+[0mPOST /v1/admin/quiz/0/question/0/duplicate [33m400[0m 4.357 ms - 64[0m
+[0mDELETE /v1/clear [32m200[0m 1.720 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.015 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 4.965 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.868 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.436 ms - 16[0m
+[0mPOST /v1/admin/quiz/0/question/2/duplicate [33m400[0m 3.875 ms - 75[0m
+[0mDELETE /v1/clear [32m200[0m 1.754 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.108 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.195 ms - 160[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.535 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.091 ms - 16[0m
+[0mPOST /v1/admin/quiz/0/question/0/duplicate [33m401[0m 0.369 ms - 42[0m
+[0mDELETE /v1/clear [32m200[0m 2.185 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 3.341 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 13.887 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 10.923 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 6.547 ms - 16[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 4.388 ms - 2[0m
+[0mPOST /v1/admin/quiz/0/question/0/duplicate [33m403[0m 1.974 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 1.997 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 4.251 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 13.678 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 10.599 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0/question/5?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIiLCJ1c2VySWQiOjUsImlhdCI6MTY4OTY2OTAyMH0.GufwSi0rb5SiWl8qiAR_hXmIACFwGGTbWbIx-KeXMzY [33m403[0m 3.047 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 2.284 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 3.149 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 15.123 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 12.108 ms - 12[0m
+[0mDELETE /v1/admin/quiz/5/question/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIyODU5NzE3IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMjF9.HaPV8mzuVN9XUR9F1z3eXBp6eBR78GGcrvK3GI7-xSs [33m400[0m 3.364 ms - 50[0m
+[0mDELETE /v1/clear [32m200[0m 2.397 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.165 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 9.580 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 10.816 ms - 12[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 9.457 ms - 161[0m
+[0mDELETE /v1/admin/quiz/0/question/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI0MjEwNTg3IiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwMjF9.KqNMiNg9QSwGxZfFqa4K-hXOlZIg7uvQBTlvfhuX7VI [33m400[0m 4.503 ms - 64[0m
+[0mDELETE /v1/clear [32m200[0m 2.814 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.409 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 10.506 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 11.167 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0/question/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIxODkxNTU0IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMjF9.qfgSN043zdIFj2V_4m7iQcRwYksgX5exLvi1IeEoDQw [33m400[0m 5.294 ms - 71[0m
+[0mDELETE /v1/clear [32m200[0m 6.318 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 3.662 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 9.023 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.122 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.389 ms - 16[0m
+[0mDELETE /v1/admin/quiz/0/question/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzMTA4MDI5IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMjF9.92uDoCxLCUCMg4y2XXW8ffcU0Ra7bYpZp1ar3Uy-Qq0 [32m200[0m 5.788 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.462 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.338 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.016 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.521 ms - 12[0m
+[0mPUT /v1/admin/quiz/0/question/0/move [33m403[0m 2.983 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 2.217 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 1.953 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.209 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.637 ms - 12[0m
+[0mPUT /v1/admin/quiz/5/question/0/move [33m400[0m 2.960 ms - 50[0m
+[0mDELETE /v1/clear [32m200[0m 1.682 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.123 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.206 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.161 ms - 12[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.331 ms - 161[0m
+[0mPUT /v1/admin/quiz/0/question/0/move [33m400[0m 4.449 ms - 64[0m
+[0mDELETE /v1/clear [32m200[0m 1.438 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.026 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.363 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.092 ms - 12[0m
+[0mPUT /v1/admin/quiz/0/question/0/move [33m400[0m 4.945 ms - 71[0m
+[0mDELETE /v1/clear [32m200[0m 2.133 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.512 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.017 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.119 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.028 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0/move [33m400[0m 3.978 ms - 95[0m
+[0mDELETE /v1/clear [32m200[0m 2.140 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.365 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 21.108 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 18.719 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 15.417 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0/move [33m400[0m 11.136 ms - 95[0m
+[0mDELETE /v1/clear [32m200[0m 9.961 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 14.335 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 35.947 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 21.042 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 19.676 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0/move [33m400[0m 6.213 ms - 64[0m
+[0mDELETE /v1/clear [32m200[0m 6.830 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 14.380 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 35.583 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 17.829 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 23.780 ms - 16[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 14.889 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0/move [32m200[0m 15.983 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 14.924 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 14.036 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 35.408 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 18.136 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 18.526 ms - 16[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 14.323 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/1/move [32m200[0m 5.737 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.152 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.097 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.208 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.687 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.294 ms - 16[0m
+[0mPUT /v1/admin/quiz/-1/question/0 [33m400[0m 4.078 ms - 50[0m
+[0mDELETE /v1/clear [32m200[0m 1.954 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.201 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.587 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.844 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.284 ms - 16[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.544 ms - 161[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 4.601 ms - 64[0m
+[0mDELETE /v1/clear [32m200[0m 1.873 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.011 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.155 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.894 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.003 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/3 [33m400[0m 4.012 ms - 75[0m
+[0mDELETE /v1/clear [32m200[0m 1.608 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.040 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 4.873 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.096 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 4.975 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 3.790 ms - 103[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 3.184 ms - 103[0m
+[0mDELETE /v1/clear [32m200[0m 1.549 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.031 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.069 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.463 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.142 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 3.917 ms - 71[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 3.139 ms - 71[0m
+[0mDELETE /v1/clear [32m200[0m 1.679 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.187 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.153 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.753 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.300 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 3.824 ms - 58[0m
+[0mDELETE /v1/clear [32m200[0m 1.888 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.439 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.705 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.090 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.446 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [32m200[0m 5.577 ms - 2[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 3.892 ms - 75[0m
+[0mDELETE /v1/clear [32m200[0m 2.097 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.427 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.840 ms - 160[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.888 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.537 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 3.979 ms - 82[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 3.082 ms - 82[0m
+[0mDELETE /v1/clear [32m200[0m 1.858 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.413 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.618 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.071 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.220 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 3.885 ms - 104[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 3.181 ms - 104[0m
+[0mDELETE /v1/clear [32m200[0m 1.846 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.361 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.231 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.642 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.161 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 3.933 ms - 87[0m
+[0mDELETE /v1/clear [32m200[0m 1.639 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.203 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.121 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.889 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.411 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 3.838 ms - 40[0m
+[0mDELETE /v1/clear [32m200[0m 1.575 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.157 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.097 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.047 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.532 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [32m200[0m 5.877 ms - 2[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2MzUxNDI0IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMjV9.uq43tSmbTrzUgYnaYwLDYO2g__3iQZutGTZGvwljIrw [32m200[0m 4.213 ms - 556[0m
+[0mDELETE /v1/clear [32m200[0m 2.044 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.053 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.471 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.780 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.362 ms - 16[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2NTEzNDU1IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMjZ9.uADhTF1QyULig0ciuxJZNHVrXmMzt3tRZfAYMC1k5cs [32m200[0m 5.060 ms - 555[0m
+[0mDELETE /v1/clear [32m200[0m 1.681 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.490 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.922 ms - 161[0m
+[0mDELETE /v1/clear [32m200[0m 2.236 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.373 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 1.642 ms - 60[0m
+[0mDELETE /v1/clear [32m200[0m 2.099 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.413 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.980 ms - 96[0m
+[0mDELETE /v1/clear [32m200[0m 1.668 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 1.919 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.839 ms - 60[0m
+[0mDELETE /v1/clear [32m200[0m 1.694 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.234 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.909 ms - 60[0m
+[0mDELETE /v1/clear [32m200[0m 1.785 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.090 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.958 ms - 59[0m
+[0mDELETE /v1/clear [32m200[0m 1.638 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.413 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.866 ms - 95[0m
+[0mDELETE /v1/clear [32m200[0m 2.043 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.305 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.905 ms - 59[0m
+[0mDELETE /v1/clear [32m200[0m 2.061 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.352 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 1.455 ms - 59[0m
+[0mDELETE /v1/clear [32m200[0m 2.077 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.221 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.926 ms - 113[0m
+[0mDELETE /v1/clear [32m200[0m 2.148 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.119 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 1.166 ms - 113[0m
+[0mDELETE /v1/clear [32m200[0m 2.073 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.435 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.857 ms - 113[0m
+[0mDELETE /v1/clear [32m200[0m 1.687 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.466 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.911 ms - 113[0m
+[0mDELETE /v1/clear [32m200[0m 1.601 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 1.995 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.869 ms - 30[0m
+[0mDELETE /v1/clear [32m200[0m 1.659 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.022 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 4.952 ms - 160[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.706 ms - 30[0m
+[0mDELETE /v1/clear [32m200[0m 1.448 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.455 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.917 ms - 161[0m
+EEYEYYE
+{
+  users: [
+    {
+      email: 'goofy.email@gmail.com',
+      password: 'Password123',
+      nameFirst: 'Joh nny-Bone',
+      nameLast: 'Jones',
+      authUserId: 0,
+      numSuccessLogins: 1,
+      numFailedPasswordsSinceLastLogin: 0,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [ { sessionId: '6689806', userId: 0 } ],
+  metaData: { totalUsers: 1, totalQuizzes: 0 }
+}
+{
+  users: [
+    {
+      email: 'goofy.email@gmail.com',
+      password: 'Password123',
+      nameFirst: 'Joh nny-Bone',
+      nameLast: 'Jones',
+      authUserId: 0,
+      numSuccessLogins: 2,
+      numFailedPasswordsSinceLastLogin: 0,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [ { sessionId: '6689806', userId: 0 } ],
+  metaData: { totalUsers: 1, totalQuizzes: 0 }
+}
+[0mPOST /v1/admin/auth/login [32m200[0m 7.758 ms - 161[0m
+[0mDELETE /v1/clear [32m200[0m 2.356 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.478 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.913 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.627 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.823 ms - 161[0m
+EEYEYYE
+{
+  users: [
+    {
+      email: 'good.ail@gmail.com',
+      password: 'Password123',
+      nameFirst: 'Joh nny-Bone',
+      nameLast: "Jo'nes",
+      authUserId: 0,
+      numSuccessLogins: 1,
+      numFailedPasswordsSinceLastLogin: 1,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    },
+    {
+      email: 'gooemail@gmail.com',
+      password: 'Password121233',
+      nameFirst: 'Joh nny-Bone',
+      nameLast: 'Jones',
+      authUserId: 1,
+      numSuccessLogins: 1,
+      numFailedPasswordsSinceLastLogin: 0,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    },
+    {
+      email: 'gdemail@gmail.com',
+      password: 'Password112315g23',
+      nameFirst: 'Joh nny-Bone',
+      nameLast: 'Jones',
+      authUserId: 2,
+      numSuccessLogins: 1,
+      numFailedPasswordsSinceLastLogin: 0,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [
+    { sessionId: '7738466', userId: 0 },
+    { sessionId: '6223000', userId: 1 },
+    { sessionId: '5491433', userId: 2 }
+  ],
+  metaData: { totalUsers: 3, totalQuizzes: 0 }
+}
+{
+  users: [
+    {
+      email: 'good.ail@gmail.com',
+      password: 'Password123',
+      nameFirst: 'Joh nny-Bone',
+      nameLast: "Jo'nes",
+      authUserId: 0,
+      numSuccessLogins: 1,
+      numFailedPasswordsSinceLastLogin: 1,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    },
+    {
+      email: 'gooemail@gmail.com',
+      password: 'Password121233',
+      nameFirst: 'Joh nny-Bone',
+      nameLast: 'Jones',
+      authUserId: 1,
+      numSuccessLogins: 2,
+      numFailedPasswordsSinceLastLogin: 0,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    },
+    {
+      email: 'gdemail@gmail.com',
+      password: 'Password112315g23',
+      nameFirst: 'Joh nny-Bone',
+      nameLast: 'Jones',
+      authUserId: 2,
+      numSuccessLogins: 1,
+      numFailedPasswordsSinceLastLogin: 0,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [
+    { sessionId: '7738466', userId: 0 },
+    { sessionId: '6223000', userId: 1 },
+    { sessionId: '5491433', userId: 2 }
+  ],
+  metaData: { totalUsers: 3, totalQuizzes: 0 }
+}
+[0mPOST /v1/admin/auth/login [32m200[0m 6.806 ms - 161[0m
+EEYEYYE
+{
+  users: [
+    {
+      email: 'good.ail@gmail.com',
+      password: 'Password123',
+      nameFirst: 'Joh nny-Bone',
+      nameLast: "Jo'nes",
+      authUserId: 0,
+      numSuccessLogins: 1,
+      numFailedPasswordsSinceLastLogin: 2,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    },
+    {
+      email: 'gooemail@gmail.com',
+      password: 'Password121233',
+      nameFirst: 'Joh nny-Bone',
+      nameLast: 'Jones',
+      authUserId: 1,
+      numSuccessLogins: 2,
+      numFailedPasswordsSinceLastLogin: 1,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    },
+    {
+      email: 'gdemail@gmail.com',
+      password: 'Password112315g23',
+      nameFirst: 'Joh nny-Bone',
+      nameLast: 'Jones',
+      authUserId: 2,
+      numSuccessLogins: 1,
+      numFailedPasswordsSinceLastLogin: 0,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [
+    { sessionId: '7738466', userId: 0 },
+    { sessionId: '6223000', userId: 1 },
+    { sessionId: '5491433', userId: 2 }
+  ],
+  metaData: { totalUsers: 3, totalQuizzes: 0 }
+}
+{
+  users: [
+    {
+      email: 'good.ail@gmail.com',
+      password: 'Password123',
+      nameFirst: 'Joh nny-Bone',
+      nameLast: "Jo'nes",
+      authUserId: 0,
+      numSuccessLogins: 1,
+      numFailedPasswordsSinceLastLogin: 2,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    },
+    {
+      email: 'gooemail@gmail.com',
+      password: 'Password121233',
+      nameFirst: 'Joh nny-Bone',
+      nameLast: 'Jones',
+      authUserId: 1,
+      numSuccessLogins: 2,
+      numFailedPasswordsSinceLastLogin: 1,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    },
+    {
+      email: 'gdemail@gmail.com',
+      password: 'Password112315g23',
+      nameFirst: 'Joh nny-Bone',
+      nameLast: 'Jones',
+      authUserId: 2,
+      numSuccessLogins: 2,
+      numFailedPasswordsSinceLastLogin: 0,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [
+    { sessionId: '7738466', userId: 0 },
+    { sessionId: '6223000', userId: 1 },
+    { sessionId: '5491433', userId: 2 }
+  ],
+  metaData: { totalUsers: 3, totalQuizzes: 0 }
+}
+[0mPOST /v1/admin/auth/login [32m200[0m 7.213 ms - 161[0m
+[0mDELETE /v1/clear [32m200[0m 1.772 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.364 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.404 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.325 ms - 161[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 2.961 ms - 45[0m
+[0mDELETE /v1/clear [32m200[0m 2.118 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.259 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.797 ms - 161[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 2.079 ms - 45[0m
+[0mDELETE /v1/clear [32m200[0m 2.516 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.410 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.771 ms - 161[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 2.299 ms - 45[0m
+[0mDELETE /v1/clear [32m200[0m 2.164 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.117 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 4.930 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 4.628 ms - 161[0m
+[0mDELETE /v1/clear [32m200[0m 1.972 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.446 ms - 161[0m
+[0mDELETE /v1/clear [32m200[0m 2.273 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.257 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.881 ms - 159[0m
+[0mPOST /v1/admin/auth/logout [33m400[0m 2.037 ms - 39[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 2.707 ms - 2[0m
+[0mPOST /v1/admin/auth/logout [33m400[0m 1.751 ms - 39[0m
+[0mDELETE /v1/clear [32m200[0m 2.088 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 1.815 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.368 ms - 160[0m
+[0mPOST /v1/admin/auth/logout [33m401[0m 1.135 ms - 42[0m
+[0mPOST /v1/admin/auth/logout [33m401[0m 0.267 ms - 42[0m
+[0mDELETE /v1/clear [32m200[0m 1.967 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.560 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.773 ms - 160[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.423 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.288 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.499 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.586 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.554 ms - 161[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.968 ms - 2[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.319 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.320 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.483 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.558 ms - 161[0m
+[0mGET /v1/admin/user/details?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIiLCJ1c2VySWQiOjEyLCJpYXQiOjE2ODk2NjkwMzB9.pbbnQXoMu3Ru5fMZMhn9DK-kHF-Km-abxzA9g0cax_c [33m403[0m 3.096 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 1.538 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.095 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.602 ms - 161[0m
+EEYEYYE
+{
+  users: [
+    {
+      email: 'JohnSmith@gmail.com',
+      password: 'Password123',
+      nameFirst: 'John',
+      nameLast: 'Smith',
+      authUserId: 0,
+      numSuccessLogins: 1,
+      numFailedPasswordsSinceLastLogin: 0,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [ { sessionId: '4667635', userId: 0 } ],
+  metaData: { totalUsers: 1, totalQuizzes: 0 }
+}
+{
+  users: [
+    {
+      email: 'JohnSmith@gmail.com',
+      password: 'Password123',
+      nameFirst: 'John',
+      nameLast: 'Smith',
+      authUserId: 0,
+      numSuccessLogins: 2,
+      numFailedPasswordsSinceLastLogin: 0,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [ { sessionId: '4667635', userId: 0 } ],
+  metaData: { totalUsers: 1, totalQuizzes: 0 }
+}
+[0mPOST /v1/admin/auth/login [32m200[0m 4.478 ms - 161[0m
+[0mGET /v1/admin/user/details?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI0NjY3NjM1IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMzB9.aMnorAtmtOJP6fav-H-xE_uVEQFJvC5c8vnCqyVyL7g [32m200[0m 3.331 ms - 132[0m
+[0mDELETE /v1/clear [32m200[0m 1.860 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.395 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.474 ms - 161[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 2.233 ms - 45[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 2.116 ms - 45[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 1.951 ms - 45[0m
+EEYEYYE
+{
+  users: [
+    {
+      email: 'JohnSmith@gmail.com',
+      password: 'Password123',
+      nameFirst: 'John',
+      nameLast: 'Smith',
+      authUserId: 0,
+      numSuccessLogins: 1,
+      numFailedPasswordsSinceLastLogin: 3,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [ { sessionId: '8718936', userId: 0 } ],
+  metaData: { totalUsers: 1, totalQuizzes: 0 }
+}
+{
+  users: [
+    {
+      email: 'JohnSmith@gmail.com',
+      password: 'Password123',
+      nameFirst: 'John',
+      nameLast: 'Smith',
+      authUserId: 0,
+      numSuccessLogins: 2,
+      numFailedPasswordsSinceLastLogin: 3,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [ { sessionId: '8718936', userId: 0 } ],
+  metaData: { totalUsers: 1, totalQuizzes: 0 }
+}
+[0mPOST /v1/admin/auth/login [32m200[0m 4.592 ms - 161[0m
+[0mGET /v1/admin/user/details?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI4NzE4OTM2IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMzB9.HSrt7XAMvFQTsaCGDhPwpNmrYAzSY2EtRlIzR2GMoBI [32m200[0m 3.386 ms - 132[0m
+[0mDELETE /v1/clear [32m200[0m 1.996 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.031 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 4.926 ms - 161[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 1.992 ms - 45[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 1.995 ms - 45[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 2.179 ms - 45[0m
+EEYEYYE
+{
+  users: [
+    {
+      email: 'JohnSmith@gmail.com',
+      password: 'Password123',
+      nameFirst: 'John',
+      nameLast: 'Smith',
+      authUserId: 0,
+      numSuccessLogins: 1,
+      numFailedPasswordsSinceLastLogin: 3,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [ { sessionId: '2642444', userId: 0 } ],
+  metaData: { totalUsers: 1, totalQuizzes: 0 }
+}
+{
+  users: [
+    {
+      email: 'JohnSmith@gmail.com',
+      password: 'Password123',
+      nameFirst: 'John',
+      nameLast: 'Smith',
+      authUserId: 0,
+      numSuccessLogins: 2,
+      numFailedPasswordsSinceLastLogin: 3,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [ { sessionId: '2642444', userId: 0 } ],
+  metaData: { totalUsers: 1, totalQuizzes: 0 }
+}
+[0mPOST /v1/admin/auth/login [32m200[0m 4.526 ms - 161[0m
+[0mGET /v1/admin/user/details?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIyNjQyNDQ0IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMzF9.TH6R9fTRq0VixQnt3OYNYX4SWtNakVKHZ0wvbvh4RMw [32m200[0m 3.323 ms - 132[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.149 ms - 160[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 3.825 ms - 45[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 3.454 ms - 45[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 3.607 ms - 45[0m
+EEYEYYE
+{
+  users: [
+    {
+      email: 'JohnSmith@gmail.com',
+      password: 'Password123',
+      nameFirst: 'John',
+      nameLast: 'Smith',
+      authUserId: 0,
+      numSuccessLogins: 2,
+      numFailedPasswordsSinceLastLogin: 4,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    },
+    {
+      email: 'Connor@gmail.com',
+      password: 'Password123',
+      nameFirst: 'Connor',
+      nameLast: 'Mcgregor',
+      authUserId: 1,
+      numSuccessLogins: 1,
+      numFailedPasswordsSinceLastLogin: 3,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [
+    { sessionId: '2642444', userId: 0 },
+    { sessionId: '338064', userId: 1 }
+  ],
+  metaData: { totalUsers: 2, totalQuizzes: 0 }
+}
+{
+  users: [
+    {
+      email: 'JohnSmith@gmail.com',
+      password: 'Password123',
+      nameFirst: 'John',
+      nameLast: 'Smith',
+      authUserId: 0,
+      numSuccessLogins: 2,
+      numFailedPasswordsSinceLastLogin: 4,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    },
+    {
+      email: 'Connor@gmail.com',
+      password: 'Password123',
+      nameFirst: 'Connor',
+      nameLast: 'Mcgregor',
+      authUserId: 1,
+      numSuccessLogins: 2,
+      numFailedPasswordsSinceLastLogin: 3,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [
+    { sessionId: '2642444', userId: 0 },
+    { sessionId: '338064', userId: 1 }
+  ],
+  metaData: { totalUsers: 2, totalQuizzes: 0 }
+}
+[0mPOST /v1/admin/auth/login [32m200[0m 5.054 ms - 160[0m
+[0mGET /v1/admin/user/details?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzMzgwNjQiLCJ1c2VySWQiOjEsImlhdCI6MTY4OTY2OTAzMX0.1mw5xs7BYl2FgOcYOzkMo3m6-aA8shnY4IU-pL4C1OY [32m200[0m 4.059 ms - 134[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.249 ms - 161[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 4.268 ms - 45[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 4.400 ms - 45[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 4.219 ms - 45[0m
+EEYEYYE
+{
+  users: [
+    {
+      email: 'JohnSmith@gmail.com',
+      password: 'Password123',
+      nameFirst: 'John',
+      nameLast: 'Smith',
+      authUserId: 0,
+      numSuccessLogins: 2,
+      numFailedPasswordsSinceLastLogin: 8,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    },
+    {
+      email: 'Connor@gmail.com',
+      password: 'Password123',
+      nameFirst: 'Connor',
+      nameLast: 'Mcgregor',
+      authUserId: 1,
+      numSuccessLogins: 2,
+      numFailedPasswordsSinceLastLogin: 4,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    },
+    {
+      email: 'John@gmail.com',
+      password: 'Password123',
+      nameFirst: 'John',
+      nameLast: 'Cena',
+      authUserId: 2,
+      numSuccessLogins: 1,
+      numFailedPasswordsSinceLastLogin: 3,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [
+    { sessionId: '2642444', userId: 0 },
+    { sessionId: '338064', userId: 1 },
+    { sessionId: '1053317', userId: 2 }
+  ],
+  metaData: { totalUsers: 3, totalQuizzes: 0 }
+}
+{
+  users: [
+    {
+      email: 'JohnSmith@gmail.com',
+      password: 'Password123',
+      nameFirst: 'John',
+      nameLast: 'Smith',
+      authUserId: 0,
+      numSuccessLogins: 2,
+      numFailedPasswordsSinceLastLogin: 8,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    },
+    {
+      email: 'Connor@gmail.com',
+      password: 'Password123',
+      nameFirst: 'Connor',
+      nameLast: 'Mcgregor',
+      authUserId: 1,
+      numSuccessLogins: 2,
+      numFailedPasswordsSinceLastLogin: 4,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    },
+    {
+      email: 'John@gmail.com',
+      password: 'Password123',
+      nameFirst: 'John',
+      nameLast: 'Cena',
+      authUserId: 2,
+      numSuccessLogins: 2,
+      numFailedPasswordsSinceLastLogin: 3,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [
+    { sessionId: '2642444', userId: 0 },
+    { sessionId: '338064', userId: 1 },
+    { sessionId: '1053317', userId: 2 }
+  ],
+  metaData: { totalUsers: 3, totalQuizzes: 0 }
+}
+[0mPOST /v1/admin/auth/login [32m200[0m 6.529 ms - 161[0m
+[0mGET /v1/admin/user/details?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIxMDUzMzE3IiwidXNlcklkIjoyLCJpYXQiOjE2ODk2NjkwMzF9.7-pzCbwUIv3P1A2nlKMmSPSE4reUburDPEyftKZwOrI [32m200[0m 4.811 ms - 126[0m
+[0mDELETE /v1/clear [32m200[0m 1.959 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.235 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.448 ms - 161[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 1.998 ms - 45[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 2.048 ms - 45[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 2.290 ms - 45[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 2.258 ms - 45[0m
+[0mGET /v1/admin/user/details?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzMTY4ODc0IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMzF9.C9QfhnRFrXGcgApi9YRZXC_s8BnmbWcXMbSYB0-GmSk [32m200[0m 3.772 ms - 132[0m
+[0mDELETE /v1/clear [32m200[0m 1.796 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.199 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.400 ms - 161[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 1.890 ms - 45[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 2.195 ms - 45[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 2.200 ms - 45[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 1.936 ms - 45[0m
+[0mGET /v1/admin/user/details?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI0NTE1NDYyIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMzJ9.zCnNvfuFo1I8MHNHT-ccNiIq-QUfXS0JRClHQgZKLOY [32m200[0m 3.620 ms - 132[0m
+[0mDELETE /v1/clear [32m200[0m 1.690 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.112 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.192 ms - 161[0m
+[0mGET /v1/admin/user/details?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI0IiwidXNlcklkIjoxMiwiaWF0IjoxNjg5NjY5MDMyfQ.Uek5sCS3V5NfYYiyrU3G5KSWaNm11BAyt9vkfhIdN_E [33m403[0m 2.899 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 1.567 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 1.988 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.165 ms - 161[0m
+[0mPUT /v1/admin/user/details [33m400[0m 3.972 ms - 52[0m
+[0mDELETE /v1/clear [32m200[0m 1.636 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.209 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.010 ms - 161[0m
+[0mPUT /v1/admin/user/details [33m400[0m 3.843 ms - 54[0m
+[0mDELETE /v1/clear [32m200[0m 1.837 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.249 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.431 ms - 160[0m
+[0mPUT /v1/admin/user/details [33m400[0m 3.495 ms - 29[0m
+[0mDELETE /v1/clear [32m200[0m 1.834 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.245 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.694 ms - 161[0m
+[0mPUT /v1/admin/user/details [32m200[0m 5.051 ms - 2[0m
+[0mGET /v1/admin/user/details?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI5MjY1MTkxIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwMzJ9.kGo5V3JgF5JrK9IyE72-73iwHOP4otSX5NsobKQqn14 [32m200[0m 3.750 ms - 138[0m
+[0mDELETE /v1/clear [32m200[0m 1.894 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.395 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.437 ms - 161[0m
+[0mPUT /v1/admin/user/password [33m403[0m 3.259 ms - 56[0m
+[0mDELETE /v1/clear [32m200[0m 1.891 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.397 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.676 ms - 160[0m
+[0mPUT /v1/admin/user/password [33m400[0m 3.652 ms - 39[0m
+[0mDELETE /v1/clear [32m200[0m 1.927 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.481 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.843 ms - 161[0m
+[0mPUT /v1/admin/user/password [33m400[0m 3.630 ms - 106[0m
+[0mDELETE /v1/clear [32m200[0m 2.045 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.495 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.540 ms - 161[0m
+[0mPUT /v1/admin/user/password [33m400[0m 3.401 ms - 63[0m
+[0mDELETE /v1/clear [32m200[0m 2.009 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.479 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.769 ms - 161[0m
+[0mPUT /v1/admin/user/password [32m200[0m 4.866 ms - 2[0m
+[0mPUT /v1/admin/user/password [33m400[0m 3.643 ms - 63[0m
+[0mDELETE /v1/clear [32m200[0m 1.682 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.501 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.462 ms - 160[0m
+[0mPUT /v1/admin/user/password [32m200[0m 4.727 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.140 ms - 2[0m
+[0mGET /echo?echo=Hello [32m200[0m 0.338 ms - 17[0m
+[0mGET /echo?echo=echo [33m400[0m 0.209 ms - 48[0m
+Shutting down server gracefully.

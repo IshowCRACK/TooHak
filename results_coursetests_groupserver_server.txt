@@ -1,0 +1,1072 @@
+
+> start
+> ts-node -T src/server.ts
+
+⚡️ Server started on port 48237 at localhost
+[0mDELETE /v1/clear [32m200[0m 6.621 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 16.711 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 11.012 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 7.458 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [32m200[0m 7.299 ms - 2[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2NDYwNTgyIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNDl9.1-HehV_5w8QqALZsoy0CrneeJfHkLX_KmJRR80F21j0 [32m200[0m 5.291 ms - 437[0m
+[0mDELETE /v1/clear [32m200[0m 2.316 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 8.349 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.575 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 6.480 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [32m200[0m 6.294 ms - 2[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI5NTMwMzQ0IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNDl9.gM9dqeKMZJ2zcbNzLJgMK99OspL8Tf7TPbsTXk7iGTc [32m200[0m 4.328 ms - 436[0m
+[0mDELETE /v1/clear [32m200[0m 2.462 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.375 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.630 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.907 ms - 16[0m
+[0mPUT /v1/admin/quiz/1234321/question/0 [33m400[0m 3.996 ms - 50[0m
+[0mDELETE /v1/clear [32m200[0m 2.213 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.298 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.179 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.932 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/1234321 [33m400[0m 4.411 ms - 75[0m
+[0mDELETE /v1/clear [32m200[0m 2.256 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.802 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.172 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 6.058 ms - 16[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 1.059 ms - 95[0m
+[0mPOST /v1/admin/quiz [33m401[0m 0.775 ms - 42[0m
+[0mPUT /v1/admin/quiz/401/question/0 [33m400[0m 3.208 ms - 50[0m
+[0mDELETE /v1/clear [32m200[0m 2.210 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.291 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.994 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.577 ms - 16[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 1.037 ms - 95[0m
+[0mPOST /v1/admin/quiz/0/question [33m401[0m 0.274 ms - 42[0m
+[0mPUT /v1/admin/quiz/0/question/401 [33m400[0m 3.544 ms - 75[0m
+[0mDELETE /v1/clear [32m200[0m 1.913 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.517 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.381 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.559 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 4.130 ms - 103[0m
+[0mDELETE /v1/clear [32m200[0m 1.928 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.809 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 10.687 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.615 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 4.164 ms - 103[0m
+[0mDELETE /v1/clear [32m200[0m 2.077 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.988 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.481 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.391 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 4.160 ms - 71[0m
+[0mDELETE /v1/clear [32m200[0m 1.662 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.624 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.886 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.958 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 4.065 ms - 71[0m
+[0mDELETE /v1/clear [32m200[0m 1.718 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.739 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.838 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.544 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 4.320 ms - 58[0m
+[0mDELETE /v1/clear [32m200[0m 1.907 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.775 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.773 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.920 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 4.063 ms - 58[0m
+[0mDELETE /v1/clear [32m200[0m 1.856 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.037 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.989 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.952 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 4.116 ms - 82[0m
+[0mDELETE /v1/clear [32m200[0m 1.658 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.780 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.690 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.530 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 4.194 ms - 82[0m
+[0mDELETE /v1/clear [32m200[0m 1.865 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.607 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.368 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 6.074 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 4.131 ms - 75[0m
+[0mDELETE /v1/clear [32m200[0m 2.053 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.407 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.773 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.636 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [32m200[0m 5.846 ms - 2[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 4.263 ms - 75[0m
+[0mDELETE /v1/clear [32m200[0m 1.862 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.610 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.786 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.526 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 4.138 ms - 104[0m
+[0mDELETE /v1/clear [32m200[0m 1.870 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.077 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.937 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.781 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 4.127 ms - 104[0m
+[0mDELETE /v1/clear [32m200[0m 1.675 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.408 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.062 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.774 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 5.335 ms - 87[0m
+[0mDELETE /v1/clear [32m200[0m 1.935 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.844 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.819 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.375 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 4.266 ms - 87[0m
+[0mDELETE /v1/clear [32m200[0m 1.872 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.679 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.494 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.737 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m400[0m 3.972 ms - 40[0m
+[0mDELETE /v1/clear [32m200[0m 1.912 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.881 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.342 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.575 ms - 16[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.969 ms - 2[0m
+[0mPUT /v1/admin/quiz/0/question/0 [33m403[0m 1.956 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 2.496 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.491 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.069 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 6.492 ms - 16[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI0MTYwNzE0IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNTN9.BMaDf35wDbrj4LTFes8duRKEE0XW7gWF6KELnkOfJOo [32m200[0m 4.405 ms - 435[0m
+[0mDELETE /v1/clear [32m200[0m 1.991 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.805 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.066 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.523 ms - 16[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIyNzAyNDk4IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNTN9.dXvbw7ucgHog1lNmOtNowSn0i9mbKDtqFa48dzqC00E [32m200[0m 4.262 ms - 434[0m
+[0mDELETE /v1/clear [32m200[0m 1.962 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.541 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.934 ms - 12[0m
+[0mPOST /v1/admin/quiz/1234321/question [33m400[0m 6.370 ms - 50[0m
+[0mDELETE /v1/clear [32m200[0m 6.138 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 18.464 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 17.534 ms - 12[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 4.414 ms - 95[0m
+[0mPOST /v1/admin/quiz [33m401[0m 0.672 ms - 42[0m
+[0mPOST /v1/admin/quiz/401/question [33m400[0m 3.158 ms - 50[0m
+[0mDELETE /v1/clear [32m200[0m 5.493 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 25.137 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 10.005 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 4.034 ms - 103[0m
+[0mDELETE /v1/clear [32m200[0m 2.240 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 9.630 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 12.083 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 6.698 ms - 103[0m
+[0mDELETE /v1/clear [32m200[0m 4.958 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 13.089 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.615 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 3.928 ms - 71[0m
+[0mDELETE /v1/clear [32m200[0m 1.907 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 16.764 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.977 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 4.200 ms - 71[0m
+[0mDELETE /v1/clear [32m200[0m 7.170 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 11.692 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 11.017 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 7.689 ms - 58[0m
+[0mDELETE /v1/clear [32m200[0m 6.976 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 14.418 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.440 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 7.595 ms - 58[0m
+[0mDELETE /v1/clear [32m200[0m 1.798 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.531 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.903 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 3.912 ms - 82[0m
+[0mDELETE /v1/clear [32m200[0m 1.914 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.925 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.339 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 4.105 ms - 82[0m
+[0mDELETE /v1/clear [32m200[0m 1.773 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.685 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.759 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 3.988 ms - 75[0m
+[0mDELETE /v1/clear [32m200[0m 1.883 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.516 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.850 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.644 ms - 16[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 3.908 ms - 75[0m
+[0mDELETE /v1/clear [32m200[0m 1.855 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.540 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.322 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 4.028 ms - 104[0m
+[0mDELETE /v1/clear [32m200[0m 1.880 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.542 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.838 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 4.048 ms - 104[0m
+[0mDELETE /v1/clear [32m200[0m 1.806 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.796 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.994 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 4.170 ms - 87[0m
+[0mDELETE /v1/clear [32m200[0m 1.838 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.612 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.767 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 3.831 ms - 87[0m
+[0mDELETE /v1/clear [32m200[0m 1.804 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.403 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.784 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [33m400[0m 3.956 ms - 40[0m
+[0mDELETE /v1/clear [32m200[0m 1.817 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.663 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.723 ms - 12[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.355 ms - 2[0m
+[0mPOST /v1/admin/quiz/0/question [33m403[0m 1.875 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 1.823 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.440 ms - 161[0m
+[0mPUT /v1/admin/user/details [32m200[0m 5.429 ms - 2[0m
+[0mGET /v1/admin/user/details?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIyNzUwMjU1IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNTZ9.u74mWZzTA2hDrTy1cVGjprkPPMQxfQvkeCu4aBx_ljs [32m200[0m 3.989 ms - 136[0m
+[0mDELETE /v1/clear [32m200[0m 1.840 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.185 ms - 161[0m
+[0mPUT /v1/admin/user/details [32m200[0m 5.321 ms - 2[0m
+[0mGET /v1/admin/user/details?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzNzc1OTQ1IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNTZ9.wY6iXgQg1KKyjjxQglDvmOwFH_EpUZZ7CgiEc4zZy7Q [32m200[0m 3.797 ms - 135[0m
+[0mDELETE /v1/clear [32m200[0m 2.065 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.699 ms - 161[0m
+[0mPUT /v1/admin/user/details [32m200[0m 5.453 ms - 2[0m
+[0mGET /v1/admin/user/details?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2NjUzNDY3IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNTZ9._mNyM2SmFOBp8zWddzAGaM4WkU-1YM8fj_8mnff0EsM [32m200[0m 3.840 ms - 127[0m
+[0mDELETE /v1/clear [32m200[0m 2.139 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 4.892 ms - 161[0m
+[0mPUT /v1/admin/user/details [32m200[0m 4.846 ms - 2[0m
+[0mGET /v1/admin/user/details?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI4MjcwMzk2IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNTZ9.KyI_7PUMXscDC1NAPBc8CUWmLvwqMA6wnn--zog6naQ [32m200[0m 3.903 ms - 128[0m
+[0mDELETE /v1/clear [32m200[0m 1.967 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.047 ms - 161[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.274 ms - 2[0m
+[0mPUT /v1/admin/user/details [33m403[0m 2.928 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 2.083 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.945 ms - 161[0m
+[0mPUT /v1/admin/user/details [33m400[0m 3.979 ms - 30[0m
+[0mDELETE /v1/clear [32m200[0m 2.135 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.766 ms - 161[0m
+[0mPUT /v1/admin/user/details [33m400[0m 3.568 ms - 30[0m
+[0mDELETE /v1/clear [32m200[0m 2.293 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.661 ms - 161[0m
+[0mPUT /v1/admin/user/details [33m400[0m 3.626 ms - 54[0m
+[0mDELETE /v1/clear [32m200[0m 2.124 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.165 ms - 161[0m
+[0mPUT /v1/admin/user/details [33m400[0m 4.056 ms - 54[0m
+[0mDELETE /v1/clear [32m200[0m 2.187 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.302 ms - 161[0m
+[0mPUT /v1/admin/user/details [33m400[0m 3.803 ms - 54[0m
+[0mDELETE /v1/clear [32m200[0m 1.959 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.383 ms - 161[0m
+[0mPUT /v1/admin/user/details [33m400[0m 4.133 ms - 29[0m
+[0mDELETE /v1/clear [32m200[0m 2.137 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.204 ms - 161[0m
+[0mPUT /v1/admin/user/details [33m400[0m 3.719 ms - 54[0m
+[0mDELETE /v1/clear [32m200[0m 2.381 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.987 ms - 161[0m
+[0mPUT /v1/admin/user/details [33m400[0m 4.791 ms - 54[0m
+[0mDELETE /v1/clear [32m200[0m 2.370 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.061 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.844 ms - 161[0m
+[0mPUT /v1/admin/user/details [33m400[0m 4.898 ms - 52[0m
+[0mDELETE /v1/clear [32m200[0m 2.072 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.239 ms - 161[0m
+[0mPUT /v1/admin/user/details [33m400[0m 3.482 ms - 52[0m
+[0mPUT /v1/admin/user/details [33m400[0m 2.961 ms - 52[0m
+[0mPUT /v1/admin/user/details [33m400[0m 5.447 ms - 52[0m
+[0mPUT /v1/admin/user/details [33m400[0m 3.043 ms - 52[0m
+[0mDELETE /v1/clear [32m200[0m 1.736 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.680 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.693 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 15.705 ms - 16[0m
+[0mPOST /v1/admin/quiz/0/question/0/duplicate [32m200[0m 18.123 ms - 19[0m
+[0mPUT /v1/admin/quiz/0/question/0/move [32m200[0m 25.220 ms - 2[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI3NTM2MDQ2IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNTh9.Ix2n0aCYMsJawk1JIXSr3keLMOYnbfcB0HoJszYvZiU [32m200[0m 8.843 ms - 710[0m
+[0mDELETE /v1/clear [32m200[0m 10.517 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 37.207 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 20.599 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 20.539 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0/move [33m400[0m 10.474 ms - 64[0m
+[0mDELETE /v1/clear [32m200[0m 8.156 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 35.472 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 23.192 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 19.095 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0/move [32m200[0m 24.290 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 14.446 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 39.420 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 19.383 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 18.222 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/0/move [33m400[0m 12.139 ms - 95[0m
+[0mDELETE /v1/clear [32m200[0m 10.426 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 35.744 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.155 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.128 ms - 16[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzODIwMDIxIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNTl9.8dVNdcnu3JW6B-kHa9bW_b9Yho11Cp9_TLB8biZOD_Y [32m200[0m 5.213 ms - 2[0m
+[0mPUT /v1/admin/quiz/0/question/0/move [33m400[0m 2.817 ms - 50[0m
+[0mDELETE /v1/clear [32m200[0m 1.749 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.651 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.010 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.592 ms - 16[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.517 ms - 161[0m
+[0mPUT /v1/admin/quiz/0/question/0/move [33m400[0m 4.563 ms - 64[0m
+[0mDELETE /v1/clear [32m200[0m 2.032 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.565 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.708 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.306 ms - 16[0m
+[0mPUT /v1/admin/quiz/0/question/-100/move [33m400[0m 3.821 ms - 71[0m
+[0mDELETE /v1/clear [32m200[0m 2.069 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.976 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.721 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.578 ms - 16[0m
+[0mDELETE /v1/admin/quiz/0/question/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI1MzQwNzgxIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjB9.vZ4joTidHT5LQythW1ZgS5OXzP4paEkmnL3svtd194E [32m200[0m 5.580 ms - 2[0m
+[0mPUT /v1/admin/quiz/0/question/0/move [33m400[0m 3.819 ms - 71[0m
+[0mDELETE /v1/clear [32m200[0m 2.085 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.249 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.809 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.364 ms - 16[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.294 ms - 2[0m
+[0mPUT /v1/admin/quiz/0/question/0/move [33m403[0m 1.743 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 2.477 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.640 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.681 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.950 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzOTQzOTUwIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjF9.Mp2osReFJh2OxLM-Aq19ENoK40x61RY9svCjLwQDyXg [32m200[0m 5.156 ms - 2[0m
+[0mDELETE /v1/admin/quiz/trash/empty?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzOTQzOTUwIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjF9.Mp2osReFJh2OxLM-Aq19ENoK40x61RY9svCjLwQDyXg&quizIds=%5B0%5D [31m500[0m 7.032 ms - 1577[0m
+TypeError: quizIdsString.map is not a function
+    at /import/kamen/3/cs1531/project-automarking-kahoot/tempstore/src/server.ts:270:33
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/layer.js:95:5)
+    at next (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/route.js:144:13)
+    at Route.dispatch (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/route.js:114:3)
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/layer.js:95:5)
+    at /import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/index.js:346:12)
+    at next (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/index.js:280:10)
+    at logger (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/morgan/index.js:144:5)
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/layer.js:95:5)
+[0mDELETE /v1/clear [32m200[0m 2.050 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.167 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.818 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.869 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2MjYzNDMyIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjF9.6pBw84e7AFHhGiOUrLFmlscPQ1nUzP1zqXMNZ2Ab3MA [32m200[0m 6.186 ms - 2[0m
+[0mDELETE /v1/admin/quiz/1?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2MjYzNDMyIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjF9.6pBw84e7AFHhGiOUrLFmlscPQ1nUzP1zqXMNZ2Ab3MA [32m200[0m 5.867 ms - 2[0m
+[0mDELETE /v1/admin/quiz/trash/empty?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2MjYzNDMyIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjF9.6pBw84e7AFHhGiOUrLFmlscPQ1nUzP1zqXMNZ2Ab3MA&quizIds=%5B0%2C1%5D [31m500[0m 1.540 ms - 1577[0m
+TypeError: quizIdsString.map is not a function
+    at /import/kamen/3/cs1531/project-automarking-kahoot/tempstore/src/server.ts:270:33
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/layer.js:95:5)
+    at next (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/route.js:144:13)
+    at Route.dispatch (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/route.js:114:3)
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/layer.js:95:5)
+    at /import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/index.js:346:12)
+    at next (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/index.js:280:10)
+    at logger (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/morgan/index.js:144:5)
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/layer.js:95:5)
+[0mDELETE /v1/clear [32m200[0m 2.450 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.689 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.439 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.352 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIxMzkxODQzIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjF9.z_vGP9MNOxWXhFUNuB5_sob-2FT9X1FbXLMkiiPw_Os [32m200[0m 6.056 ms - 2[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.239 ms - 2[0m
+[0mDELETE /v1/admin/quiz/trash/empty?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIxMzkxODQzIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjF9.z_vGP9MNOxWXhFUNuB5_sob-2FT9X1FbXLMkiiPw_Os&quizIds=%5B0%5D [31m500[0m 1.201 ms - 1577[0m
+TypeError: quizIdsString.map is not a function
+    at /import/kamen/3/cs1531/project-automarking-kahoot/tempstore/src/server.ts:270:33
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/layer.js:95:5)
+    at next (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/route.js:144:13)
+    at Route.dispatch (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/route.js:114:3)
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/layer.js:95:5)
+    at /import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/index.js:346:12)
+    at next (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/index.js:280:10)
+    at logger (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/morgan/index.js:144:5)
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/layer.js:95:5)
+[0mDELETE /v1/clear [32m200[0m 3.410 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.655 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.032 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.458 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI5MTI0NzIzIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjF9.RemwKkh1hwWvqaog_zeG992Y9UIOtoe6PZPYltYqSbQ [32m200[0m 6.229 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.077 ms - 161[0m
+[0mDELETE /v1/admin/quiz/trash/empty?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI4NDg0MjYyIiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwNjF9.omrCCXPpsuLEKYsiUh61Gsr9SKzqkuBpRivlpvowi08&quizIds=%5B0%5D [31m500[0m 0.968 ms - 1577[0m
+TypeError: quizIdsString.map is not a function
+    at /import/kamen/3/cs1531/project-automarking-kahoot/tempstore/src/server.ts:270:33
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/layer.js:95:5)
+    at next (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/route.js:144:13)
+    at Route.dispatch (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/route.js:114:3)
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/layer.js:95:5)
+    at /import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/index.js:346:12)
+    at next (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/index.js:280:10)
+    at logger (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/morgan/index.js:144:5)
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/layer.js:95:5)
+[0mDELETE /v1/clear [32m200[0m 2.382 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.796 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.888 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.188 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI4NTUzNTIwIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjF9.jK8tpjiiGR7m4qC6hAd0jdl5fMkka0p2J0P2OU3eyg4 [32m200[0m 5.931 ms - 2[0m
+[0mDELETE /v1/admin/quiz/trash/empty?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI4NTUzNTIwIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjF9.jK8tpjiiGR7m4qC6hAd0jdl5fMkka0p2J0P2OU3eyg4&quizIds=%5B1234321%5D [31m500[0m 1.213 ms - 1577[0m
+TypeError: quizIdsString.map is not a function
+    at /import/kamen/3/cs1531/project-automarking-kahoot/tempstore/src/server.ts:270:33
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/layer.js:95:5)
+    at next (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/route.js:144:13)
+    at Route.dispatch (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/route.js:114:3)
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/layer.js:95:5)
+    at /import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/index.js:346:12)
+    at next (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/index.js:280:10)
+    at logger (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/morgan/index.js:144:5)
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/layer.js:95:5)
+[0mDELETE /v1/clear [32m200[0m 2.439 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.225 ms - 160[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.942 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 11.375 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIxMTIzMjEiLCJ1c2VySWQiOjAsImlhdCI6MTY4OTY2OTA2Mn0.ZzBd1E2058XSwGXetMCKKqY0RdLOi3S98XyfAjvet_I [32m200[0m 7.370 ms - 2[0m
+[0mDELETE /v1/admin/quiz/trash/empty?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIxMTIzMjEiLCJ1c2VySWQiOjAsImlhdCI6MTY4OTY2OTA2Mn0.ZzBd1E2058XSwGXetMCKKqY0RdLOi3S98XyfAjvet_I&quizIds=%5B1%5D [31m500[0m 0.931 ms - 1577[0m
+TypeError: quizIdsString.map is not a function
+    at /import/kamen/3/cs1531/project-automarking-kahoot/tempstore/src/server.ts:270:33
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/layer.js:95:5)
+    at next (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/route.js:144:13)
+    at Route.dispatch (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/route.js:114:3)
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/layer.js:95:5)
+    at /import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/index.js:346:12)
+    at next (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/index.js:280:10)
+    at logger (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/morgan/index.js:144:5)
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/layer.js:95:5)
+[0mDELETE /v1/clear [32m200[0m 2.276 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.197 ms - 160[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.780 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.869 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI1MzQyOTciLCJ1c2VySWQiOjAsImlhdCI6MTY4OTY2OTA2Mn0.7oyuqcP6FTpPf2UfdRql9eFTim3fTZ9eNrgwVlVQjt8 [32m200[0m 5.940 ms - 2[0m
+[0mDELETE /v1/admin/quiz/trash/empty?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI1MzQyOTciLCJ1c2VySWQiOjAsImlhdCI6MTY4OTY2OTA2Mn0.7oyuqcP6FTpPf2UfdRql9eFTim3fTZ9eNrgwVlVQjt8&quizIds=%5B0%2C1%5D [31m500[0m 0.965 ms - 1577[0m
+TypeError: quizIdsString.map is not a function
+    at /import/kamen/3/cs1531/project-automarking-kahoot/tempstore/src/server.ts:270:33
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/layer.js:95:5)
+    at next (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/route.js:144:13)
+    at Route.dispatch (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/route.js:114:3)
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/layer.js:95:5)
+    at /import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/index.js:346:12)
+    at next (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/index.js:280:10)
+    at logger (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/morgan/index.js:144:5)
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking-kahoot/tempstore/node_modules/express/lib/router/layer.js:95:5)
+[0mDELETE /v1/clear [32m200[0m 2.098 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.388 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.995 ms - 12[0m
+[0mPUT /v1/admin/quiz/0/description [32m200[0m 6.157 ms - 2[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2NTg5MTE4IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjN9.mKCDqfhkWxKZ_OIeyi_0h4H87f5egd0mHXMhrJlQALg [32m200[0m 4.855 ms - 146[0m
+[0mDELETE /v1/clear [32m200[0m 1.895 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.013 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.564 ms - 12[0m
+[0mPUT /v1/admin/quiz/0/description [32m200[0m 5.935 ms - 2[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI4OTMxOTExIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjN9.G25f0OckmbVEvmCb8XnMU7wZoaEAFVfDfgxU3L6BxPQ [32m200[0m 5.800 ms - 161[0m
+[0mDELETE /v1/clear [32m200[0m 2.370 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.037 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.170 ms - 12[0m
+[0mPUT /v1/admin/quiz/0/description [32m200[0m 6.260 ms - 2[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI0MDcxMDY4IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjN9.ep0CcDpXTZNICD-kPUsDeHogeryZxrn8NXIdr8Jr-xY [32m200[0m 4.826 ms - 189[0m
+[0mDELETE /v1/clear [32m200[0m 2.275 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.427 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.041 ms - 12[0m
+[0mPUT /v1/admin/quiz/0/description [32m200[0m 6.172 ms - 2[0m
+[0mPUT /v1/admin/quiz/0/description [32m200[0m 6.130 ms - 2[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIyNDA1OTE4IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjN9.eCjbpt_284G5GdeCYVj0YXvYsGm9XmRerE_N-Sg3NXs [32m200[0m 4.788 ms - 180[0m
+[0mDELETE /v1/clear [32m200[0m 1.812 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.964 ms - 160[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.263 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI1MDIzMjciLCJ1c2VySWQiOjAsImlhdCI6MTY4OTY2OTA2M30.Ja6uirL0Nm6MFYP7ddhQeBVxeSfAkOk-uEcmpQ5kBH8 [32m200[0m 7.285 ms - 2[0m
+[0mPUT /v1/admin/quiz/0/description [33m400[0m 4.259 ms - 50[0m
+[0mDELETE /v1/clear [32m200[0m 2.080 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.652 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.932 ms - 12[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.807 ms - 160[0m
+[0mPUT /v1/admin/quiz/0/description [33m400[0m 5.627 ms - 64[0m
+[0mDELETE /v1/clear [32m200[0m 2.210 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.223 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.919 ms - 12[0m
+[0mPUT /v1/admin/quiz/0/description [33m400[0m 4.690 ms - 52[0m
+[0mDELETE /v1/clear [32m200[0m 1.845 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.191 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.598 ms - 12[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 2.845 ms - 2[0m
+[0mPUT /v1/admin/quiz/0/description [33m403[0m 2.378 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 2.350 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.393 ms - 160[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.904 ms - 12[0m
+[0mPUT /v1/admin/quiz/0/name [32m200[0m 9.679 ms - 2[0m
+[0mGET /v1/admin/quiz/list?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI1ODc5NzUiLCJ1c2VySWQiOjAsImlhdCI6MTY4OTY2OTA2NH0.b8_2aDheNEqrPwJDMLDn7WMgv9LWhffOV6fE7QQmcQQ [32m200[0m 4.024 ms - 44[0m
+[0mDELETE /v1/clear [32m200[0m 2.290 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.580 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.698 ms - 12[0m
+[0mPUT /v1/admin/quiz/0/name [32m200[0m 9.904 ms - 2[0m
+[0mPUT /v1/admin/quiz/0/name [32m200[0m 9.134 ms - 2[0m
+[0mGET /v1/admin/quiz/list?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI4OTUyNTg1IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjV9.EJooHUtqdgOMPI_6G998iCPQA9ugIe06CRTUZ60-stE [32m200[0m 3.886 ms - 45[0m
+[0mDELETE /v1/clear [32m200[0m 2.229 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.912 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.114 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI0NTM4ODAzIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjV9.NydSSi5aIvbLom-LxdPeo3bY0XpykNCIR3-EcretBU4 [32m200[0m 6.182 ms - 2[0m
+[0mPUT /v1/admin/quiz/0/name [33m400[0m 4.327 ms - 50[0m
+[0mDELETE /v1/clear [32m200[0m 2.131 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.700 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.164 ms - 12[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.908 ms - 161[0m
+[0mPUT /v1/admin/quiz/0/name [33m400[0m 5.608 ms - 64[0m
+[0mDELETE /v1/clear [32m200[0m 2.215 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.808 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.362 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.245 ms - 12[0m
+[0mPUT /v1/admin/quiz/0/name [33m400[0m 9.117 ms - 39[0m
+[0mDELETE /v1/clear [32m200[0m 1.790 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.430 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.310 ms - 12[0m
+[0mPUT /v1/admin/quiz/0/name [33m400[0m 4.605 ms - 67[0m
+[0mDELETE /v1/clear [32m200[0m 2.132 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.471 ms - 160[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.198 ms - 12[0m
+[0mPUT /v1/admin/quiz/0/name [33m400[0m 4.765 ms - 52[0m
+[0mDELETE /v1/clear [32m200[0m 2.329 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.769 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.223 ms - 12[0m
+[0mPUT /v1/admin/quiz/0/name [33m400[0m 4.687 ms - 52[0m
+[0mDELETE /v1/clear [32m200[0m 2.183 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.484 ms - 160[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.911 ms - 12[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.230 ms - 2[0m
+[0mPUT /v1/admin/quiz/0/name [33m403[0m 2.490 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 2.170 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.781 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.160 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.870 ms - 16[0m
+[0mDELETE /v1/admin/quiz/0/question/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIxMDI3MDIzIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjZ9.7-b9AJowTW_tjByM0FFa6yFQPinNZzAyOaX7h9unbQo [32m200[0m 5.481 ms - 2[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIxMDI3MDIzIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjZ9.7-b9AJowTW_tjByM0FFa6yFQPinNZzAyOaX7h9unbQo [32m200[0m 3.867 ms - 161[0m
+[0mDELETE /v1/clear [32m200[0m 2.109 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.737 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.341 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.200 ms - 16[0m
+[0mDELETE /v1/admin/quiz/0/question/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI4Njg4NTQ1IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjd9.sZmouW8CK4kUDKjpvfzThflHi1xdTVUZWlfNxWyn8_k [32m200[0m 5.466 ms - 2[0m
+[0mDELETE /v1/admin/quiz/0/question/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI4Njg4NTQ1IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjd9.sZmouW8CK4kUDKjpvfzThflHi1xdTVUZWlfNxWyn8_k [33m400[0m 4.442 ms - 71[0m
+[0mDELETE /v1/clear [32m200[0m 2.094 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.639 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 9.623 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.650 ms - 16[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzMTI5MTI3IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjd9.KDUnwwSWoZ7Bjd6JNTsUfxF4hkxPIyid2RqRNzVfcNA [32m200[0m 5.549 ms - 2[0m
+[0mDELETE /v1/admin/quiz/0/question/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzMTI5MTI3IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjd9.KDUnwwSWoZ7Bjd6JNTsUfxF4hkxPIyid2RqRNzVfcNA [33m400[0m 2.962 ms - 50[0m
+[0mDELETE /v1/clear [32m200[0m 1.744 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.613 ms - 160[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.811 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.801 ms - 16[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.046 ms - 161[0m
+[0mDELETE /v1/admin/quiz/0/question/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIyNjM1NDAyIiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwNjd9.qfcsQnkYdxVhUEQV009lQHJ6lRcYTUelfbVspHmy8Xw [33m400[0m 4.745 ms - 64[0m
+[0mDELETE /v1/clear [32m200[0m 2.207 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.482 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.948 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.250 ms - 16[0m
+[0mDELETE /v1/admin/quiz/0/question/-100?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI0NjI5ODU5IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjd9.6vH7ubn5YWRz0UD82EtkBypGpFCSP8g1IMsSheFR51c [33m400[0m 4.078 ms - 71[0m
+[0mDELETE /v1/clear [32m200[0m 1.916 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.787 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.604 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.623 ms - 16[0m
+[0mDELETE /v1/admin/quiz/0/question/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI5NjAwMjA4IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjd9.ouKdzkNv7vRcdkWWp80pEF622iF5aFMsVRWHyg6lDA8 [32m200[0m 5.329 ms - 2[0m
+[0mDELETE /v1/admin/quiz/0/question/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI5NjAwMjA4IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjd9.ouKdzkNv7vRcdkWWp80pEF622iF5aFMsVRWHyg6lDA8 [33m400[0m 3.950 ms - 71[0m
+[0mDELETE /v1/clear [32m200[0m 2.062 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.663 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.036 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 6.188 ms - 16[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.406 ms - 2[0m
+[0mDELETE /v1/admin/quiz/0/question/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI0MzU3MDY4IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNjh9.6N4lvC8jQVy1-AYfgV1t-C5oWFr8PVnrJ2OAfw_ch5A [33m403[0m 1.690 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 1.952 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.694 ms - 160[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.866 ms - 12[0m
+[0mDELETE /v1/clear [32m200[0m 2.222 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 8.605 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.399 ms - 12[0m
+[0mDELETE /v1/clear [32m200[0m 2.375 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.493 ms - 161[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.116 ms - 2[0m
+[0mPOST /v1/admin/quiz [33m403[0m 2.014 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 1.673 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.149 ms - 161[0m
+[0mPOST /v1/admin/quiz [33m400[0m 2.469 ms - 67[0m
+[0mDELETE /v1/clear [32m200[0m 1.748 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.178 ms - 161[0m
+[0mPOST /v1/admin/quiz [33m400[0m 3.002 ms - 52[0m
+[0mDELETE /v1/clear [32m200[0m 1.761 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.525 ms - 160[0m
+[0mPOST /v1/admin/quiz [33m400[0m 2.613 ms - 52[0m
+[0mDELETE /v1/clear [32m200[0m 1.794 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.876 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.865 ms - 12[0m
+[0mPOST /v1/admin/quiz [33m400[0m 6.417 ms - 39[0m
+[0mDELETE /v1/clear [32m200[0m 2.033 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.105 ms - 161[0m
+[0mPOST /v1/admin/quiz [33m400[0m 2.887 ms - 52[0m
+[0mDELETE /v1/clear [32m200[0m 1.883 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.931 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.935 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.636 ms - 16[0m
+[0mPOST /v1/admin/quiz/0/question/0/duplicate [32m200[0m 5.998 ms - 19[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzMzg4MjEzIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzB9.9rYo1UKXVyivoPSMORPoFa1G8I9UeRh5yhY2KLGMFuw [32m200[0m 4.079 ms - 710[0m
+[0mDELETE /v1/clear [32m200[0m 2.115 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.518 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.898 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.497 ms - 16[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2NjY2MTYzIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzB9.6X2FluE-98Dlt29bbwzyd6xfhYpDJWWpIQnIfJbj5vA [32m200[0m 5.683 ms - 2[0m
+[0mPOST /v1/admin/quiz/0/question/0/duplicate [33m400[0m 4.656 ms - 50[0m
+[0mDELETE /v1/clear [32m200[0m 2.099 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.946 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.073 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.584 ms - 16[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.234 ms - 161[0m
+[0mPOST /v1/admin/quiz/0/question/0/duplicate [33m400[0m 4.458 ms - 64[0m
+[0mDELETE /v1/clear [32m200[0m 2.095 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.578 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.122 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.667 ms - 16[0m
+[0mPOST /v1/admin/quiz/0/question/-100/duplicate [33m400[0m 3.866 ms - 75[0m
+[0mDELETE /v1/clear [32m200[0m 2.094 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.368 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.247 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/question [32m200[0m 5.337 ms - 16[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 2.926 ms - 2[0m
+[0mPOST /v1/admin/quiz/0/question/0/duplicate [33m403[0m 1.801 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 1.877 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.069 ms - 160[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.394 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.264 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/transfer [32m200[0m 6.716 ms - 2[0m
+[0mGET /v1/admin/quiz/list?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI3ODU1NzM1IiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwNzF9._amLLIk3evEnFBI4Sv5jd5z-dkBsbgY49G-W47jSiOY [32m200[0m 4.579 ms - 45[0m
+[0mDELETE /v1/clear [32m200[0m 1.752 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.304 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.322 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.124 ms - 12[0m
+[0mPOST /v1/admin/quiz/0/transfer [32m200[0m 7.410 ms - 2[0m
+[0mPOST /v1/admin/quiz/0/transfer [32m200[0m 7.258 ms - 2[0m
+[0mGET /v1/admin/quiz/list?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzOTU3MDI2IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzJ9.hAy2c7ir7Psfu5Z2hs6JD-D1k6kJCeay5woMtf_43kU [32m200[0m 3.925 ms - 45[0m
+[0mDELETE /v1/clear [32m200[0m 2.166 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.252 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.651 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.051 ms - 12[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.643 ms - 2[0m
+[0mPOST /v1/admin/quiz/0/transfer [33m403[0m 2.892 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 2.291 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.633 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 7.377 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.603 ms - 12[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.651 ms - 161[0m
+[0mPOST /v1/admin/quiz/0/transfer [33m400[0m 5.248 ms - 64[0m
+[0mDELETE /v1/clear [32m200[0m 1.710 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.404 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.359 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.829 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2NzM3MjU3IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzJ9.K3DymLD_8pY8BzOkv4KmNPlyqB7T_c1pjp2nxbtyTnM [32m200[0m 5.374 ms - 2[0m
+[0mPOST /v1/admin/quiz/0/transfer [33m400[0m 2.957 ms - 50[0m
+[0mDELETE /v1/clear [32m200[0m 1.871 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.421 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.890 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI5OTAyMTM1IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzN9.FMQpLUzD0-lhKp6cZxrTRDgYfW8T0C7RsqVn6B21ZXE [32m200[0m 5.154 ms - 2[0m
+[0mPOST /v1/admin/quiz/0/restore [32m200[0m 5.980 ms - 2[0m
+[0mGET /v1/admin/quiz/list?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI5OTAyMTM1IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzN9.FMQpLUzD0-lhKp6cZxrTRDgYfW8T0C7RsqVn6B21ZXE [32m200[0m 3.703 ms - 45[0m
+[0mDELETE /v1/clear [32m200[0m 1.530 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.225 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.544 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzNTcxMDMzIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzN9.T9PQhXqfZggXCD_rUoHSPzqOvAzsWzi5js_XuFkBe2I [32m200[0m 5.302 ms - 2[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.428 ms - 2[0m
+[0mPOST /v1/admin/quiz/0/restore [33m403[0m 1.859 ms - 91[0m
+[0mDELETE /v1/clear [32m200[0m 2.113 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.604 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.809 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIxNjYyNjQ1IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzN9.TDB5OPO8I8vzh_GJGRndLi0pgphXH_mvGlU6I_0fuhA [32m200[0m 5.538 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.811 ms - 161[0m
+[0mPOST /v1/admin/quiz/0/restore [33m400[0m 4.401 ms - 64[0m
+[0mDELETE /v1/clear [32m200[0m 1.943 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.397 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.206 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIxMzQ2MDgxIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzR9.wNtAiffkwCOV8Pn5o0EzaFSPUouj4XOPShSjBxhKXzE [32m200[0m 5.576 ms - 2[0m
+[0mPOST /v1/admin/quiz/1234321/restore [33m400[0m 3.929 ms - 50[0m
+[0mDELETE /v1/clear [32m200[0m 1.775 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.666 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.968 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2NzE0MTM2IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzR9.Np5tJ1zTl1iL9Ea8aAVH_yXdUj_TpbKHg9Hl7hFSOHo [32m200[0m 5.697 ms - 2[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.203 ms - 12[0m
+[0mPOST /v1/admin/quiz/1/restore [33m400[0m 3.932 ms - 71[0m
+[0mDELETE /v1/clear [32m200[0m 2.176 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.152 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.252 ms - 12[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI4OTk2MjU5IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzV9.XgOwrX0-JUJJSk5LhyTGS0dySHG2SFVzgweWMKvX3BQ [32m200[0m 3.957 ms - 180[0m
+[0mDELETE /v1/clear [32m200[0m 2.286 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.096 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.959 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.059 ms - 12[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI0MDU0NzM4IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzV9.afuo1feIRJM7G_XgxBXNV5mSjez66DbkKH2uRKB7jjQ [32m200[0m 3.963 ms - 180[0m
+[0mGET /v1/admin/quiz/1?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI0MDU0NzM4IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzV9.afuo1feIRJM7G_XgxBXNV5mSjez66DbkKH2uRKB7jjQ [32m200[0m 3.161 ms - 182[0m
+[0mDELETE /v1/clear [32m200[0m 2.022 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.967 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.673 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIxNTE3MzUxIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzV9.3s2WkDoSBs5i4KFWbijg4HWmKUj2QO7SQRYZYudeeko [32m200[0m 5.759 ms - 2[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIxNTE3MzUxIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzV9.3s2WkDoSBs5i4KFWbijg4HWmKUj2QO7SQRYZYudeeko [33m400[0m 4.660 ms - 50[0m
+[0mDELETE /v1/clear [32m200[0m 2.101 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.424 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.442 ms - 12[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.904 ms - 161[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI4NzMyNjY1IiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwNzV9.Deg-qkSistJLATkpNbAuCglDf2b1D7__6HKxVyBP9so [33m400[0m 4.344 ms - 64[0m
+[0mDELETE /v1/clear [32m200[0m 2.148 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.687 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.695 ms - 12[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.101 ms - 2[0m
+[0mGET /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI0NTU0MjM5IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzV9.TeZBXgcI6-Ph9Sru06AVa-HqvXnr3il2A1obzy24KE8 [33m403[0m 2.008 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 3.314 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.727 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.969 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI3OTY1ODE4IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzZ9.4dO7hHTFcvXFgsO7tzmKeGixDEvdxyxdL5P6fx0AIow [32m200[0m 5.435 ms - 2[0m
+[0mGET /v1/admin/quiz/trash?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI3OTY1ODE4IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzZ9.4dO7hHTFcvXFgsO7tzmKeGixDEvdxyxdL5P6fx0AIow [32m200[0m 4.372 ms - 45[0m
+[0mDELETE /v1/clear [32m200[0m 2.350 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.710 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.250 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIxNjM5MDMzIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzZ9.ICEatCPxFfbTXvjwfLRsU1W5uO1Uxwm0VA_xNl_Iemk [32m200[0m 5.370 ms - 2[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.250 ms - 12[0m
+[0mDELETE /v1/admin/quiz/1?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIxNjM5MDMzIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzZ9.ICEatCPxFfbTXvjwfLRsU1W5uO1Uxwm0VA_xNl_Iemk [32m200[0m 5.144 ms - 2[0m
+[0mGET /v1/admin/quiz/trash?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIxNjM5MDMzIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzZ9.ICEatCPxFfbTXvjwfLRsU1W5uO1Uxwm0VA_xNl_Iemk [32m200[0m 3.688 ms - 79[0m
+[0mDELETE /v1/clear [32m200[0m 1.942 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.727 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.189 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIyMDgyMDA0IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzZ9.ZCKkoO-a8oU2wLyx-fxPh84DDJSYPP-Tq9oOdI-tKJ0 [32m200[0m 5.743 ms - 2[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.139 ms - 2[0m
+[0mGET /v1/admin/quiz/trash?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIyMDgyMDA0IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzZ9.ZCKkoO-a8oU2wLyx-fxPh84DDJSYPP-Tq9oOdI-tKJ0 [33m403[0m 1.786 ms - 91[0m
+[0mDELETE /v1/clear [32m200[0m 2.234 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.802 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.776 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI0MDg0MTI5IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzd9.ZR8ykGr9jNQv6vof21JiSnmL2cuoGRKlI9HovuWYzyI [32m200[0m 5.403 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.350 ms - 161[0m
+[0mGET /v1/admin/quiz/trash?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzNzEwNTM2IiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwNzd9.uX0OI_Wno5tNvdhFO4ONWnx5y0xy6KJqmAqeFYBuLH8 [32m200[0m 5.592 ms - 14[0m
+[0mDELETE /v1/clear [32m200[0m 1.842 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.290 ms - 161[0m
+[0mPUT /v1/admin/user/password [32m200[0m 4.874 ms - 2[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.035 ms - 2[0m
+EEYEYYE
+{
+  users: [
+    {
+      email: 'blah@email.com',
+      password: 'ThisIsAValidNewPassword!123',
+      nameFirst: 'john',
+      nameLast: 'smith',
+      authUserId: 0,
+      numSuccessLogins: 1,
+      numFailedPasswordsSinceLastLogin: 0,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [],
+  metaData: { totalUsers: 1, totalQuizzes: 0 }
+}
+{
+  users: [
+    {
+      email: 'blah@email.com',
+      password: 'ThisIsAValidNewPassword!123',
+      nameFirst: 'john',
+      nameLast: 'smith',
+      authUserId: 0,
+      numSuccessLogins: 2,
+      numFailedPasswordsSinceLastLogin: 0,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [],
+  metaData: { totalUsers: 1, totalQuizzes: 0 }
+}
+[0mPOST /v1/admin/auth/login [32m200[0m 8.226 ms - 161[0m
+[0mDELETE /v1/clear [32m200[0m 2.141 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.529 ms - 161[0m
+[0mPUT /v1/admin/user/password [33m400[0m 3.743 ms - 39[0m
+[0mDELETE /v1/clear [32m200[0m 1.818 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.195 ms - 160[0m
+[0mPUT /v1/admin/user/password [32m200[0m 4.894 ms - 2[0m
+[0mPUT /v1/admin/user/password [33m400[0m 3.720 ms - 63[0m
+[0mDELETE /v1/clear [32m200[0m 1.728 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.141 ms - 161[0m
+[0mPUT /v1/admin/user/password [32m200[0m 4.929 ms - 2[0m
+[0mPUT /v1/admin/user/password [32m200[0m 5.219 ms - 2[0m
+[0mPUT /v1/admin/user/password [33m400[0m 3.759 ms - 63[0m
+[0mDELETE /v1/clear [32m200[0m 2.033 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.877 ms - 161[0m
+[0mPUT /v1/admin/user/password [33m400[0m 3.840 ms - 106[0m
+[0mPUT /v1/admin/user/password [33m400[0m 3.071 ms - 106[0m
+[0mPUT /v1/admin/user/password [33m400[0m 3.073 ms - 106[0m
+[0mPUT /v1/admin/user/password [33m400[0m 2.961 ms - 106[0m
+[0mDELETE /v1/clear [32m200[0m 1.932 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.396 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.045 ms - 12[0m
+[0mGET /v1/admin/quiz/list?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIzMzc5MTk2IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzl9.6f8bixgw3fVxBl_-Fh0K2S7OpWt_cHYs2O5SYQLjyK8 [32m200[0m 3.736 ms - 45[0m
+[0mDELETE /v1/clear [32m200[0m 2.036 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.731 ms - 160[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.180 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.199 ms - 12[0m
+[0mGET /v1/admin/quiz/list?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIxMjUxNDQiLCJ1c2VySWQiOjAsImlhdCI6MTY4OTY2OTA3OX0.ErBmiGO6-l6bKAh6HNEQNFVN3kK1fJUreaJ3TE87HPo [32m200[0m 4.461 ms - 79[0m
+[0mDELETE /v1/clear [32m200[0m 2.080 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.105 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.323 ms - 12[0m
+[0mPOST /v1/admin/quiz [32m200[0m 8.736 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI1MzU5OTI2IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzl9._NhaoApeKxty8h5csu_t9l-d1CyoPNQ9fh8n_-PDp-M [32m200[0m 5.658 ms - 2[0m
+[0mGET /v1/admin/quiz/list?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI1MzU5OTI2IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwNzl9._NhaoApeKxty8h5csu_t9l-d1CyoPNQ9fh8n_-PDp-M [32m200[0m 3.808 ms - 47[0m
+[0mDELETE /v1/clear [32m200[0m 2.164 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.060 ms - 160[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.371 ms - 12[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.632 ms - 2[0m
+[0mGET /v1/admin/quiz/list?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI0MTc2NzIiLCJ1c2VySWQiOjAsImlhdCI6MTY4OTY2OTA3OX0.CJXYb1I8ab8QtpSb9uB8nrGgX1_2k-tmGDf8QBYUU0U [33m403[0m 1.805 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 2.057 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.784 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.984 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI1NjUzMjU5IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwODB9.Ii3G3wBDeEkooNnLzn1Pj6AvdC0r2OIUCmHxQVKb6gA [32m200[0m 5.666 ms - 2[0m
+[0mGET /v1/admin/quiz/list?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI1NjUzMjU5IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwODB9.Ii3G3wBDeEkooNnLzn1Pj6AvdC0r2OIUCmHxQVKb6gA [32m200[0m 2.887 ms - 14[0m
+[0mDELETE /v1/clear [32m200[0m 1.968 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.531 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 7.011 ms - 12[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.127 ms - 2[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI1OTY1NDMwIiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwODB9.HG_GOT2alBUMEfzusF4W8oNVur16mw8mzt4QxtuZ1dU [33m403[0m 2.384 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 1.684 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.336 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.824 ms - 12[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.457 ms - 161[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI3ODk1MDgwIiwidXNlcklkIjoxLCJpYXQiOjE2ODk2NjkwODF9.3hp4WmVfMiefIXjuGc54K3sZ17rD-2_342c7S0T1Lwg [33m400[0m 4.864 ms - 64[0m
+[0mDELETE /v1/clear [32m200[0m 1.774 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.319 ms - 161[0m
+[0mPOST /v1/admin/quiz [32m200[0m 6.886 ms - 12[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI4NzQ1Njg0IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwODF9.qkPDRFi1zx4I6mgm9MTjjzY3RcKv0xh4btPO60F89V4 [32m200[0m 5.285 ms - 2[0m
+[0mDELETE /v1/admin/quiz/0?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI4NzQ1Njg0IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwODF9.qkPDRFi1zx4I6mgm9MTjjzY3RcKv0xh4btPO60F89V4 [33m400[0m 3.813 ms - 50[0m
+[0mDELETE /v1/clear [32m200[0m 1.804 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.487 ms - 161[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 2.948 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.171 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.767 ms - 161[0m
+EEYEYYE
+{
+  users: [
+    {
+      email: 'blah@email.com',
+      password: 'password1YAY',
+      nameFirst: 'john',
+      nameLast: 'smith',
+      authUserId: 0,
+      numSuccessLogins: 1,
+      numFailedPasswordsSinceLastLogin: 0,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [ { sessionId: '4484123', userId: 0 } ],
+  metaData: { totalUsers: 1, totalQuizzes: 0 }
+}
+{
+  users: [
+    {
+      email: 'blah@email.com',
+      password: 'password1YAY',
+      nameFirst: 'john',
+      nameLast: 'smith',
+      authUserId: 0,
+      numSuccessLogins: 2,
+      numFailedPasswordsSinceLastLogin: 0,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [ { sessionId: '4484123', userId: 0 } ],
+  metaData: { totalUsers: 1, totalQuizzes: 0 }
+}
+[0mPOST /v1/admin/auth/login [32m200[0m 4.968 ms - 161[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.193 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.566 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.664 ms - 161[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.284 ms - 2[0m
+[0mPOST /v1/admin/auth/logout [33m400[0m 1.905 ms - 39[0m
+[0mDELETE /v1/clear [32m200[0m 2.152 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.765 ms - 161[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 2.799 ms - 2[0m
+[0mGET /v1/admin/user/details?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2Mzk0Mzc4IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwODJ9.jbFHetunEuzoBughXgdz2gixDPvh2-TNW8WclTzm93o [33m403[0m 2.177 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 1.786 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.026 ms - 161[0m
+EEYEYYE
+{
+  users: [
+    {
+      email: 'blah@email.com',
+      password: 'password1YAY',
+      nameFirst: 'john',
+      nameLast: 'smith',
+      authUserId: 0,
+      numSuccessLogins: 1,
+      numFailedPasswordsSinceLastLogin: 0,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [ { sessionId: '9777486', userId: 0 } ],
+  metaData: { totalUsers: 1, totalQuizzes: 0 }
+}
+{
+  users: [
+    {
+      email: 'blah@email.com',
+      password: 'password1YAY',
+      nameFirst: 'john',
+      nameLast: 'smith',
+      authUserId: 0,
+      numSuccessLogins: 2,
+      numFailedPasswordsSinceLastLogin: 0,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [ { sessionId: '9777486', userId: 0 } ],
+  metaData: { totalUsers: 1, totalQuizzes: 0 }
+}
+[0mPOST /v1/admin/auth/login [32m200[0m 5.134 ms - 161[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.080 ms - 2[0m
+[0mGET /v1/admin/user/details?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI5Nzc3NDg2IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwODJ9.YL3nF1pzapfwuOIqEu1A3E09zQzP_uhb0VqpDXomkSk [33m403[0m 3.484 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 2.369 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.967 ms - 161[0m
+[0mGET /v1/admin/user/details?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI0MjkxNjU5IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwODN9.22tPVbZUK90ly6PsA3V_5jXPjX4EEVw4WIvXTSGJeGw [32m200[0m 4.265 ms - 127[0m
+[0mDELETE /v1/clear [32m200[0m 1.823 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.945 ms - 161[0m
+[0mPOST /v1/admin/auth/logout [32m200[0m 3.307 ms - 2[0m
+[0mGET /v1/admin/user/details?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2Mzg3MzY0IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwODN9.su1bCzzM1IHKzW7skX7GF66lFjUlpJa_HnZTEiaWgl0 [33m403[0m 2.113 ms - 53[0m
+[0mDELETE /v1/clear [32m200[0m 1.597 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.220 ms - 161[0m
+EEYEYYE
+{
+  users: [
+    {
+      email: 'blah@email.com',
+      password: 'password1YAY',
+      nameFirst: 'john',
+      nameLast: 'smith',
+      authUserId: 0,
+      numSuccessLogins: 1,
+      numFailedPasswordsSinceLastLogin: 0,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [ { sessionId: '7362197', userId: 0 } ],
+  metaData: { totalUsers: 1, totalQuizzes: 0 }
+}
+{
+  users: [
+    {
+      email: 'blah@email.com',
+      password: 'password1YAY',
+      nameFirst: 'john',
+      nameLast: 'smith',
+      authUserId: 0,
+      numSuccessLogins: 2,
+      numFailedPasswordsSinceLastLogin: 0,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [ { sessionId: '7362197', userId: 0 } ],
+  metaData: { totalUsers: 1, totalQuizzes: 0 }
+}
+[0mPOST /v1/admin/auth/login [32m200[0m 4.393 ms - 161[0m
+[0mGET /v1/admin/user/details?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI3MzYyMTk3IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwODN9.SNhFLJ1uMQKEy85QK9BE6s26VP5ko2hyUwtpg2NHQMw [32m200[0m 3.477 ms - 127[0m
+[0mDELETE /v1/clear [32m200[0m 2.045 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.592 ms - 161[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 2.490 ms - 45[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 2.518 ms - 45[0m
+[0mGET /v1/admin/user/details?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiI2ODQ4ODE4IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwODN9.AxKjJIKJ5COFAZKC-uKpRH3ZpRaTmh4SbwGDF2PEUFw [32m200[0m 4.200 ms - 127[0m
+[0mDELETE /v1/clear [32m200[0m 2.147 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.994 ms - 30[0m
+[0mDELETE /v1/clear [32m200[0m 1.889 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.929 ms - 30[0m
+[0mDELETE /v1/clear [32m200[0m 1.847 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.922 ms - 30[0m
+[0mDELETE /v1/clear [32m200[0m 1.873 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.930 ms - 30[0m
+[0mDELETE /v1/clear [32m200[0m 2.298 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.200 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.964 ms - 113[0m
+[0mDELETE /v1/clear [32m200[0m 1.873 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.923 ms - 113[0m
+[0mDELETE /v1/clear [32m200[0m 2.192 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.969 ms - 113[0m
+[0mDELETE /v1/clear [32m200[0m 2.163 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.956 ms - 113[0m
+[0mDELETE /v1/clear [32m200[0m 2.042 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.096 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.861 ms - 60[0m
+[0mDELETE /v1/clear [32m200[0m 2.197 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.965 ms - 96[0m
+[0mDELETE /v1/clear [32m200[0m 2.233 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.926 ms - 60[0m
+[0mDELETE /v1/clear [32m200[0m 2.214 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.894 ms - 60[0m
+[0mDELETE /v1/clear [32m200[0m 2.123 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.383 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.976 ms - 59[0m
+[0mDELETE /v1/clear [32m200[0m 2.185 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.981 ms - 95[0m
+[0mDELETE /v1/clear [32m200[0m 2.430 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.885 ms - 59[0m
+[0mDELETE /v1/clear [32m200[0m 1.859 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.945 ms - 59[0m
+[0mDELETE /v1/clear [32m200[0m 1.695 ms - 2[0m
+[0mDELETE /v1/clear [32m200[0m 2.124 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.365 ms - 161[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 0.671 ms - 30[0m
+[0mDELETE /v1/clear [32m200[0m 1.925 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.448 ms - 161[0m
+[0mDELETE /v1/clear [32m200[0m 2.014 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.281 ms - 161[0m
+[0mDELETE /v1/clear [32m200[0m 2.177 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.312 ms - 161[0m
+[0mDELETE /v1/clear [32m200[0m 2.651 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.084 ms - 160[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 8.525 ms - 160[0m
+[0mDELETE /v1/clear [32m200[0m 2.577 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 6.336 ms - 161[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 5.201 ms - 161[0m
+[0mDELETE /v1/clear [32m200[0m 8.081 ms - 2[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 3.870 ms - 45[0m
+[0mDELETE /v1/clear [32m200[0m 9.454 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 45.881 ms - 161[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 13.819 ms - 45[0m
+[0mDELETE /v1/clear [32m200[0m 17.012 ms - 2[0m
+[0mPOST /v1/admin/auth/register [32m200[0m 35.718 ms - 161[0m
+EEYEYYE
+{
+  users: [
+    {
+      email: 'valid.email@domain.com',
+      password: 'ThisIsAGoodPassword123!',
+      nameFirst: 'FFFFF',
+      nameLast: 'LLLLL',
+      authUserId: 0,
+      numSuccessLogins: 1,
+      numFailedPasswordsSinceLastLogin: 0,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [ { sessionId: '2727438', userId: 0 } ],
+  metaData: { totalUsers: 1, totalQuizzes: 0 }
+}
+{
+  users: [
+    {
+      email: 'valid.email@domain.com',
+      password: 'ThisIsAGoodPassword123!',
+      nameFirst: 'FFFFF',
+      nameLast: 'LLLLL',
+      authUserId: 0,
+      numSuccessLogins: 2,
+      numFailedPasswordsSinceLastLogin: 0,
+      deletedQuizzes: [],
+      prevPassword: [Array]
+    }
+  ],
+  quizzes: [],
+  session: [ { sessionId: '2727438', userId: 0 } ],
+  metaData: { totalUsers: 1, totalQuizzes: 0 }
+}
+[0mPOST /v1/admin/auth/login [32m200[0m 24.902 ms - 161[0m
+[0mDELETE /v1/clear [32m200[0m 2.306 ms - 2[0m
+[0mPOST /v1/admin/auth/register [33m400[0m 1.095 ms - 113[0m
+[0mDELETE /v1/clear [32m200[0m 2.473 ms - 2[0m
+[0mPOST /v1/admin/auth/login [33m400[0m 1.044 ms - 45[0m
+Shutting down server gracefully.

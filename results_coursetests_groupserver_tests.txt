@@ -1,0 +1,576 @@
+
+> test
+> jest httpTests/
+
+FAIL httpTests/adminQuiz/adminQuizQUestionEdit.test.ts (6.223 s)
+  ● Test successful question edit
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: undefined
+    Received array: ["red", "blue", "yellow", "green", "brown", "purple", "orange"]
+
+      72 |   expect(quiz.questions[0].points).toEqual(points);
+      73 |   for (let answer of quiz.questions[0].answers) {
+    > 74 |     expect(colours).toContain(answer.colour);
+         |                     ^
+      75 |     expect(answer.answerId).toEqual(expect.any(Number));
+      76 |     expect(answerNames).toContain(answer.answer);
+      77 |     if (answer.answer === "Queen Elizabeth") {
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizQUestionEdit.test.ts:74:21)
+
+  ● Test successful question edit - multiple correct
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: undefined
+    Received array: ["red", "blue", "yellow", "green", "brown", "purple", "orange"]
+
+      105 |   const quiz = adminQuizInfo(token, quizId);
+      106 |   for (let answer of quiz.questions[0].answers) {
+    > 107 |     expect(colours).toContain(answer.colour);
+          |                     ^
+      108 |     expect(answer.answerId).toEqual(expect.any(Number));
+      109 |     expect(answerNames).toContain(answer.answer);
+      110 |     if (answer.answer === "King Charles" || answer.answer === "Empress Yuchao") {
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizQUestionEdit.test.ts:107:21)
+
+FAIL httpTests/adminQuiz/adminQuizQuestionAdd.test.ts
+  ● Test successful question add - all details are correctly stored and retrieved by quiz info
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: undefined
+    Received array: ["red", "blue", "yellow", "green", "brown", "purple", "orange"]
+
+      46 |   expect(quiz.questions[0].points).toEqual(points);
+      47 |   for (let answer of quiz.questions[0].answers) {
+    > 48 |     expect(colours).toContain(answer.colour);
+         |                     ^
+      49 |     expect(answer.answerId).toEqual(expect.any(Number));
+      50 |     expect(answerNames).toContain(answer.answer);
+      51 |     if (answer.answer === "Prince Charles") {
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizQuestionAdd.test.ts:48:21)
+
+  ● Test successful question add - multiple correct
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: undefined
+    Received array: ["red", "blue", "yellow", "green", "brown", "purple", "orange"]
+
+      79 |   const quiz = adminQuizInfo(token, quizId);
+      80 |   for (let answer of quiz.questions[0].answers) {
+    > 81 |     expect(colours).toContain(answer.colour);
+         |                     ^
+      82 |     expect(answer.answerId).toEqual(expect.any(Number));
+      83 |     expect(answerNames).toContain(answer.answer);
+      84 |     if (answer.answer === "Prince Charles" || answer.answer === "Prince George") {
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizQuestionAdd.test.ts:81:21)
+
+PASS httpTests/adminUser/adminUserDetailsPut.test.ts
+FAIL httpTests/adminQuiz/adminQuizQuestionMove.test.ts
+  ● Successful quiz question move
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: undefined
+    Received array: ["red", "blue", "yellow", "green", "brown", "purple", "orange"]
+
+      51 |   expect(quizInfo.questions[newPosition].points).toEqual(question.points);
+      52 |   for (let answer of quizInfo.questions[newPosition].answers) {
+    > 53 |     expect(colours).toContain(answer.colour);
+         |                     ^
+      54 |     expect(answer.answerId).toEqual(expect.any(Number));
+      55 |     expect(answerNames).toContain(answer.answer);
+      56 |     if (answer.answer === "Prince Charles") {
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizQuestionMove.test.ts:53:21)
+
+  ● Invalid position for quiz move - longer than n-1 questions
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    Expected: 400
+    Received: {}
+
+      69 | test('Invalid position for quiz move - longer than n-1 questions', () => {
+      70 |   const res = adminQuizQuestionMove(token, quizId, questionId, 1);
+    > 71 |   expect(res).toStrictEqual(400);
+         |               ^
+      72 | });
+      73 |
+      74 | test('Invalid position for quiz move - less than 0', () => {
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizQuestionMove.test.ts:71:15)
+
+FAIL httpTests/adminQuiz/adminQuizTrashEmpty.test.ts
+  ● Test successful quiz trash empty - single quiz
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    Expected: {}
+    Received: 500
+
+      20 | test('Test successful quiz trash empty - single quiz', () => {
+      21 |   const res = adminQuizTrashEmpty(token, quizIds);
+    > 22 |   expect(res).toStrictEqual({});
+         |               ^
+      23 |   const quizzes = adminQuizTrash(token).quizzes;
+      24 |   expect(quizzes).not.toContain({ quizId: quizId, name: 'test quiz'});
+      25 | });
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizTrashEmpty.test.ts:22:15)
+
+  ● Test successful quiz trash empty - multiple quizes
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    Expected: {}
+    Received: 500
+
+      29 |   adminQuizDelete(token, quizId2);
+      30 |   const res = adminQuizTrashEmpty(token, qs);
+    > 31 |   expect(res).toStrictEqual({});
+         |               ^
+      32 |   const quizzes = adminQuizTrash(token).quizzes;
+      33 |   expect(quizzes).not.toContain({ quizId: quizId, name: 'test quiz'});
+      34 |   expect(quizzes).not.toContain({ quizId: quizId2, name: 'second quiz'});
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizTrashEmpty.test.ts:31:15)
+
+  ● Test token valid but not for current session - quiz trash empty
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    Expected: 403
+    Received: 500
+
+      38 |   adminAuthLogout(token);
+      39 |   const res = adminQuizTrashEmpty(token, quizIds);
+    > 40 |   expect(res).toStrictEqual(403);
+         |               ^
+      41 | });
+      42 |
+      43 | /* iter3test('Test token invalid structure - quiz trash empty', () => {
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizTrashEmpty.test.ts:40:15)
+
+  ● Test quiz trash empty - quiz that the current owner doesnt own error
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    Expected: 400
+    Received: 500
+
+      49 |   const token2 = adminAuthRegister('blah2@email.com', 'password1YAY', 'hayden', 'smith').token;
+      50 |   const res = adminQuizTrashEmpty(token2, quizIds);
+    > 51 |   expect(res).toStrictEqual(400);
+         |               ^
+      52 | });
+      53 |
+      54 | test('Test quiz trash empty - invalid quiz error', () => {
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizTrashEmpty.test.ts:51:15)
+
+  ● Test quiz trash empty - invalid quiz error
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    Expected: 400
+    Received: 500
+
+      54 | test('Test quiz trash empty - invalid quiz error', () => {
+      55 |   const res = adminQuizTrashEmpty(token, "[1234321]");
+    > 56 |   expect(res).toStrictEqual(400);
+         |               ^
+      57 | });
+      58 |
+      59 | test('Test quiz trash empty - single quiz not in trash error', () => {
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizTrashEmpty.test.ts:56:15)
+
+  ● Test quiz trash empty - single quiz not in trash error
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    Expected: 400
+    Received: 500
+
+      60 |   const qs = `[${quizId2}]`;
+      61 |   const res = adminQuizTrashEmpty(token, qs);
+    > 62 |   expect(res).toStrictEqual(400);
+         |               ^
+      63 | });
+      64 |
+      65 | test('Test quiz trash empty - one quiz in trash and one quiz not in trash error', () => {
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizTrashEmpty.test.ts:62:15)
+
+  ● Test quiz trash empty - one quiz in trash and one quiz not in trash error
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    Expected: 400
+    Received: 500
+
+      66 |   const qs = `[${quizId},${quizId2}]`;
+      67 |   const res = adminQuizTrashEmpty(token, qs);
+    > 68 |   expect(res).toStrictEqual(400);
+         |               ^
+      69 | });
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizTrashEmpty.test.ts:68:15)
+
+PASS httpTests/adminQuiz/adminQuizDescriptionUpdate.test.ts
+PASS httpTests/adminQuiz/adminQuizNameUpdate.test.ts
+PASS httpTests/adminQuiz/adminQuizQuestionDelete.test.ts
+PASS httpTests/adminQuiz/adminQuizNew.test.ts
+FAIL httpTests/adminQuiz/adminQuizQuestionDuplicate.test.ts
+  ● Successful quiz question duplicate
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: undefined
+    Received array: ["red", "blue", "yellow", "green", "brown", "purple", "orange"]
+
+      50 |   expect(quiz.questions[1].points).toEqual(question.points);
+      51 |   for (let answer of quiz.questions[0].answers) {
+    > 52 |     expect(colours).toContain(answer.colour);
+         |                     ^
+      53 |     expect(answer.answerId).toEqual(expect.any(Number));
+      54 |     expect(answerNames).toContain(answer.answer);
+      55 |     if (answer.answer === "Prince Charles") {
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizQuestionDuplicate.test.ts:52:21)
+
+PASS httpTests/adminQuiz/adminQuizTransfer.test.ts
+PASS httpTests/adminQuiz/adminQuizRestore.test.ts
+PASS httpTests/adminQuiz/adminQuizInfo.test.ts
+PASS httpTests/adminQuiz/adminQuizTrash.test.ts
+PASS httpTests/adminUser/adminUserPassword.test.ts
+PASS httpTests/adminQuiz/adminQuizList.test.ts
+PASS httpTests/adminQuiz/adminQuizDelete.test.ts
+FAIL httpTests/adminAuth/adminAuthLogout.test.ts
+  ● Logout in one session doesnt affect another
+
+    expect(received).not.toStrictEqual(expected) // deep equality
+
+    Expected: not 403
+
+      43 |   adminAuthLogout(token);
+      44 |   const res = adminUserDetailsGet(tok2);
+    > 45 |   expect(res).not.toStrictEqual(403);
+         |                   ^
+      46 | });
+
+      at Object.<anonymous> (httpTests/adminAuth/adminAuthLogout.test.ts:45:19)
+
+PASS httpTests/adminUser/adminUserDetails.test.ts
+PASS httpTests/adminAuth/adminAuthRegister.test.ts
+FAIL httpTests/adminAuth/adminAuthLogin.test.ts
+  ● Test successful login and register gives different tokens, since they are for different sessions
+
+    expect(received).not.toStrictEqual(expected) // deep equality
+
+    Expected: not {"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIyNzI3NDM4IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwODd9.CoL-SQIYcS68wchP4T9X_2E0l-tghSPwhQRwglmhaqs"}
+
+      30 |   const token1 = adminAuthRegister(EMAIL, PASSWORD, FIRST, LAST);
+      31 |   const token2 = adminAuthLogin(EMAIL, PASSWORD);
+    > 32 |   expect(token1).not.toStrictEqual(token2);
+         |                      ^
+      33 | });
+      34 |
+
+      at Object.<anonymous> (httpTests/adminAuth/adminAuthLogin.test.ts:32:22)
+
+PASS httpTests/other/clear.test.ts
+
+Summary of all failing tests
+FAIL httpTests/adminQuiz/adminQuizQUestionEdit.test.ts (6.223 s)
+  ● Test successful question edit
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: undefined
+    Received array: ["red", "blue", "yellow", "green", "brown", "purple", "orange"]
+
+      72 |   expect(quiz.questions[0].points).toEqual(points);
+      73 |   for (let answer of quiz.questions[0].answers) {
+    > 74 |     expect(colours).toContain(answer.colour);
+         |                     ^
+      75 |     expect(answer.answerId).toEqual(expect.any(Number));
+      76 |     expect(answerNames).toContain(answer.answer);
+      77 |     if (answer.answer === "Queen Elizabeth") {
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizQUestionEdit.test.ts:74:21)
+
+  ● Test successful question edit - multiple correct
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: undefined
+    Received array: ["red", "blue", "yellow", "green", "brown", "purple", "orange"]
+
+      105 |   const quiz = adminQuizInfo(token, quizId);
+      106 |   for (let answer of quiz.questions[0].answers) {
+    > 107 |     expect(colours).toContain(answer.colour);
+          |                     ^
+      108 |     expect(answer.answerId).toEqual(expect.any(Number));
+      109 |     expect(answerNames).toContain(answer.answer);
+      110 |     if (answer.answer === "King Charles" || answer.answer === "Empress Yuchao") {
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizQUestionEdit.test.ts:107:21)
+
+FAIL httpTests/adminQuiz/adminQuizQuestionAdd.test.ts
+  ● Test successful question add - all details are correctly stored and retrieved by quiz info
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: undefined
+    Received array: ["red", "blue", "yellow", "green", "brown", "purple", "orange"]
+
+      46 |   expect(quiz.questions[0].points).toEqual(points);
+      47 |   for (let answer of quiz.questions[0].answers) {
+    > 48 |     expect(colours).toContain(answer.colour);
+         |                     ^
+      49 |     expect(answer.answerId).toEqual(expect.any(Number));
+      50 |     expect(answerNames).toContain(answer.answer);
+      51 |     if (answer.answer === "Prince Charles") {
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizQuestionAdd.test.ts:48:21)
+
+  ● Test successful question add - multiple correct
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: undefined
+    Received array: ["red", "blue", "yellow", "green", "brown", "purple", "orange"]
+
+      79 |   const quiz = adminQuizInfo(token, quizId);
+      80 |   for (let answer of quiz.questions[0].answers) {
+    > 81 |     expect(colours).toContain(answer.colour);
+         |                     ^
+      82 |     expect(answer.answerId).toEqual(expect.any(Number));
+      83 |     expect(answerNames).toContain(answer.answer);
+      84 |     if (answer.answer === "Prince Charles" || answer.answer === "Prince George") {
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizQuestionAdd.test.ts:81:21)
+
+FAIL httpTests/adminQuiz/adminQuizQuestionMove.test.ts
+  ● Successful quiz question move
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: undefined
+    Received array: ["red", "blue", "yellow", "green", "brown", "purple", "orange"]
+
+      51 |   expect(quizInfo.questions[newPosition].points).toEqual(question.points);
+      52 |   for (let answer of quizInfo.questions[newPosition].answers) {
+    > 53 |     expect(colours).toContain(answer.colour);
+         |                     ^
+      54 |     expect(answer.answerId).toEqual(expect.any(Number));
+      55 |     expect(answerNames).toContain(answer.answer);
+      56 |     if (answer.answer === "Prince Charles") {
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizQuestionMove.test.ts:53:21)
+
+  ● Invalid position for quiz move - longer than n-1 questions
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    Expected: 400
+    Received: {}
+
+      69 | test('Invalid position for quiz move - longer than n-1 questions', () => {
+      70 |   const res = adminQuizQuestionMove(token, quizId, questionId, 1);
+    > 71 |   expect(res).toStrictEqual(400);
+         |               ^
+      72 | });
+      73 |
+      74 | test('Invalid position for quiz move - less than 0', () => {
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizQuestionMove.test.ts:71:15)
+
+FAIL httpTests/adminQuiz/adminQuizTrashEmpty.test.ts
+  ● Test successful quiz trash empty - single quiz
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    Expected: {}
+    Received: 500
+
+      20 | test('Test successful quiz trash empty - single quiz', () => {
+      21 |   const res = adminQuizTrashEmpty(token, quizIds);
+    > 22 |   expect(res).toStrictEqual({});
+         |               ^
+      23 |   const quizzes = adminQuizTrash(token).quizzes;
+      24 |   expect(quizzes).not.toContain({ quizId: quizId, name: 'test quiz'});
+      25 | });
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizTrashEmpty.test.ts:22:15)
+
+  ● Test successful quiz trash empty - multiple quizes
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    Expected: {}
+    Received: 500
+
+      29 |   adminQuizDelete(token, quizId2);
+      30 |   const res = adminQuizTrashEmpty(token, qs);
+    > 31 |   expect(res).toStrictEqual({});
+         |               ^
+      32 |   const quizzes = adminQuizTrash(token).quizzes;
+      33 |   expect(quizzes).not.toContain({ quizId: quizId, name: 'test quiz'});
+      34 |   expect(quizzes).not.toContain({ quizId: quizId2, name: 'second quiz'});
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizTrashEmpty.test.ts:31:15)
+
+  ● Test token valid but not for current session - quiz trash empty
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    Expected: 403
+    Received: 500
+
+      38 |   adminAuthLogout(token);
+      39 |   const res = adminQuizTrashEmpty(token, quizIds);
+    > 40 |   expect(res).toStrictEqual(403);
+         |               ^
+      41 | });
+      42 |
+      43 | /* iter3test('Test token invalid structure - quiz trash empty', () => {
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizTrashEmpty.test.ts:40:15)
+
+  ● Test quiz trash empty - quiz that the current owner doesnt own error
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    Expected: 400
+    Received: 500
+
+      49 |   const token2 = adminAuthRegister('blah2@email.com', 'password1YAY', 'hayden', 'smith').token;
+      50 |   const res = adminQuizTrashEmpty(token2, quizIds);
+    > 51 |   expect(res).toStrictEqual(400);
+         |               ^
+      52 | });
+      53 |
+      54 | test('Test quiz trash empty - invalid quiz error', () => {
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizTrashEmpty.test.ts:51:15)
+
+  ● Test quiz trash empty - invalid quiz error
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    Expected: 400
+    Received: 500
+
+      54 | test('Test quiz trash empty - invalid quiz error', () => {
+      55 |   const res = adminQuizTrashEmpty(token, "[1234321]");
+    > 56 |   expect(res).toStrictEqual(400);
+         |               ^
+      57 | });
+      58 |
+      59 | test('Test quiz trash empty - single quiz not in trash error', () => {
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizTrashEmpty.test.ts:56:15)
+
+  ● Test quiz trash empty - single quiz not in trash error
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    Expected: 400
+    Received: 500
+
+      60 |   const qs = `[${quizId2}]`;
+      61 |   const res = adminQuizTrashEmpty(token, qs);
+    > 62 |   expect(res).toStrictEqual(400);
+         |               ^
+      63 | });
+      64 |
+      65 | test('Test quiz trash empty - one quiz in trash and one quiz not in trash error', () => {
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizTrashEmpty.test.ts:62:15)
+
+  ● Test quiz trash empty - one quiz in trash and one quiz not in trash error
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    Expected: 400
+    Received: 500
+
+      66 |   const qs = `[${quizId},${quizId2}]`;
+      67 |   const res = adminQuizTrashEmpty(token, qs);
+    > 68 |   expect(res).toStrictEqual(400);
+         |               ^
+      69 | });
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizTrashEmpty.test.ts:68:15)
+
+FAIL httpTests/adminQuiz/adminQuizQuestionDuplicate.test.ts
+  ● Successful quiz question duplicate
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: undefined
+    Received array: ["red", "blue", "yellow", "green", "brown", "purple", "orange"]
+
+      50 |   expect(quiz.questions[1].points).toEqual(question.points);
+      51 |   for (let answer of quiz.questions[0].answers) {
+    > 52 |     expect(colours).toContain(answer.colour);
+         |                     ^
+      53 |     expect(answer.answerId).toEqual(expect.any(Number));
+      54 |     expect(answerNames).toContain(answer.answer);
+      55 |     if (answer.answer === "Prince Charles") {
+
+      at Object.<anonymous> (httpTests/adminQuiz/adminQuizQuestionDuplicate.test.ts:52:21)
+
+FAIL httpTests/adminAuth/adminAuthLogout.test.ts
+  ● Logout in one session doesnt affect another
+
+    expect(received).not.toStrictEqual(expected) // deep equality
+
+    Expected: not 403
+
+      43 |   adminAuthLogout(token);
+      44 |   const res = adminUserDetailsGet(tok2);
+    > 45 |   expect(res).not.toStrictEqual(403);
+         |                   ^
+      46 | });
+
+      at Object.<anonymous> (httpTests/adminAuth/adminAuthLogout.test.ts:45:19)
+
+FAIL httpTests/adminAuth/adminAuthLogin.test.ts
+  ● Test successful login and register gives different tokens, since they are for different sessions
+
+    expect(received).not.toStrictEqual(expected) // deep equality
+
+    Expected: not {"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXNzaW9uSWQiOiIyNzI3NDM4IiwidXNlcklkIjowLCJpYXQiOjE2ODk2NjkwODd9.CoL-SQIYcS68wchP4T9X_2E0l-tghSPwhQRwglmhaqs"}
+
+      30 |   const token1 = adminAuthRegister(EMAIL, PASSWORD, FIRST, LAST);
+      31 |   const token2 = adminAuthLogin(EMAIL, PASSWORD);
+    > 32 |   expect(token1).not.toStrictEqual(token2);
+         |                      ^
+      33 | });
+      34 |
+
+      at Object.<anonymous> (httpTests/adminAuth/adminAuthLogin.test.ts:32:22)
+
+
+Test Suites: 7 failed, 15 passed, 22 total
+Tests:       16 failed, 143 passed, 159 total
+Snapshots:   0 total
+Time:        42.181 s
+Ran all test suites matching /httpTests\//i.
+npm notice 
+npm notice New minor version of npm available! 9.5.1 -> 9.8.0
+npm notice Changelog: <https://github.com/npm/cli/releases/tag/v9.8.0>
+npm notice Run `npm install -g npm@9.8.0` to update!
+npm notice 

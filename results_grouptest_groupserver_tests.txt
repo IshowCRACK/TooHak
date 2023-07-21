@@ -1,0 +1,24 @@
+
+> test
+> jest **/?(*.)+(test).ts
+
+  Invalid testPattern **/?(*.)+(test).ts supplied. Running all tests instead.
+  Invalid testPattern **/?(*.)+(test).ts supplied. Running all tests instead.
+PASS src/tests/iter1tests/quiz.test.ts
+PASS src/tests/http-quiz.test.ts (18.565 s)
+PASS src/tests/http-question.test.ts (10.015 s)
+PASS src/tests/iter1tests/auth.test.ts
+PASS src/tests/http-auth.test.ts (6.927 s)
+PASS src/tests/iter1tests/other.test.ts
+PASS src/tests/iter1tests/echo.test.ts
+
+Test Suites: 7 passed, 7 total
+Tests:       159 passed, 159 total
+Snapshots:   0 total
+Time:        40.959 s
+Ran all test suites.
+npm notice 
+npm notice New minor version of npm available! 9.5.1 -> 9.8.0
+npm notice Changelog: <https://github.com/npm/cli/releases/tag/v9.8.0>
+npm notice Run `npm install -g npm@9.8.0` to update!
+npm notice 
