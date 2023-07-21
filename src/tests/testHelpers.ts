@@ -377,4 +377,23 @@ export const getUserV2 = (jwt: Jwt): AdminUserDetailsReturn | ErrorObj => {
   return parsedResponse;
 };
 
+export const updateDetailsAuthHandlerV2 = (jwt: Jwt, email: string, nameFirst: string, nameLast: string): OkObj | ErrorObj => {
+  const res = request(
+    'PUT',
+    URL + 'v2/admin/user/details',
+    {
+      json: {
+        email: email,
+        nameFirst: nameFirst,
+        nameLast: nameLast
+      },
+      headers: {
+        token: jwt.token,
+      }
+    }
+  );
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+  return parsedResponse;
+};
+
 

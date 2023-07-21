@@ -301,6 +301,26 @@ app.get('/v2/admin/user/details', (req: Request, res: Response) => {
   res.status(200).json(response);
 });
 
+app.put('/v2/admin/user/details', (req: Request, res: Response) => {
+  const { token } = req.headers
+  const { email, nameFirst, nameLast } = req.body;
+  const response = adminUpdateUserDetails({ token: token }, email, nameFirst, nameLast);
+  if ('error' in response) {
+    return res.status(response.statusCode).json(formatError(response));
+  }
+  res.status(200).json(response);
+});
+
+app.post('/v1/admin/quiz', (req: Request, res: Response) => {
+  const { token, name, description } = req.body;
+  const response = adminQuizCreate({ token: token }, name, description);
+  if ('error' in response) {
+    return res.status(response.statusCode).json(formatError(response));
+  }
+
+  res.status(200).json(response);
+});
+
 // ====================================================================
 //  ================= WORK IS DONE ABOVE THIS LINE ===================
 // ====================================================================
