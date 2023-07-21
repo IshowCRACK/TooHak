@@ -414,6 +414,25 @@ export const updateUserDetailsPasswordV2 = (jwt: Jwt, oldPassword: string, newPa
   return parsedResponse;
 };
 
+export const RequestCreateQuizV2 = (jwt: Jwt, name: string, description: string): AdminQuizCreate | ErrorObj => {
+  const res = request(
+    'POST',
+    URL + 'v2/admin/quiz',
+    {
+      json: {
+        name: name,
+        description: description,
+      },
+      headers: {
+        token: jwt.token
+      }
+    }
+  );
+  const parsedResponse: AdminQuizCreate | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
+};
+
 export const listQuizV2 = (jwt: Jwt): AdminQuizListReturn | ErrorObj => {
   const res = request(
     'GET',

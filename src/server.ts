@@ -322,6 +322,17 @@ app.put('/v2/admin/user/password', (req: Request, res: Response) => {
   res.status(200).json(response);
 });
 
+app.post('/v2/admin/quiz', (req: Request, res: Response) => {
+  const { token } = req.headers
+  const { name, description } = req.body;
+  const response = adminQuizCreate({ token: token }, name, description);
+  if ('error' in response) {
+    return res.status(response.statusCode).json(formatError(response));
+  }
+
+  res.status(200).json(response);
+});
+
 app.get('/v2/admin/quiz/list', (req: Request, res: Response) => {
   const token = req.headers.token as string;
   const response = adminQuizList({ token: token });
