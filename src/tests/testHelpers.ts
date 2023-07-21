@@ -345,7 +345,7 @@ export const updateUserDetailsPassword = (jwt: Jwt, oldPassword: string, newPass
   return parsedResponse;
 };
 
-////////////////////////////////////////////    V2 ROUTES     ////////////////////////////////////////////////////
+//  //////////////////////////////// V2 ROUTES /////////////////////////////////////
 export const logoutUserHandlerV2 = (jwt: Jwt) => {
   const res = request(
     'POST',
@@ -447,4 +447,3 @@ export const listQuizV2 = (jwt: Jwt): AdminQuizListReturn | ErrorObj => {
 
   return parsedResponse;
 };
-
