@@ -281,7 +281,7 @@ app.get('/debug', (req: Request, res: Response) => {
 
 //  //////////////////////////////// V2 ROUTES /////////////////////////////////////
 app.post('/v2/admin/auth/logout', (req: Request, res: Response) => {
-  const { token } = req.headers;
+  const token: string = req.header('token') as string;
   const response = adminAuthLogout({ token: token });
 
   if ('error' in response) {
@@ -292,7 +292,7 @@ app.post('/v2/admin/auth/logout', (req: Request, res: Response) => {
 });
 
 app.get('/v2/admin/user/details', (req: Request, res: Response) => {
-  const token = req.headers.token as string;
+  const token: string = req.header('token') as string;
   const response = adminUserDetails({ token: token });
 
   if ('error' in response) {
@@ -303,7 +303,7 @@ app.get('/v2/admin/user/details', (req: Request, res: Response) => {
 });
 
 app.put('/v2/admin/user/details', (req: Request, res: Response) => {
-  const { token } = req.headers;
+  const token: string = req.header('token') as string;
   const { email, nameFirst, nameLast } = req.body;
   const response = adminUpdateUserDetails({ token: token }, email, nameFirst, nameLast);
   if ('error' in response) {
@@ -313,7 +313,7 @@ app.put('/v2/admin/user/details', (req: Request, res: Response) => {
 });
 
 app.put('/v2/admin/user/password', (req: Request, res: Response) => {
-  const { token } = req.headers;
+  const token: string = req.header('token') as string;
   const { oldPassword, newPassword } = req.body;
   const response = adminUpdateUserPassword({ token: token }, oldPassword, newPassword);
   if ('error' in response) {
@@ -324,7 +324,7 @@ app.put('/v2/admin/user/password', (req: Request, res: Response) => {
 });
 
 app.post('/v2/admin/quiz', (req: Request, res: Response) => {
-  const { token } = req.headers;
+  const token: string = req.header('token') as string;
   const { name, description } = req.body;
   const response = adminQuizCreate({ token: token }, name, description);
   if ('error' in response) {
@@ -335,7 +335,7 @@ app.post('/v2/admin/quiz', (req: Request, res: Response) => {
 });
 
 app.get('/v2/admin/quiz/list', (req: Request, res: Response) => {
-  const token = req.headers.token as string;
+  const token: string = req.header('token') as string;
   const response = adminQuizList({ token: token });
 
   if ('error' in response) {
