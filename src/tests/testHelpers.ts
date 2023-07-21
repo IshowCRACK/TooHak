@@ -362,4 +362,19 @@ export const logoutUserHandlerV2 = (jwt: Jwt) => {
   return parsedResponse;
 };
 
+export const getUserV2 = (jwt: Jwt): AdminUserDetailsReturn | ErrorObj => {
+  const res = request(
+    'GET',
+    URL + 'v2/admin/user/details',
+    {
+      headers: {
+        token: jwt.token
+      }
+    }
+  );
+  const parsedResponse: AdminUserDetailsReturn | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
+};
+
 
