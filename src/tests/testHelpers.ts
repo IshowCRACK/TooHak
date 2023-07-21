@@ -414,3 +414,18 @@ export const updateUserDetailsPasswordV2 = (jwt: Jwt, oldPassword: string, newPa
   return parsedResponse;
 };
 
+export const listQuizV2 = (jwt: Jwt): AdminQuizListReturn | ErrorObj => {
+  const res = request(
+    'GET',
+    URL + 'v2/admin/quiz/list',
+    {
+      headers: {
+        token: jwt.token
+      }
+    }
+  );
+  const parsedResponse: AdminQuizListReturn | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
+};
+
