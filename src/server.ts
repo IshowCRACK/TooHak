@@ -278,6 +278,17 @@ app.get('/debug', (req: Request, res: Response) => {
 
   res.json(data);
 });
+///////////////////////////// V2 ROUTES ///////////////////////////////
+app.post('/v2/admin/auth/logout', (req: Request, res: Response) => {
+  const { token } = req.headers;
+  const response = adminAuthLogout({ token: token });
+
+  if ('error' in response) {
+    return res.status(response.statusCode).json(formatError(response));
+  }
+
+  res.status(200).json(response);
+});
 
 // ====================================================================
 //  ================= WORK IS DONE ABOVE THIS LINE ===================

@@ -344,3 +344,22 @@ export const updateUserDetailsPassword = (jwt: Jwt, oldPassword: string, newPass
   const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
   return parsedResponse;
 };
+
+////////////////////////////////////////////    V2 ROUTES     ////////////////////////////////////////////////////
+export const logoutUserHandlerV2 = (jwt: Jwt) => {
+  const res = request(
+    'POST',
+    URL + 'v2/admin/auth/logout',
+    {
+      headers: {
+        token: jwt.token
+      }
+    }
+  );
+
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
+};
+
+
