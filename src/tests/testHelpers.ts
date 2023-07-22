@@ -344,3 +344,106 @@ export const updateUserDetailsPassword = (jwt: Jwt, oldPassword: string, newPass
   const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
   return parsedResponse;
 };
+
+//  //////////////////////////////// V2 ROUTES /////////////////////////////////////
+export const logoutUserHandlerV2 = (jwt: Jwt) => {
+  const res = request(
+    'POST',
+    URL + 'v2/admin/auth/logout',
+    {
+      headers: {
+        token: jwt.token
+      }
+    }
+  );
+
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
+};
+
+export const getUserV2 = (jwt: Jwt): AdminUserDetailsReturn | ErrorObj => {
+  const res = request(
+    'GET',
+    URL + 'v2/admin/user/details',
+    {
+      headers: {
+        token: jwt.token
+      }
+    }
+  );
+  const parsedResponse: AdminUserDetailsReturn | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
+};
+
+export const updateDetailsAuthHandlerV2 = (jwt: Jwt, email: string, nameFirst: string, nameLast: string): OkObj | ErrorObj => {
+  const res = request(
+    'PUT',
+    URL + 'v2/admin/user/details',
+    {
+      json: {
+        email: email,
+        nameFirst: nameFirst,
+        nameLast: nameLast
+      },
+      headers: {
+        token: jwt.token,
+      }
+    }
+  );
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+  return parsedResponse;
+};
+
+export const updateUserDetailsPasswordV2 = (jwt: Jwt, oldPassword: string, newPassword: string): OkObj | ErrorObj => {
+  const res = request(
+    'PUT',
+    URL + 'v2/admin/user/password',
+    {
+      json: {
+        oldPassword: oldPassword,
+        newPassword: newPassword
+      },
+      headers: {
+        token: jwt.token,
+      }
+    }
+  );
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+  return parsedResponse;
+};
+
+export const RequestCreateQuizV2 = (jwt: Jwt, name: string, description: string): AdminQuizCreate | ErrorObj => {
+  const res = request(
+    'POST',
+    URL + 'v2/admin/quiz',
+    {
+      json: {
+        name: name,
+        description: description,
+      },
+      headers: {
+        token: jwt.token
+      }
+    }
+  );
+  const parsedResponse: AdminQuizCreate | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
+};
+
+export const listQuizV2 = (jwt: Jwt): AdminQuizListReturn | ErrorObj => {
+  const res = request(
+    'GET',
+    URL + 'v2/admin/quiz/list',
+    {
+      headers: {
+        token: jwt.token
+      }
+    }
+  );
+  const parsedResponse: AdminQuizListReturn | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
+};
