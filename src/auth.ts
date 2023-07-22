@@ -3,6 +3,7 @@ import { getData, setData } from './dataStore';
 import { checkName, checkPassword, emailAlreadyUsed, checkTokenValidStructure, checkTokenValidSession, createUserId } from './helper';
 import validator from 'validator';
 import { addTokenToSession, checkJwtValid, createToken, getTokenLogin, tokenToJwt, jwtToToken } from './token';
+import HTTPError from 'http-errors';
 
 /**
   * Register a user with an email, password, and names, then returns thier authUserId value
@@ -18,66 +19,42 @@ function adminAuthRegister (email: string, password: string, nameFirst: string, 
 
   // checking if any parts are null
   if (email === null || password === null || nameFirst === null || nameLast === null) {
-    return {
-      error: 'All sections should be filled',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'All sections should be filled');
   }
 
   // checking email hasnt been used
   for (const user of data.users) {
     if (user.email === email) {
-      return {
-        error: 'Email already used',
-        statusCode: 400
-      };
+      throw HTTPError(400, 'Email already used');
     }
   }
 
   // check email is valid using validator
   if (!validator.isEmail(email)) {
-    return {
-      error: 'Email is not valid',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'Email is not valid');
   }
 
   // checking first name
   if (nameFirst.length > 20 || nameFirst.length < 2) {
-    return {
-      error: 'First name has to be between 2 and 20 characters',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'First name has to be between 2 and 20 characters');
   }
 
   if (!checkName(nameFirst)) {
-    return {
-      error: 'First name can only contain upper/lower case letters, spaces, hyphens or apostrophes',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'First name can only contain upper/lower case letters, spaces, hyphens or apostrophes');
   }
 
   // checking last name
   if (nameLast.length > 20 || nameLast.length < 2) {
-    return {
-      error: 'Last name has to be between 2 and 20 characters',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'Last name has to be between 2 and 20 characters');
   }
 
   if (!checkName(nameLast)) {
-    return {
-      error: 'Last name can only contain upper/lower case letters, spaces, hyphens or apostrophes',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'Last name can only contain upper/lower case letters, spaces, hyphens or apostrophes');
   }
 
   // checking password
-  if (password.length < 8 || !checkPassword(password)) {
-    return {
-      error: 'Password length has to be 8 characters & needs to contain at least one number and at least one letter',
-      statusCode: 400
-    };
+  if (!checkPassword(password)) {
+    throw HTTPError(400, 'Password length has to be 8 characters & needs to contain at least one number and at least one letter');
   }
 
   // else if every parameter is valid push into users database
@@ -137,8 +114,7 @@ function adminAuthLogin (email: string, password: string): Jwt | ErrorAndStatusC
       setData(data);
     }
   }
-
-  return { error: 'Username or Password is not valid', statusCode: 400 };
+  throw HTTPError(400, 'Username or Password is not valid');
 }
 
 /**
@@ -152,17 +128,11 @@ function adminUserDetails (jwt: Jwt): AdminUserDetailsReturn | ErrorAndStatusCod
   const data: Data = getData();
   // checking valid structure
   if (!checkTokenValidStructure(jwt)) {
-    return {
-      error: 'Token is not a valid structure',
-      statusCode: 401
-    };
+    throw HTTPError(401, 'Token is not a valid structure');
   }
   // check if valid for active sessions
   if (!checkTokenValidSession(jwt)) {
-    return {
-      error: 'Token not for currently logged in session',
-      statusCode: 403
-    };
+    throw HTTPError(403, 'Token not for currently logged in session');
   }
   //
   const authUserId: number = jwtToToken(jwt).userId;
@@ -200,46 +170,28 @@ function adminUpdateUserDetails(jwt: Jwt, email: string, nameFirst: string, name
   const authUserId: number = token.userId;
 
   if (!checkTokenValidStructure(jwt)) {
-    return {
-      error: 'Token is not a valid structure',
-      statusCode: 401
-    };
+    throw HTTPError(401, 'Token is not a valid structure');
   }
 
   if (!checkTokenValidSession(jwt)) {
-    return {
-      error: 'Token not for currently logged in session',
-      statusCode: 403
-    };
+    throw HTTPError(403, 'Token not for currently logged in session');
   }
 
   // Check if email is valid and not used by another user
   if (!validator.isEmail(email) || emailAlreadyUsed(email, authUserId)) {
-    return {
-      error: 'Invalid email or email is already in use',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'Invalid email or email is already in use');
   }
 
   // Check if user's nameFirst is valid
   if (nameFirst.length <= 2 || nameFirst.length >= 20) {
-    return {
-      error: 'Invalid first name',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'Invalid first name');
   }
   if (!checkName(nameFirst) || !checkName(nameLast)) {
-    return {
-      error: 'Name can only contain alphanumeric symbols',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'Name can only contain alphanumeric symbols');
   }
 
   if (nameLast.length <= 2 || nameLast.length >= 20) {
-    return {
-      error: 'Invalid last name',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'Invalid last name');
   }
 
   // Update data only if there were changes
@@ -268,17 +220,11 @@ function adminUpdateUserPassword(jwt: Jwt, oldPassword: string, newPassword: str
 
   // checking valid structure
   if (!checkTokenValidStructure(jwt)) {
-    return {
-      error: 'Token is not a valid structure',
-      statusCode: 401
-    };
+    throw HTTPError(401, 'Token is not a valid structure');
   }
   // check if valid for active sessions
   if (!checkTokenValidSession(jwt)) {
-    return {
-      error: 'Token is not for currently logged in session',
-      statusCode: 403
-    };
+    throw HTTPError(403, 'Token is not for currently logged in session');
   }
 
   const token: Token = jwtToToken(jwt);
@@ -290,33 +236,17 @@ function adminUpdateUserPassword(jwt: Jwt, oldPassword: string, newPassword: str
   if (user) {
     // Check if the old password matches the user's current password
     if (user.password !== oldPassword) {
-      return {
-        error: 'Old password is not correct',
-        statusCode: 400
-      };
+      throw HTTPError(400, 'Old password is not correct');
     }
 
     // Check if the new password has been used before by this user
-    if (user.password === newPassword) {
-      return {
-        error: 'New password cannot be the same as the old password',
-        statusCode: 400
-      };
-    }
-    // Check password has not been used before by this user
-    if (user.prevPassword.includes(newPassword) === true) {
-      return {
-        error: 'New password cannot be the same as the old password',
-        statusCode: 400,
-      };
+    if (user.password === newPassword || user.prevPassword.includes(newPassword) === true) {
+      throw HTTPError(400, 'New password cannot be the same as the old password');
     }
 
     // Check if the new password meets the requirements
-    if (newPassword.length < 8 || !checkPassword(newPassword)) {
-      return {
-        error: 'New password must be at least 8 characters long and contain at least one number and one letter',
-        statusCode: 400
-      };
+    if (!checkPassword(newPassword)) {
+      throw HTTPError(400, 'New password must be at least 8 characters long and contain at least one number and one letter');
     }
 
     // Update the user's password
@@ -325,10 +255,7 @@ function adminUpdateUserPassword(jwt: Jwt, oldPassword: string, newPassword: str
 
     setData(data);
   } else {
-    return {
-      error: 'wtf',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'wtf');
   }
   return {};
 }
@@ -337,10 +264,7 @@ export const adminAuthLogout = (jwt: Jwt): OkObj | ErrorAndStatusCode => {
   const possibleToken = checkJwtValid(jwt);
 
   if (possibleToken.valid === false) {
-    return {
-      error: 'Token is not a valid structure',
-      statusCode: 401
-    };
+    throw HTTPError(401, 'Token is not a valid structure');
   }
 
   const data = getData();
@@ -353,11 +277,7 @@ export const adminAuthLogout = (jwt: Jwt): OkObj | ErrorAndStatusCode => {
     setData(data);
     return {};
   }
-
-  return {
-    error: 'User has already logged out',
-    statusCode: 400
-  };
+  throw HTTPError(400, 'User has already logged out');
 };
 
 export { adminAuthLogin, adminAuthRegister, adminUserDetails, adminUpdateUserDetails, adminUpdateUserPassword };

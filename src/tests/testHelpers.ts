@@ -447,3 +447,49 @@ export const listQuizV2 = (jwt: Jwt): AdminQuizListReturn | ErrorObj => {
 
   return parsedResponse;
 };
+
+export const RequestRemoveQuizV2 = (jwt: Jwt, quizId: number): OkObj | ErrorObj => {
+  const res = request(
+    'DELETE',
+    URL + `v2/admin/quiz/${quizId}`,
+    {
+      headers: {
+        token: jwt.token,
+      }
+    }
+  );
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+  return parsedResponse;
+};
+
+export const infoQuizV2 = (jwt: Jwt, quizId: number): AdminQuizInfo | ErrorObj => {
+  const res = request(
+    'GET',
+    URL + `v2/admin/quiz/${quizId}`,
+    {
+      headers: {
+        token: jwt.token,
+      }
+    }
+  );
+
+  const parsedResponse: AdminQuizInfo | ErrorObj = JSON.parse(res.body.toString());
+  return parsedResponse;
+};
+
+export const updateNameQuizV2 = (jwt: Jwt, name: string, quizId: number): OkObj | ErrorObj => {
+  const res = request(
+    'PUT',
+    URL + `v2/admin/quiz/${quizId}/name`,
+    {
+      json: {
+        name: name
+      },
+      headers: {
+        token: jwt.token
+      }
+    }
+  );
+  const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+  return parsedResponse;
+};

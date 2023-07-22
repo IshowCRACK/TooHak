@@ -9,6 +9,7 @@ import {
   checkQuizIdValidAndTrash, createQuizId
 } from './helper';
 import { jwtToToken } from './token';
+import HTTPError from 'http-errors';
 
 // Update the description of the relevant quiz
 export function adminQuizDescriptionUpdate (jwt: Jwt, description: string, quizId: number): OkObj | ErrorAndStatusCode {
@@ -16,43 +17,28 @@ export function adminQuizDescriptionUpdate (jwt: Jwt, description: string, quizI
 
   // Check valid structure
   if (!checkTokenValidStructure(jwt)) {
-    return {
-      error: 'Token is not a valid structure',
-      statusCode: 401
-    };
+    throw HTTPError(401, 'Token is not a valid structure');
   }
 
   // Check if valid for active sessions
   if (!checkTokenValidSession(jwt)) {
-    return {
-      error: 'Token not for currently logged in session',
-      statusCode: 403
-    };
+    throw HTTPError(403, 'Token not for currently logged in session');
   }
 
   const authUserId: number = jwtToToken(jwt).userId;
 
   // Quiz ID does not refer to a valid quiz
   if (!checkQuizIdValid(quizId)) {
-    return {
-      error: 'Quiz ID does not refer to a valid quiz',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'Quiz ID does not refer to a valid quiz');
   }
 
   // Quiz ID does not refer to a quiz that this user owns
   if (!checkQuizAndUserIdValid(quizId, authUserId)) {
-    return {
-      error: 'Quiz ID does not refer to a quiz that this user owns',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'Quiz ID does not refer to a quiz that this user owns');
   }
 
   if (description.length > 100) {
-    return {
-      error: 'Description must be under 100 characters',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'Description must be under 100 characters');
   }
 
   for (const quiz of data.quizzes) {
@@ -73,29 +59,23 @@ export function adminQuizRemove (jwt: Jwt, quizId: number): OkObj | ErrorAndStat
 
   // Check valid structure
   if (!checkTokenValidStructure(jwt)) {
-    return {
-      error: 'Token is not a valid structure',
-      statusCode: 401
-    };
+    throw HTTPError(401, 'Token is not a valid structure');
   }
   // Check if valid for active sessions
   if (!checkTokenValidSession(jwt)) {
-    return {
-      error: 'Token not for currently logged in session',
-      statusCode: 403
-    };
+    throw HTTPError(403, 'Token not for currently logged in session');
   }
 
   const authUserId: number = jwtToToken(jwt).userId;
 
   // Quiz ID does not refer to a valid quiz
   if (!checkQuizIdValid(quizId)) {
-    return { error: 'Quiz ID does not refer to a valid quiz', statusCode: 400 };
+    throw HTTPError(400, 'Quiz ID does not refer to a valid quiz');
   }
 
   // Quiz ID does not refer to a quiz that this user owns
   if (!checkQuizAndUserIdValid(quizId, authUserId)) {
-    return { error: 'Quiz ID does not refer to a quiz that this user owns', statusCode: 400 };
+    throw HTTPError(400, 'Quiz ID does not refer to a quiz that this user owns');
   }
 
   const userIndex = data.users.findIndex((user) => user.authUserId === authUserId);
@@ -119,17 +99,11 @@ export function adminQuizRemove (jwt: Jwt, quizId: number): OkObj | ErrorAndStat
 export function quizTrash(jwt: Jwt): QuizTrashReturn | ErrorAndStatusCode {
   // Check valid structure
   if (!checkTokenValidStructure(jwt)) {
-    return {
-      error: 'Token is not a valid structure',
-      statusCode: 401
-    };
+    throw HTTPError(401, 'Token is not a valid structure');
   }
   // Check if valid for active sessions
   if (!checkTokenValidSession(jwt)) {
-    return {
-      error: 'Provided token is valid structure, but is not for a currently logged in session',
-      statusCode: 403
-    };
+    throw HTTPError(403, 'Provided token is valid structure, but is not for a currently logged in session');
   }
 
   const data = getData();
@@ -153,44 +127,38 @@ export function adminQuizCreate (jwt: Jwt, name: string, description: string): A
   const data = getData();
   // Check valid structure
   if (!checkTokenValidStructure(jwt)) {
-    return {
-      error: 'Token is not a valid structure',
-      statusCode: 401
-    };
+    throw HTTPError(401, 'Token is not a valid structure');
   }
 
   //  Check if valid for active sessions
   if (!checkTokenValidSession(jwt)) {
-    return {
-      error: 'Token not for currently logged in session',
-      statusCode: 403
-    };
+    throw HTTPError(403, 'Token not for currently logged in session');
   }
 
   // Check name length
   if (name === null || name === '') {
-    return { error: 'A name must be entered', statusCode: 400 };
+    throw HTTPError(400, 'A name must be entered');
   }
 
   if (name.length < 3 || name.length > 30) {
-    return { error: 'Name must be between 3 and 30 characters', statusCode: 400 };
+    throw HTTPError(400, 'Name must be between 3 and 30 characters');
   }
 
   // Check name composition (alphanumeric and spaces)
   if (!checkAlphanumeric(name)) {
-    return { error: 'Must use only alphanumeric characters or spaces in name', statusCode: 400 };
+    throw HTTPError(400, 'Must use only alphanumeric characters or spaces in name');
   }
 
   // Check description length
   if (description.length > 100) {
-    return { error: 'Description must be under 100 characters', statusCode: 400 };
+    throw HTTPError(400, 'Description must be under 100 characters');
   }
 
   const authUserId: number = jwtToToken(jwt).userId;
 
   // Check if quiz name already in use by this user
   if (checkQuizNameUsed(jwt, name)) {
-    return { error: 'Quiz name is already in use', statusCode: 400 };
+    throw HTTPError(400, 'Quiz name is already in use');
   }
 
   const quizId = createQuizId();
@@ -219,18 +187,12 @@ export function adminQuizCreate (jwt: Jwt, name: string, description: string): A
 export function adminQuizList (jwt: Jwt): AdminQuizListReturn | ErrorAndStatusCode {
   // checking valid structure
   if (!checkTokenValidStructure(jwt)) {
-    return {
-      error: 'Token is not a valid structure',
-      statusCode: 401
-    };
+    throw HTTPError(401, 'Token is not a valid structure');
   }
 
   // check if valid for active sessions
   if (!checkTokenValidSession(jwt)) {
-    return {
-      error: 'Token not for currently logged in session',
-      statusCode: 403
-    };
+    throw HTTPError(403, 'Token not for currently logged in session');
   }
 
   const data = getData();
@@ -259,59 +221,38 @@ export function adminQuizNameUpdate (jwt: Jwt, name: string, quizId: number): Ok
 
   //  check valid structure
   if (!checkTokenValidStructure(jwt)) {
-    return {
-      error: 'Token is not a valid structure',
-      statusCode: 401
-    };
+    throw HTTPError(401, 'Token is not a valid structure');
   }
 
   //  check if valid for active sessions
   if (!checkTokenValidSession(jwt)) {
-    return {
-      error: 'Token not for currently logged in session',
-      statusCode: 403
-    };
+    throw HTTPError(403, 'Token not for currently logged in session');
   }
   const authUserId: number = jwtToToken(jwt).userId;
 
   // Quiz ID does not refer to a valid quiz
   if (!checkQuizIdValid(quizId)) {
-    return {
-      error: 'Quiz ID does not refer to a valid quiz',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'Quiz ID does not refer to a valid quiz');
   }
 
   // Quiz ID does not refer to a quiz that this user owns
   if (!checkQuizAndUserIdValid(quizId, authUserId)) {
-    return {
-      error: 'Quiz ID does not refer to a quiz that this user owns',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'Quiz ID does not refer to a quiz that this user owns');
   }
 
   // Check name composition (alphanumeric and spaces)
   if (!checkAlphanumeric(name)) {
-    return {
-      error: 'Must use only alphanumeric characters or spaces in name',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'Must use only alphanumeric characters or spaces in name');
   }
 
   // Check name length
   if (name.length < 3 || name.length > 30) {
-    return {
-      error: 'Name must be between 3 and 30 characters',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'Name must be between 3 and 30 characters');
   }
 
   // Check if quiz name is already used by user
   if (checkQuizNameUsed(jwt, name)) {
-    return {
-      error: 'Quiz name is already in use',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'Quiz name is already in use');
   }
 
   for (const quiz of data.quizzes) {
@@ -332,36 +273,24 @@ export function adminQuizInfo (jwt: Jwt, quizId: number): AdminQuizInfo | ErrorA
 
   // Check valid structure
   if (!checkTokenValidStructure(jwt)) {
-    return {
-      error: 'Token is not a valid structure',
-      statusCode: 401
-    };
+    throw HTTPError(401, 'Token is not a valid structure');
   }
 
   // Check if valid for active sessions
   if (!checkTokenValidSession(jwt)) {
-    return {
-      error: 'Token not for currently logged in session',
-      statusCode: 403
-    };
+    throw HTTPError(403, 'Token not for currently logged in session');
   }
 
   const authUserId: number = jwtToToken(jwt).userId;
 
   // Quiz ID does not refer to a valid quiz
   if (!checkQuizIdValid(quizId)) {
-    return {
-      error: 'Quiz ID does not refer to a valid quiz',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'Quiz ID does not refer to a valid quiz');
   }
 
   // Quiz ID does not refer to a quiz that this user owns
   if (!checkQuizAndUserIdValid(quizId, authUserId)) {
-    return {
-      error: 'Quiz ID does not refer to a quiz that this user owns',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'Quiz ID does not refer to a quiz that this user owns');
   }
 
   // if no errors
@@ -385,34 +314,22 @@ export function adminQuizInfo (jwt: Jwt, quizId: number): AdminQuizInfo | ErrorA
 export function adminQuizRestore(jwt: Jwt, quizId: number): OkObj | ErrorAndStatusCode {
   // check valid structure
   if (!checkTokenValidStructure(jwt)) {
-    return {
-      error: 'Token is not a valid structure',
-      statusCode: 401
-    };
+    throw HTTPError(401, 'Token is not a valid structure');
   }
 
   // check if valid for active sessions
   if (!checkTokenValidSession(jwt)) {
-    return {
-      error: 'Provided token is valid structure, but is not for a currently logged in session',
-      statusCode: 403
-    };
+    throw HTTPError(403, 'Provided token is valid structure, but is not for a currently logged in session');
   }
   const token: Token = jwtToToken(jwt);
   const data = getData();
 
   if (!checkQuizIdValidAndTrash(quizId)) {
-    return {
-      error: 'Quiz ID does not refer to a valid quiz',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'Quiz ID does not refer to a valid quiz');
   }
 
   if (!checkQuizIdAndUserIdValidAndTrash(quizId, token.userId)) {
-    return {
-      error: 'Quiz ID does not refer to a quiz that this user owns',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'Quiz ID does not refer to a quiz that this user owns');
   }
 
   const user: User = data.users.find((user) => user.authUserId === token.userId);
@@ -421,10 +338,7 @@ export function adminQuizRestore(jwt: Jwt, quizId: number): OkObj | ErrorAndStat
   );
 
   if (deletedQuizIndex === -1) {
-    return {
-      error: 'Quiz ID refers to a quiz that is not currently in the trash',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'Quiz ID refers to a quiz that is not currently in the trash');
   }
 
   const deletedQuiz = user.deletedQuizzes[deletedQuizIndex];
@@ -444,18 +358,12 @@ export function adminQuizEmptyTrash(jwt: Jwt, quizIds: number[]): OkObj | ErrorA
   // todo: ask about if theres an error, you don't delete any of them
   // Check valid structure
   if (!checkTokenValidStructure(jwt)) {
-    return {
-      error: 'Token is not a valid structure',
-      statusCode: 401
-    };
+    throw HTTPError(401, 'Token is not a valid structure');
   }
 
   // Check if valid for active sessions
   if (!checkTokenValidSession(jwt)) {
-    return {
-      error: 'Provided token is valid structure, but is not for a currently logged in session',
-      statusCode: 403
-    };
+    throw HTTPError(403, 'Provided token is valid structure, but is not for a currently logged in session');
   }
 
   const token: Token = jwtToToken(jwt);
@@ -463,18 +371,12 @@ export function adminQuizEmptyTrash(jwt: Jwt, quizIds: number[]): OkObj | ErrorA
 
   // if at least one quiz doesn't have a valid quizId
   if (quizIds.find((quizId: number) => !checkQuizIdValidAndTrash(quizId)) !== undefined) {
-    return {
-      error: 'One or more of the Quiz IDs is not a valid quiz',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'One or more of the Quiz IDs is not a valid quiz');
   }
 
   // if at least one quiz doesn't have a valid correspondent user
   if (quizIds.find((quizId: number) => !checkQuizIdAndUserIdValidAndTrash(quizId, token.userId)) !== undefined) {
-    return {
-      error: 'One or more of the Quiz IDs refers to a quiz that this current user does not own',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'One or more of the Quiz IDs refers to a quiz that this current user does not own');
   }
 
   const user: User = data.users.find((user) => user.authUserId === token.userId);
@@ -483,10 +385,7 @@ export function adminQuizEmptyTrash(jwt: Jwt, quizIds: number[]): OkObj | ErrorA
     // Check if each quiz is in deleted quizzes
     if (user.deletedQuizzes.find((deletedQuiz: Quiz) => deletedQuiz.quizId === quizId) === undefined) {
       // Returns error if at least one quiz isn't in deleted quizes
-      return {
-        error: 'One or more of the Quiz IDs is not currently in the trash',
-        statusCode: 400
-      };
+      throw HTTPError(400, 'One or more of the Quiz IDs is not currently in the trash');
     }
   }
 
@@ -509,52 +408,31 @@ export function adminQuizTransfer(jwt: Jwt, email: string, quizId: number): OkOb
   const targetUser = data.users.find((user: User) => user.email === email);
 
   if (!checkTokenValidStructure(jwt)) {
-    return {
-      error: 'Token is not a valid structure',
-      statusCode: 401
-    };
+    throw HTTPError(401, 'Token is not a valid structure');
   }
 
   if (!checkTokenValidSession(jwt)) {
-    return {
-      error: 'Token not for currently logged in session',
-      statusCode: 403
-    };
+    throw HTTPError(403, 'Token not for currently logged in session');
   }
 
   if (!checkQuizIdValid(quizId)) {
-    return {
-      error: 'Quiz ID does not refer to a valid quiz',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'Quiz ID does not refer to a valid quiz');
   }
 
   if (!checkQuizAndUserIdValid(quizId, jwtToToken(jwt).userId)) {
-    return {
-      error: 'Quiz ID does not refer to a quiz that this user owns',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'Quiz ID does not refer to a quiz that this user owns');
   }
 
   if (!targetUser) {
-    return {
-      error: 'userEmail is not a real user',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'userEmail is not a real user');
   }
 
   if (targetUser.authUserId === jwtToToken(jwt).userId) {
-    return {
-      error: 'userEmail is the current logged in user',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'userEmail is the current logged in user');
   }
 
   if (checkNameUsedInQuiz(quizId, targetUser.authUserId)) {
-    return {
-      error: 'Quiz ID refers to a quiz that has a name that is already used by the target user',
-      statusCode: 400
-    };
+    throw HTTPError(400, 'Quiz ID refers to a quiz that has a name that is already used by the target user');
   }
 
   // Update the adminQuizId to the target user's authUserId
