@@ -1,5 +1,5 @@
 import request from 'sync-request';
-import { AdminQuizCreate, AdminQuizListReturn, AdminUserDetailsReturn, ErrorObj, Jwt, OkObj, Token, AdminQuizInfo, AdminQuestionDuplicate, QuizTrashReturn, QuestionBody } from '../../interfaces/interfaces';
+import { AdminQuizCreate, AdminQuizListReturn, AdminUserDetailsReturn, ErrorObj, Jwt, OkObj, Token, AdminQuizInfo, AdminQuestionDuplicate, QuizTrashReturn, QuestionBody,QuizQuestionCreate } from '../../interfaces/interfaces';
 import { jwtToToken } from '../token';
 import { getUrl } from '../helper';
 
@@ -345,7 +345,12 @@ export const updateUserDetailsPassword = (jwt: Jwt, oldPassword: string, newPass
   return parsedResponse;
 };
 
+
+
+
 //  //////////////////////////////// V2 ROUTES /////////////////////////////////////
+
+
 export const logoutUserHandlerV2 = (jwt: Jwt) => {
   const res = request(
     'POST',
@@ -444,6 +449,27 @@ export const listQuizV2 = (jwt: Jwt): AdminQuizListReturn | ErrorObj => {
     }
   );
   const parsedResponse: AdminQuizListReturn | ErrorObj = JSON.parse(res.body.toString());
+
+  return parsedResponse;
+};
+
+
+export const createQuizQuestionHandlerV2 = (quizId: number, jwt: Jwt, questionBody: QuestionBody): 
+QuizQuestionCreate | ErrorObj => {
+  const res = request(
+    'POST',
+    URL + `v1/admin/quiz/${quizId}/question`,
+    {
+      json: {
+        questionBody: questionBody
+      }, 
+      headers: {
+        token: jwt.token
+      }
+    }
+  );
+
+  const parsedResponse: QuizQuestionCreate | ErrorObj = JSON.parse(res.body.toString());
 
   return parsedResponse;
 };

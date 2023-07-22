@@ -5,6 +5,7 @@ import {
 } from './helper';
 import { jwtToToken } from './token';
 import { getData, setData } from './dataStore';
+import HTTPError from 'http-errors';
 
 export function quizCreateQuestion(jwt: Jwt, questionBody: QuestionBody, quizId: number): QuizQuestionCreate | ErrorAndStatusCode {
   if (!checkTokenValidStructure(jwt)) {
@@ -436,3 +437,6 @@ export function quizMoveQuestion(quizId: number, questionId: number, newPosition
   setData(data);
   return {};
 }
+
+
+///////////////////////////////// V2 FUNCTIONS /////////////////////////////////////////////

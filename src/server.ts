@@ -348,6 +348,16 @@ app.get('/v2/admin/quiz/list', (req: Request, res: Response) => {
   res.status(200).json(response);
 });
 
+app.post('/v2/admin/quiz/:quizId/question', (req: Request, res: Response) => {
+  const quizId = parseInt(req.params.quizId);
+  const token: string = req.header('token') as string;
+  const { questionBody } = req.body;
+  const response = quizCreateQuestion({ token: token }, questionBody, quizId);
+  if ('error' in response) {
+    return res.status(response.statusCode).json(formatError(response));
+  }
+  res.status(200).json(response);
+});
 // ====================================================================
 //  ================= WORK IS DONE ABOVE THIS LINE ===================
 // ====================================================================

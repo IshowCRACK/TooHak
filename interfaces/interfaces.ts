@@ -47,6 +47,7 @@ export interface QuestionBody {
     duration: number;
     points: number;
     answers: Answer[];
+    thumbnailUrl: string;
 }
 
 export interface Answer {
