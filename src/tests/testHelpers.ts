@@ -458,7 +458,7 @@ export const createQuizQuestionHandlerV2 = (quizId: number, jwt: Jwt, questionBo
 QuizQuestionCreate | ErrorObj => {
   const res = request(
     'POST',
-    URL + `v1/admin/quiz/${quizId}/question`,
+    URL + `v2/admin/quiz/${quizId}/question`,
     {
       json: {
         questionBody: questionBody

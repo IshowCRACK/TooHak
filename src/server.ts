@@ -12,7 +12,7 @@ import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQu
 import { clear } from './other';
 import { formatError } from './helper';
 import { getData } from './dataStore';
-import { quizCreateQuestion, adminQuizDelete, quizDuplicateQuestion, quizMoveQuestion, quizUpdateQuestion } from './question';
+import { quizCreateQuestion, adminQuizDelete, quizDuplicateQuestion, quizMoveQuestion, quizUpdateQuestion, quizCreateQuestionV2 } from './question';
 
 // Set up web app
 const app = express();
@@ -352,11 +352,8 @@ app.post('/v2/admin/quiz/:quizId/question', (req: Request, res: Response) => {
   const quizId = parseInt(req.params.quizId);
   const token: string = req.header('token') as string;
   const { questionBody } = req.body;
-  const response = quizCreateQuestion({ token: token }, questionBody, quizId);
-  if ('error' in response) {
-    return res.status(response.statusCode).json(formatError(response));
-  }
-  res.status(200).json(response);
+  res.json(quizCreateQuestionV2({ token: token }, questionBody, quizId));
+
 });
 // ====================================================================
 //  ================= WORK IS DONE ABOVE THIS LINE ===================

@@ -63,7 +63,7 @@ describe('Tests related to creating a Quiz Question', () => {
 
   describe('Unsuccessful Tests', () => {
     test('QuizId does not refer to valid quiz', () => {
-        expect(() => createQuizQuestionHandlerV2(5, userJwt, defaultQuestionBody)).toThrow(HTTPError[400]);
+        expect(() => createQuizQuestionHandlerV2(-1, userJwt, defaultQuestionBody)).toThrow(HTTPError[400]);
     });
 
     test('QuizId does not refer to a valid quiz that this user owns', () => {
