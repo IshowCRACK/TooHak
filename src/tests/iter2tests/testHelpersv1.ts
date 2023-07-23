@@ -357,7 +357,7 @@ export const createQuizQuestionHandler = (quizId: number, jwt: Jwt, questionBody
     }
   );
 
-const parsedResponse: QuizQuestionCreate | ErrorObj = JSON.parse(res.body.toString());
+  const parsedResponse: QuizQuestionCreate | ErrorObj = JSON.parse(res.body.toString());
 
   return parsedResponse;
 };

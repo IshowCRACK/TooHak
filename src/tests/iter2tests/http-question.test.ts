@@ -1,10 +1,7 @@
 import { AdminQuizCreate, ErrorObj, Jwt, QuestionBody, QuizQuestionCreate, Token, AdminQuizInfo, AdminQuestionDuplicate } from '../../../interfaces/interfaces';
-import { getUrl } from '../../helper';
 import { RequestCreateQuiz, clearUsers, registerUser, duplicateQuiz, infoQuiz, logoutUserHandler, deleteQuestion, moveQuestion, updateQuiz, createQuizQuestionHandler } from './testHelpersv1';
 import { tokenToJwt } from '../../token';
 // import { token } from 'morgan';
-
-const URL: string = getUrl();
 
 beforeEach(() => {
   clearUsers();

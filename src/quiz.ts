@@ -6,9 +6,9 @@ import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkQuizAndUserIdValid, checkQuizIdValid, checkQuizNameUsed,
   checkTokenValidStructure, checkTokenValidSession, checkNameUsedInQuiz, checkQuizIdAndUserIdValidAndTrash,
-  checkQuizIdValidAndTrash, createQuizId
+  checkQuizIdValidAndTrash, createQuizId, checkMaxNumSessions, checkQuizHasQuestions
 } from './helper';
-import { jwtToToken } from './token';
+import { createQuizSession, jwtToToken } from './token';
 import HTTPError from 'http-errors';
 
 // Update the description of the relevant quiz
@@ -444,5 +444,35 @@ export function adminQuizTransfer(jwt: Jwt, email: string, quizId: number): OkOb
 }
 
 export function quizStartSession(jwt: Jwt, autoStartNum: number, quizId: number) {
-  throw HTTPError(400, 'Stub');
+  const token = jwtToToken(jwt);
+
+  if (!checkQuizIdValid(quizId)) {
+    throw HTTPError(400, 'Quiz ID does not refer to a valid quiz');
+  }
+
+  if (!checkQuizAndUserIdValid(quizId, jwtToToken(jwt).userId)) {
+    throw HTTPError(400, 'Quiz ID does not refer to a quiz that this user owns');
+  }
+
+  if (autoStartNum > 50) {
+    throw HTTPError(400, 'autoStartNum is a number greater than 50');
+  }
+
+  if (!checkMaxNumSessions(token.userId)) {
+    throw HTTPError(400, 'More than 10 active sessions');
+  }
+
+  if (!checkQuizHasQuestions(quizId)) {
+    throw HTTPError(400, 'The quiz does not have any questions in it');
+  }
+
+  const quizSession = createQuizSession(token.userId, quizId, autoStartNum);
+
+  const data = getData();
+  data.quizSessions.push(quizSession);
+  setData(data);
+
+  return {
+    sessionId: quizSession.sessionId
+  };
 }

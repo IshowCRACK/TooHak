@@ -2,7 +2,8 @@
 export interface Data {
     users: User[];
     quizzes: Quiz[];
-    session: Token[];
+    session: Token[]; // array of all people that are currently logged in
+    quizSessions: QuizSessionAdmin[];
     metaData: MetaData;
 }
 
@@ -22,10 +23,56 @@ export interface User {
     prevPassword: string[];
 }
 
+export interface QuizSessionAdmin extends QuizSession {
+    sessionId: number;
+    authUserId: number;
+    autoStartNum: number;
+}
+export interface QuizSession {
+    state: States;
+    atQuestion: number;
+    players: string[];
+    metadata: QuizMetadata[];
+}
+
+
+export enum States {
+   LOBBY = "LOBBY",
+   QUESTION_COUNTDOWN = "QUESTION_COUNTDOWN",
+   QUESTION_OPEN = "QUESTION_OPEN",
+   QUESTION_CLOSE = "QUESTION_CLOSE",
+   ANSWER_SHOW = "ANSWER_SHOW",
+   FINAL_RESULTS = "FINAL_RESULTS",
+   END = "END"
+}
+
+export enum Actions {
+    NEXT_QUESTION = "NEXT_QUESTION",
+    GO_TO_ANSWER = "GO_TO_ANSWER",
+    GO_TO_FINAL_RESULTS = "GO_TO_FINAL_RESULTS",
+    END = "END"
+}
+
+// export interface QuestionResults {
+//     questionId: number;
+//     questionCorrectBreakdown: QuestionCorrectBreakdown[];
+//     averageAnswerTime: number;
+//     percentCorrect: number;
+// }
+
+// export interface QuestionCorrectBreakdown {
+//     answerId: number;
+//     playersCorrect: string[];
+// }
+
 export type JwtToken = string;
 
 export interface Quiz extends AdminQuizInfo {
     adminQuizId: number;
+}
+
+export interface QuizMetadata extends AdminQuizInfo {
+    thumbnailUrl: string;
 }
 export interface AdminQuizInfo {
     quizId: number;
@@ -40,6 +87,7 @@ export interface AdminQuizInfo {
 
 export interface Question extends QuestionBody {
     questionId: number;
+    thumbnailUrl?: string; // Make sure to put thumbnail in as actual parameter to whoever is doing it
 }
 
 export interface QuestionBody {

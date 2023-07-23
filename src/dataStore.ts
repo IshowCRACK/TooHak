@@ -8,6 +8,7 @@ let data: Data = {
   users: [],
   quizzes: [],
   session: [],
+  quizSessions: [],
   metaData: {
     totalUsers: 0,
     totalQuizzes: 0

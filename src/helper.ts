@@ -1,4 +1,4 @@
-import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer, Question, User } from '../interfaces/interfaces';
+import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer, Question, User, States } from '../interfaces/interfaces';
 import { getData } from './dataStore';
 import { adminQuizList } from './quiz';
 import { checkJwtValid, jwtToToken } from './token';
@@ -436,4 +436,31 @@ export function checkQuizIdAndUserIdValidAndTrash(quizId: number, userId: number
   if (user.deletedQuizzes.find((quiz: Quiz) => quiz.quizId === quizId) !== undefined) return true;
 
   return false;
+}
+
+// Checks if there is a maximum of 10 sessions not in end state
+export function checkMaxNumSessions(userId: number): boolean {
+  const data = getData();
+
+  let numActiveSessions = 0;
+  for (const quizSession of data.quizSessions) {
+    if (quizSession.state !== States.END && quizSession.authUserId === userId) {
+      numActiveSessions++;
+    }
+  }
+
+  console.log(numActiveSessions);
+  return numActiveSessions <= 10;
+}
+
+// Checks if there is at least 1 question in the quiz
+export function checkQuizHasQuestions(quizId: number): boolean {
+  const data = getData();
+
+  const quiz: Quiz = data.quizzes.find((quiz: Quiz) => quiz.quizId === quizId);
+
+  // Returns false if there is no questions
+  if (quiz.questions.length === 0) return false;
+
+  return true;
 }

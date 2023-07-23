@@ -60,6 +60,6 @@ export const updateNameQuizV2 = (jwt: Jwt, name: string, quizId: number): OkObj 
   return requestHelper('PUT', `v2/admin/quiz/${quizId}/name`, { name }, jwt);
 };
 
-export const startSessionQuiz = (jwt: Jwt, autoStartNum: number, quizId: number): OkSessionObj | ErrorObj  => {
-  return requestHelper('POST', `v1/admin/quiz/${quizId}/session/start`, {autoStartNum}, jwt);
-}
+export const startSessionQuiz = (jwt: Jwt, autoStartNum: number, quizId: number): OkSessionObj | ErrorObj => {
+  return requestHelper('POST', `v1/admin/quiz/${quizId}/session/start`, { autoStartNum }, jwt);
+};

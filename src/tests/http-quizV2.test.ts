@@ -1,4 +1,4 @@
-import { ErrorObj, Token, AdminQuizCreate, Jwt, OkObj, AdminQuizInfo, QuizQuestionCreate } from '../../interfaces/interfaces';
+import { ErrorObj, Token, AdminQuizCreate, Jwt, OkObj, AdminQuizInfo } from '../../interfaces/interfaces';
 import { tokenToJwt } from '../token';
 import { registerUser, clearUsers, createQuizQuestionHandler } from './iter2tests/testHelpersv1';
 import { RequestCreateQuizV2, RequestRemoveQuizV2, infoQuizV2, listQuizV2, logoutUserHandlerV2, startSessionQuiz, updateNameQuizV2 } from './testhelpersV2';
@@ -389,13 +389,12 @@ describe('Quiz Update NameV2', () => {
   });
 });
 
-describe('Create new session', () => {
+describe('Start new session', () => {
   let userJwt: Jwt;
   let userJwt2: Jwt;
   let userToken: Token;
   let userToken2: Token;
   let quizId: number;
-  let questionId: number;
 
   beforeEach(() => {
     userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
@@ -404,8 +403,7 @@ describe('Create new session', () => {
 
     userJwt2 = tokenToJwt(userToken2);
     quizId = (RequestCreateQuizV2(userJwt, 'Countries of the world', 'Quiz on all countries') as AdminQuizCreate).quizId;
-    questionId = (createQuizQuestionHandler(quizId, userJwt, defaultQuestionBody) as QuizQuestionCreate).questionId;
-
+    createQuizQuestionHandler(quizId, userJwt, defaultQuestionBody);
   });
 
   describe('Unsucessful cases', () => {
@@ -419,8 +417,8 @@ describe('Create new session', () => {
       expect(startSessionQuiz(userJwt2, 0, quizId)).toEqual(
         { error: 'Quiz ID does not refer to a quiz that this user owns' }
       );
-    });  
-    
+    });
+
     test('autoStartNum is greater than 50', () => {
       expect(startSessionQuiz(userJwt, 51, quizId)).toEqual({
         error: 'autoStartNum is a number greater than 50'
@@ -428,14 +426,13 @@ describe('Create new session', () => {
     });
 
     test('More than 10 active sessions', () => {
-      for (let i = 0; i < 10; ++i ) {
+      for (let i = 0; i <= 10; ++i) {
         expect(startSessionQuiz(userJwt, 30, quizId)).toHaveProperty('sessionId');
       }
 
       expect(startSessionQuiz(userJwt, 30, quizId)).toEqual({
         error: 'More than 10 active sessions'
       });
-
     });
 
     test('quiz does not have any questions in it', () => {
@@ -444,7 +441,6 @@ describe('Create new session', () => {
         error: 'The quiz does not have any questions in it'
       });
     });
-
   });
 
   describe('Successful cases', () => {
