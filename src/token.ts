@@ -1,4 +1,4 @@
-import { Data, Jwt, QuizSessionAdmin, States, Token } from '../interfaces/interfaces';
+import { Data, Jwt, Quiz, QuizSessionAdmin, States, Token } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import jsonwebtoken, { JwtPayload } from 'jsonwebtoken';
 
@@ -108,6 +108,10 @@ export const checkJwtValid = (jwt: Jwt) => {
 export const createQuizSession = (authUserId: number, quizId: number, autoStartNum: number): QuizSessionAdmin => {
   const sessionId: number = parseInt(createSessionId());
 
+  const data = getData();
+
+  const quiz: Quiz = data.quizzes.find((quiz: Quiz) => quiz.quizId === quizId);
+
   const quizSession: QuizSessionAdmin = {
     sessionId: sessionId,
     authUserId: authUserId,
@@ -115,7 +119,10 @@ export const createQuizSession = (authUserId: number, quizId: number, autoStartN
     state: States.LOBBY,
     atQuestion: 0,
     players: [],
-    metadata: []
+    metadata: {
+      thumbnailUrl: 'Some thumbnail url.com.au',
+      ...quiz
+    } // todo: Add thumbnail to whoever doing it.
   };
 
   return quizSession;

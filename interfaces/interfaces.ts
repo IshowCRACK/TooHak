@@ -32,7 +32,7 @@ export interface QuizSession {
     state: States;
     atQuestion: number;
     players: string[];
-    metadata: QuizMetadata[];
+    metadata: QuizMetadata;
 }
 
 
@@ -72,7 +72,7 @@ export interface Quiz extends AdminQuizInfo {
 }
 
 export interface QuizMetadata extends AdminQuizInfo {
-    thumbnailUrl: string;
+    thumbnailUrl?: string;
 }
 export interface AdminQuizInfo {
     quizId: number;
