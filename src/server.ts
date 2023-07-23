@@ -8,7 +8,7 @@ import YAML from 'yaml';
 import sui from 'swagger-ui-express';
 import fs from 'fs';
 import { adminAuthRegister, adminAuthLogin, adminAuthLogout, adminUserDetails, adminUpdateUserDetails, adminUpdateUserPassword } from './auth';
-import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash, adminQuizRestore, adminQuizEmptyTrash } from './quiz';
+import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash, adminQuizRestore, adminQuizEmptyTrash, quizStartSession } from './quiz';
 import { clear } from './other';
 import { formatError } from './helper';
 import { getData } from './dataStore';
@@ -287,20 +287,12 @@ app.post('/v2/admin/auth/logout', (req: Request, res: Response) => {
   const token: string = req.header('token') as string;
   const response = adminAuthLogout({ token: token });
 
-  if ('error' in response) {
-    return res.status(response.statusCode).json(formatError(response));
-  }
-
   res.status(200).json(response);
 });
 
 app.get('/v2/admin/user/details', (req: Request, res: Response) => {
   const token: string = req.header('token') as string;
   const response = adminUserDetails({ token: token });
-
-  if ('error' in response) {
-    return res.status(response.statusCode).json(formatError(response));
-  }
 
   res.status(200).json(response);
 });
@@ -309,9 +301,7 @@ app.put('/v2/admin/user/details', (req: Request, res: Response) => {
   const token: string = req.header('token') as string;
   const { email, nameFirst, nameLast } = req.body;
   const response = adminUpdateUserDetails({ token: token }, email, nameFirst, nameLast);
-  if ('error' in response) {
-    return res.status(response.statusCode).json(formatError(response));
-  }
+
   res.status(200).json(response);
 });
 
@@ -319,9 +309,6 @@ app.put('/v2/admin/user/password', (req: Request, res: Response) => {
   const token: string = req.header('token') as string;
   const { oldPassword, newPassword } = req.body;
   const response = adminUpdateUserPassword({ token: token }, oldPassword, newPassword);
-  if ('error' in response) {
-    return res.status(response.statusCode).json(formatError(response));
-  }
 
   res.status(200).json(response);
 });
@@ -330,9 +317,6 @@ app.post('/v2/admin/quiz', (req: Request, res: Response) => {
   const token: string = req.header('token') as string;
   const { name, description } = req.body;
   const response = adminQuizCreate({ token: token }, name, description);
-  if ('error' in response) {
-    return res.status(response.statusCode).json(formatError(response));
-  }
 
   res.status(200).json(response);
 });
@@ -340,9 +324,6 @@ app.post('/v2/admin/quiz', (req: Request, res: Response) => {
 app.get('/v2/admin/quiz/list', (req: Request, res: Response) => {
   const token: string = req.header('token') as string;
   const response = adminQuizList({ token: token });
-  if ('error' in response) {
-    return res.status(response.statusCode).json(formatError(response));
-  }
 
   res.status(200).json(response);
 });
@@ -351,9 +332,6 @@ app.delete('/v2/admin/quiz/:quizId', (req: Request, res: Response) => {
   const quizId = parseInt(req.params.quizId);
   const token: string = req.header('token') as string;
   const response = adminQuizRemove({ token: token }, quizId);
-  if ('error' in response) {
-    return res.status(response.statusCode).json(formatError(response));
-  }
 
   res.status(200).json(response);
 });
@@ -362,9 +340,6 @@ app.get('/v2/admin/quiz/:quizId', (req: Request, res: Response) => {
   const token: string = req.header('token') as string;
   const quizId = parseInt(req.params.quizId);
   const response = adminQuizInfo({ token: token }, quizId);
-  if ('error' in response) {
-    return res.status(response.statusCode).json(formatError(response));
-  }
 
   res.status(200).json(response);
 });
@@ -374,9 +349,16 @@ app.put('/v2/admin/quiz/:quizId/name', (req: Request, res: Response) => {
   const token: string = req.header('token') as string;
   const { name } = req.body;
   const response = adminQuizNameUpdate({ token: token }, name, quizId);
-  if ('error' in response) {
-    return res.status(response.statusCode).json(formatError(response));
-  }
+
+  res.status(200).json(response);
+});
+
+app.post('/v1/admin/quiz/:quizId/session/start', (req: Request, res: Response) => {
+  const quizId = parseInt(req.params.quizId);
+  const token: string = req.header('token') as string;
+  const { autoStartNum } = req.body;
+  const response = quizStartSession({ token: token }, parseInt(autoStartNum), quizId);
+
   res.status(200).json(response);
 });
 

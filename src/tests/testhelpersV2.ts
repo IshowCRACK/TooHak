@@ -1,5 +1,5 @@
 import request, { HttpVerb } from 'sync-request';
-import { AdminQuizCreate, AdminQuizListReturn, ErrorObj, Jwt, OkObj, AdminQuizInfo } from '../../interfaces/interfaces';
+import { AdminQuizCreate, AdminQuizListReturn, ErrorObj, Jwt, OkObj, AdminQuizInfo, OkSessionObj } from '../../interfaces/interfaces';
 import { getUrl } from '../helper';
 
 const URL: string = getUrl();
@@ -58,4 +58,8 @@ export const infoQuizV2 = (jwt: Jwt, quizId: number): AdminQuizInfo | ErrorObj =
 
 export const updateNameQuizV2 = (jwt: Jwt, name: string, quizId: number): OkObj | ErrorObj => {
   return requestHelper('PUT', `v2/admin/quiz/${quizId}/name`, { name }, jwt);
+};
+
+export const startSessionQuiz = (jwt: Jwt, autoStartNum: number, quizId: number): OkSessionObj | ErrorObj => {
+  return requestHelper('POST', `v1/admin/quiz/${quizId}/session/start`, { autoStartNum }, jwt);
 };

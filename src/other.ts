@@ -13,6 +13,7 @@ function clear (): ClearReturn {
   data.users = [];
   data.quizzes = [];
   data.session = [];
+  data.quizSessions = [];
   data.metaData.totalUsers = 0;
   data.metaData.totalQuizzes = 0;
 

@@ -1,5 +1,5 @@
 import request from 'sync-request';
-import { AdminQuizCreate, AdminQuizListReturn, AdminUserDetailsReturn, ErrorObj, Jwt, OkObj, Token, AdminQuizInfo, AdminQuestionDuplicate, QuizTrashReturn, QuestionBody } from '../../../interfaces/interfaces';
+import { AdminQuizCreate, AdminQuizListReturn, AdminUserDetailsReturn, ErrorObj, Jwt, OkObj, Token, AdminQuizInfo, AdminQuestionDuplicate, QuizTrashReturn, QuestionBody, QuizQuestionCreate } from '../../../interfaces/interfaces';
 import { jwtToToken } from '../../token';
 import { getUrl } from '../../helper';
 
@@ -342,5 +342,22 @@ export const updateUserDetailsPassword = (jwt: Jwt, oldPassword: string, newPass
     }
   );
   const parsedResponse: OkObj | ErrorObj = JSON.parse(res.body.toString());
+  return parsedResponse;
+};
+
+export const createQuizQuestionHandler = (quizId: number, jwt: Jwt, questionBody: QuestionBody) => {
+  const res = request(
+    'POST',
+    URL + `v1/admin/quiz/${quizId}/question`,
+    {
+      json: {
+        token: jwt.token,
+        questionBody: questionBody
+      }
+    }
+  );
+
+  const parsedResponse: QuizQuestionCreate | ErrorObj = JSON.parse(res.body.toString());
+
   return parsedResponse;
 };
