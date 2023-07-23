@@ -14,7 +14,7 @@ import HTTPError from 'http-errors';
   * @param {string} nameLast - Users last name
   * @returns {{authUserId: number} | {error: string}} - Returns an integer, authUserId that is unique to the user
 */
-function adminAuthRegister (email: string, password: string, nameFirst: string, nameLast: string): Jwt | ErrorAndStatusCode {
+export function adminAuthRegister (email: string, password: string, nameFirst: string, nameLast: string): Jwt | ErrorAndStatusCode {
   const data = getData();
 
   // checking if any parts are null
@@ -90,17 +90,14 @@ function adminAuthRegister (email: string, password: string, nameFirst: string, 
   *
   * @returns {{authUserId: number} | {error: string}} - returns an integer, authUserId that is unique to the user
 */
-function adminAuthLogin (email: string, password: string): Jwt | ErrorAndStatusCode {
+export function adminAuthLogin (email: string, password: string): Jwt | ErrorAndStatusCode {
   const data = getData();
 
   // loop through users array from dataStore
   for (const user of data.users) {
     if (user.email === email && user.password === password) {
       // add successful logins for all times & change failed password
-      console.log('EEYEYYE');
-      console.log(data);
       user.numSuccessLogins++;
-      console.log(data);
       user.numFailedPasswordsSinceLastLogin = 0;
       setData(data);
 
@@ -124,7 +121,7 @@ function adminAuthLogin (email: string, password: string): Jwt | ErrorAndStatusC
   *
   * @returns {{user: {userId: number, name: string, email: string, numSuccessfulLogins: number, numFailedPasswordsSinceLastLogin: number}} | {error: string}} - Returns an object of User details
 */
-function adminUserDetails (jwt: Jwt): AdminUserDetailsReturn | ErrorAndStatusCode {
+export function adminUserDetails (jwt: Jwt): AdminUserDetailsReturn | ErrorAndStatusCode {
   const data: Data = getData();
   // checking valid structure
   if (!checkTokenValidStructure(jwt)) {
@@ -164,7 +161,7 @@ function adminUserDetails (jwt: Jwt): AdminUserDetailsReturn | ErrorAndStatusCod
  * @returns {{} | {error: string}} - Returns an empty object or Error
  */
 
-function adminUpdateUserDetails(jwt: Jwt, email: string, nameFirst: string, nameLast: string): OkObj | ErrorAndStatusCode {
+export function adminUpdateUserDetails(jwt: Jwt, email: string, nameFirst: string, nameLast: string): OkObj | ErrorAndStatusCode {
   const data = getData();
   const token: Token = jwtToToken(jwt);
   const authUserId: number = token.userId;
@@ -215,7 +212,7 @@ function adminUpdateUserDetails(jwt: Jwt, email: string, nameFirst: string, name
   *
  * @returns {{} | {error: string}} - Returns an empty object or Error
 */
-function adminUpdateUserPassword(jwt: Jwt, oldPassword: string, newPassword: string): OkObj | ErrorAndStatusCode {
+export function adminUpdateUserPassword(jwt: Jwt, oldPassword: string, newPassword: string): OkObj | ErrorAndStatusCode {
   const data = getData();
 
   // checking valid structure
@@ -279,5 +276,3 @@ export const adminAuthLogout = (jwt: Jwt): OkObj | ErrorAndStatusCode => {
   }
   throw HTTPError(400, 'User has already logged out');
 };
-
-export { adminAuthLogin, adminAuthRegister, adminUserDetails, adminUpdateUserDetails, adminUpdateUserPassword };

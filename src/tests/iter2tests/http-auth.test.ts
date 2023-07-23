@@ -1,7 +1,7 @@
-import { AdminUserDetailsReturn, ErrorObj, Jwt, Token, AdminUserDetails } from '../../interfaces/interfaces';
-import { objToJwt, tokenToJwt } from '../token';
+import { AdminUserDetailsReturn, ErrorObj, Jwt, Token, AdminUserDetails } from '../../../interfaces/interfaces';
+import { objToJwt, tokenToJwt } from '../../token';
 // IMPORTING ALL WRAPPER FUNCTIONS
-import { checkTokenValid, clearUsers, loginUser, logoutUserHandler, registerUser, getUser, updateUserDetailsPassword, updateDetailsAuthHandler } from './testHelpers';
+import { checkTokenValid, clearUsers, loginUser, logoutUserHandler, registerUser, getUser, updateUserDetailsPassword, updateDetailsAuthHandler } from './testHelpersv1';
 
 // TESTS FOR REGISTER //
 beforeEach(() => {

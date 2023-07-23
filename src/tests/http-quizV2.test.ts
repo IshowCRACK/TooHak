@@ -1,6 +1,7 @@
 import { ErrorObj, Token, AdminQuizCreate, Jwt, OkObj, AdminQuizInfo } from '../../interfaces/interfaces';
 import { tokenToJwt } from '../token';
-import { registerUser, logoutUserHandlerV2, RequestCreateQuizV2, clearUsers, listQuizV2, RequestRemoveQuizV2, infoQuizV2, updateNameQuizV2 } from './testHelpers';
+import { registerUser, clearUsers } from './iter2tests/testHelpersv1';
+import { RequestCreateQuizV2, RequestRemoveQuizV2, infoQuizV2, listQuizV2, logoutUserHandlerV2, updateNameQuizV2 } from './testhelpersV2';
 
 beforeEach(() => {
   clearUsers();
