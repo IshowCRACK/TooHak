@@ -97,10 +97,7 @@ export function adminAuthLogin (email: string, password: string): Jwt | ErrorAnd
   for (const user of data.users) {
     if (user.email === email && user.password === password) {
       // add successful logins for all times & change failed password
-      console.log('EEYEYYE');
-      console.log(data);
       user.numSuccessLogins++;
-      console.log(data);
       user.numFailedPasswordsSinceLastLogin = 0;
       setData(data);
 
