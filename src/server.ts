@@ -8,7 +8,7 @@ import YAML from 'yaml';
 import sui from 'swagger-ui-express';
 import fs from 'fs';
 import { adminAuthRegister, adminAuthLogin, adminAuthLogout, adminUserDetails, adminUpdateUserDetails, adminUpdateUserPassword } from './auth';
-import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash, adminQuizRestore, adminQuizEmptyTrash } from './quiz';
+import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash, adminQuizRestore, adminQuizEmptyTrash, quizStartSession } from './quiz';
 import { clear } from './other';
 import { formatError } from './helper';
 import { getData } from './dataStore';
@@ -378,6 +378,13 @@ app.put('/v2/admin/quiz/:quizId/name', (req: Request, res: Response) => {
     return res.status(response.statusCode).json(formatError(response));
   }
   res.status(200).json(response);
+});
+
+app.post('/v1/admin/quiz/:quizId/session/start', (req: Request, res: Response) => {
+  const quizId = parseInt(req.params.quizId);
+  const token: string = req.header('token') as string;
+  const {autoStartNum} = req.body;
+  const response = quizStartSession({token: token}, parseInt(autoStartNum), quizId);
 });
 
 // ====================================================================

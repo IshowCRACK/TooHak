@@ -1,8 +1,8 @@
 import { Data } from '../interfaces/interfaces';
-import fs from 'fs';
-import config from './config.json';
+// import fs from 'fs';
+// import config from './config.json';
 
-const DATA_URL = config.dataUrl;
+// const DATA_URL = config.dataUrl;
 
 let data: Data = {
   users: [],
@@ -38,7 +38,7 @@ let data: Data = {
   * }}}
 */
 function getData (): Data {
-  load();
+  // load();
   return data;
 }
 
@@ -67,15 +67,15 @@ function getData (): Data {
 */
 function setData (newData: Data): void {
   data = newData;
-  save();
+  // save();
 }
 
-function save() {
-  fs.writeFileSync(DATA_URL, JSON.stringify(data));
-}
+// function save() {
+//   fs.writeFileSync(DATA_URL, JSON.stringify(data));
+// }
 
-function load() {
-  data = JSON.parse(String(fs.readFileSync(DATA_URL))) as Data;
-}
+// function load() {
+//   data = JSON.parse(String(fs.readFileSync(DATA_URL))) as Data;
+// }
 
 export { getData, setData };

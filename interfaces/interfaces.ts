@@ -80,6 +80,9 @@ export interface OkObj {
     
 }
 
+export interface OkSessionObj {
+    sessionId: number;
+}
 export interface ErrorAndStatusCode {
     error: string;
     statusCode: number;

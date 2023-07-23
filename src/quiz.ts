@@ -442,3 +442,7 @@ export function adminQuizTransfer(jwt: Jwt, email: string, quizId: number): OkOb
 
   return {};
 }
+
+export function quizStartSession(jwt: Jwt, autoStartNum: number, quizId: number) {
+  throw HTTPError(400, 'Stub');
+}

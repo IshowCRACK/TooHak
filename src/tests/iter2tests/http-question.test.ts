@@ -1,7 +1,6 @@
-import request from 'sync-request';
 import { AdminQuizCreate, ErrorObj, Jwt, QuestionBody, QuizQuestionCreate, Token, AdminQuizInfo, AdminQuestionDuplicate } from '../../../interfaces/interfaces';
 import { getUrl } from '../../helper';
-import { RequestCreateQuiz, clearUsers, registerUser, duplicateQuiz, infoQuiz, logoutUserHandler, deleteQuestion, moveQuestion, updateQuiz } from './testHelpersv1';
+import { RequestCreateQuiz, clearUsers, registerUser, duplicateQuiz, infoQuiz, logoutUserHandler, deleteQuestion, moveQuestion, updateQuiz, createQuizQuestionHandler } from './testHelpersv1';
 import { tokenToJwt } from '../../token';
 // import { token } from 'morgan';
 
@@ -14,23 +13,6 @@ beforeEach(() => {
 afterEach(() => {
   clearUsers();
 });
-
-const createQuizQuestionHandler = (quizId: number, jwt: Jwt, questionBody: QuestionBody) => {
-  const res = request(
-    'POST',
-    URL + `v1/admin/quiz/${quizId}/question`,
-    {
-      json: {
-        token: jwt.token,
-        questionBody: questionBody
-      }
-    }
-  );
-
-  const parsedResponse: QuizQuestionCreate | ErrorObj = JSON.parse(res.body.toString());
-
-  return parsedResponse;
-};
 
 describe('Tests related to creating a Quiz Question', () => {
   let userToken: Token;
