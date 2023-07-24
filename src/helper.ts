@@ -3,7 +3,7 @@ import { getData } from './dataStore';
 import { adminQuizList } from './quiz';
 import { checkJwtValid, jwtToToken } from './token';
 import config from './config.json';
-
+const isImageURL = require('image-url-validator').default;
 /**
  * -------------------------------------- HELPERS FUNCTIONS-----------------------------------------------
  */
@@ -464,3 +464,27 @@ export function checkQuizHasQuestions(quizId: number): boolean {
 
   return true;
 }
+
+//checks if a string ends in either .png OR .jpeg
+export function isValidImageType(imgUrl: string): boolean {
+  const extension = filename.slice(-4).toLowerCase(); // Get the last 4 characters (including the dot) and convert to lowercase
+  return extension === '.png' || extension === 'jpeg';
+}
+
+//checks if url is a valid image
+export async function checkImageURL(imgUrl:string): Promise<boolean> {
+  try {
+    const isImage = await isImageURL(imgUrl);
+
+    if (!isImage) {
+      return false;
+    }
+
+    // Other code to handle the valid image URL...
+
+    return true; // Return true if the URL is a valid image
+  } catch (error) {
+    return false; // Return false if any error occurs
+  }
+}
+

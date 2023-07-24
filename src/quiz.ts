@@ -6,10 +6,11 @@ import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkQuizAndUserIdValid, checkQuizIdValid, checkQuizNameUsed,
   checkTokenValidStructure, checkTokenValidSession, checkNameUsedInQuiz, checkQuizIdAndUserIdValidAndTrash,
-  checkQuizIdValidAndTrash, createQuizId, checkMaxNumSessions, checkQuizHasQuestions
+  checkQuizIdValidAndTrash, createQuizId, checkMaxNumSessions, checkQuizHasQuestions, checkImageURL, isValidImageType
 } from './helper';
 import { createQuizSession, jwtToToken } from './token';
 import HTTPError from 'http-errors';
+const isImageURL = require('image-url-validator').default;
 
 // Update the description of the relevant quiz
 export function adminQuizDescriptionUpdate (jwt: Jwt, description: string, quizId: number): OkObj | ErrorAndStatusCode {
@@ -173,7 +174,8 @@ export function adminQuizCreate (jwt: Jwt, name: string, description: string): A
     description: description,
     numQuestions: 0,
     questions: [],
-    duration: 0
+    duration: 0,
+    imgUrl: '',
   });
 
   setData(data);
@@ -475,4 +477,25 @@ export function quizStartSession(jwt: Jwt, autoStartNum: number, quizId: number)
   return {
     sessionId: quizSession.sessionId
   };
+}
+
+export async function createQuizThumbnail(jwt: Jwt, quizId: number, imgUrl: string) {
+  const token = jwtToToken(jwt);
+
+  if (!checkQuizIdValid(quizId)) {
+    throw HTTPError(400, 'Quiz ID does not refer to a valid quiz');
+  }
+
+  if (!checkQuizAndUserIdValid(quizId, jwtToToken(jwt).userId)) {
+    throw HTTPError(400, 'Quiz ID does not refer to a quiz that this user owns');
+  }
+
+  // const urlCheck: boolean = await checkImageURL(imgUrl);
+
+  // if (urlCheck === false) {
+  //   throw HTTPError(400, 'imgUrl when fetched does not return a valid file');
+  // }
+
+
+  return {};
 }
