@@ -291,7 +291,6 @@ app.post('/v1/admin/quiz/:quizId/thumbnail', (req: Request, res: Response) => {
   res.status(200).json(response);
 });
 
-
 //  //////////////////////////////// V2 ROUTES /////////////////////////////////////
 app.post('/v2/admin/auth/logout', (req: Request, res: Response) => {
   const token: string = req.header('token') as string;

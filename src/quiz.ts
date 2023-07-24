@@ -6,14 +6,11 @@ import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkQuizAndUserIdValid, checkQuizIdValid, checkQuizNameUsed,
   checkTokenValidStructure, checkTokenValidSession, checkNameUsedInQuiz, checkQuizIdAndUserIdValidAndTrash,
-  checkQuizIdValidAndTrash, createQuizId, checkMaxNumSessions, checkQuizHasQuestions, checkImageURL, isValidImageType
+  checkQuizIdValidAndTrash, createQuizId, checkMaxNumSessions, checkQuizHasQuestions
 } from './helper';
 import { createQuizSession, jwtToToken } from './token';
 import HTTPError from 'http-errors';
-import { port } from './config.json';
 import request from 'sync-request';
-import fs from 'fs';
-const Jimp = require('jimp');
 
 // Update the description of the relevant quiz
 export function adminQuizDescriptionUpdate (jwt: Jwt, description: string, quizId: number): OkObj | ErrorAndStatusCode {
@@ -483,9 +480,7 @@ export function quizStartSession(jwt: Jwt, autoStartNum: number, quizId: number)
 }
 
 export function createQuizThumbnail(jwt: Jwt, quizId: number, imgUrl: string) {
-
   const data = getData();
-  const token = jwtToToken(jwt);
 
   if (!checkTokenValidStructure(jwt)) {
     throw HTTPError(401, 'Token is not a valid structure');
@@ -505,7 +500,7 @@ export function createQuizThumbnail(jwt: Jwt, quizId: number, imgUrl: string) {
   if (imgUrl.includes(' ')) {
     throw HTTPError(400, 'imgUrl must be a valid file URL');
   }
-  
+
   // Getting the image
   const ogImg = request(
     'GET',
@@ -513,7 +508,7 @@ export function createQuizThumbnail(jwt: Jwt, quizId: number, imgUrl: string) {
   );
   // Error if there is issue retrieving image
   if (ogImg.statusCode !== 200) {
-    throw HTTPError(400, 'imgUrl when fetched does not return a valid file');
+    throw HTTPError(400, 'imgUrl must be a valid file URL');
   }
 
   if (!(/\.jpg$/.test(imgUrl) || /\.png$/.test(imgUrl))) {
@@ -522,6 +517,5 @@ export function createQuizThumbnail(jwt: Jwt, quizId: number, imgUrl: string) {
   const quizToUpdate: Quiz = data.quizzes.find((quiz: Quiz) => quiz.quizId === quizId);
   quizToUpdate.imgUrl = imgUrl;
   setData(data);
-  console.log(getData().quizzes[quizId].imgUrl)
   return {}; // Return an empty object if it passes the checks
 }

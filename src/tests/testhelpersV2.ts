@@ -26,10 +26,8 @@ const requestHelper = (method: HttpVerb, path: string, payload: object, jwt?: Jw
 //  ///////////////////// NEW ITR3  ////////////////////////////////////////
 
 export const createQuizThumbnailHandler = (jwt: Jwt, quizId: number, imgUrl: string): OkObj | ErrorObj => {
-
-  return requestHelper('POST',`v1/admin/quiz/${quizId}/thumbnail`, { imgUrl }, jwt);
+  return requestHelper('POST', `v1/admin/quiz/${quizId}/thumbnail`, { imgUrl }, jwt);
 };
-
 
 //  ////////////////////  MODIFIED ITR3 ////////////////////////////////////
 export const logoutUserHandlerV2 = (jwt: Jwt) => {
@@ -71,4 +69,3 @@ export const updateNameQuizV2 = (jwt: Jwt, name: string, quizId: number): OkObj 
 export const startSessionQuiz = (jwt: Jwt, autoStartNum: number, quizId: number): OkSessionObj | ErrorObj => {
   return requestHelper('POST', `v1/admin/quiz/${quizId}/session/start`, { autoStartNum }, jwt);
 };
-

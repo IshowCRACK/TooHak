@@ -1,9 +1,8 @@
-import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer, Question, User, States, OkObj } from '../interfaces/interfaces';
+import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer, Question, User, States } from '../interfaces/interfaces';
 import { getData } from './dataStore';
 import { adminQuizList } from './quiz';
 import { checkJwtValid, jwtToToken } from './token';
 import config from './config.json';
-const isImageURL = require('image-url-validator').default;
 /**
  * -------------------------------------- HELPERS FUNCTIONS-----------------------------------------------
  */
@@ -468,25 +467,3 @@ export function checkQuizHasQuestions(quizId: number): boolean {
 
   return true;
 }
-
-//checks if a string ends in either .png OR .jpeg
-export function isValidImageType(imgUrl: string): boolean  {
-const extension = imgUrl.slice(-4).toLowerCase(); // Get the last 4 characters (including the dot) and convert to lowercase
-  return extension === '.png' || extension === '.jpg';
-}
-
-export function checkImageURL(imgUrl: string, callback: (isImage: boolean) => void) {
-  const image = new Image();
-  image.onload = function () {
-    callback(true);
-  };
-  image.onerror = function () {
-    callback(false);
-  };
-  image.src = imgUrl;
-}
-
-
-
-
-

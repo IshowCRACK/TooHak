@@ -2,7 +2,6 @@ import { ErrorObj, Token, AdminQuizCreate, Jwt, OkObj, AdminQuizInfo } from '../
 import { tokenToJwt } from '../token';
 import { registerUser, clearUsers, createQuizQuestionHandler } from './iter2tests/testHelpersv1';
 import { RequestCreateQuizV2, RequestRemoveQuizV2, infoQuizV2, listQuizV2, logoutUserHandlerV2, startSessionQuiz, updateNameQuizV2, createQuizThumbnailHandler } from './testhelpersV2';
-import { getData } from '../dataStore';
 
 beforeEach(() => {
   clearUsers();
@@ -67,12 +66,11 @@ describe('Quiz Thumnail', () => {
     test('successful image upload', () => {
       res = createQuizThumbnailHandler(tokenToJwt(token0), quizId0, 'https://thumbs.dreamstime.com/z/tracks-snow-3356163.jpg');
       expect(res).toStrictEqual({});
-      // expect().toStrictEqual({});
     });
 
-    test('2. Successfull Quiz Create multiple for User', () => {
-      res = RequestRemoveQuizV2(tokenToJwt(token0), quizId0);
-      res0 = RequestRemoveQuizV2(tokenToJwt(token0), quizId1);
+    test('2. Successfull Quiz thumbnail multiple for User', () => {
+      res = createQuizThumbnailHandler(tokenToJwt(token0), quizId0, 'https://thumbs.dreamstime.com/z/tracks-snow-3356163.jpg');
+      res0 = createQuizThumbnailHandler(tokenToJwt(token0), quizId1, 'http://www.freeimageslive.co.uk/files/images006/christmas_balls.jpg');
       expect(res).toStrictEqual({
 
       });
@@ -100,16 +98,15 @@ describe('Quiz Thumnail', () => {
 
     test('imgUrl when fetched does not return a valid file', () => {
       res = createQuizThumbnailHandler(tokenToJwt(token0), quizId1, 'https://github.com/BhanukaUOM/valid-image-url');
-      expect(res).toStrictEqual({ error: 'imgUrl when fetched does not return a valid file' });
+      expect(res).toStrictEqual({ error: 'imgUrl must be a valid file URL' });
     });
 
     test('imgUrl when fetched does not return a valid file', () => {
       res = createQuizThumbnailHandler(tokenToJwt(token0), quizId1, 'https://definately NOT avalidURL');
-      expect(res).toStrictEqual({ error: 'imgUrl when fetched does not return a valid file' });
+      expect(res).toStrictEqual({ error: 'imgUrl must be a valid file URL' });
     });
   });
 });
-
 
 //  ///////////////////// MODIFIED ITR3 ////////////////////////////////////////
 
