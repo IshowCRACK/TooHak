@@ -282,11 +282,12 @@ app.get('/debug', (req: Request, res: Response) => {
   res.json(data);
 });
 
-app.put('/v1/admin/quiz/:quizId/thumbnail', (req: Request, res: Response) => {
+app.post('/v1/admin/quiz/:quizId/thumbnail', (req: Request, res: Response) => {
   const token: string = req.header('token') as string;
   const quizId = parseInt(req.params.quizId);
   const { imgUrl } = req.body;
-  const response = CreateQuizThumbnail({ token: token }, quizId, imgUrl);
+
+  const response = createQuizThumbnail({ token: token }, quizId, imgUrl);
   res.status(200).json(response);
 });
 

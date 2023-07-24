@@ -1,4 +1,4 @@
-import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer, Question, User, States } from '../interfaces/interfaces';
+import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer, Question, User, States, OkObj } from '../interfaces/interfaces';
 import { getData } from './dataStore';
 import { adminQuizList } from './quiz';
 import { checkJwtValid, jwtToToken } from './token';
@@ -204,7 +204,7 @@ export function adminUserALLDetails(authUserId: number): AdminUserALLDetailsRetu
   * }>} | {error: string}} - An array of quizzes and its details
   *
   */
-// function adminQuizALLDetails(quizId: number): AdminQuizALLDetailsReturn {
+// export function adminQuizALLDetails(quizId: number): Quiz {
 //   const data = getData();
 
 //   for (const quiz of data.quizzes) {
@@ -216,7 +216,11 @@ export function adminUserALLDetails(authUserId: number): AdminUserALLDetailsRetu
 //           name: quiz.name,
 //           timeCreated: quiz.timeCreated,
 //           timeLastEdited: quiz.timeLastEdited,
-//           description: quiz.description
+//           description: quiz.description,
+//           numQuestions: quiz.numQuestions,
+//           questions: quiz.questions,
+//           duration: quiz.duration,
+//           imgUrl: quiz.imgUrl
 //         }
 //       };
 //     }
@@ -466,25 +470,23 @@ export function checkQuizHasQuestions(quizId: number): boolean {
 }
 
 //checks if a string ends in either .png OR .jpeg
-export function isValidImageType(imgUrl: string): boolean {
-  const extension = filename.slice(-4).toLowerCase(); // Get the last 4 characters (including the dot) and convert to lowercase
-  return extension === '.png' || extension === 'jpeg';
+export function isValidImageType(imgUrl: string): boolean  {
+const extension = imgUrl.slice(-4).toLowerCase(); // Get the last 4 characters (including the dot) and convert to lowercase
+  return extension === '.png' || extension === '.jpg';
 }
 
-//checks if url is a valid image
-export async function checkImageURL(imgUrl:string): Promise<boolean> {
-  try {
-    const isImage = await isImageURL(imgUrl);
-
-    if (!isImage) {
-      return false;
-    }
-
-    // Other code to handle the valid image URL...
-
-    return true; // Return true if the URL is a valid image
-  } catch (error) {
-    return false; // Return false if any error occurs
-  }
+export function checkImageURL(imgUrl: string, callback: (isImage: boolean) => void) {
+  const image = new Image();
+  image.onload = function () {
+    callback(true);
+  };
+  image.onerror = function () {
+    callback(false);
+  };
+  image.src = imgUrl;
 }
+
+
+
+
 

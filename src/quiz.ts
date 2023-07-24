@@ -10,7 +10,10 @@ import {
 } from './helper';
 import { createQuizSession, jwtToToken } from './token';
 import HTTPError from 'http-errors';
-const isImageURL = require('image-url-validator').default;
+import { port } from './config.json';
+import request from 'sync-request';
+import fs from 'fs';
+const Jimp = require('jimp');
 
 // Update the description of the relevant quiz
 export function adminQuizDescriptionUpdate (jwt: Jwt, description: string, quizId: number): OkObj | ErrorAndStatusCode {
@@ -479,8 +482,18 @@ export function quizStartSession(jwt: Jwt, autoStartNum: number, quizId: number)
   };
 }
 
-export async function createQuizThumbnail(jwt: Jwt, quizId: number, imgUrl: string) {
+export function createQuizThumbnail(jwt: Jwt, quizId: number, imgUrl: string) {
+
+  const data = getData();
   const token = jwtToToken(jwt);
+
+  if (!checkTokenValidStructure(jwt)) {
+    throw HTTPError(401, 'Token is not a valid structure');
+  }
+
+  if (!checkTokenValidSession(jwt)) {
+    throw HTTPError(403, 'Token not for currently logged in session');
+  }
 
   if (!checkQuizIdValid(quizId)) {
     throw HTTPError(400, 'Quiz ID does not refer to a valid quiz');
@@ -489,13 +502,26 @@ export async function createQuizThumbnail(jwt: Jwt, quizId: number, imgUrl: stri
   if (!checkQuizAndUserIdValid(quizId, jwtToToken(jwt).userId)) {
     throw HTTPError(400, 'Quiz ID does not refer to a quiz that this user owns');
   }
+  if (imgUrl.includes(' ')) {
+    throw HTTPError(400, 'imgUrl must be a valid file URL');
+  }
+  
+  // Getting the image
+  const ogImg = request(
+    'GET',
+    imgUrl
+  );
+  // Error if there is issue retrieving image
+  if (ogImg.statusCode !== 200) {
+    throw HTTPError(400, 'imgUrl when fetched does not return a valid file');
+  }
 
-  // const urlCheck: boolean = await checkImageURL(imgUrl);
-
-  // if (urlCheck === false) {
-  //   throw HTTPError(400, 'imgUrl when fetched does not return a valid file');
-  // }
-
-
-  return {};
+  if (!(/\.jpg$/.test(imgUrl) || /\.png$/.test(imgUrl))) {
+    throw HTTPError(400, 'File is not a png or jpg file');
+  }
+  const quizToUpdate: Quiz = data.quizzes.find((quiz: Quiz) => quiz.quizId === quizId);
+  quizToUpdate.imgUrl = imgUrl;
+  setData(data);
+  console.log(getData().quizzes[quizId].imgUrl)
+  return {}; // Return an empty object if it passes the checks
 }

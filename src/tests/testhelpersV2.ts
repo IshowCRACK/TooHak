@@ -26,10 +26,8 @@ const requestHelper = (method: HttpVerb, path: string, payload: object, jwt?: Jw
 //  ///////////////////// NEW ITR3  ////////////////////////////////////////
 
 export const createQuizThumbnailHandler = (jwt: Jwt, quizId: number, imgUrl: string): OkObj | ErrorObj => {
-  console.log(jwt);
-  console.log(quizId);
-  console.log(imgUrl);
-  return requestHelper('POST',`v1/admin/quiz/${quizId}/thumbnail`, {}, jwt);
+
+  return requestHelper('POST',`v1/admin/quiz/${quizId}/thumbnail`, { imgUrl }, jwt);
 };
 
 

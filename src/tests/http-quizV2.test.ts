@@ -2,6 +2,7 @@ import { ErrorObj, Token, AdminQuizCreate, Jwt, OkObj, AdminQuizInfo } from '../
 import { tokenToJwt } from '../token';
 import { registerUser, clearUsers, createQuizQuestionHandler } from './iter2tests/testHelpersv1';
 import { RequestCreateQuizV2, RequestRemoveQuizV2, infoQuizV2, listQuizV2, logoutUserHandlerV2, startSessionQuiz, updateNameQuizV2, createQuizThumbnailHandler } from './testhelpersV2';
+import { getData } from '../dataStore';
 
 beforeEach(() => {
   clearUsers();
@@ -63,11 +64,10 @@ describe('Quiz Thumnail', () => {
     logoutUserHandlerV2(tokenToJwt(token1));
   });
   describe('Successful Tests', () => {
-    test('1. Successful Quiz Remove for User', () => {
-      res = RequestRemoveQuizV2(tokenToJwt(token0), quizId0);
-      expect(res).toStrictEqual({
-
-      });
+    test('successful image upload', () => {
+      res = createQuizThumbnailHandler(tokenToJwt(token0), quizId0, 'https://thumbs.dreamstime.com/z/tracks-snow-3356163.jpg');
+      expect(res).toStrictEqual({});
+      // expect().toStrictEqual({});
     });
 
     test('2. Successfull Quiz Create multiple for User', () => {
@@ -89,22 +89,22 @@ describe('Quiz Thumnail', () => {
     // });
 
     test('Invalid QuizId ', () => {
-      res = createQuizThumbnailHandler(tokenToJwt(token0), -99, 'https://png.pngtree.com/png-clipart/20210318/ourmid/pngtree-delicious-pancakes-for-canadian-maple-festival-png-image_3045828.jpg');
+      res = createQuizThumbnailHandler(tokenToJwt(token0), -99, 'https://thumbs.dreamstime.com/z/tracks-snow-3356163.jpg');
       expect(res).toStrictEqual({ error: 'Quiz ID does not refer to a valid quiz' });
     });
 
     test('Quiz ID does not refer to a quiz that this user owns', () => {
-      res = createQuizThumbnailHandler(tokenToJwt(token0), quizId2, 'https://png.pngtree.com/png-clipart/20210318/ourmid/pngtree-delicious-pancakes-for-canadian-maple-festival-png-image_3045828.jpg');
+      res = createQuizThumbnailHandler(tokenToJwt(token0), quizId2, 'https://thumbs.dreamstime.com/z/tracks-snow-3356163.jpg');
       expect(res).toStrictEqual({ error: 'Quiz ID does not refer to a quiz that this user owns' });
     });
 
     test('imgUrl when fetched does not return a valid file', () => {
-      res = createQuizThumbnailHandler(tokenToJwt(token0), quizId2, 'https://github.com/BhanukaUOM/valid-image-url');
+      res = createQuizThumbnailHandler(tokenToJwt(token0), quizId1, 'https://github.com/BhanukaUOM/valid-image-url');
       expect(res).toStrictEqual({ error: 'imgUrl when fetched does not return a valid file' });
     });
 
     test('imgUrl when fetched does not return a valid file', () => {
-      res = createQuizThumbnailHandler(tokenToJwt(token0), quizId2, 'definately NOT a valid URL');
+      res = createQuizThumbnailHandler(tokenToJwt(token0), quizId1, 'https://definately NOT avalidURL');
       expect(res).toStrictEqual({ error: 'imgUrl when fetched does not return a valid file' });
     });
   });
