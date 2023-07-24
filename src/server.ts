@@ -13,7 +13,7 @@ import { clear } from './other';
 import { formatError } from './helper';
 import { getData } from './dataStore';
 import { quizCreateQuestion, adminQuizDelete, quizDuplicateQuestion, quizMoveQuestion, quizUpdateQuestion } from './question';
-
+import { quizCreateQuestionV2 } from './questionV2';
 // Set up web app
 const app = express();
 // Use middleware that allows us to access the JSON body of requests
@@ -362,6 +362,14 @@ app.post('/v1/admin/quiz/:quizId/session/start', (req: Request, res: Response) =
   res.status(200).json(response);
 });
 
+app.post('/v2/admin/quiz/:quizId/question', (req: Request, res: Response) => {
+  const quizId = parseInt(req.params.quizId);
+  const token: string = req.header('token') as string;
+  const { questionBody } = req.body;
+  const response = quizCreateQuestionV2({ token: token }, questionBody, quizId);
+  
+  res.status(200).json(response);
+});
 // ====================================================================
 //  ================= WORK IS DONE ABOVE THIS LINE ===================
 // ====================================================================

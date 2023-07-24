@@ -87,7 +87,8 @@ export interface AdminQuizInfo {
 
 export interface Question extends QuestionBody {
     questionId: number;
-    thumbnailUrl?: string; // Make sure to put thumbnail in as actual parameter to whoever is doing it
+    // kelly - its needed in Questionbody so i put it there instead but i 
+    //thumbnailUrl?: string; // Make sure to put thumbnail in as actual parameter to whoever is doing it
 }
 
 export interface QuestionBody {
@@ -95,6 +96,7 @@ export interface QuestionBody {
     duration: number;
     points: number;
     answers: Answer[];
+    thumbnailUrl?: string;
 }
 
 export interface Answer {
