@@ -13,7 +13,7 @@ import { clear } from './other';
 import { formatError } from './helper';
 import { getData } from './dataStore';
 import { quizCreateQuestion, adminQuizDelete, quizDuplicateQuestion, quizMoveQuestion, quizUpdateQuestion } from './question';
-import { quizCreateQuestionV2, deleteQuestionV2 } from './questionV2';
+import { quizCreateQuestionV2, deleteQuestionV2, quizUpdateQuestionV2 } from './questionV2';
 
 // Set up web app
 const app = express();
@@ -408,6 +408,14 @@ app.post('/v2/admin/quiz/:quizId/question/:questionId/duplicate', (req: Request,
   res.status(200).json(response);
 });
 
+app.put('/v2/admin/quiz/:quizId/question/:questionId', (req: Request, res: Response) => {
+  const quizId = parseInt(req.params.quizId);
+  const questionId = parseInt(req.params.questionId);
+  const { questionBody } = req.body;
+  const token: string = req.header('token') as string;
+  const response = quizUpdateQuestionV2({ token: token }, questionBody, quizId, questionId);
+  res.status(200).json(response);
+});
 // ====================================================================
 //  ================= WORK IS DONE ABOVE THIS LINE ===================
 // ====================================================================

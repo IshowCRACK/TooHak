@@ -74,7 +74,7 @@ export const createQuizQuestionHandlerV2 = (quizId: number, jwt: Jwt, questionBo
   return requestHelper('POST', `v2/admin/quiz/${quizId}/question`, { questionBody }, jwt);
 };
 
-export const deleteQuestionHandlerV2 = (jwt: Jwt, quizId: number, questionId: number): OkObj | ErrorObj => {
+export const deleteQuestionV2 = (jwt: Jwt, quizId: number, questionId: number): OkObj | ErrorObj => {
   return requestHelper('DELETE', `v2/admin/quiz/${quizId}/question/${questionId}`, {}, jwt);
 };
 
@@ -82,6 +82,11 @@ export function moveQuestionV2(quizId: number, questionId: number, newPosition: 
   return requestHelper('PUT', `v2/admin/quiz/${quizId}/question/${questionId}/move`, { newPosition }, jwt);
 }
 
-export const duplicateQuiz = (jwt: Jwt, quizId: number, questionId: number): AdminQuestionDuplicate | ErrorObj => {
+export const duplicateQuizV2 = (jwt: Jwt, quizId: number, questionId: number): AdminQuestionDuplicate | ErrorObj => {
   return requestHelper('POST', `v2/admin/quiz/${quizId}/question/${questionId}/duplicate`, {}, jwt);
+};
+
+export const updateQuizV2 = (jwt: Jwt, questionBody: QuestionBody, quizId: number, questionId: number
+): OkObj | ErrorObj => {
+  return requestHelper('PUT', `v2/admin/quiz/${quizId}/question/${questionId}`, { questionBody }, jwt);
 };
