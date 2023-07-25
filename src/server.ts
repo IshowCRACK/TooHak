@@ -399,6 +399,14 @@ app.put('/v2/admin/quiz/:quizId/question/:questionId/move', (req: Request, res: 
   res.status(200).json(response);
 });
 
+app.post('/v2/admin/quiz/:quizId/question/:questionId/duplicate', (req: Request, res: Response) => {
+  const quizId = parseInt(req.params.quizId);
+  const questionId = parseInt(req.params.questionId);
+  const token: string = req.header('token') as string;
+  const response = quizDuplicateQuestion({ token: token }, quizId, questionId);
+
+  res.status(200).json(response);
+});
 
 // ====================================================================
 //  ================= WORK IS DONE ABOVE THIS LINE ===================
