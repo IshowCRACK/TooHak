@@ -1,16 +1,14 @@
-import { ErrorAndStatusCode, Jwt, QuestionBody, QuizQuestionCreate, Token, Question, Quiz, OkObj, AdminQuestionDuplicate } from '../interfaces/interfaces';
+import { ErrorAndStatusCode, Jwt, QuestionBody, Token, Quiz, OkObj } from '../interfaces/interfaces';
 import {
   checkAnswerHasTrueValue, checkAnswerLengthValid, checkQuestionAnswerNonDuplicate, checkQuizAndUserIdValid, checkQuizIdValid,
-  checkTokenValidSession, checkTokenValidStructure, createQuestionId, getTotalDuration, checkQuestionIdIsValidInQuiz, checkQuestionIdValid
+  checkTokenValidSession, checkTokenValidStructure, createQuestionId, getTotalDuration, checkQuestionIdValid
 } from './helper';
 import { jwtToToken } from './token';
 import { getData, setData } from './dataStore';
 import HTTPError from 'http-errors';
-import  isURL  from 'is-url';
-
+import isURL from 'is-url';
 
 export function quizCreateQuestionV2(jwt: Jwt, questionBody: QuestionBody, quizId: number) {
- 
   if (!checkTokenValidStructure(jwt)) {
     throw HTTPError(401, 'Token is not a valid structure');
   }
@@ -64,17 +62,16 @@ export function quizCreateQuestionV2(jwt: Jwt, questionBody: QuestionBody, quizI
     throw HTTPError(400, 'There are no correct answers');
   }
 
-if (!questionBody.thumbnailUrl || questionBody.thumbnailUrl === '') {
-        throw HTTPError(400, 'Must have thumbnail');
-};
-if (!(/\.jpg$/.test(questionBody.thumbnailUrl) || /\.png$/.test(questionBody.thumbnailUrl))) {
-        throw HTTPError(400, 'File is not a png or jpg file');
-      }
+  if (!questionBody.thumbnailUrl || questionBody.thumbnailUrl === '') {
+    throw HTTPError(400, 'Must have thumbnail');
+  }
+  if (!(/\.jpg$/.test(questionBody.thumbnailUrl) || /\.png$/.test(questionBody.thumbnailUrl))) {
+    throw HTTPError(400, 'File is not a png or jpg file');
+  }
 
-    if (!isURL(questionBody.thumbnailUrl)) {
-        throw HTTPError(400, 'Invalid URL');
-    }
-    
+  if (!isURL(questionBody.thumbnailUrl)) {
+    throw HTTPError(400, 'Invalid URL');
+  }
 
   const questionId: number = createQuestionId(quiz);
 
@@ -89,7 +86,6 @@ if (!(/\.jpg$/.test(questionBody.thumbnailUrl) || /\.png$/.test(questionBody.thu
     questionId: questionId
   };
 }
-      
 
 /**
  * Deletes a quiz question
@@ -100,51 +96,50 @@ if (!(/\.jpg$/.test(questionBody.thumbnailUrl) || /\.png$/.test(questionBody.thu
 */
 
 export function deleteQuestionV2(jwt: Jwt, quizId: number, questionId: number): OkObj | ErrorAndStatusCode {
-        if (!checkTokenValidStructure(jwt)) {
-          throw HTTPError(401, 'Token is not a valid structure');
-        }
-      
-        if (!checkTokenValidSession(jwt)) {
-          throw HTTPError(403, 'Token not for currently logged in session');
-        }
-      
-        // QuizId does not refer to a valid quiz
-        if (!checkQuizIdValid(quizId)) {
-          throw HTTPError(400, 'Quiz ID does not refer to a valid quiz');
-        }
-      
-        // QuizId does not refer to a quiz that this user owns
-        if (!checkQuizAndUserIdValid(quizId, jwtToToken(jwt).userId)) {
-          throw HTTPError(400, 'Quiz ID does not refer to a quiz that this user owns');
-        }
-      
-        const data = getData();
-        const quiz = data.quizzes.find((quiz: Quiz) => quiz.quizId === quizId);
-        // QuestionId does not refer to a valid question within this quiz
-        if (!checkQuestionIdValid(questionId, quiz)) {
-          throw HTTPError(400, 'Quiz ID does not refer to a valid question within this quiz');
-        }
+  if (!checkTokenValidStructure(jwt)) {
+    throw HTTPError(401, 'Token is not a valid structure');
+  }
 
-        /* 
-        
+  if (!checkTokenValidSession(jwt)) {
+    throw HTTPError(403, 'Token not for currently logged in session');
+  }
+
+  // QuizId does not refer to a valid quiz
+  if (!checkQuizIdValid(quizId)) {
+    throw HTTPError(400, 'Quiz ID does not refer to a valid quiz');
+  }
+
+  // QuizId does not refer to a quiz that this user owns
+  if (!checkQuizAndUserIdValid(quizId, jwtToToken(jwt).userId)) {
+    throw HTTPError(400, 'Quiz ID does not refer to a quiz that this user owns');
+  }
+
+  const data = getData();
+  const quiz = data.quizzes.find((quiz: Quiz) => quiz.quizId === quizId);
+  // QuestionId does not refer to a valid question within this quiz
+  if (!checkQuestionIdValid(questionId, quiz)) {
+    throw HTTPError(400, 'Quiz ID does not refer to a valid question within this quiz');
+  }
+
+  /*
+
                 NEED TO IMPLEMENT: All sessions for this quiz must be in END state ,
 
         USE THE GET SESSION STATUS FUNCTION TO ERROR CHECK WHEN WE FINSIH THAT FUNCTION
-        
+
         */
-      
-        const quizIndex: number = data.quizzes.indexOf(quiz);
-        let questionIndex: number;
-        for (const question of data.quizzes[quizIndex].questions) {
-          if (question.questionId === questionId) {
-            questionIndex = data.quizzes[quizIndex].questions.indexOf(question);
-          }
-        }
-      
-        if (questionIndex !== -1) {
-          data.quizzes[quizIndex].questions.splice(questionIndex, 1);
-          setData(data);
-          return {};
-        }
-      }
-      
+
+  const quizIndex: number = data.quizzes.indexOf(quiz);
+  let questionIndex: number;
+  for (const question of data.quizzes[quizIndex].questions) {
+    if (question.questionId === questionId) {
+      questionIndex = data.quizzes[quizIndex].questions.indexOf(question);
+    }
+  }
+
+  if (questionIndex !== -1) {
+    data.quizzes[quizIndex].questions.splice(questionIndex, 1);
+    setData(data);
+    return {};
+  }
+}

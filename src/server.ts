@@ -14,7 +14,7 @@ import { formatError } from './helper';
 import { getData } from './dataStore';
 import { quizCreateQuestion, adminQuizDelete, quizDuplicateQuestion, quizMoveQuestion, quizUpdateQuestion } from './question';
 import { quizCreateQuestionV2, deleteQuestionV2 } from './questionV2';
-import { duplicateQuiz } from './tests/testhelpersV2';
+
 // Set up web app
 const app = express();
 // Use middleware that allows us to access the JSON body of requests
@@ -377,7 +377,7 @@ app.post('/v2/admin/quiz/:quizId/question', (req: Request, res: Response) => {
   const token: string = req.header('token') as string;
   const { questionBody } = req.body;
   const response = quizCreateQuestionV2({ token: token }, questionBody, quizId);
-  
+
   res.status(200).json(response);
 });
 app.delete('/v2/admin/quiz/:quizId/question/:questionId', (req: Request, res: Response) => {
@@ -385,7 +385,7 @@ app.delete('/v2/admin/quiz/:quizId/question/:questionId', (req: Request, res: Re
   const questionId = parseInt(req.params.questionId);
   const token: string = req.header('token') as string;
   const response = deleteQuestionV2({ token: token }, quizId, questionId);
-  
+
   res.status(200).json(response);
 });
 

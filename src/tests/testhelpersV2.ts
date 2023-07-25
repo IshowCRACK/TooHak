@@ -78,9 +78,9 @@ export const deleteQuestionHandlerV2 = (jwt: Jwt, quizId: number, questionId: nu
   return requestHelper('DELETE', `v2/admin/quiz/${quizId}/question/${questionId}`, {}, jwt);
 };
 
-export function moveQuestionV2(quizId: number, questionId: number, newPosition: number, jwt: Jwt): OkObj | ErrorObj{
+export function moveQuestionV2(quizId: number, questionId: number, newPosition: number, jwt: Jwt): OkObj | ErrorObj {
   return requestHelper('PUT', `v2/admin/quiz/${quizId}/question/${questionId}/move`, { newPosition }, jwt);
-};
+}
 
 export const duplicateQuiz = (jwt: Jwt, quizId: number, questionId: number): AdminQuestionDuplicate | ErrorObj => {
   return requestHelper('POST', `v2/admin/quiz/${quizId}/question/${questionId}/duplicate`, {}, jwt);
