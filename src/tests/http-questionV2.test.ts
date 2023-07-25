@@ -1,6 +1,6 @@
 import { AdminQuizCreate, ErrorObj, Jwt, QuestionBody, QuizQuestionCreate, Token, AdminQuizInfo, AdminQuestionDuplicate } from '../../interfaces/interfaces';
 import { clearUsers, registerUser, duplicateQuiz, logoutUserHandler, deleteQuestion, moveQuestion, updateQuiz } from './iter2tests/testHelpersv1';
-import { RequestCreateQuizV2, infoQuizV2, logoutUserHandlerV2, createQuizQuestionHandlerV2 } from './testhelpersV2';
+import { RequestCreateQuizV2, infoQuizV2, logoutUserHandlerV2, createQuizQuestionHandlerV2, deleteQuestionHandlerV2 } from './testhelpersV2';
 import { tokenToJwt } from '../token';
 // import { token } from 'morgan';
 
@@ -167,7 +167,7 @@ describe('Tests related to creating a Quiz Question', () => {
       test('URL not jpeg or png', () => {
         defaultQuestionBody.thumbnailUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1WXM5IVq1TJWzhGKuAC6F6YBcY1yJH4Cc9Q&usqp=CAU';
         expect(createQuizQuestionHandlerV2(quizId, userJwt, defaultQuestionBody)).toEqual({
-          error: 'Must be a JPG or PNG file type'
+          error: 'File is not a png or jpg file'
         });
       });
 
@@ -203,3 +203,91 @@ describe('Tests related to creating a Quiz Question', () => {
     });
   });
 });
+
+
+// TESTS FOR QUESTION DELETE //
+
+describe('Tests for deleteQuestionV2', () => {
+        let userToken: Token;
+        let userJwt: Jwt;
+        let quizId: number;
+        let defaultQuestionBody: QuestionBody;
+        beforeEach(() => {
+          userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+          userJwt = tokenToJwt(userToken);
+          quizId = (RequestCreateQuizV2(tokenToJwt(userToken), 'Countries of the World', 'Quiz on Countries of the World') as AdminQuizCreate).quizId;
+      
+          defaultQuestionBody = {
+            question: 'What continent is Russia in?',
+            duration: 5,
+            points: 1,
+            answers: [
+              {
+                answerId: 0,
+                answer: 'Asia',
+                colour: 'Red',
+                correct: true
+              },
+              {
+                answerId: 1,
+                answer: 'North America',
+                colour: 'Blue',
+                correct: false
+              },
+              {
+                answerId: 2,
+                answer: 'South America',
+                colour: 'Green',
+                correct: false
+              },
+              {
+                answerId: 3,
+                answer: 'Africa',
+                colour: 'Yellow',
+                correct: false
+              }
+            ],
+            thumbnailUrl: "https://static.vecteezy.com/system/resources/previews/001/204/011/original/soccer-ball-png.png"
+          };
+        });
+      
+        describe('Unsuccessful Tests', () => {
+          test('token not for currently logged in session', () => {
+            const exampleToken: Token = {
+              sessionId: '',
+              userId: 5
+            };
+            expect(deleteQuestionHandlerV2(tokenToJwt(exampleToken), quizId, 5)).toStrictEqual({ error: 'Token not for currently logged in session' });
+          });
+      
+          test('quizId does not refer to a valid quiz', () => {
+            expect(deleteQuestionHandlerV2(userJwt, 5, 0)).toStrictEqual({ error: 'Quiz ID does not refer to a valid quiz' });
+          });
+      
+          test('quizId does not refer to a quiz that this user owns', () => {
+            const token2 = registerUser('JohnCena@gmail.com', 'Password123', 'John', 'Cena') as Token;
+            expect(deleteQuestionHandlerV2(tokenToJwt(token2), 0, 0)).toStrictEqual({ error: 'Quiz ID does not refer to a quiz that this user owns' });
+          });
+      
+          test('quizId does not refer to a valid question within the quiz', () => {
+            expect(deleteQuestionHandlerV2(userJwt, quizId, 0)).toStrictEqual({ error: 'Quiz ID does not refer to a valid question within this quiz' });
+          });
+        });
+
+         /* 
+        
+                NEED TO ADD TESTS: All sessions for this quiz must be in END state ,
+
+                USE THE GET SESSION STATUS FUNCTION TO ERROR CHECK WHEN WE FINSIH THAT FUNCTION
+        
+        */
+      
+        describe('Successful Tests', () => {
+          test('Successfully deleted question', () => {
+            createQuizQuestionHandlerV2(quizId, userJwt, defaultQuestionBody);
+            expect(deleteQuestionHandlerV2(userJwt, quizId, 0)).toStrictEqual({});
+          });
+        });
+      });
+      
+

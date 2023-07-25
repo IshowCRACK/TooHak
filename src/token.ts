@@ -120,7 +120,7 @@ export const createQuizSession = (authUserId: number, quizId: number, autoStartN
     atQuestion: 0,
     players: [],
     metadata: {
-      thumbnailUrl: 'Some thumbnail url.com.au',
+      imgUrl: 'Some thumbnail url.com.au',
       ...quiz
     } // todo: Add thumbnail to whoever doing it.
   };

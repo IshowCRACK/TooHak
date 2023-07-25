@@ -8,12 +8,13 @@ import YAML from 'yaml';
 import sui from 'swagger-ui-express';
 import fs from 'fs';
 import { adminAuthRegister, adminAuthLogin, adminAuthLogout, adminUserDetails, adminUpdateUserDetails, adminUpdateUserPassword } from './auth';
-import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash, adminQuizRestore, adminQuizEmptyTrash, quizStartSession } from './quiz';
+import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash, adminQuizRestore, adminQuizEmptyTrash, quizStartSession, createQuizThumbnail } from './quiz';
 import { clear } from './other';
 import { formatError } from './helper';
 import { getData } from './dataStore';
 import { quizCreateQuestion, adminQuizDelete, quizDuplicateQuestion, quizMoveQuestion, quizUpdateQuestion } from './question';
-import { quizCreateQuestionV2 } from './questionV2';
+import { quizCreateQuestionV2, deleteQuestionV2 } from './questionV2';
+import { duplicateQuiz } from './tests/testhelpersV2';
 // Set up web app
 const app = express();
 // Use middleware that allows us to access the JSON body of requests
@@ -282,6 +283,15 @@ app.get('/debug', (req: Request, res: Response) => {
   res.json(data);
 });
 
+app.post('/v1/admin/quiz/:quizId/thumbnail', (req: Request, res: Response) => {
+  const token: string = req.header('token') as string;
+  const quizId = parseInt(req.params.quizId);
+  const { imgUrl } = req.body;
+
+  const response = createQuizThumbnail({ token: token }, quizId, imgUrl);
+  res.status(200).json(response);
+});
+
 //  //////////////////////////////// V2 ROUTES /////////////////////////////////////
 app.post('/v2/admin/auth/logout', (req: Request, res: Response) => {
   const token: string = req.header('token') as string;
@@ -368,6 +378,33 @@ app.post('/v2/admin/quiz/:quizId/question', (req: Request, res: Response) => {
   const { questionBody } = req.body;
   const response = quizCreateQuestionV2({ token: token }, questionBody, quizId);
   
+  res.status(200).json(response);
+});
+app.delete('/v2/admin/quiz/:quizId/question/:questionId', (req: Request, res: Response) => {
+  const quizId = parseInt(req.params.quizId);
+  const questionId = parseInt(req.params.questionId);
+  const token: string = req.header('token') as string;
+  const response = deleteQuestionV2({ token: token }, quizId, questionId);
+  
+  res.status(200).json(response);
+});
+
+app.put('/v2/admin/quiz/:quizId/question/:questionId/move', (req: Request, res: Response) => {
+  const quizId = parseInt(req.params.quizId);
+  const questionId = parseInt(req.params.questionId);
+  const { newPosition } = req.body;
+  const token: string = req.header('token') as string;
+  const response = quizMoveQuestion(quizId, questionId, newPosition, { token: token });
+
+  res.status(200).json(response);
+});
+
+app.post('/v2/admin/quiz/:quizId/question/:questionId/duplicate', (req: Request, res: Response) => {
+  const quizId = parseInt(req.params.quizId);
+  const questionId = parseInt(req.params.questionId);
+  const token: string = req.header('token') as string;
+  const response = quizDuplicateQuestion({ token: token }, quizId, questionId);
+
   res.status(200).json(response);
 });
 // ====================================================================

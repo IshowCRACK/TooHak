@@ -1,5 +1,5 @@
 import request, { HttpVerb } from 'sync-request';
-import { AdminQuizCreate, AdminQuizListReturn, ErrorObj, Jwt, OkObj, AdminQuizInfo, OkSessionObj, QuestionBody, QuizQuestionCreate } from '../../interfaces/interfaces';
+import { AdminQuizCreate, AdminQuizListReturn, ErrorObj, Jwt, OkObj, AdminQuizInfo, OkSessionObj, QuestionBody, QuizQuestionCreate, AdminQuestionDuplicate } from '../../interfaces/interfaces';
 import { getUrl } from '../helper';
 
 const URL: string = getUrl();
@@ -23,7 +23,13 @@ const requestHelper = (method: HttpVerb, path: string, payload: object, jwt?: Jw
 
   return JSON.parse(res.body.toString());
 };
+//  ///////////////////// NEW ITR3  ////////////////////////////////////////
 
+export const createQuizThumbnailHandler = (jwt: Jwt, quizId: number, imgUrl: string): OkObj | ErrorObj => {
+  return requestHelper('POST', `v1/admin/quiz/${quizId}/thumbnail`, { imgUrl }, jwt);
+};
+
+//  ////////////////////  MODIFIED ITR3 ////////////////////////////////////
 export const logoutUserHandlerV2 = (jwt: Jwt) => {
   return requestHelper('POST', 'v2/admin/auth/logout', {}, jwt);
 };
@@ -66,4 +72,16 @@ export const startSessionQuiz = (jwt: Jwt, autoStartNum: number, quizId: number)
 
 export const createQuizQuestionHandlerV2 = (quizId: number, jwt: Jwt, questionBody: QuestionBody): QuizQuestionCreate | ErrorObj => {
   return requestHelper('POST', `v2/admin/quiz/${quizId}/question`, { questionBody }, jwt);
+};
+
+export const deleteQuestionHandlerV2 = (jwt: Jwt, quizId: number, questionId: number): OkObj | ErrorObj => {
+  return requestHelper('DELETE', `v2/admin/quiz/${quizId}/question/${questionId}`, {}, jwt);
+};
+
+export function moveQuestionV2(quizId: number, questionId: number, newPosition: number, jwt: Jwt): OkObj | ErrorObj{
+  return requestHelper('PUT', `v2/admin/quiz/${quizId}/question/${questionId}/move`, { newPosition }, jwt);
+};
+
+export const duplicateQuiz = (jwt: Jwt, quizId: number, questionId: number): AdminQuestionDuplicate | ErrorObj => {
+  return requestHelper('POST', `v2/admin/quiz/${quizId}/question/${questionId}/duplicate`, {}, jwt);
 };

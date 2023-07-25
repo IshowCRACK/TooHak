@@ -10,6 +10,7 @@ import {
 } from './helper';
 import { createQuizSession, jwtToToken } from './token';
 import HTTPError from 'http-errors';
+import request from 'sync-request';
 
 // Update the description of the relevant quiz
 export function adminQuizDescriptionUpdate (jwt: Jwt, description: string, quizId: number): OkObj | ErrorAndStatusCode {
@@ -173,7 +174,8 @@ export function adminQuizCreate (jwt: Jwt, name: string, description: string): A
     description: description,
     numQuestions: 0,
     questions: [],
-    duration: 0
+    duration: 0,
+    imgUrl: '',
   });
 
   setData(data);
@@ -475,4 +477,45 @@ export function quizStartSession(jwt: Jwt, autoStartNum: number, quizId: number)
   return {
     sessionId: quizSession.sessionId
   };
+}
+
+export function createQuizThumbnail(jwt: Jwt, quizId: number, imgUrl: string) {
+  const data = getData();
+
+  if (!checkTokenValidStructure(jwt)) {
+    throw HTTPError(401, 'Token is not a valid structure');
+  }
+
+  if (!checkTokenValidSession(jwt)) {
+    throw HTTPError(403, 'Token not for currently logged in session');
+  }
+
+  if (!checkQuizIdValid(quizId)) {
+    throw HTTPError(400, 'Quiz ID does not refer to a valid quiz');
+  }
+
+  if (!checkQuizAndUserIdValid(quizId, jwtToToken(jwt).userId)) {
+    throw HTTPError(400, 'Quiz ID does not refer to a quiz that this user owns');
+  }
+  if (imgUrl.includes(' ')) {
+    throw HTTPError(400, 'imgUrl must be a valid file URL');
+  }
+
+  // Getting the image
+  const ogImg = request(
+    'GET',
+    imgUrl
+  );
+  // Error if there is issue retrieving image
+  if (ogImg.statusCode !== 200) {
+    throw HTTPError(400, 'imgUrl must be a valid file URL');
+  }
+
+  if (!(/\.jpg$/.test(imgUrl) || /\.png$/.test(imgUrl))) {
+    throw HTTPError(400, 'File is not a png or jpg file');
+  }
+  const quizToUpdate: Quiz = data.quizzes.find((quiz: Quiz) => quiz.quizId === quizId);
+  quizToUpdate.imgUrl = imgUrl;
+  setData(data);
+  return {}; // Return an empty object if it passes the checks
 }

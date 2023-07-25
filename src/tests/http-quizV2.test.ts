@@ -1,7 +1,7 @@
 import { ErrorObj, Token, AdminQuizCreate, Jwt, OkObj, AdminQuizInfo } from '../../interfaces/interfaces';
 import { tokenToJwt } from '../token';
 import { registerUser, clearUsers, createQuizQuestionHandler } from './iter2tests/testHelpersv1';
-import { RequestCreateQuizV2, RequestRemoveQuizV2, infoQuizV2, listQuizV2, logoutUserHandlerV2, startSessionQuiz, updateNameQuizV2 } from './testhelpersV2';
+import { RequestCreateQuizV2, RequestRemoveQuizV2, infoQuizV2, listQuizV2, logoutUserHandlerV2, startSessionQuiz, updateNameQuizV2, createQuizThumbnailHandler } from './testhelpersV2';
 
 beforeEach(() => {
   clearUsers();
@@ -42,6 +42,73 @@ const defaultQuestionBody = {
     }
   ]
 };
+//  ///////////////////// NEW ITR3  ////////////////////////////////////////////
+
+// TESTS FOR QUIZ THUMBNAIL //
+describe('Quiz Thumnail', () => {
+  let token0: Token;
+  let token1: Token;
+  let quizId0: number;
+  let quizId1: number;
+  let quizId2: number;
+  let res: OkObj | ErrorObj;
+  let res0: OkObj | ErrorObj;
+
+  beforeEach(() => {
+    token0 = registerUser('JohnSmith@gmail.com', 'Password123', 'Johnny', 'Jones') as Token;
+    token1 = registerUser('JoeMama@gmail.com', 'Password456', 'Joe', 'Mama') as Token;
+    quizId0 = (RequestCreateQuizV2(tokenToJwt(token0), 'Quiz0', 'Description 0') as AdminQuizCreate).quizId;
+    quizId1 = (RequestCreateQuizV2(tokenToJwt(token0), 'Quiz1', 'Description 1') as AdminQuizCreate).quizId;
+    quizId2 = (RequestCreateQuizV2(tokenToJwt(token1), 'Quiz2', 'Description 2') as AdminQuizCreate).quizId;
+    logoutUserHandlerV2(tokenToJwt(token1));
+  });
+  describe('Successful Tests', () => {
+    test('successful image upload', () => {
+      res = createQuizThumbnailHandler(tokenToJwt(token0), quizId0, 'https://thumbs.dreamstime.com/z/tracks-snow-3356163.jpg');
+      expect(res).toStrictEqual({});
+    });
+
+    test('2. Successfull Quiz thumbnail multiple for User', () => {
+      res = createQuizThumbnailHandler(tokenToJwt(token0), quizId0, 'https://thumbs.dreamstime.com/z/tracks-snow-3356163.jpg');
+      res0 = createQuizThumbnailHandler(tokenToJwt(token0), quizId1, 'http://www.freeimageslive.co.uk/files/images006/christmas_balls.jpg');
+      expect(res).toStrictEqual({
+
+      });
+      expect(res0).toStrictEqual({
+
+      });
+    });
+  });
+
+  describe('Unsuccessful Tests', () => {
+    // test('Not token of an active session', () => {
+    //   res = createQuizThumbnailHandler(tokenToJwt(token1), quizId1, 'https://png.pngtree.com/png-clipart/20210318/ourmid/pngtree-delicious-pancakes-for-canadian-maple-festival-png-image_3045828.jpg');
+    //   expect(res).toStrictEqual({ error: 'Token not for currently logged in session' });
+    // });
+
+    test('Invalid QuizId ', () => {
+      res = createQuizThumbnailHandler(tokenToJwt(token0), -99, 'https://thumbs.dreamstime.com/z/tracks-snow-3356163.jpg');
+      expect(res).toStrictEqual({ error: 'Quiz ID does not refer to a valid quiz' });
+    });
+
+    test('Quiz ID does not refer to a quiz that this user owns', () => {
+      res = createQuizThumbnailHandler(tokenToJwt(token0), quizId2, 'https://thumbs.dreamstime.com/z/tracks-snow-3356163.jpg');
+      expect(res).toStrictEqual({ error: 'Quiz ID does not refer to a quiz that this user owns' });
+    });
+
+    test('imgUrl when fetched does not return a valid file', () => {
+      res = createQuizThumbnailHandler(tokenToJwt(token0), quizId1, 'https://github.com/BhanukaUOM/valid-image-url');
+      expect(res).toStrictEqual({ error: 'imgUrl must be a valid file URL' });
+    });
+
+    test('imgUrl when fetched does not return a valid file', () => {
+      res = createQuizThumbnailHandler(tokenToJwt(token0), quizId1, 'https://definately NOT avalidURL');
+      expect(res).toStrictEqual({ error: 'imgUrl must be a valid file URL' });
+    });
+  });
+});
+
+//  ///////////////////// MODIFIED ITR3 ////////////////////////////////////////
 
 // TESTS FOR QUIZ CREATE //
 describe('Quiz CreateV2', () => {

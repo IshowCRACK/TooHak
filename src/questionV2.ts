@@ -67,9 +67,9 @@ export function quizCreateQuestionV2(jwt: Jwt, questionBody: QuestionBody, quizI
 if (!questionBody.thumbnailUrl || questionBody.thumbnailUrl === '') {
         throw HTTPError(400, 'Must have thumbnail');
 };
-if (!questionBody.thumbnailUrl.toLowerCase().includes('png') && !questionBody.thumbnailUrl.toLowerCase().includes('jpg')) {
-        throw HTTPError(400, 'Must be a JPG or PNG file type');
-    }
+if (!(/\.jpg$/.test(questionBody.thumbnailUrl) || /\.png$/.test(questionBody.thumbnailUrl))) {
+        throw HTTPError(400, 'File is not a png or jpg file');
+      }
 
     if (!isURL(questionBody.thumbnailUrl)) {
         throw HTTPError(400, 'Invalid URL');
@@ -90,4 +90,61 @@ if (!questionBody.thumbnailUrl.toLowerCase().includes('png') && !questionBody.th
   };
 }
       
+
+/**
+ * Deletes a quiz question
+ *
+ * @param {number} quizId - The unique id of the quiz
+ * @param {number} questionId - The unique id of the quiz question
+ * @param {Jwt} jwt - Jwt token containing sessionId and userId
+*/
+
+export function deleteQuestionV2(jwt: Jwt, quizId: number, questionId: number): OkObj | ErrorAndStatusCode {
+        if (!checkTokenValidStructure(jwt)) {
+          throw HTTPError(401, 'Token is not a valid structure');
+        }
+      
+        if (!checkTokenValidSession(jwt)) {
+          throw HTTPError(403, 'Token not for currently logged in session');
+        }
+      
+        // QuizId does not refer to a valid quiz
+        if (!checkQuizIdValid(quizId)) {
+          throw HTTPError(400, 'Quiz ID does not refer to a valid quiz');
+        }
+      
+        // QuizId does not refer to a quiz that this user owns
+        if (!checkQuizAndUserIdValid(quizId, jwtToToken(jwt).userId)) {
+          throw HTTPError(400, 'Quiz ID does not refer to a quiz that this user owns');
+        }
+      
+        const data = getData();
+        const quiz = data.quizzes.find((quiz: Quiz) => quiz.quizId === quizId);
+        // QuestionId does not refer to a valid question within this quiz
+        if (!checkQuestionIdValid(questionId, quiz)) {
+          throw HTTPError(400, 'Quiz ID does not refer to a valid question within this quiz');
+        }
+
+        /* 
+        
+                NEED TO IMPLEMENT: All sessions for this quiz must be in END state ,
+
+        USE THE GET SESSION STATUS FUNCTION TO ERROR CHECK WHEN WE FINSIH THAT FUNCTION
+        
+        */
+      
+        const quizIndex: number = data.quizzes.indexOf(quiz);
+        let questionIndex: number;
+        for (const question of data.quizzes[quizIndex].questions) {
+          if (question.questionId === questionId) {
+            questionIndex = data.quizzes[quizIndex].questions.indexOf(question);
+          }
+        }
+      
+        if (questionIndex !== -1) {
+          data.quizzes[quizIndex].questions.splice(questionIndex, 1);
+          setData(data);
+          return {};
+        }
+      }
       
