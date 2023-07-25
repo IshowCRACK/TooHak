@@ -69,10 +69,11 @@ export type JwtToken = string;
 
 export interface Quiz extends AdminQuizInfo {
     adminQuizId: number;
+    imgUrl: string;
 }
 
 export interface QuizMetadata extends AdminQuizInfo {
-    thumbnailUrl?: string;
+    imgUrl: string;
 }
 export interface AdminQuizInfo {
     quizId: number;
@@ -87,7 +88,7 @@ export interface AdminQuizInfo {
 
 export interface Question extends QuestionBody {
     questionId: number;
-    thumbnailUrl?: string; // Make sure to put thumbnail in as actual parameter to whoever is doing it
+    imgUrl?: string; // Make sure to put thumbnail in as actual parameter to whoever is doing it
 }
 
 export interface QuestionBody {

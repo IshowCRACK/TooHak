@@ -23,7 +23,13 @@ const requestHelper = (method: HttpVerb, path: string, payload: object, jwt?: Jw
 
   return JSON.parse(res.body.toString());
 };
+//  ///////////////////// NEW ITR3  ////////////////////////////////////////
 
+export const createQuizThumbnailHandler = (jwt: Jwt, quizId: number, imgUrl: string): OkObj | ErrorObj => {
+  return requestHelper('POST', `v1/admin/quiz/${quizId}/thumbnail`, { imgUrl }, jwt);
+};
+
+//  ////////////////////  MODIFIED ITR3 ////////////////////////////////////
 export const logoutUserHandlerV2 = (jwt: Jwt) => {
   return requestHelper('POST', 'v2/admin/auth/logout', {}, jwt);
 };

@@ -12,6 +12,9 @@ beforeEach(() => {
 afterEach(() => {
   clearUsers();
 });
+//  ///////////////////// NEW ITR3  ////////////////////////////////////////
+
+//  ////////////////////  MODIFIED ITR3 ////////////////////////////////////
 
 // TESTS FOR LOGOUT //
 describe('Tests related to logging out an admin', () => {

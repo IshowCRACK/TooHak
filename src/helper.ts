@@ -3,7 +3,6 @@ import { getData } from './dataStore';
 import { adminQuizList } from './quiz';
 import { checkJwtValid, jwtToToken } from './token';
 import config from './config.json';
-
 /**
  * -------------------------------------- HELPERS FUNCTIONS-----------------------------------------------
  */
@@ -204,7 +203,7 @@ export function adminUserALLDetails(authUserId: number): AdminUserALLDetailsRetu
   * }>} | {error: string}} - An array of quizzes and its details
   *
   */
-// function adminQuizALLDetails(quizId: number): AdminQuizALLDetailsReturn {
+// export function adminQuizALLDetails(quizId: number): Quiz {
 //   const data = getData();
 
 //   for (const quiz of data.quizzes) {
@@ -216,7 +215,11 @@ export function adminUserALLDetails(authUserId: number): AdminUserALLDetailsRetu
 //           name: quiz.name,
 //           timeCreated: quiz.timeCreated,
 //           timeLastEdited: quiz.timeLastEdited,
-//           description: quiz.description
+//           description: quiz.description,
+//           numQuestions: quiz.numQuestions,
+//           questions: quiz.questions,
+//           duration: quiz.duration,
+//           imgUrl: quiz.imgUrl
 //         }
 //       };
 //     }

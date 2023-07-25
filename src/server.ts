@@ -8,7 +8,7 @@ import YAML from 'yaml';
 import sui from 'swagger-ui-express';
 import fs from 'fs';
 import { adminAuthRegister, adminAuthLogin, adminAuthLogout, adminUserDetails, adminUpdateUserDetails, adminUpdateUserPassword } from './auth';
-import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash, adminQuizRestore, adminQuizEmptyTrash, quizStartSession } from './quiz';
+import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash, adminQuizRestore, adminQuizEmptyTrash, quizStartSession, createQuizThumbnail } from './quiz';
 import { clear } from './other';
 import { formatError } from './helper';
 import { getData } from './dataStore';
@@ -280,6 +280,15 @@ app.get('/debug', (req: Request, res: Response) => {
   const data = getData();
 
   res.json(data);
+});
+
+app.post('/v1/admin/quiz/:quizId/thumbnail', (req: Request, res: Response) => {
+  const token: string = req.header('token') as string;
+  const quizId = parseInt(req.params.quizId);
+  const { imgUrl } = req.body;
+
+  const response = createQuizThumbnail({ token: token }, quizId, imgUrl);
+  res.status(200).json(response);
 });
 
 //  //////////////////////////////// V2 ROUTES /////////////////////////////////////
