@@ -3,7 +3,6 @@ import { clearUsers, registerUser } from './iter2tests/testHelpersv1';
 import { RequestCreateQuizV2, infoQuizV2, moveQuestionV2, deleteQuestionV2, duplicateQuizV2, logoutUserHandlerV2, createQuizQuestionHandlerV2, updateQuizV2 } from './testhelpersV2';
 import { tokenToJwt } from '../token';
 
-
 beforeEach(() => {
   clearUsers();
 });
@@ -499,7 +498,7 @@ describe('Tests for adminQuizDelete', () => {
     test('quizId does not refer to a valid question within the quiz', () => {
       expect(deleteQuestionV2(userJwt, quizId, 0)).toStrictEqual({ error: 'Quiz ID does not refer to a valid question within this quiz' });
     });
-      /*
+    /*
 
                 NEED TO ADD TESTS: All sessions for this quiz must be in END state ,
 
