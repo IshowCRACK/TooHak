@@ -6,7 +6,7 @@ import {
 import { jwtToToken } from './token';
 import { getData, setData } from './dataStore';
 import HTTPError from 'http-errors';
-import { isWebUri } from 'valid-url';
+import  isURL  from 'is-url';
 
 
 export function quizCreateQuestionV2(jwt: Jwt, questionBody: QuestionBody, quizId: number) {
@@ -63,9 +63,6 @@ export function quizCreateQuestionV2(jwt: Jwt, questionBody: QuestionBody, quizI
   if (!checkAnswerHasTrueValue(questionBody.answers)) {
     throw HTTPError(400, 'There are no correct answers');
   }
-/*The thumbnailUrl is an empty string
-The thumbnailUrl does not return to a valid file
-The thumbnailUrl, when fetched, is not a JPG or PNg file type*/
 
 if (!questionBody.thumbnailUrl || questionBody.thumbnailUrl === '') {
         throw HTTPError(400, 'Must have thumbnail');
@@ -74,7 +71,7 @@ if (!questionBody.thumbnailUrl.toLowerCase().includes('png') && !questionBody.th
         throw HTTPError(400, 'Must be a JPG or PNG file type');
     }
 
-    if (!isWebUri(questionBody.thumbnailUrl)) {
+    if (!isURL(questionBody.thumbnailUrl)) {
         throw HTTPError(400, 'Invalid URL');
     }
     
