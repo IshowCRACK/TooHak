@@ -1,6 +1,6 @@
 import { AdminUserDetailsReturn, Data, Token, Jwt, ErrorAndStatusCode, OkObj, User } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
-import { checkName, checkPassword, emailAlreadyUsed, checkTokenValidStructure, checkTokenValidSession, createUserId } from './helper';
+import { checkName, checkPassword, emailAlreadyUsed, checkTokenValidStructure, checkTokenValidSession, createUserId, hashPassword } from './helper';
 import validator from 'validator';
 import { addTokenToSession, checkJwtValid, createToken, getTokenLogin, tokenToJwt, jwtToToken } from './token';
 import HTTPError from 'http-errors';
@@ -63,14 +63,14 @@ export function adminAuthRegister (email: string, password: string, nameFirst: s
 
   data.users.push({
     email: email,
-    password: password,
+    password: hashPassword(password),
     nameFirst: nameFirst,
     nameLast: nameLast,
     authUserId: userID,
     numSuccessLogins: 1,
     numFailedPasswordsSinceLastLogin: 0,
     deletedQuizzes: [],
-    prevPassword: [password],
+    prevPassword: [hashPassword(password)],
   });
 
   setData(data);
@@ -95,7 +95,7 @@ export function adminAuthLogin (email: string, password: string): Jwt | ErrorAnd
 
   // loop through users array from dataStore
   for (const user of data.users) {
-    if (user.email === email && user.password === password) {
+    if (user.email === email && user.password === hashPassword(password)) {
       // add successful logins for all times & change failed password
       user.numSuccessLogins++;
       user.numFailedPasswordsSinceLastLogin = 0;
@@ -232,12 +232,12 @@ export function adminUpdateUserPassword(jwt: Jwt, oldPassword: string, newPasswo
 
   if (user) {
     // Check if the old password matches the user's current password
-    if (user.password !== oldPassword) {
+    if (user.password !== hashPassword(oldPassword)) {
       throw HTTPError(400, 'Old password is not correct');
     }
 
     // Check if the new password has been used before by this user
-    if (user.password === newPassword || user.prevPassword.includes(newPassword) === true) {
+    if (user.password === hashPassword(newPassword) || user.prevPassword.includes(hashPassword(newPassword)) === true) {
       throw HTTPError(400, 'New password cannot be the same as the old password');
     }
 
@@ -247,8 +247,8 @@ export function adminUpdateUserPassword(jwt: Jwt, oldPassword: string, newPasswo
     }
 
     // Update the user's password
-    user.password = newPassword;
-    user.prevPassword.push(newPassword);
+    user.password = hashPassword(newPassword);
+    user.prevPassword.push(hashPassword(newPassword));
 
     setData(data);
   } else {
