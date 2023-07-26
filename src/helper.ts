@@ -3,6 +3,7 @@ import { getData } from './dataStore';
 import { adminQuizList } from './quiz';
 import { checkJwtValid, jwtToToken } from './token';
 import config from './config.json';
+import crypto from 'crypto';
 /**
  * -------------------------------------- HELPERS FUNCTIONS-----------------------------------------------
  */
@@ -466,4 +467,16 @@ export function checkQuizHasQuestions(quizId: number): boolean {
   if (quiz.questions.length === 0) return false;
 
   return true;
+}
+
+/**
+  * Hashes the passwords
+  *
+  * @param {string} password - Uniqued hashed password
+  *
+  * @returns {string} - Returns string for the hashed password
+ */
+
+export function hashPassword(password: string): string {
+  return crypto.createHash('sha256').update(password).digest('hex');
 }
