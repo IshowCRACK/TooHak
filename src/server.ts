@@ -298,7 +298,7 @@ app.put('/v1/admin/quiz/:quizId/session/:sessionId', (req: Request, res: Respons
   const quizId = parseInt(req.params.quizId);
   const { action } = req.body;
 
-  const response = updateQuizSessionState( quizId, sessionId, { token: token }, action);
+  const response = updateQuizSessionState(quizId, sessionId, { token: token }, action);
   res.status(200).json(response);
 });
 
@@ -307,7 +307,7 @@ app.get('/v1/admin/quiz/:quizId/session/:sessionId', (req: Request, res: Respons
   const sessionId = parseInt(req.params.sessionId);
   const quizId = parseInt(req.params.quizId);
 
-  const response = getSessionStatus( quizId, sessionId, { token: token });
+  const response = getSessionStatus(quizId, sessionId, { token: token });
   res.status(200).json(response);
 });
 

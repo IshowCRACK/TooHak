@@ -116,6 +116,8 @@ export const createQuizSession = (authUserId: number, quizId: number, autoStartN
     sessionId: sessionId,
     authUserId: authUserId,
     autoStartNum: autoStartNum,
+    countdownTimer: undefined, // Timer for countdown
+    questionTimer: undefined, // Timer for question countdown
     state: States.LOBBY,
     atQuestion: 0,
     players: [],

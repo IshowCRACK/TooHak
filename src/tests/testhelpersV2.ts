@@ -29,12 +29,11 @@ export const createQuizThumbnailHandler = (jwt: Jwt, quizId: number, imgUrl: str
   return requestHelper('POST', `v1/admin/quiz/${quizId}/thumbnail`, { imgUrl }, jwt);
 };
 
-
 export const updateQuizSessionStateHandler = (quizId: number, sessionId: number, jwt: Jwt, action: string): OkObj | ErrorObj => {
   return requestHelper('PUT', `v1/admin/quiz/${quizId}/session/${sessionId}`, { action }, jwt);
 };
 
-export const getSessionStatusHandler = (quizId: number, sessionId: number, jwt:Jwt ): string | ErrorObj => {
+export const getSessionStatusHandler = (quizId: number, sessionId: number, jwt:Jwt): string | ErrorObj => {
   return requestHelper('GET', `v1/admin/quiz/${quizId}/session/${sessionId}`, {}, jwt);
 };
 

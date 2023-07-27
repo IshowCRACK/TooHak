@@ -27,6 +27,8 @@ export interface QuizSessionAdmin extends QuizSession {
     sessionId: number;
     authUserId: number;
     autoStartNum: number;
+    countdownTimer: ReturnType<typeof setTimeout> | undefined; // Timer for question countdown
+    questionTimer: ReturnType<typeof setTimeout> | undefined; // Timer for question countdown
 }
 export interface QuizSession {
     state: States;
