@@ -575,7 +575,7 @@ export function updateQuizSessionState(quizId: number, sessionId: number, jwt: J
     throw HTTPError(400, 'Action CANNOT be applied to current state');
   }
   let questionDuration: number;
-  const countdownDuration = 5;
+  const countdownDuration = 1;
   const questionCount: number = quizSession.metadata.numQuestions;
 
   switch (action) {

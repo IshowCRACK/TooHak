@@ -17,7 +17,7 @@ afterEach(() => {
 
 const defaultQuestionBody = {
   question: 'What content is Russia in?',
-  duration: 5,
+  duration: 1,
   points: 1,
   answers: [
     {
@@ -49,7 +49,7 @@ const defaultQuestionBody = {
 
 const defaultQuestionBody2 = {
   question: 'What country is sydney in?',
-  duration: 2,
+  duration: 1,
   points: 1,
   answers: [
     {
@@ -171,7 +171,7 @@ describe('Session State Update', () => {
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
       });
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
-      await delay(5100);
+      await delay(1100);
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'END')).toEqual({
       });
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('END');
@@ -181,9 +181,9 @@ describe('Session State Update', () => {
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
       });
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
-      await delay(5100);
+      await delay(1100);
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_OPEN');
-      await delay(5100);
+      await delay(1100);
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_CLOSE');
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER')).toEqual({
       });
@@ -200,9 +200,9 @@ describe('Session State Update', () => {
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
       });
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
-      await delay(5100);
+      await delay(1100);
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_OPEN');
-      await delay(5100);
+      await delay(1100);
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_CLOSE');
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_FINAL_RESULTS')).toEqual({
       });
@@ -216,9 +216,9 @@ describe('Session State Update', () => {
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
       });
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
-      await delay(5100);
+      await delay(1100);
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_OPEN');
-      await delay(5100);
+      await delay(1100);
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_CLOSE');
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'END')).toEqual({
       });
@@ -229,14 +229,14 @@ describe('Session State Update', () => {
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
       });
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
-      await delay(5100);
+      await delay(1100);
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_OPEN');
-      await delay(5100);
+      await delay(1100);
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_CLOSE');
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
       });
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
-      await delay(5100);
+      await delay(1100);
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_OPEN');
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER')).toEqual({
       });
@@ -249,7 +249,7 @@ describe('Session State Update', () => {
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
       });
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
-      await delay(5100);
+      await delay(1100);
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_OPEN');
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'END')).toEqual({
       });
@@ -259,9 +259,9 @@ describe('Session State Update', () => {
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
       });
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
-      await delay(5100);
+      await delay(1100);
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_OPEN');
-      await delay(5100);
+      await delay(1100);
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER')).toEqual({
       });
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('ANSWER_SHOW');
@@ -274,7 +274,7 @@ describe('Session State Update', () => {
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
       });
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
-      await delay(5100);
+      await delay(1100);
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_OPEN');
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER')).toEqual({
       });
@@ -291,10 +291,10 @@ describe('Session State Update', () => {
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
       });
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
-      await delay(5100);
+      await delay(1100);
 
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_OPEN');
-      await delay(5100);
+      await delay(1100);
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_CLOSE');
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER')).toEqual({
       });
@@ -302,9 +302,8 @@ describe('Session State Update', () => {
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
       });
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
-      await delay(5100);
+      await delay(1100);
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_OPEN');
-      await delay(1000);
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER')).toEqual({
       });
       expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('ANSWER_SHOW');
