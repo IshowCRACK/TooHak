@@ -1,12 +1,12 @@
 import {
   Data, AdminQuizListReturn, AdminQuizList, Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj,
-  AdminQuizInfo, User, Quiz, QuizTrashReturn, Token,
+  AdminQuizInfo, User, Quiz, QuizTrashReturn, Token, States, Actions
 } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkQuizAndUserIdValid, checkQuizIdValid, checkQuizNameUsed,
   checkTokenValidStructure, checkTokenValidSession, checkNameUsedInQuiz, checkQuizIdAndUserIdValidAndTrash,
-  checkQuizIdValidAndTrash, createQuizId, checkMaxNumSessions, checkQuizHasQuestions
+  checkQuizIdValidAndTrash, createQuizId, checkMaxNumSessions, checkQuizHasQuestions, isActionValid
 } from './helper';
 import { createQuizSession, jwtToToken } from './token';
 import HTTPError from 'http-errors';
@@ -518,4 +518,144 @@ export function createQuizThumbnail(jwt: Jwt, quizId: number, imgUrl: string) {
   quizToUpdate.imgUrl = imgUrl;
   setData(data);
   return {}; // Return an empty object if it passes the checks
+}
+
+// Updates the Quiz Session state
+export function updateQuizSessionState(quizId: number, sessionId: number, jwt: Jwt, action: string): OkObj {
+  if (!checkTokenValidStructure(jwt)) {
+    throw HTTPError(401, 'Token is not a valid structure');
+  }
+
+  if (!checkTokenValidSession(jwt)) {
+    throw HTTPError(403, 'Token not for currently logged in session');
+  }
+
+  if (!checkQuizIdValid(quizId)) {
+    throw HTTPError(400, 'Quiz ID does not refer to a valid quiz');
+  }
+
+  if (!checkQuizAndUserIdValid(quizId, jwtToToken(jwt).userId)) {
+    throw HTTPError(400, 'Quiz ID does not refer to a quiz that this user owns');
+  }
+
+  const data = getData();
+  const quizSession = data.quizSessions.find(
+    (session) => session.sessionId === sessionId && session.metadata.quizId === quizId
+  );
+
+  // If the quiz session is not found, return an error
+  if (!quizSession) {
+    throw HTTPError(400, 'Invalid quiz session or session not found');
+  }
+
+  // Get the current state of the quiz session
+  const currentState = quizSession.state;
+
+  // Convert the string action to an Actions enum value
+  const actionEnum: Actions = Actions[action as keyof typeof Actions];
+
+  // Define the valid transitions for each state
+  const validTransitions: { [key in States]: Actions[] } = {
+    [States.LOBBY]: [Actions.NEXT_QUESTION, Actions.END],
+    [States.QUESTION_COUNTDOWN]: [Actions.END],
+    [States.QUESTION_OPEN]: [Actions.END, Actions.GO_TO_ANSWER],
+    [States.QUESTION_CLOSE]: [Actions.END, Actions.NEXT_QUESTION, Actions.GO_TO_ANSWER, Actions.GO_TO_FINAL_RESULTS],
+    [States.ANSWER_SHOW]: [Actions.END, Actions.NEXT_QUESTION, Actions.GO_TO_FINAL_RESULTS],
+    [States.FINAL_RESULTS]: [Actions.END],
+    [States.END]: [],
+  };
+
+  // Check if the action is a valid enum value
+  if (!isActionValid(action)) {
+    throw HTTPError(400, 'Invalid action. Action must be one of the valid action strings.');
+  }
+
+  // Check if the provided action is a valid transition from the current state
+  if (!validTransitions[currentState].includes(actionEnum)) {
+    throw HTTPError(400, 'Action CANNOT be applied to current state');
+  }
+  let questionDuration: number;
+  const countdownDuration = 1;
+  const questionCount: number = quizSession.metadata.numQuestions;
+
+  switch (action) {
+    case Actions.NEXT_QUESTION:
+      if (quizSession.atQuestion < questionCount) {
+        questionDuration = quizSession.metadata.questions[quizSession.atQuestion].duration;
+        quizSession.atQuestion = quizSession.atQuestion + 1;
+        // Update the state to QUESTION_COUNTDOWN
+        quizSession.state = States.QUESTION_COUNTDOWN;
+        setData(data);
+        // Start the countdown timer
+        quizSession.countdownTimer = setTimeout(() => {
+          quizSession.state = States.QUESTION_OPEN;
+          setData(data);
+          // Clear the countdown timer
+          clearTimeout(quizSession.countdownTimer);
+          quizSession.countdownTimer = undefined;
+          // Start the question duration timer
+          quizSession.questionTimer = setTimeout(() => {
+            quizSession.state = States.QUESTION_CLOSE;
+            setData(data);
+
+            // Clear the question duration timer
+            clearTimeout(quizSession.questionTimer);
+            quizSession.questionTimer = undefined;
+          }, questionDuration * 1000);
+        }, countdownDuration * 1000);
+      } else {
+        // when no more questions go to END
+        quizSession.state = States.END;
+      }
+      break;
+    case Actions.GO_TO_ANSWER:
+      // Update the state to ANSWER_SHOW
+      clearTimeout(quizSession.questionTimer);
+      clearTimeout(quizSession.countdownTimer);
+      quizSession.questionTimer = undefined;
+      quizSession.countdownTimer = undefined;
+
+      quizSession.state = States.ANSWER_SHOW;
+      setData(data);
+      break;
+
+    case Actions.GO_TO_FINAL_RESULTS:
+      // Update the state to FINAL_RESULTS
+      clearTimeout(quizSession.questionTimer);
+      clearTimeout(quizSession.countdownTimer);
+      quizSession.questionTimer = undefined;
+      quizSession.countdownTimer = undefined;
+      quizSession.state = States.FINAL_RESULTS;
+      setData(data);
+      break;
+
+    case Actions.END:
+      // Update the state to END
+      clearTimeout(quizSession.questionTimer);
+      clearTimeout(quizSession.countdownTimer);
+      quizSession.questionTimer = undefined;
+      quizSession.countdownTimer = undefined;
+      quizSession.state = States.END;
+      setData(data);
+      break;
+  }
+  return {};
+}
+
+//  Returns the State of a Quiz (used for updatQuizSessionState TESTS)
+//  --> turn this into "Get session status" & replace tests for updatQuizSessionState
+export function getSessionStatus(quizId: number, sessionId: number, jwt: Jwt): string {
+  const data = getData();
+  const quizSession = data.quizSessions.find(
+    (session) => session.sessionId === sessionId && session.metadata.quizId === quizId
+  );
+
+  if (quizSession) {
+    // If the quizSession is found, return its state
+    return quizSession.state;
+  } else {
+    // If the quizSession is not found, return an error message or throw an error
+    // For simplicity, let's return an error message
+    return 'Quiz session not found';
+  }
 }

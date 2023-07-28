@@ -1,8 +1,12 @@
-import { ErrorObj, Token, AdminQuizCreate, Jwt, OkObj, AdminQuizInfo } from '../../interfaces/interfaces';
+import { ErrorObj, Token, AdminQuizCreate, Jwt, OkObj, AdminQuizInfo, OkSessionObj } from '../../interfaces/interfaces';
 import { tokenToJwt } from '../token';
 import { registerUser, clearUsers, createQuizQuestionHandler } from './iter2tests/testHelpersv1';
-import { RequestCreateQuizV2, RequestRemoveQuizV2, infoQuizV2, listQuizV2, logoutUserHandlerV2, startSessionQuiz, updateNameQuizV2, createQuizThumbnailHandler } from './testhelpersV2';
+import { RequestCreateQuizV2, RequestRemoveQuizV2, infoQuizV2, listQuizV2, logoutUserHandlerV2, startSessionQuiz, updateNameQuizV2, createQuizThumbnailHandler, updateQuizSessionStateHandler, getSessionStatusHandler } from './testhelpersV2';
 
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+jest.setTimeout(20000);
 beforeEach(() => {
   clearUsers();
 });
@@ -13,7 +17,7 @@ afterEach(() => {
 
 const defaultQuestionBody = {
   question: 'What content is Russia in?',
-  duration: 5,
+  duration: 1,
   points: 1,
   answers: [
     {
@@ -42,7 +46,274 @@ const defaultQuestionBody = {
     }
   ]
 };
+
+const defaultQuestionBody2 = {
+  question: 'What country is sydney in?',
+  duration: 1,
+  points: 1,
+  answers: [
+    {
+      answerId: 0,
+      answer: 'Australia',
+      colour: 'Red',
+      correct: true
+    },
+    {
+      answerId: 1,
+      answer: 'Earth',
+      colour: 'Blue',
+      correct: false
+    },
+    {
+      answerId: 2,
+      answer: 'Russia',
+      colour: 'Green',
+      correct: false
+    },
+    {
+      answerId: 3,
+      answer: 'Ukraine',
+      colour: 'Yellow',
+      correct: false
+    }
+  ]
+};
 //  ///////////////////// NEW ITR3  ////////////////////////////////////////////
+
+// TESTS FOR QUIZ SESSION UPDATE STATE //
+describe('Session State Update', () => {
+  let userJwt: Jwt;
+  let userJwt2: Jwt;
+  let userJwt3: Jwt;
+  let userToken: Token;
+  let userToken2: Token;
+  let userToken3: Token;
+
+  let quizId: number;
+  let sessionId: number;
+
+  beforeEach(() => {
+    userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    userJwt = tokenToJwt(userToken);
+    quizId = (RequestCreateQuizV2(userJwt, 'Countries of the world', 'Quiz on all countries') as AdminQuizCreate).quizId;
+    createQuizQuestionHandler(quizId, userJwt, defaultQuestionBody);
+    createQuizQuestionHandler(quizId, userJwt, defaultQuestionBody2);
+
+    sessionId = (startSessionQuiz(userJwt, 30, quizId) as OkSessionObj).sessionId;
+
+    userToken2 = registerUser('JaneAusten@gmail.com', 'Password123', 'Jane', 'Austen') as Token;
+    userJwt2 = tokenToJwt(userToken2);
+
+    userToken3 = registerUser('JaneAusdfdsfsdfdddsten@gmail.com', 'Password123', 'Jane', 'Austen') as Token;
+    userJwt3 = tokenToJwt(userToken3);
+    logoutUserHandlerV2(tokenToJwt(userToken3));
+  });
+
+  afterEach(() => {
+    jest.clearAllTimers();
+  });
+
+  describe('Unsucessful cases', () => {
+    test('Quiz ID does not refer to a valid quiz', () => {
+      expect(updateQuizSessionStateHandler(-99, sessionId, userJwt, 'QUESTION_COUNTDOWN')).toEqual(
+        { error: 'Quiz ID does not refer to a valid quiz' }
+      );
+    });
+
+    test('Quiz ID does not refer to a quiz that this user owns', () => {
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt2, 'QUESTION_COUNTDOWN')).toEqual(
+        { error: 'Quiz ID does not refer to a quiz that this user owns' }
+      );
+    });
+
+    test('Not token of an active session', () => {
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt3, 'QUESTION_COUNTDOWN')).toStrictEqual(
+        { error: 'Token not for currently logged in session' }
+      );
+    });
+
+    test('Token is not a valid structure', () => {
+      expect(updateQuizSessionStateHandler(quizId, sessionId, { token: '-1' }, 'QUESTION_COUNTDOWN')).toEqual(
+        { error: 'Token is not a valid structure' }
+      );
+    });
+
+    test('Invalid Action Enum', () => {
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'INVALID_ACTION')).toEqual(
+        { error: 'Invalid action. Action must be one of the valid action strings.' }
+      );
+    });
+
+    test('Action CANNOT be applied to current state', () => {
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_FINAL_RESULTS')).toEqual(
+        { error: 'Action CANNOT be applied to current state' }
+      );
+    });
+    test('Action CANNOT be applied to current state', () => {
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_FINAL_RESULTS')).toEqual(
+        { error: 'Action CANNOT be applied to current state' }
+      );
+    });
+    test('Action CANNOT be applied to current state', () => {
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER')).toEqual(
+        { error: 'Action CANNOT be applied to current state' }
+      );
+    });
+  });
+
+  describe('Successful cases', () => {
+    test('LOBBY ---> END', () => {
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'END')).toEqual({
+      });
+    });
+
+    test('LOBBY ---> QUESTION_COUNTDOWN ---> END', async () => {
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
+      await delay(1100);
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'END')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('END');
+    });
+
+    test('LOBBY ---> QUESTION_COUNTDOWN --(countdown duration)--> QUESTION_OPEN --(question duration)--> QUESTION_CLOSE ---> ANSWERSHOW ---> FINAL RESULTS ---> END ', async () => {
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
+      await delay(1100);
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_OPEN');
+      await delay(1100);
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_CLOSE');
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('ANSWER_SHOW');
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_FINAL_RESULTS')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('FINAL_RESULTS');
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'END')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('END');
+    });
+
+    test('LOBBY ---> QUESTION_COUNTDOWN --(countdown duration)--> QUESTION_OPEN --(question duration)--> QUESTION_CLOSE ---> FINAL RESULTS ---> END ', async () => {
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
+      await delay(1100);
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_OPEN');
+      await delay(1100);
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_CLOSE');
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_FINAL_RESULTS')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('FINAL_RESULTS');
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'END')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('END');
+    });
+
+    test('LOBBY ---> QUESTION_COUNTDOWN --(countdown duration)--> QUESTION_OPEN --(question duration)--> QUESTION_CLOSE  ---> END ', async () => {
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
+      await delay(1100);
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_OPEN');
+      await delay(1100);
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_CLOSE');
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'END')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('END');
+    });
+
+    test('LOBBY ---> QUESTION_COUNTDOWN --(countdown duration)--> QUESTION_OPEN --(question duration)--> QUESTION_CLOSE  ---> QUESTION_COUNTDOWN ---> QUESTION_OPEN ---> ANSWER_SHOW --(END state is set eventhough NEXT_QUESTION is called to test last question case)--> END', async () => {
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
+      await delay(1100);
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_OPEN');
+      await delay(1100);
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_CLOSE');
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
+      await delay(1100);
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_OPEN');
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('ANSWER_SHOW');
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('END');
+    });
+    test('LOBBY ---> QUESTION_COUNTDOWN --(countdown duration)--> QUESTION_OPEN ---> END ', async () => {
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
+      await delay(1100);
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_OPEN');
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'END')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('END');
+    });
+    test('LOBBY ---> QUESTION_COUNTDOWN --(countdown duration)--> QUESTION_OPEN ---> ANSWERSHOW ---> END ', async () => {
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
+      await delay(1100);
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_OPEN');
+      await delay(1100);
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('ANSWER_SHOW');
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'END')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('END');
+    });
+
+    test('LOBBY ---> QUESTION_COUNTDOWN --(countdown duration)--> QUESTION_OPEN ---> ANSWERSHOW ---> QUESTION_COUNTDOWN ---> END  ', async () => {
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
+      await delay(1100);
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_OPEN');
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('ANSWER_SHOW');
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'END')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('END');
+    });
+
+    test('LOBBY ---> QUESTION_COUNTDOWN --(countdown duration)--> QUESTION_OPEN --(question duration)--> QUESTION_CLOSE ---> ANSWER_SHOW ---> QUESTION_COUNTDOWN ---> QUESTION_OPEN ---> ANSWER_SHOW --(END state is set eventhough NEXT_QUESTION is called to test last question case)--> END', async () => {
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
+      await delay(1100);
+
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_OPEN');
+      await delay(1100);
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_CLOSE');
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('ANSWER_SHOW');
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
+      await delay(1100);
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_OPEN');
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER')).toEqual({
+      });
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('ANSWER_SHOW');
+      expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
+      });
+      // Expect STATE to be END because last question (extra edge case i added)
+      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('END');
+    });
+  });
+});
 
 // TESTS FOR QUIZ THUMBNAIL //
 describe('Quiz Thumnail', () => {

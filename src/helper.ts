@@ -1,4 +1,4 @@
-import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer, Question, User, States } from '../interfaces/interfaces';
+import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer, Question, User, States, Actions } from '../interfaces/interfaces';
 import { getData } from './dataStore';
 import { adminQuizList } from './quiz';
 import { checkJwtValid, jwtToToken } from './token';
@@ -452,8 +452,6 @@ export function checkMaxNumSessions(userId: number): boolean {
       numActiveSessions++;
     }
   }
-
-  console.log(numActiveSessions);
   return numActiveSessions <= 10;
 }
 
@@ -479,4 +477,13 @@ export function checkQuizHasQuestions(quizId: number): boolean {
 
 export function hashPassword(password: string): string {
   return crypto.createHash('sha256').update(password).digest('hex');
+}
+
+// Function to check if a given action exists in the Actions enum
+export function isActionValid(action: string): boolean {
+  // Get all the enum values of Actions as an array
+  const allActions: string[] = Object.values(Actions);
+
+  // Check if the action exists in the array of allActions
+  return allActions.includes(action);
 }
