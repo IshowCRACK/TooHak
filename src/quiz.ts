@@ -603,8 +603,7 @@ export function updateQuizSessionState(quizId: number, sessionId: number, jwt: J
             quizSession.questionTimer = undefined;
           }, questionDuration * 1000);
         }, countdownDuration * 1000);
-      }
-      else {
+      } else {
         // when no more questions go to END
         quizSession.state = States.END;
       }
