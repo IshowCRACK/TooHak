@@ -121,6 +121,7 @@ export const createQuizSession = (authUserId: number, quizId: number, autoStartN
     state: States.LOBBY,
     atQuestion: 0,
     players: [],
+    maxPlayerId: 0,
     metadata: {
       imgUrl: 'Some thumbnail url.com.au',
       ...quiz

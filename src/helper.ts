@@ -4,6 +4,8 @@ import { adminQuizList } from './quiz';
 import { checkJwtValid, jwtToToken } from './token';
 import config from './config.json';
 import crypto from 'crypto';
+import randomstring from 'randomstring';
+
 /**
  * -------------------------------------- HELPERS FUNCTIONS-----------------------------------------------
  */
@@ -486,4 +488,38 @@ export function isActionValid(action: string): boolean {
 
   // Check if the action exists in the array of allActions
   return allActions.includes(action);
+}
+
+export function getLetter() {
+  const letters: string[] = [];
+
+  while (letters.length !== 5) {
+    const letter = randomstring.generate({
+      length: 1,
+      charset: 'alphabetic'
+    });
+
+    if (!letters.includes(letter)) {
+      letters.push(letter);
+    }
+  }
+
+  return letters.join('');
+}
+
+export function getNumber() {
+  const numbers: number[] = [];
+
+  while (numbers.length !== 3) {
+    const number = randomstring.generate({
+      length: 1,
+      charset: 'numeric'
+    });
+
+    if (!numbers.includes(parseInt(number))) {
+      numbers.push(parseInt(number));
+    }
+  }
+
+  return numbers.join('');
 }

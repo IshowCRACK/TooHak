@@ -33,10 +33,15 @@ export interface QuizSessionAdmin extends QuizSession {
 export interface QuizSession {
     state: States;
     atQuestion: number;
-    players: string[];
+    players: Player[];
+    maxPlayerId: number; 
     metadata: QuizMetadata;
 }
 
+export interface Player {
+    name: string;
+    playerId: number; 
+}
 
 export enum States {
    LOBBY = "LOBBY",
@@ -262,4 +267,8 @@ export interface QuizTrashReturn {
 export interface QuizTrashItemReturn {
     quizId: number;
     name: string;
+}
+
+export interface PlayerReturn {
+    playerId: number;
 }
