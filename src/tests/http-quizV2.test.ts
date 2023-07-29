@@ -1,7 +1,11 @@
 import { ErrorObj, Token, AdminQuizCreate, Jwt, OkObj, AdminQuizInfo, OkSessionObj } from '../../interfaces/interfaces';
 import { tokenToJwt } from '../token';
 import { registerUser, clearUsers, createQuizQuestionHandler } from './iter2tests/testHelpersv1';
-import { RequestCreateQuizV2, RequestRemoveQuizV2, infoQuizV2, listQuizV2, logoutUserHandlerV2, startSessionQuiz, updateNameQuizV2, createQuizThumbnailHandler, updateQuizSessionStateHandler, getSessionStatusHandler } from './testhelpersV2';
+import {
+  RequestCreateQuizV2, RequestRemoveQuizV2, infoQuizV2, listQuizV2, logoutUserHandlerV2, startSessionQuiz, updateNameQuizV2,
+  createQuizThumbnailHandler, updateQuizSessionStateHandler, getSessionStatusHandler, updateDescriptionQuizV2, viewQuizTrashHandlerV2,
+  trashRestoreQuizHandlerV2, emptyTrashHandlerV2, quizTransferHandlerV2
+} from './testhelpersV2';
 
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -784,6 +788,349 @@ describe('Start new session', () => {
   describe('Successful cases', () => {
     test('Single successful', () => {
       expect(startSessionQuiz(userJwt, 30, quizId)).toHaveProperty('sessionId');
+    });
+  });
+});
+
+describe('Update Quiz Description', () => {
+  let token0: Token;
+  let token1: Token;
+  let quizId0: number;
+  let quizId1: number;
+  let res: OkObj | ErrorObj;
+  let quizInfo: AdminQuizInfo;
+  //  Giving a 20 second buffer for tests to run
+  const timeBufferSeconds = 20;
+  let quizEditedTime: number;
+
+  beforeEach(() => {
+    token0 = registerUser('JohnSmith@gmail.com', 'Password123', 'Johnny', 'Jones') as Token;
+    token1 = registerUser('JoeMama@gmail.com', 'Password456', 'Joe', 'Mama') as Token;
+    quizId0 = (RequestCreateQuizV2(tokenToJwt(token0), 'Quiz0', 'Description 0') as AdminQuizCreate).quizId;
+    quizId1 = (RequestCreateQuizV2(tokenToJwt(token1), 'Quiz1', 'Description 1') as AdminQuizCreate).quizId;
+  });
+
+  describe('Successful test', () => {
+    beforeEach(() => {
+      quizEditedTime = Math.round(Date.now() / 1000);
+      res = updateDescriptionQuizV2(tokenToJwt(token0), 'Updated description', quizId0) as OkObj;
+      quizInfo = infoQuizV2(tokenToJwt(token0), quizId0) as AdminQuizInfo;
+    });
+
+    test('1. Updates the name of an existing quiz', () => {
+      expect(quizInfo.description).toStrictEqual('Updated description');
+      expect(res).toStrictEqual({});
+    });
+
+    test('2. Updates the time edited', () => {
+      expect(quizInfo.timeLastEdited).toBeGreaterThanOrEqual(quizEditedTime);
+      expect(quizInfo.timeLastEdited).toBeLessThanOrEqual(quizEditedTime + timeBufferSeconds);
+      expect(res).toEqual({});
+    });
+  });
+
+  describe('Unsuccessful test', () => {
+    test('1. Returns an error when Quiz ID does not refer to a valid quiz', () => {
+      res = updateDescriptionQuizV2(tokenToJwt(token0), 'Updated description', -9);
+      expect(res).toStrictEqual({ error: 'Quiz ID does not refer to a valid quiz' });
+    });
+
+    test('2. Quiz ID does not refer to a quiz that this user owns', () => {
+      res = updateDescriptionQuizV2(tokenToJwt(token0), 'Updated description', quizId1);
+      expect(res).toStrictEqual({ error: 'Quiz ID does not refer to a quiz that this user owns' });
+    });
+
+    test('3.Description is more than 100 characters in length', () => {
+      res = updateDescriptionQuizV2(tokenToJwt(token0), 'This is a description that is more than 100 characters long. It should trigger an error. ?!@ #$& *%)_@ ;-))1', quizId0);
+      expect(res).toStrictEqual({ error: 'Description must be under 100 characters' });
+    });
+
+    test('6. Token is not a valid structure', () => {
+      res = res = updateDescriptionQuizV2({ token: '-1' }, 'Updated description', quizId0);
+      expect(res).toStrictEqual({ error: 'Token is not a valid structure' });
+    });
+
+    test('7. Not token of an active session', () => {
+      logoutUserHandlerV2(tokenToJwt(token1));
+      res = updateDescriptionQuizV2(tokenToJwt(token1), 'Updated description', quizId1);
+      expect(res).toStrictEqual({ error: 'Token not for currently logged in session' });
+    });
+  });
+});
+
+describe('View Quizzes in Trash', () => {
+  let userJwt: Jwt;
+  let userJwt2: Jwt;
+  let userToken: Token;
+  let userToken2: Token;
+  let quizId: number;
+  beforeEach(() => {
+    userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    userJwt = tokenToJwt(userToken);
+    userToken2 = registerUser('JaneAusten@gmail.com', 'Password123', 'Jane', 'Austen') as Token;
+    userJwt2 = tokenToJwt(userToken2);
+    quizId = (RequestCreateQuizV2(userJwt, 'Countries of the world', 'Quiz on all countries') as AdminQuizCreate).quizId;
+  });
+
+  describe('Unsuccessful tests', () => {
+    test('Invalid token structure', () => {
+      expect(viewQuizTrashHandlerV2({ token: '0' })).toEqual({
+        error: 'Token is not a valid structure'
+      });
+    });
+
+    test('Token is not logged in', () => {
+      logoutUserHandlerV2(userJwt);
+      expect(viewQuizTrashHandlerV2(userJwt)).toEqual({
+        error: 'Provided token is valid structure, but is not for a currently logged in session'
+      });
+    });
+  });
+
+  describe('Successful tests', () => {
+    test('Empty Trash', () => {
+      expect(viewQuizTrashHandlerV2(userJwt)).toEqual({
+        quizzes: []
+      });
+
+      expect(viewQuizTrashHandlerV2(userJwt2)).toEqual({
+        quizzes: []
+      });
+    });
+
+    test('Non empty trash', () => {
+      const quizId2 = (RequestCreateQuizV2(userJwt2, 'Flags of the world', 'Flags on all countries') as AdminQuizCreate).quizId;
+
+      RequestRemoveQuizV2(userJwt, quizId);
+      expect(viewQuizTrashHandlerV2(userJwt)).toEqual({
+        quizzes: [
+          {
+            quizId: quizId,
+            name: 'Countries of the world'
+          }
+        ]
+      });
+
+      RequestRemoveQuizV2(userJwt2, quizId2);
+
+      expect(viewQuizTrashHandlerV2(userJwt2)).toEqual({
+        quizzes: [
+          {
+            quizId: quizId2,
+            name: 'Flags of the world'
+          }
+        ]
+      });
+    });
+  });
+});
+
+describe('Restore Quiz Trash', () => {
+  let userJwt: Jwt;
+  let userJwt2: Jwt;
+  let userToken: Token;
+  let userToken2: Token;
+  let quizId: number;
+  let quizId2: number;
+  beforeEach(() => {
+    userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    userJwt = tokenToJwt(userToken);
+    userToken2 = registerUser('JaneAusten@gmail.com', 'Password123', 'Jane', 'Austen') as Token;
+    userJwt2 = tokenToJwt(userToken2);
+    quizId = (RequestCreateQuizV2(userJwt, 'Countries of the world', 'Quiz on all countries') as AdminQuizCreate).quizId;
+    quizId2 = (RequestCreateQuizV2(userJwt2, 'Flags of the world', 'Flags on all countries') as AdminQuizCreate).quizId;
+    RequestRemoveQuizV2(userJwt2, quizId2);
+  });
+
+  describe('Unsuccessful tests', () => {
+    test('Token is not a valid structure', () => {
+      expect(trashRestoreQuizHandlerV2({ token: 'some token' }, quizId2)).toEqual({
+        error: 'Token is not a valid structure'
+      });
+    });
+
+    test('User is not logged in', () => {
+      logoutUserHandlerV2(userJwt2);
+      expect(trashRestoreQuizHandlerV2(userJwt2, quizId2)).toEqual({
+        error: 'Provided token is valid structure, but is not for a currently logged in session'
+      });
+    });
+
+    test('Quiz ID is invalid', () => {
+      expect(trashRestoreQuizHandlerV2(userJwt, quizId + 5)).toEqual({
+        error: 'Quiz ID does not refer to a valid quiz'
+      });
+    });
+
+    test('Quiz ID does not refer to a valid quiz that the user owns', () => {
+      expect(trashRestoreQuizHandlerV2(userJwt2, quizId)).toEqual({
+        error: 'Quiz ID does not refer to a quiz that this user owns'
+      });
+    });
+
+    test('Quiz ID refers to quiz not currently in trash', () => {
+      expect(trashRestoreQuizHandlerV2(userJwt, quizId)).toEqual({
+        error: 'Quiz ID refers to a quiz that is not currently in the trash'
+      });
+    });
+  });
+
+  describe('Successful tests', () => {
+    test('Restoring 1 quiz', () => {
+      expect(trashRestoreQuizHandlerV2(userJwt2, quizId2)).toEqual({});
+      expect(viewQuizTrashHandlerV2(userJwt2)).toEqual({
+        quizzes: []
+      });
+    });
+
+    test('Restoring multiple quizzes', () => {
+      RequestRemoveQuizV2(userJwt, quizId);
+      expect(trashRestoreQuizHandlerV2(userJwt2, quizId2)).toEqual({});
+      expect(trashRestoreQuizHandlerV2(userJwt, quizId)).toEqual({});
+
+      expect(viewQuizTrashHandlerV2(userJwt)).toEqual({
+        quizzes: []
+      });
+
+      expect(viewQuizTrashHandlerV2(userJwt2)).toEqual({
+        quizzes: []
+      });
+    });
+  });
+});
+
+describe('Empty Quiz Trash', () => {
+  let userJwt: Jwt;
+  let userJwt2: Jwt;
+  let userToken: Token;
+  let userToken2: Token;
+  let quizId: number;
+  let quizId2: number;
+  let quizId3: number;
+
+  beforeEach(() => {
+    userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    userJwt = tokenToJwt(userToken);
+    userToken2 = registerUser('JaneAusten@gmail.com', 'Password123', 'Jane', 'Austen') as Token;
+    userJwt2 = tokenToJwt(userToken2);
+    quizId = (RequestCreateQuizV2(userJwt, 'Countries of the world', 'Quiz on all countries') as AdminQuizCreate).quizId;
+    quizId2 = (RequestCreateQuizV2(userJwt, 'Flags of the world', 'Flags on all countries') as AdminQuizCreate).quizId;
+    quizId3 = (RequestCreateQuizV2(userJwt2, 'Continents of the world', 'Flags on all continents') as AdminQuizCreate).quizId;
+    RequestRemoveQuizV2(userJwt, quizId);
+    RequestRemoveQuizV2(userJwt, quizId2);
+    RequestRemoveQuizV2(userJwt2, quizId3);
+  });
+
+  describe('Unsuccessful tests', () => {
+    test('Token is not a valid structure', () => {
+      expect(trashRestoreQuizHandlerV2({ token: 'some token' }, quizId2)).toEqual({
+        error: 'Token is not a valid structure'
+      });
+    });
+
+    test('User is not logged in', () => {
+      logoutUserHandlerV2(userJwt2);
+      expect(trashRestoreQuizHandlerV2(userJwt2, quizId2)).toEqual({
+        error: 'Provided token is valid structure, but is not for a currently logged in session'
+      });
+    });
+
+    test('One more more Quiz IDs is not valid', () => {
+      expect(emptyTrashHandlerV2(userJwt, [quizId, quizId2, quizId2 + 4])).toEqual({
+        error: 'One or more of the Quiz IDs is not a valid quiz'
+      });
+    });
+
+    test('One or more Quiz IDs refer to a quiz this current user doesnt own', () => {
+      expect(emptyTrashHandlerV2(userJwt2, [quizId, quizId2])).toEqual({
+        error: 'One or more of the Quiz IDs refers to a quiz that this current user does not own'
+      });
+
+      expect(emptyTrashHandlerV2(userJwt2, [quizId, quizId3])).toEqual({
+        error: 'One or more of the Quiz IDs refers to a quiz that this current user does not own'
+      });
+    });
+
+    test('One or more of the Quiz IDs is not currently in the trash', () => {
+      trashRestoreQuizHandlerV2(userJwt, quizId);
+
+      expect(emptyTrashHandlerV2(userJwt, [quizId, quizId2])).toEqual({
+        error: 'One or more of the Quiz IDs is not currently in the trash'
+      });
+    });
+  });
+
+  describe('Successful Tests', () => {
+    test('One user', () => {
+      expect(emptyTrashHandlerV2(userJwt2, [quizId3])).toEqual({});
+    });
+
+    test('Multiple Users', () => {
+      expect(emptyTrashHandlerV2(userJwt2, [quizId3])).toEqual({});
+      expect(emptyTrashHandlerV2(userJwt, [quizId, quizId2])).toEqual({});
+    });
+  });
+});
+
+describe('Transfer Quiz', () => {
+  let userJwt: Jwt;
+  let userJwt2: Jwt;
+  let userToken: Token;
+  let userToken2: Token;
+  let quizId: number;
+
+  beforeEach(() => {
+    userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    userJwt = tokenToJwt(userToken);
+    userToken2 = registerUser('JaneAusten@gmail.com', 'Password123', 'Jane', 'Austen') as Token;
+
+    userJwt2 = tokenToJwt(userToken2);
+    quizId = (RequestCreateQuizV2(userJwt, 'Countries of the world', 'Quiz on all countries') as AdminQuizCreate).quizId;
+  });
+
+  describe('Unsuccessful Tests', () => {
+    test('Quiz ID does not refer to a valid quiz', () => {
+      expect(quizTransferHandlerV2(userJwt, 'JaneAusten@gmail.com', quizId + 1)).toEqual(
+        { error: 'Quiz ID does not refer to a valid quiz' }
+      );
+    });
+
+    test('Quiz ID does not refer to a quiz that this user owns', () => {
+      expect(quizTransferHandlerV2(userJwt2, 'JaneAusten@gmail.com', quizId)).toEqual(
+        { error: 'Quiz ID does not refer to a quiz that this user owns' }
+      );
+    });
+
+    test('Email is not a real user', () => {
+      expect(quizTransferHandlerV2(userJwt2, 'JaneAusten@gmail.com', quizId)).toEqual(
+        { error: 'Quiz ID does not refer to a quiz that this user owns' }
+      );
+    });
+
+    test('Email is not currently a logged in user', () => {
+      expect(quizTransferHandlerV2(userJwt, 'JohnSmith@gmail.com', quizId)).toEqual(
+        { error: 'userEmail is the current logged in user' }
+      );
+    });
+
+    test('Quiz name is already used by user', () => {
+      RequestCreateQuizV2(userJwt2, 'Countries of the world', 'Quiz on all countries V2');
+      expect(quizTransferHandlerV2(userJwt, 'JaneAusten@gmail.com', quizId)).toEqual({
+        error: 'Quiz ID refers to a quiz that has a name that is already used by the target user'
+      });
+    });
+  });
+
+  describe('Successful Tests', () => {
+    test('Single quiz transfer', () => {
+      expect(quizTransferHandlerV2(userJwt, 'JaneAusten@gmail.com', quizId)).toEqual({});
+    });
+
+    test('Multiple Quiz Transfers with Multiple Quizzes', () => {
+      const quizId2 = (RequestCreateQuizV2(userJwt2, 'Flags of the world', 'Flags on all countries') as AdminQuizCreate).quizId;
+      expect(quizTransferHandlerV2(userJwt, 'JaneAusten@gmail.com', quizId)).toEqual({});
+      expect(quizTransferHandlerV2(userJwt2, 'JohnSmith@gmail.com', quizId)).toEqual({});
+      expect(quizTransferHandlerV2(userJwt2, 'JohnSmith@gmail.com', quizId2)).toEqual({});
     });
   });
 });
