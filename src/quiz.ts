@@ -1,6 +1,6 @@
 import {
   Data, AdminQuizListReturn, AdminQuizList, Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj,
-  AdminQuizInfo, User, Quiz, QuizTrashReturn, Token, States, Actions
+  AdminQuizInfo, User, Quiz, QuizTrashReturn, Token, States, Actions, QuizSession, QuizMetadata
 } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
@@ -644,18 +644,49 @@ export function updateQuizSessionState(quizId: number, sessionId: number, jwt: J
 
 //  Returns the State of a Quiz (used for updatQuizSessionState TESTS)
 //  --> turn this into "Get session status" & replace tests for updatQuizSessionState
-export function getSessionStatus(quizId: number, sessionId: number, jwt: Jwt): string {
+export function getSessionStatus(quizId: number, sessionId: number, jwt: Jwt): QuizSession {
+  if (!checkTokenValidStructure(jwt)) {
+    throw HTTPError(401, 'Token is not a valid structure');
+  }
+
+  if (!checkTokenValidSession(jwt)) {
+    throw HTTPError(403, 'Token not for currently logged in session');
+  }
+
+  if (!checkQuizIdValid(quizId)) {
+    throw HTTPError(400, 'Quiz ID does not refer to a valid quiz');
+  }
+
+  if (!checkQuizAndUserIdValid(quizId, jwtToToken(jwt).userId)) {
+    throw HTTPError(400, 'Quiz ID does not refer to a quiz that this user owns');
+  }
+
   const data = getData();
   const quizSession = data.quizSessions.find(
     (session) => session.sessionId === sessionId && session.metadata.quizId === quizId
   );
 
-  if (quizSession) {
-    // If the quizSession is found, return its state
-    return quizSession.state;
-  } else {
-    // If the quizSession is not found, return an error message or throw an error
-    // For simplicity, let's return an error message
-    return 'Quiz session not found';
+  // If the quiz session is not found, return an error
+  if (!quizSession) {
+    throw HTTPError(400, 'Invalid quiz session or session not found');
   }
+  const quizMetaData: QuizMetadata = {
+    quizId: quizSession.metadata.quizId,
+    name: quizSession.metadata.name,
+    timeCreated: quizSession.metadata.timeCreated,
+    timeLastEdited: quizSession.metadata.timeLastEdited,
+    description: quizSession.metadata.description,
+    numQuestions: quizSession.metadata.numQuestions,
+    questions: quizSession.metadata.questions,
+    imgUrl: quizSession.metadata.imgUrl,
+    duration: quizSession.metadata.duration,
+  };
+
+  const quizSessionReturn: QuizSession = {
+    state: quizSession.state,
+    atQuestion: quizSession.atQuestion,
+    players: quizSession.players,
+    metadata: quizMetaData,
+  };
+  return quizSessionReturn;
 }

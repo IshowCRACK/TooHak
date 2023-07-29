@@ -1,5 +1,6 @@
 import request, { HttpVerb } from 'sync-request';
-import { AdminQuizCreate, AdminQuizListReturn, ErrorObj, Jwt, OkObj, AdminQuizInfo, OkSessionObj, QuestionBody, QuizQuestionCreate, AdminQuestionDuplicate, QuizTrashReturn } from '../../interfaces/interfaces';
+
+import { AdminQuizCreate, AdminQuizListReturn, ErrorObj, Jwt, OkObj, AdminQuizInfo, OkSessionObj, QuestionBody, QuizQuestionCreate, AdminQuestionDuplicate, QuizTrashReturn, QuizSession } from '../../interfaces/interfaces';
 import { getUrl } from '../helper';
 
 const URL: string = getUrl();
@@ -33,7 +34,7 @@ export const updateQuizSessionStateHandler = (quizId: number, sessionId: number,
   return requestHelper('PUT', `v1/admin/quiz/${quizId}/session/${sessionId}`, { action }, jwt);
 };
 
-export const getSessionStatusHandler = (quizId: number, sessionId: number, jwt:Jwt): string | ErrorObj => {
+export const getSessionStatusHandler = (quizId: number, sessionId: number, jwt:Jwt): QuizSession => {
   return requestHelper('GET', `v1/admin/quiz/${quizId}/session/${sessionId}`, {}, jwt);
 };
 
