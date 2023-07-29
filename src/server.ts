@@ -312,6 +312,14 @@ app.get('/v1/admin/quiz/:quizId/session/:sessionId', (req: Request, res: Respons
 });
 
 /// /////////////////////////////// V2 ROUTES /////////////////////////////////////
+
+app.get('/v2/admin/quiz/trash', (req: Request, res: Response) => {
+  const token: string = req.header('token') as string;
+  const response = quizTrash({ token: token });
+
+  res.status(200).json(response);
+});
+
 app.post('/v2/admin/auth/logout', (req: Request, res: Response) => {
   const token: string = req.header('token') as string;
   const response = adminAuthLogout({ token: token });
@@ -382,25 +390,40 @@ app.put('/v2/admin/quiz/:quizId/name', (req: Request, res: Response) => {
   res.status(200).json(response);
 });
 
-// AREEQ START HERE //
-
-// Update Quiz Description
 app.put('/v2/admin/quiz/:quizId/description', (req: Request, res: Response) => {
-});
-// View the quizzes in trash
-app.get('/v2/admin/quiz/trash', (req: Request, res: Response) => {
-});
-// Restore a quiz from trash
-app.post('/v2/admin/quiz/:quizId/restore', (req: Request, res: Response) => {
-});
-// Empty the trash
-app.delete('/v2/admin/quiz/trash/empty', (req: Request, res: Response) => {
-});
-// Transfer the quiz to another owner
-app.post('/v2/admin/quiz/:quizId/transfer', (req: Request, res: Response) => {
+  const quizId = parseInt(req.params.quizId);
+  const token: string = req.header('token') as string;
+  const { description } = req.body;
+  const response = adminQuizDescriptionUpdate({ token: token }, description, quizId);
+
+  res.status(200).json(response);
 });
 
-//
+app.post('/v2/admin/quiz/:quizId/restore', (req: Request, res: Response) => {
+  const token: string = req.header('token') as string;
+  const quizId = parseInt(req.params.quizId);
+  const response = adminQuizRestore({ token: token }, quizId);
+
+  res.status(200).json(response);
+});
+
+app.delete('/v2/admin/quiz/trash/empty', (req: Request, res: Response) => {
+  const token: string = req.header('token') as string;
+  const quizIdsString = req.query.quizIds as string[];
+  const quizIds = quizIdsString.map((item: string) => parseInt(item));
+  const response = adminQuizEmptyTrash({ token: token }, quizIds);
+
+  res.status(200).json(response);
+});
+
+app.post('/v2/admin/quiz/:quizId/transfer', (req: Request, res: Response) => {
+  const quizId = parseInt(req.params.quizId);
+  const token: string = req.header('token') as string;
+  const { email } = req.body;
+  const response = adminQuizTransfer({ token: token }, email, quizId);
+
+  res.status(200).json(response);
+});
 
 app.post('/v1/admin/quiz/:quizId/session/start', (req: Request, res: Response) => {
   const quizId = parseInt(req.params.quizId);

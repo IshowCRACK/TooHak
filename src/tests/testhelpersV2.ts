@@ -107,13 +107,13 @@ export const viewQuizTrashHandlerV2 = (jwt: Jwt): QuizTrashReturn | ErrorObj => 
 };
 
 export const trashRestoreQuizHandlerV2 = (jwt: Jwt, quizId: number): OkObj | ErrorObj => {
-  return requestHelper('POST', `/v2/admin/quiz/${quizId}/restore`, {}, jwt);
+  return requestHelper('POST', `v2/admin/quiz/${quizId}/restore`, {}, jwt);
 };
 
 export const emptyTrashHandlerV2 = (jwt: Jwt, quizIds: number[]): OkObj | ErrorObj => {
-  return requestHelper('DELETE', '/v2/admin/quiz/trash/empty', { quizIds }, jwt);
+  return requestHelper('DELETE', 'v2/admin/quiz/trash/empty', { quizIds }, jwt);
 };
 
 export const quizTransferHandlerV2 = (jwt: Jwt, email: string, quizId: number): OkObj | ErrorObj => {
-  return requestHelper('POST', `/v2/admin/quiz/${quizId}/transfer`, { email }, jwt);
+  return requestHelper('POST', `v2/admin/quiz/${quizId}/transfer`, { email }, jwt);
 };
