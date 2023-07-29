@@ -263,3 +263,14 @@ export interface QuizTrashItemReturn {
     quizId: number;
     name: string;
 }
+
+export interface Message {
+    messageBody: string;
+    playerId: number;
+    playerName: string;
+    timeSent: number;
+}
+
+export interface MessageReturn {
+    messages: Message[];
+}

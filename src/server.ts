@@ -311,6 +311,11 @@ app.get('/v1/admin/quiz/:quizId/session/:sessionId', (req: Request, res: Respons
   res.status(200).json(response);
 });
 
+// VIEW CHAT //
+
+app.get('/v1/player/:playerId/chat', (req: Request, res: Response) => {
+});
+
 /// /////////////////////////////// V2 ROUTES /////////////////////////////////////
 
 app.get('/v2/admin/quiz/trash', (req: Request, res: Response) => {
