@@ -96,7 +96,7 @@ export function adminQuizRemove (jwt: Jwt, quizId: number): OkObj | ErrorAndStat
   return {};
 }
 
-// Given a UserId, view the deleted quizes
+// Given a User token, view the deleted quizes
 export function quizTrash(jwt: Jwt): QuizTrashReturn | ErrorAndStatusCode {
   // Check valid structure
   if (!checkTokenValidStructure(jwt)) {
