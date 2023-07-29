@@ -1,6 +1,6 @@
 import request, { HttpVerb } from 'sync-request';
 
-import { AdminQuizCreate, AdminQuizListReturn, ErrorObj, Jwt, OkObj, AdminQuizInfo, OkSessionObj, QuestionBody, QuizQuestionCreate, AdminQuestionDuplicate, QuizTrashReturn, QuizSession } from '../../interfaces/interfaces';
+import { AdminQuizCreate, AdminQuizListReturn, ErrorObj, Jwt, OkObj, AdminQuizInfo, OkSessionObj, QuestionBody, QuizQuestionCreate, AdminQuestionDuplicate, QuizTrashReturn, QuizSession, PlayerReturn } from '../../interfaces/interfaces';
 import { getUrl } from '../helper';
 
 const URL: string = getUrl();
@@ -117,4 +117,8 @@ export const emptyTrashHandlerV2 = (jwt: Jwt, quizIds: number[]): OkObj | ErrorO
 
 export const quizTransferHandlerV2 = (jwt: Jwt, email: string, quizId: number): OkObj | ErrorObj => {
   return requestHelper('POST', `v2/admin/quiz/${quizId}/transfer`, { email }, jwt);
+};
+
+export const playerJoinHelper = (sessionId: number, name: string): PlayerReturn | ErrorObj => {
+  return requestHelper('POST', 'v1/player/join', { sessionId, name });
 };

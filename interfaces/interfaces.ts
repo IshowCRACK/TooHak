@@ -26,6 +26,7 @@ export interface User {
 export interface QuizSessionAdmin extends QuizSession {
     sessionId: number;
     authUserId: number;
+    maxPlayerId: number;
     autoStartNum: number;
     countdownTimer: ReturnType<typeof setTimeout> | undefined; // Timer for question countdown
     questionTimer: ReturnType<typeof setTimeout> | undefined; // Timer for question countdown
@@ -262,4 +263,8 @@ export interface QuizTrashReturn {
 export interface QuizTrashItemReturn {
     quizId: number;
     name: string;
+}
+
+export interface PlayerReturn {
+    playerId: number;
 }

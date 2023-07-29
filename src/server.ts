@@ -14,6 +14,7 @@ import { formatError } from './helper';
 import { getData } from './dataStore';
 import { quizCreateQuestion, adminQuizDelete, quizDuplicateQuestion, quizMoveQuestion, quizUpdateQuestion } from './question';
 import { quizCreateQuestionV2, deleteQuestionV2, quizUpdateQuestionV2 } from './questionV2';
+import {playerJoin} from './player'
 
 // Set up web app
 const app = express();
@@ -478,6 +479,13 @@ app.put('/v2/admin/quiz/:quizId/question/:questionId', (req: Request, res: Respo
   const response = quizUpdateQuestionV2({ token: token }, questionBody, quizId, questionId);
   res.status(200).json(response);
 });
+
+app.post('/v1/player/join', (req: Request, res: Response) => {
+  const { sessionId, name } = req.body;
+  const response = playerJoin(sessionId, name);
+  res.status(200).json(response);
+});
+
 // ====================================================================
 //  ================= WORK IS DONE ABOVE THIS LINE ===================
 // ====================================================================
