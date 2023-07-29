@@ -1,4 +1,4 @@
-import { ErrorObj, Token, AdminQuizCreate, Jwt, OkObj, AdminQuizInfo, OkSessionObj } from '../../interfaces/interfaces';
+import { ErrorObj, Token, AdminQuizCreate, Jwt, OkObj, AdminQuizInfo, OkSessionObj, QuizSession } from '../../interfaces/interfaces';
 import { tokenToJwt } from '../token';
 import { registerUser, clearUsers, createQuizQuestionHandler } from './iter2tests/testHelpersv1';
 import { RequestCreateQuizV2, RequestRemoveQuizV2, infoQuizV2, listQuizV2, logoutUserHandlerV2, startSessionQuiz, updateNameQuizV2, createQuizThumbnailHandler, updateQuizSessionStateHandler, getSessionStatusHandler } from './testhelpersV2';
@@ -79,6 +79,9 @@ const defaultQuestionBody2 = {
   ]
 };
 //  ///////////////////// NEW ITR3  ////////////////////////////////////////////
+
+// TESTS FOR QUIZ GET QUIZ SESSION STATUS //
+
 
 // TESTS FOR QUIZ SESSION UPDATE STATE //
 describe('Session State Update', () => {
@@ -170,46 +173,46 @@ describe('Session State Update', () => {
     test('LOBBY ---> QUESTION_COUNTDOWN ---> END', async () => {
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
       });
-      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_COUNTDOWN');
       await delay(1100);
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'END')).toEqual({
       });
-      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('END');
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('END');
     });
 
     test('LOBBY ---> QUESTION_COUNTDOWN --(countdown duration)--> QUESTION_OPEN --(question duration)--> QUESTION_CLOSE ---> ANSWERSHOW ---> FINAL RESULTS ---> END ', async () => {
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
       });
-      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_COUNTDOWN');
       await delay(1100);
-      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_OPEN');
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_OPEN');
       await delay(1100);
-      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_CLOSE');
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_CLOSE');
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER')).toEqual({
       });
-      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('ANSWER_SHOW');
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('ANSWER_SHOW');
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_FINAL_RESULTS')).toEqual({
       });
-      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('FINAL_RESULTS');
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('FINAL_RESULTS');
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'END')).toEqual({
       });
-      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('END');
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('END');
     });
 
     test('LOBBY ---> QUESTION_COUNTDOWN --(countdown duration)--> QUESTION_OPEN --(question duration)--> QUESTION_CLOSE ---> FINAL RESULTS ---> END ', async () => {
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')).toEqual({
       });
-      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_COUNTDOWN');
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_COUNTDOWN');
       await delay(1100);
-      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_OPEN');
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_OPEN');
       await delay(1100);
-      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('QUESTION_CLOSE');
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_CLOSE');
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_FINAL_RESULTS')).toEqual({
       });
-      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('FINAL_RESULTS');
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('FINAL_RESULTS');
       expect(updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'END')).toEqual({
       });
-      expect(getSessionStatusHandler(quizId, sessionId, userJwt)).toEqual('END');
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('END');
     });
 
     test('LOBBY ---> QUESTION_COUNTDOWN --(countdown duration)--> QUESTION_OPEN --(question duration)--> QUESTION_CLOSE  ---> END ', async () => {
