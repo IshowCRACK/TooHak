@@ -1,5 +1,5 @@
 import request, { HttpVerb } from 'sync-request';
-import { AdminQuizCreate, AdminQuizListReturn, ErrorObj, Jwt, OkObj, AdminQuizInfo, OkSessionObj, QuestionBody, QuizQuestionCreate, AdminQuestionDuplicate } from '../../interfaces/interfaces';
+import { AdminQuizCreate, AdminQuizListReturn, ErrorObj, Jwt, OkObj, AdminQuizInfo, OkSessionObj, QuestionBody, QuizQuestionCreate, AdminQuestionDuplicate, QuizTrashReturn } from '../../interfaces/interfaces';
 import { getUrl } from '../helper';
 
 const URL: string = getUrl();
@@ -94,7 +94,26 @@ export const duplicateQuizV2 = (jwt: Jwt, quizId: number, questionId: number): A
   return requestHelper('POST', `v2/admin/quiz/${quizId}/question/${questionId}/duplicate`, {}, jwt);
 };
 
-export const updateQuizV2 = (jwt: Jwt, questionBody: QuestionBody, quizId: number, questionId: number
-): OkObj | ErrorObj => {
+export const updateQuizV2 = (jwt: Jwt, questionBody: QuestionBody, quizId: number, questionId: number): OkObj | ErrorObj => {
   return requestHelper('PUT', `v2/admin/quiz/${quizId}/question/${questionId}`, { questionBody }, jwt);
+};
+
+export const updateDescriptionQuizV2 = (jwt: Jwt, description: string, quizId: number): OkObj | ErrorObj => {
+  return requestHelper('PUT', `v2/admin/quiz/${quizId}/description`, { description }, jwt);
+};
+
+export const viewQuizTrashHandlerV2 = (jwt: Jwt): QuizTrashReturn | ErrorObj => {
+  return requestHelper('GET', 'v2/admin/quiz/trash', {}, jwt);
+};
+
+export const trashRestoreQuizHandlerV2 = (jwt: Jwt, quizId: number): OkObj | ErrorObj => {
+  return requestHelper('POST', `v2/admin/quiz/${quizId}/restore`, {}, jwt);
+};
+
+export const emptyTrashHandlerV2 = (jwt: Jwt, quizIds: number[]): OkObj | ErrorObj => {
+  return requestHelper('DELETE', 'v2/admin/quiz/trash/empty', { quizIds }, jwt);
+};
+
+export const quizTransferHandlerV2 = (jwt: Jwt, email: string, quizId: number): OkObj | ErrorObj => {
+  return requestHelper('POST', `v2/admin/quiz/${quizId}/transfer`, { email }, jwt);
 };
