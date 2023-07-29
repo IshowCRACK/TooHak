@@ -6,7 +6,6 @@ import config from './config.json';
 import crypto from 'crypto';
 import randomstring from 'randomstring';
 
-
 /**
  * -------------------------------------- HELPERS FUNCTIONS-----------------------------------------------
  */
@@ -524,4 +523,3 @@ export function getNumber() {
 
   return numbers.join('');
 }
-
