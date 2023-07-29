@@ -115,6 +115,7 @@ export const createQuizSession = (authUserId: number, quizId: number, autoStartN
   const quizSession: QuizSessionAdmin = {
     sessionId: sessionId,
     authUserId: authUserId,
+    maxPlayerId: 0,
     autoStartNum: autoStartNum,
     countdownTimer: undefined, // Timer for countdown
     questionTimer: undefined, // Timer for question countdown
