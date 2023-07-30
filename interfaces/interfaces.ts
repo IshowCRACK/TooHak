@@ -22,15 +22,20 @@ export interface User {
     deletedQuizzes: Quiz[];
     prevPassword: string[];
 }
-
+export interface Player {
+    playerId: number,
+    name: string,
+}
 export interface QuizSessionAdmin extends QuizSession {
     sessionId: number;
     authUserId: number;
     maxPlayerId: number;
+    playerInfo: Player[]
     autoStartNum: number;
     countdownTimer: ReturnType<typeof setTimeout> | undefined; // Timer for question countdown
     questionTimer: ReturnType<typeof setTimeout> | undefined; // Timer for question countdown
 }
+
 export interface QuizSession {
     state: States;
     atQuestion: number;
