@@ -91,7 +91,7 @@ export function playerQuestionInfo(playerId: number, questionPosition: number) {
     throw HTTPError(400, 'Session is in LOBBY or END state');
   }
   // if questionPostion is spot in quiz then index is questionPosition-1
-  let qP: number = questionPosition - 1; 
+  const qP: number = questionPosition - 1;
   const questionId: number = quiz.questions[qP].questionId;
   const question: string = quiz.questions[qP].question;
   const duration: number = quiz.questions[qP].duration;

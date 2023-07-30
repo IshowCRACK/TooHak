@@ -114,7 +114,6 @@ describe('PlayerQuestionInfo', () => {
   let sessionId: OkSessionObj;
   let playerId: PlayerReturn;
   let questionId1: QuizQuestionCreate;
-  let questionId2: QuizQuestionCreate;
 
   beforeEach(() => {
     userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
@@ -185,10 +184,10 @@ describe('PlayerQuestionInfo', () => {
       ],
       thumbnailUrl: 'https://static.vecteezy.com/system/resources/previews/001/204/011/original/soccer-ball-png.png'
     };
-   questionId1 = createQuizQuestionHandlerV2(quizId, userJwt, defaultQuestionBody1) as QuizQuestionCreate;
-   questionId2 = createQuizQuestionHandlerV2(quizId, userJwt, defaultQuestionBody2) as QuizQuestionCreate;
-   sessionId = startSessionQuiz(userJwt, 30, quizId) as OkSessionObj;
-   playerId = playerJoinHelper(sessionId.sessionId, 'John Doe') as PlayerReturn;
+    questionId1 = createQuizQuestionHandlerV2(quizId, userJwt, defaultQuestionBody1) as QuizQuestionCreate;
+    createQuizQuestionHandlerV2(quizId, userJwt, defaultQuestionBody2) as QuizQuestionCreate;
+    sessionId = startSessionQuiz(userJwt, 30, quizId) as OkSessionObj;
+    playerId = playerJoinHelper(sessionId.sessionId, 'John Doe') as PlayerReturn;
   });
   describe('Unsuccessful ', () => {
     test('PlayerId does not exist', () => {
