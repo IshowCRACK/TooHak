@@ -76,8 +76,8 @@ export function playerQuestionInfo(playerId: number, questionPosition: number) {
   if (quiz.numQuestions < questionPosition) {
     throw HTTPError(400, 'Question position is not valid for the session this player is in');
   }
-  if (thisSession.atQuestion !== questionPosition) {
-    throw HTTPError(400, 'If session is not currently on this question');
+  if (thisSession.atQuestion !== questionPosition && thisSession.atQuestion !== 0) {
+    throw HTTPError(400, 'Session is not currently on this question');
   }
   const quizId = quiz.quizId;
   const token: Token = {
@@ -90,13 +90,15 @@ export function playerQuestionInfo(playerId: number, questionPosition: number) {
   if (status.state === 'LOBBY' || status.state === 'END') {
     throw HTTPError(400, 'Session is in LOBBY or END state');
   }
-  const questionId: number = quiz.questions[questionPosition].questionId;
-  const question: string = quiz.questions[questionPosition].question;
-  const duration: number = quiz.questions[questionPosition].duration;
-  const points: number = quiz.questions[questionPosition].points;
-  const fullAnswers: Answer[] = quiz.questions[questionPosition].answers;
+  // if questionPostion is spot in quiz then index is questionPosition-1
+  let qP: number = questionPosition - 1; 
+  const questionId: number = quiz.questions[qP].questionId;
+  const question: string = quiz.questions[qP].question;
+  const duration: number = quiz.questions[qP].duration;
+  const points: number = quiz.questions[qP].points;
+  const fullAnswers: Answer[] = quiz.questions[qP].answers;
   const answers: QuestionAnswer[] = fullAnswers.map(({ answerId, answer, colour }) => ({ answerId, answer, colour }));
-  const thumbnailUrl = quiz.questions[questionPosition].thumbnailUrl;
+  const thumbnailUrl = quiz.questions[qP].thumbnailUrl;
 
   const questionInfoReturn = {
     questionId,
