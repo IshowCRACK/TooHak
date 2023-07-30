@@ -38,13 +38,15 @@ export function playerJoin(sessionId: number, name: string) {
 
   const playerId = session.maxPlayerId + 1;
 
-  const object = {
+  const playerInfo = {
     playerId: playerId,
+    name: name,
   };
-  console.log(object);
+
+  session.playerInfo.push(playerInfo);
   session.players.push(name);
   session.maxPlayerId++;
   setData(data);
 
-  return object;
+  return { playerId: playerId };
 }
