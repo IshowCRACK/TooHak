@@ -273,3 +273,18 @@ export interface QuizTrashItemReturn {
 export interface PlayerReturn {
     playerId: number;
 }
+
+export interface PlayerQuestionInfoReturn {
+    questionId: number,
+    question: string,
+    duration: number,
+    thumbnailUrl: string,
+    points: number,
+    answers: QuestionAnswer[];
+}
+
+export interface QuestionAnswer {
+    answerId: number,
+    answer: string,
+    colour: string
+}

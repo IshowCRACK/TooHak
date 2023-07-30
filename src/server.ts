@@ -14,7 +14,7 @@ import { formatError } from './helper';
 import { getData } from './dataStore';
 import { quizCreateQuestion, adminQuizDelete, quizDuplicateQuestion, quizMoveQuestion, quizUpdateQuestion } from './question';
 import { quizCreateQuestionV2, deleteQuestionV2, quizUpdateQuestionV2 } from './questionV2';
-import { playerJoin } from './player';
+import { playerJoin, playerQuestionInfo } from './player';
 
 // Set up web app
 const app = express();
@@ -484,6 +484,14 @@ app.post('/v1/player/join', (req: Request, res: Response) => {
   const { sessionId, name } = req.body;
   const response = playerJoin(sessionId, name);
   res.status(200).json(response);
+});
+
+app.get('/v1/player/:playerId/question/:questionPosition', (req: Request, res: Response) => {
+  // const playerId = parseInt(req.params.playerId);
+  // const questionPosition = parseInt(req.params.questionPosition);
+  // const response = playerQuestionInfo(playerId, questionPosition);
+  // res.status(200).json(response);
+  res.json("response");
 });
 
 // ====================================================================

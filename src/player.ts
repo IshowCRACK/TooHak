@@ -50,3 +50,10 @@ export function playerJoin(sessionId: number, name: string) {
 
   return { playerId: playerId };
 }
+
+
+
+
+export function playerQuestionInfo(playerId: number, questionPosition: number) {
+  return 
+}
