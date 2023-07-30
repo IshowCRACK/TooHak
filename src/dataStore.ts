@@ -12,7 +12,8 @@ let data: Data = {
   metaData: {
     totalUsers: 0,
     totalQuizzes: 0
-  }
+  },
+  maxPlayerId: 0,
 };
 
 /**

@@ -487,11 +487,11 @@ app.post('/v1/player/join', (req: Request, res: Response) => {
 });
 
 app.get('/v1/player/:playerId/question/:questionPosition', (req: Request, res: Response) => {
-  // const playerId = parseInt(req.params.playerId);
-  // const questionPosition = parseInt(req.params.questionPosition);
-  // const response = playerQuestionInfo(playerId, questionPosition);
-  // res.status(200).json(response);
-  res.json("response");
+  const playerId = parseInt(req.params.playerId);
+  const questionPosition = parseInt(req.params.questionPosition);
+  const response = playerQuestionInfo(playerId, questionPosition);
+  console.log(response);
+  res.status(200).json(response);
 });
 
 // ====================================================================
