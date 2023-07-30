@@ -109,6 +109,7 @@ describe('PlayerQuestionInfo', () => {
   let userJwt: Jwt;
   let userToken: Token;
   let quizId: number;
+  let defaultQuestionBody1 : QuestionBody;
   let defaultQuestionBody2 : QuestionBody;
   let sessionId: OkSessionObj;
   let playerId: PlayerReturn;
@@ -151,9 +152,42 @@ describe('PlayerQuestionInfo', () => {
       ],
       thumbnailUrl: 'https://static.vecteezy.com/system/resources/previews/001/204/011/original/soccer-ball-png.png'
     };
-    questionId2 = createQuizQuestionHandlerV2(quizId, userJwt, defaultQuestionBody2) as QuizQuestionCreate;
-    sessionId = startSessionQuiz(userJwt, 30, quizId) as OkSessionObj;
-    playerId = playerJoinHelper(sessionId.sessionId, 'John Doe') as PlayerReturn;
+    defaultQuestionBody1 = {
+      question: 'What content is Russia in?',
+      duration: 5,
+      points: 1,
+      answers: [
+        {
+          answerId: 0,
+          answer: 'Asia',
+          colour: 'Red',
+          correct: true
+        },
+        {
+          answerId: 1,
+          answer: 'North America',
+          colour: 'Blue',
+          correct: false
+        },
+        {
+          answerId: 2,
+          answer: 'South America',
+          colour: 'Green',
+          correct: false
+        },
+        {
+          answerId: 3,
+          answer: 'Africa',
+          colour: 'Yellow',
+          correct: false
+        }
+      ],
+      thumbnailUrl: 'https://static.vecteezy.com/system/resources/previews/001/204/011/original/soccer-ball-png.png'
+    };
+   createQuizQuestionHandlerV2(quizId, userJwt, defaultQuestionBody1) as QuizQuestionCreate;
+   questionId2 = createQuizQuestionHandlerV2(quizId, userJwt, defaultQuestionBody2) as QuizQuestionCreate;
+   sessionId = startSessionQuiz(userJwt, 30, quizId) as OkSessionObj;
+   playerId = playerJoinHelper(sessionId.sessionId, 'John Doe') as PlayerReturn;
   });
   describe('Unsuccessful ', () => {
     test('PlayerId does not exist', () => {
@@ -169,7 +203,6 @@ describe('PlayerQuestionInfo', () => {
     });
 
     test('If session is not currently on this question', () => {
-      updateQuizSessionStateHandler(quizId, sessionId.sessionId, userJwt, 'NEXT_QUESTION');
       updateQuizSessionStateHandler(quizId, sessionId.sessionId, userJwt, 'NEXT_QUESTION');
       expect(playerQuestionInfoHelper(playerId.playerId, 0)).toStrictEqual({
         error: 'If session is not currently on this question'
