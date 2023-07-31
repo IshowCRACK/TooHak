@@ -80,6 +80,8 @@ export function quizCreateQuestionV2(jwt: Jwt, questionBody: QuestionBody, quizI
     ...questionBody
   });
 
+  quiz.numQuestions++;
+
   setData(data);
 
   return {
