@@ -5,6 +5,7 @@ export interface Data {
     session: Token[]; // array of all people that are currently logged in
     quizSessions: QuizSessionAdmin[];
     metaData: MetaData;
+    maxPlayerId: number;
 }
 
 export interface MetaData {
@@ -26,10 +27,10 @@ export interface Player {
     playerId: number,
     name: string,
 }
+
 export interface QuizSessionAdmin extends QuizSession {
     sessionId: number;
     authUserId: number;
-    maxPlayerId: number;
     playerInfo: Player[]
     autoStartNum: number;
     countdownTimer: ReturnType<typeof setTimeout> | undefined; // Timer for question countdown
@@ -272,4 +273,19 @@ export interface QuizTrashItemReturn {
 
 export interface PlayerReturn {
     playerId: number;
+}
+
+export interface PlayerQuestionInfoReturn {
+    questionId: number,
+    question: string,
+    duration: number,
+    thumbnailUrl: string,
+    points: number,
+    answers: QuestionAnswer[];
+}
+
+export interface QuestionAnswer {
+    answerId: number,
+    answer: string,
+    colour: string
 }
