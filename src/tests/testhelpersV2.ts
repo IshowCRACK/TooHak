@@ -21,7 +21,6 @@ const requestHelper = (method: HttpVerb, path: string, payload: object, jwt?: Jw
   }
 
   const res = request(method, URL + path, { qs, json, headers });
-
   return JSON.parse(res.body.toString());
 };
 //  ///////////////////// NEW ITR3  ////////////////////////////////////////
@@ -36,6 +35,18 @@ export const updateQuizSessionStateHandler = (quizId: number, sessionId: number,
 
 export const getSessionStatusHandler = (quizId: number, sessionId: number, jwt:Jwt): QuizSession => {
   return requestHelper('GET', `v1/admin/quiz/${quizId}/session/${sessionId}`, {}, jwt);
+};
+
+export const playerQuestionInfoHelper = (playerId: number, questionPosition: number): PlayerQuestionInfoReturn | ErrorObj => {
+  return requestHelper('GET', `v1/player/${playerId}/question/${questionPosition}`, {});
+};
+
+export const playerSubmitAnswerHandler = (answerIds: Array<number>, playerId: number, questionPosition: number): OkObj | ErrorObj => {
+  return requestHelper('PUT', `v1/player/${playerId}/question/${questionPosition}/answer`, {answerIds});
+};
+
+export const getQuestionResultsHandler = (playerId: number, questionPosition: number): OkObj | ErrorObj => {
+  return requestHelper('GET', `v1/player/${playerId}/question/${questionPosition}/results`, {});
 };
 
 //  ////////////////////  MODIFIED ITR3 ////////////////////////////////////
@@ -123,6 +134,3 @@ export const playerJoinHelper = (sessionId: number, name: string): PlayerReturn 
   return requestHelper('POST', 'v1/player/join', { sessionId, name });
 };
 
-export const playerQuestionInfoHelper = (playerId: number, questionPosition: number): PlayerQuestionInfoReturn | ErrorObj => {
-  return requestHelper('GET', `v1/player/${playerId}/question/${questionPosition}`, {});
-};

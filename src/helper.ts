@@ -1,4 +1,4 @@
-import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer, Question, User, States, Actions } from '../interfaces/interfaces';
+import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer, Question, User, States, Actions, QuizSession } from '../interfaces/interfaces';
 import { getData } from './dataStore';
 import { adminQuizList } from './quiz';
 import { checkJwtValid, jwtToToken } from './token';
@@ -523,3 +523,41 @@ export function getNumber() {
 
   return numbers.join('');
 }
+
+//checks of duplicates in an array
+export function hasDuplicates(answerIds: number[]): boolean {
+  const numberSet: Set<number> = new Set();
+
+  for (const answer of answerIds) {
+    if (numberSet.has(answer)) {
+      return true; // Found a duplicate
+    }
+    numberSet.add(answer); // Add the number to the Set
+  }
+
+  return false; // No duplicates found
+}
+
+//checks if answer ids are valid for specific question
+export function areAnswerIdsValid(questionAnswers: number[], answerIds: number[]): boolean {
+  return answerIds.every((num: number) => questionAnswers.includes(num));
+}
+
+export function isAnswersCorrect(correctAnswerIds: number[], answerIds: number[]): boolean {
+  // Check if both arrays have the same length
+  if (correctAnswerIds.length !== answerIds.length) {
+    return false;
+  }
+
+  // Create sets from the arrays to remove duplicate elements and order dependency
+  const set1 = new Set(correctAnswerIds);
+  const set2 = new Set(answerIds);
+
+  // Check if the sets are equal
+  const isEqual = JSON.stringify(Array.from(set1).sort()) === JSON.stringify(Array.from(set2).sort());
+
+  return isEqual;
+}
+
+
+

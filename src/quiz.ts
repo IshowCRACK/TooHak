@@ -582,13 +582,15 @@ export function updateQuizSessionState(quizId: number, sessionId: number, jwt: J
     case Actions.NEXT_QUESTION:
       if (quizSession.atQuestion < questionCount) {
         questionDuration = quizSession.metadata.questions[quizSession.atQuestion].duration;
-        quizSession.atQuestion = quizSession.atQuestion + 1;
         // Update the state to QUESTION_COUNTDOWN
         quizSession.state = States.QUESTION_COUNTDOWN;
+
         setData(data);
         // Start the countdown timer
         quizSession.countdownTimer = setTimeout(() => {
           quizSession.state = States.QUESTION_OPEN;
+          quizSession.atQuestion = quizSession.atQuestion + 1;
+
           setData(data);
           // Clear the countdown timer
           clearTimeout(quizSession.countdownTimer);

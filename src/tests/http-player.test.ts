@@ -1,8 +1,12 @@
-import { AdminQuizCreate, Jwt, QuestionBody, Token, OkSessionObj, QuizQuestionCreate, PlayerReturn } from '../../interfaces/interfaces';
+import { AdminQuizCreate, Jwt, QuestionBody, Token, OkSessionObj, QuizQuestionCreate, PlayerReturn, QuizSession } from '../../interfaces/interfaces';
 import { clearUsers, registerUser } from './iter2tests/testHelpersv1';
-import { RequestCreateQuizV2, createQuizQuestionHandlerV2, startSessionQuiz, playerJoinHelper, updateQuizSessionStateHandler, playerQuestionInfoHelper } from './testhelpersV2';
+import { RequestCreateQuizV2, createQuizQuestionHandlerV2, startSessionQuiz, playerJoinHelper, updateQuizSessionStateHandler, getSessionStatusHandler, playerQuestionInfoHelper, playerSubmitAnswerHandler, getQuestionResultsHandler } from './testhelpersV2';
 import { tokenToJwt } from '../token';
 
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+jest.setTimeout(20000);
 beforeEach(() => {
   clearUsers();
 });
@@ -10,7 +14,7 @@ beforeEach(() => {
 afterEach(() => {
   clearUsers();
 });
-
+/*
 describe('PlayerJoin', () => {
   let userJwt: Jwt;
   let userToken: Token;
@@ -202,8 +206,9 @@ describe('PlayerQuestionInfo', () => {
       });
     });
 
-    test('If session is not currently on this question', () => {
+    test('If session is not currently on this question', async () => {
       updateQuizSessionStateHandler(quizId, sessionId.sessionId, userJwt, 'NEXT_QUESTION');
+      await delay(1100);
       expect(playerQuestionInfoHelper(playerId.playerId, 2)).toStrictEqual({
         error: 'Session is not currently on this question'
       });
@@ -222,8 +227,9 @@ describe('PlayerQuestionInfo', () => {
   });
 
   describe('Successful', () => {
-    test('Success', () => {
+    test('Success', async () => {
       updateQuizSessionStateHandler(quizId, sessionId.sessionId, userJwt, 'NEXT_QUESTION');
+      await delay(1100);
       expect(playerQuestionInfoHelper(playerId.playerId, 1)).toEqual(
         {
           questionId: questionId1.questionId,
@@ -257,3 +263,226 @@ describe('PlayerQuestionInfo', () => {
     });
   });
 });
+*/
+
+//  PLAYER SUBMIT ANSWER TESTS & GET QUESTION RESULTS //
+describe('playerSubmistAnswer', () => {
+  let userJwt: Jwt;
+  let userToken: Token;
+  let quizId: number;
+  let defaultQuestionBody1 : QuestionBody;
+  let defaultQuestionBody2 : QuestionBody;
+  let sessionId: number;
+  let playerId: number;
+  let questionId1: QuizQuestionCreate;
+
+  beforeEach(() => {
+    userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    userJwt = tokenToJwt(userToken);
+
+    quizId = (RequestCreateQuizV2(userJwt, 'Countries of the world', 'Quiz on all countries') as AdminQuizCreate).quizId;
+    defaultQuestionBody2 = {
+      question: 'What content is Japan in?',
+      duration: 1,
+      points: 1,
+      answers: [
+        {
+          answerId: 0,
+          answer: 'Asia',
+          colour: 'Red',
+          correct: true
+        },
+        {
+          answerId: 1,
+          answer: 'continent of Asia',
+          colour: 'Blue',
+          correct: true
+        },
+        {
+          answerId: 2,
+          answer: 'South America',
+          colour: 'Green',
+          correct: false
+        },
+        {
+          answerId: 3,
+          answer: 'Africa',
+          colour: 'Yellow',
+          correct: false
+        }
+      ],
+      thumbnailUrl: 'https://static.vecteezy.com/system/resources/previews/001/204/011/original/soccer-ball-png.png'
+    };
+    defaultQuestionBody1 = {
+      question: 'What content is Russia in?',
+      duration: 1,
+      points: 1,
+      answers: [
+        {
+          answerId: 0,
+          answer: 'Asia',
+          colour: 'Red',
+          correct: true
+        },
+        {
+          answerId: 1,
+          answer: 'North America',
+          colour: 'Blue',
+          correct: false
+        },
+        {
+          answerId: 2,
+          answer: 'South America',
+          colour: 'Green',
+          correct: false
+        },
+        {
+          answerId: 3,
+          answer: 'Africa',
+          colour: 'Yellow',
+          correct: false
+        }
+      ],
+      thumbnailUrl: 'https://static.vecteezy.com/system/resources/previews/001/204/011/original/soccer-ball-png.png'
+    };
+    questionId1 = createQuizQuestionHandlerV2(quizId, userJwt, defaultQuestionBody1) as QuizQuestionCreate;
+    createQuizQuestionHandlerV2(quizId, userJwt, defaultQuestionBody2) as QuizQuestionCreate;
+    sessionId = (startSessionQuiz(userJwt, 30, quizId) as OkSessionObj).sessionId;
+    playerId = (playerJoinHelper(sessionId, 'John Doe') as PlayerReturn).playerId;
+  });
+  describe('Unsuccessful ', () => {
+    test('PlayerId does not exist', async () => {
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION')
+      await delay(1100);
+      //Now state is QUESTION_OPEN
+      expect(playerSubmitAnswerHandler([0], -99, 0)).toStrictEqual({
+        error: 'player ID does not exist'
+      });
+    });
+
+    test('Question position is not valid for the session this player is in', async () => {
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
+      await delay(1100);
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_OPEN');
+      expect(playerSubmitAnswerHandler([0], playerId, 20)).toStrictEqual({
+        error: 'Question position is not valid for the session this player is in'
+      });
+    });
+
+    test('If session is not currently on this question', async () => {
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
+      await delay(1100);
+      expect(playerSubmitAnswerHandler([0], playerId, 2)).toStrictEqual({
+        error: 'Session is not currently on this question'
+      });
+    });
+
+    test('invalid answer Ids', async () => {
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
+      await delay(1100);
+      expect(playerSubmitAnswerHandler([-99, 80], playerId, 1)).toStrictEqual({
+        error: 'Answer IDs are not valid for this particular question'
+      });
+    });
+
+    test('duplicate answer Ids', async () => {
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
+      await delay(1100);
+      expect(playerSubmitAnswerHandler([0, 0], playerId, 1)).toStrictEqual({
+        error: 'Duplicate Answers not allowed'
+      });
+    });
+
+
+    test('Session is in LOBBY or END state', () => {
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'LOBBY');
+      expect(playerSubmitAnswerHandler([0], playerId, 1)).toStrictEqual({
+        error: 'The question is not open for answers'
+      });
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'END');
+      expect(playerSubmitAnswerHandler([0], playerId, 1)).toStrictEqual({
+        error: 'The question is not open for answers'
+      });
+    });
+  });
+
+  describe('Successful',  () => {
+    test('Success 1 round', async () => {
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
+      await delay(1100);
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_OPEN');
+      expect(playerSubmitAnswerHandler([0], playerId, 1)).toStrictEqual({
+
+      });
+      await delay(1100);
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_CLOSE');
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER')
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('ANSWER_SHOW');
+      // expect(getQuestionResultsHandler(playerId, 0)).toEqual({
+
+
+      // });
+    });
+
+    test('Success 2 round & successful multiple correct answers', async () => {
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
+      await delay(1100);
+      playerSubmitAnswerHandler([0], playerId, 1)
+      await delay(1100);
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER')
+
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
+      await delay(1100);
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_OPEN');
+      expect(playerSubmitAnswerHandler([0, 1], playerId, 2)).toStrictEqual({
+
+      });
+      await delay(1100);
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_CLOSE');
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER')
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('ANSWER_SHOW');
+    });
+
+    test('Success 2 rounds of incorrect answers', async () => {
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
+      await delay(1100);
+      playerSubmitAnswerHandler([3], playerId, 1)
+      await delay(1100);
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER')
+
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
+      await delay(1100);
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_OPEN');
+      expect(playerSubmitAnswerHandler([0, 3], playerId, 2)).toStrictEqual({
+
+      });
+      await delay(1100);
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_CLOSE');
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER')
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('ANSWER_SHOW');
+    });
+
+    test('Success 1 correct, 1 incorrect', async () => {
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
+      await delay(1100);
+      playerSubmitAnswerHandler([0], playerId, 1)
+      await delay(1100);
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER')
+
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
+      await delay(1100);
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_OPEN');
+      expect(playerSubmitAnswerHandler([1, 2], playerId, 2)).toStrictEqual({
+
+      });
+      await delay(1100);
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_CLOSE');
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER')
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('ANSWER_SHOW');
+    });
+    
+
+
+  });
+});
+

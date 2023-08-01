@@ -121,6 +121,7 @@ export const createQuizSession = (authUserId: number, quizId: number, autoStartN
     questionTimer: undefined, // Timer for question countdown
     state: States.LOBBY,
     atQuestion: 0,
+    playerAnswers: [],
     players: [],
     metadata: {
       imgUrl: 'Some thumbnail url.com.au',

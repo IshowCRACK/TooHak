@@ -14,7 +14,7 @@ import { formatError } from './helper';
 import { getData } from './dataStore';
 import { quizCreateQuestion, adminQuizDelete, quizDuplicateQuestion, quizMoveQuestion, quizUpdateQuestion } from './question';
 import { quizCreateQuestionV2, deleteQuestionV2, quizUpdateQuestionV2 } from './questionV2';
-import { playerJoin, playerQuestionInfo } from './player';
+import { playerJoin, playerQuestionInfo, playerSubmitAnswer, getQuestionResults } from './player';
 
 // Set up web app
 const app = express();
@@ -312,6 +312,29 @@ app.get('/v1/admin/quiz/:quizId/session/:sessionId', (req: Request, res: Respons
   res.status(200).json(response);
 });
 
+app.get('/v1/player/:playerId/question/:questionPosition', (req: Request, res: Response) => {
+  const playerId = parseInt(req.params.playerId);
+  const questionPosition = parseInt(req.params.questionPosition);
+  const response = playerQuestionInfo(playerId, questionPosition);
+  res.status(200).json(response);
+});
+
+app.put('/v1/player/:playerId/question/:questionPosition/answer', (req: Request, res: Response) => {
+  const playerId = parseInt(req.params.playerId);
+  const questionPosition = parseInt(req.params.questionPosition);
+  const { answerIds }  = req.body;
+
+  const response = playerSubmitAnswer(answerIds, playerId, questionPosition);
+  res.status(200).json(response);
+});
+
+app.get('/v1/player/:playerId/question/:questionPosition/results', (req: Request, res: Response) => {
+  const playerId = parseInt(req.params.playerId);
+  const questionPosition = parseInt(req.params.questionPosition);
+  const response = getQuestionResults(playerId, questionPosition);
+  res.status(200).json(response);
+});
+
 /// /////////////////////////////// V2 ROUTES /////////////////////////////////////
 
 app.get('/v2/admin/quiz/trash', (req: Request, res: Response) => {
@@ -486,13 +509,7 @@ app.post('/v1/player/join', (req: Request, res: Response) => {
   res.status(200).json(response);
 });
 
-app.get('/v1/player/:playerId/question/:questionPosition', (req: Request, res: Response) => {
-  const playerId = parseInt(req.params.playerId);
-  const questionPosition = parseInt(req.params.questionPosition);
-  const response = playerQuestionInfo(playerId, questionPosition);
-  console.log(response);
-  res.status(200).json(response);
-});
+
 
 // ====================================================================
 //  ================= WORK IS DONE ABOVE THIS LINE ===================

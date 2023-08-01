@@ -1,6 +1,6 @@
-import { Token, QuizSession, QuestionAnswer, Answer, QuizSessionAdmin } from '../interfaces/interfaces';
+import { Token, QuizSession, QuestionAnswer, Answer, QuizSessionAdmin, Question, OkObj, States } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
-import { getLetter, getNumber } from './helper';
+import { getLetter, getNumber, hasDuplicates, areAnswerIdsValid, isAnswersCorrect } from './helper';
 import { tokenToJwt } from './token';
 import HTTPError from 'http-errors';
 import { getSessionStatus } from './quiz';
@@ -33,7 +33,6 @@ export function playerJoin(sessionId: number, name: string) {
     const letters = getLetter();
     const numbers = getNumber();
     name = letters + numbers;
-    console.log(name);
   }
 
   const playerId = data.maxPlayerId + 1;
@@ -111,3 +110,5 @@ export function playerQuestionInfo(playerId: number, questionPosition: number) {
 
   return questionInfoReturn;
 }
+
+

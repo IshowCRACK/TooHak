@@ -35,6 +35,15 @@ export interface QuizSessionAdmin extends QuizSession {
     autoStartNum: number;
     countdownTimer: ReturnType<typeof setTimeout> | undefined; // Timer for question countdown
     questionTimer: ReturnType<typeof setTimeout> | undefined; // Timer for question countdown
+    playerAnswers: PlayerAnswer[]
+}
+
+export interface PlayerAnswer {
+    playerId: number;
+    questionId: number;
+    answerIds: number;
+    submissionTime: number;
+    isCorrect: boolean;
 }
 
 export interface QuizSession {
