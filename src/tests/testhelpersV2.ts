@@ -38,6 +38,14 @@ export const getSessionStatusHandler = (quizId: number, sessionId: number, jwt:J
   return requestHelper('GET', `v1/admin/quiz/${quizId}/session/${sessionId}`, {}, jwt);
 };
 
+export const playerSubmitAnswerHandler = (answerIds: Array<number>, playerId: number, questionPosition: number): OkObj | ErrorObj => {
+  return requestHelper('PUT', `v1/player/${playerId}/question/${questionPosition}/answer`, { answerIds });
+};
+
+export const getQuestionResultsHandler = (playerId: number, questionPosition: number): OkObj | ErrorObj => {
+  return requestHelper('GET', `v1/player/${playerId}/question/${questionPosition}/results`, {});
+};
+
 //  ////////////////////  MODIFIED ITR3 ////////////////////////////////////
 export const logoutUserHandlerV2 = (jwt: Jwt) => {
   return requestHelper('POST', 'v2/admin/auth/logout', {}, jwt);

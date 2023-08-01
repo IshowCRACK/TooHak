@@ -35,6 +35,17 @@ export interface QuizSessionAdmin extends QuizSession, Chat {
     autoStartNum: number;
     countdownTimer: ReturnType<typeof setTimeout> | undefined; // Timer for question countdown
     questionTimer: ReturnType<typeof setTimeout> | undefined; // Timer for question countdown
+    playerAnswers: PlayerAnswer[]
+    questionOpenTime: number
+}
+
+export interface PlayerAnswer {
+    playerId: number;
+    name: string,
+    questionId: number;
+    answerIds: number[];
+    submissionTime: number;
+    isCorrect: boolean;
 }
 
 export interface QuizSession {
@@ -299,4 +310,17 @@ export interface Message {
 
 export interface MessageReturn {
     messages: Message[];
+}
+
+export interface getQuestionResultsReturn {
+    questionId: number,
+    questionCorrectBreakdown: QuestionCorrectBreakdown[],
+    averageAnswerTime: number,
+    percentCorrect: number,
+}
+
+export interface QuestionCorrectBreakdown {
+    answerId: number,
+    playersCorrect: string[]
+
 }
