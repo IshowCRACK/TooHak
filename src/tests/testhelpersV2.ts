@@ -130,3 +130,7 @@ export const playerQuestionInfoHelper = (playerId: number, questionPosition: num
 export const viewChatHandler = (playerId: number): MessageReturn | ErrorObj => {
   return requestHelper('GET', `v1/player/${playerId}/chat`, {});
 }
+
+export const pushChatForViewChatHandler = (playerId: number, sessionId: number, messageBody: string): MessageReturn => {
+  return requestHelper('POST', 'tempPushMessage', { playerId, sessionId, messageBody });
+}

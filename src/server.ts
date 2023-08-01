@@ -15,6 +15,7 @@ import { getData } from './dataStore';
 import { quizCreateQuestion, adminQuizDelete, quizDuplicateQuestion, quizMoveQuestion, quizUpdateQuestion } from './question';
 import { quizCreateQuestionV2, deleteQuestionV2, quizUpdateQuestionV2 } from './questionV2';
 import { playerJoin, playerQuestionInfo } from './player';
+import { MessageReturn } from '../interfaces/interfaces';
 
 // Set up web app
 const app = express();
@@ -42,6 +43,20 @@ app.get('/echo', (req: Request, res: Response) => {
   const data = req.query.echo as string;
   return res.json(echo(data));
 });
+
+// TESTING PURPOSES ONLY FOR VIEWCHAT - TEMPORARY ARRANGEMENT
+
+app.post('/tempPushMessage', (req: Request, res: Response) => {
+  const { playerId, sessionId, messageBody } = req.body;
+  const data = getData();
+  const session = data.quizSessions.find((session) => session.sessionId === sessionId);
+  session.messages.push({ messageBody: messageBody, playerId: playerId });
+  const response: MessageReturn = {
+    messages: session.messages
+  };
+});
+
+// WILL BE REMOVED SHORTLY - AREEQ
 
 app.post('/v1/admin/auth/register', (req: Request, res: Response) => {
   const { email, password, nameFirst, nameLast } = req.body;
