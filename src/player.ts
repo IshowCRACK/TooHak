@@ -147,7 +147,6 @@ export function playerSubmitAnswer(answerIds: Array<number>, playerId: number, q
   }
   const sessionIndex: number = data.quizSessions.indexOf(thisSession);
   const questionAnswers: Answer[] = data.quizSessions[sessionIndex].metadata.questions[questionPosition - 1].answers;
-  const answerIdsArray = questionAnswers.map((question: Answer) => question.answerId);
   const question: Question = data.quizSessions[sessionIndex].metadata.questions[questionPosition - 1];
   const playerName: string = data.quizSessions[sessionIndex].playerInfo.find((info) => info.playerId === playerId).name;
   const answerIdsArraySet: Set<number> = new Set(questionAnswers.map(answer => answer.answerId));
