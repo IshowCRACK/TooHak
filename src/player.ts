@@ -110,7 +110,6 @@ export function playerQuestionInfo(playerId: number, questionPosition: number) {
 
   return questionInfoReturn;
 }
-
 export function playerSubmitAnswer(answerIds: Array<number>, playerId: number, questionPosition: number): OkObj {
   const data = getData();
   // no playerId
