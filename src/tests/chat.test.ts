@@ -1,8 +1,8 @@
-import { AdminQuizCreate, Message, MessageReturn, PlayerReturn, QuizSession, QuizSessionAdmin, Token, Jwt } from "../../interfaces/interfaces";
-import { viewChatHandler, pushChatForViewChatHandler } from "./testhelpersV2";
+import { AdminQuizCreate, Message, MessageReturn, PlayerReturn, QuizSession, QuizSessionAdmin, Token, Jwt, PlayerQuestionInfoReturn, OkSessionObj } from "../../interfaces/interfaces";
+import { viewChatHandler, pushChatForViewChatHandler, startSessionQuiz } from "./testhelpersV2";
 import { playerJoinHelper, RequestCreateQuizV2 } from "./testhelpersV2";
 import { clearUsers, loginUser, registerUser } from './iter2tests/testHelpersv1';
-import { tokenToJwt } from "../token";
+import { jwtToToken, tokenToJwt } from "../token";
 
 beforeEach(() => {
   clearUsers();
@@ -45,21 +45,21 @@ const defaultQuestionBody = {
 };
 
 describe('Tests for viewChat', () => {
-  let jwt: Jwt;
   let sessionId: number;
-  let playerId: number;
+  let playerId: number = 10;
+  let player: PlayerReturn;
   let quizId: number;
   beforeEach(() => {
     const token = registerUser('good@email.com', 'Password123', 'Mount', 'Franklin') as Token;
-    sessionId = parseInt(token.sessionId);
-    jwt = tokenToJwt(token);
-    const quizId = (RequestCreateQuizV2(jwt, 'Continents of the World', 'continent quiz') as AdminQuizCreate).quizId;
-    const playerId = (playerJoinHelper(sessionId, 'peahead') as PlayerReturn).playerId;
+    const quizId = (RequestCreateQuizV2(tokenToJwt(token), 'Continents of the World', 'continent quiz') as AdminQuizCreate).quizId;
+    sessionId = (startSessionQuiz(tokenToJwt(token), 30, quizId) as OkSessionObj).sessionId;
+    player = playerJoinHelper(sessionId, 'pea head') as PlayerReturn;
+    playerId = player.playerId;   
   });
 
   describe('Unsuccessful Attempts', () => {
     test('playerId does not exist', () => {
-      expect(viewChatHandler(10)).toStrictEqual({ error: 'Player ID does not not valid' });
+      expect(playerId).toStrictEqual({ error: 'Player ID is not valid' });
     });
 });
 
@@ -93,19 +93,21 @@ describe('Tests for viewChat', () => {
       });
     });
     test('view messages from multiple players', () => {
-      const player2Id = (playerJoinHelper(sessionId, 'doostin') as PlayerReturn).playerId;
-      pushChatForViewChatHandler(playerId, sessionId, 'I had a dream');
-      pushChatForViewChatHandler(player2Id, sessionId, 'That my head was underwater');
-      messages: [
-        {
-          messageBody: 'I had a dream',
-          playerId: playerId,
-        },
-        {
-          messageBody: 'That my head was underwater',
-          playerId: player2Id,
-        }
-      ]
+      const player2Id = playerJoinHelper(sessionId, 'doostin') as PlayerReturn;
+      //pushChatForViewChatHandler(playerId, sessionId, 'I had a dream');
+      //pushChatForViewChatHandler(player2Id, sessionId, 'That my head was underwater');
+      /*expect(viewChatHandler(playerId)).toStrictEqual({
+        messages: [
+          {
+            messageBody: 'I had a dream',
+            playerId: playerId,
+          },
+          {
+            messageBody: 'That my head was underwater',
+            playerId: player2Id,
+          }
+        ]
+      });*/
     });
   });
 })

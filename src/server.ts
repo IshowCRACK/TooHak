@@ -16,6 +16,7 @@ import { quizCreateQuestion, adminQuizDelete, quizDuplicateQuestion, quizMoveQue
 import { quizCreateQuestionV2, deleteQuestionV2, quizUpdateQuestionV2 } from './questionV2';
 import { playerJoin, playerQuestionInfo } from './player';
 import { MessageReturn } from '../interfaces/interfaces';
+import { viewChat } from './chat';
 
 // Set up web app
 const app = express();
@@ -330,6 +331,10 @@ app.get('/v1/admin/quiz/:quizId/session/:sessionId', (req: Request, res: Respons
 // VIEW CHAT //
 
 app.get('/v1/player/:playerId/chat', (req: Request, res: Response) => {
+  const playerId: number = parseInt(req.params.playerId);
+  const response = viewChat(playerId);
+
+  res.status(200).json(response);
 });
 
 /// /////////////////////////////// V2 ROUTES /////////////////////////////////////

@@ -48,7 +48,6 @@ export interface Chat {
     messages: Message[];
 }
 
-
 export enum States {
    LOBBY = "LOBBY",
    QUESTION_COUNTDOWN = "QUESTION_COUNTDOWN",
