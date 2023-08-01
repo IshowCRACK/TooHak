@@ -15,8 +15,7 @@ import { getData } from './dataStore';
 import { quizCreateQuestion, adminQuizDelete, quizDuplicateQuestion, quizMoveQuestion, quizUpdateQuestion } from './question';
 import { quizCreateQuestionV2, deleteQuestionV2, quizUpdateQuestionV2 } from './questionV2';
 import { playerJoin, playerQuestionInfo } from './player';
-import { MessageReturn } from '../interfaces/interfaces';
-import { viewChat } from './chat';
+import { viewChat, tempSend } from './chat';
 
 // Set up web app
 const app = express();
@@ -49,12 +48,9 @@ app.get('/echo', (req: Request, res: Response) => {
 
 app.post('/tempPushMessage', (req: Request, res: Response) => {
   const { playerId, sessionId, messageBody } = req.body;
-  const data = getData();
-  const session = data.quizSessions.find((session) => session.sessionId === sessionId);
-  session.messages.push({ messageBody: messageBody, playerId: playerId });
-  const response: MessageReturn = {
-    messages: session.messages
-  };
+  const response = tempSend(sessionId, playerId, messageBody);
+
+  res.json(response);
 });
 
 // WILL BE REMOVED SHORTLY - AREEQ
