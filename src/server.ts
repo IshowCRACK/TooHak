@@ -15,7 +15,7 @@ import { getData } from './dataStore';
 import { quizCreateQuestion, adminQuizDelete, quizDuplicateQuestion, quizMoveQuestion, quizUpdateQuestion } from './question';
 import { quizCreateQuestionV2, deleteQuestionV2, quizUpdateQuestionV2 } from './questionV2';
 import { playerJoin, playerQuestionInfo } from './player';
-import { viewChat, tempSend } from './chat';
+import { viewChat, tempSend, sendChat } from './chat';
 
 // Set up web app
 const app = express();
@@ -324,8 +324,6 @@ app.get('/v1/admin/quiz/:quizId/session/:sessionId', (req: Request, res: Respons
   res.status(200).json(response);
 });
 
-// CHAT //
-
 app.get('/v1/player/:playerId/chat', (req: Request, res: Response) => {
   const playerId: number = parseInt(req.params.playerId);
   const response = viewChat(playerId);
@@ -334,6 +332,11 @@ app.get('/v1/player/:playerId/chat', (req: Request, res: Response) => {
 });
 
 app.post('/v1/player/:playerId/chat', (req: Request, res: Response) => {
+  const playerId: number = parseInt(req.params.playerId);
+  const { messageBody } = req.body;
+  const response = sendChat(playerId, messageBody);
+
+  res.status(200).json(response);
 });
 
 /// /////////////////////////////// V2 ROUTES /////////////////////////////////////
