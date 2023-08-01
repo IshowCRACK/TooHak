@@ -28,10 +28,10 @@ export interface Player {
     name: string,
 }
 
-export interface QuizSessionAdmin extends QuizSession {
+export interface QuizSessionAdmin extends QuizSession, Chat {
     sessionId: number;
     authUserId: number;
-    playerInfo: Player[]
+    playerInfo: Player[];
     autoStartNum: number;
     countdownTimer: ReturnType<typeof setTimeout> | undefined; // Timer for question countdown
     questionTimer: ReturnType<typeof setTimeout> | undefined; // Timer for question countdown
@@ -55,6 +55,9 @@ export interface QuizSession {
     metadata: QuizMetadata;
 }
 
+export interface Chat {
+    messages: Message[];
+}
 
 export enum States {
    LOBBY = "LOBBY",
@@ -311,5 +314,13 @@ export interface getQuestionResultsReturn {
 export interface QuestionCorrectBreakdown {
     answerId: number,
     playersCorrect: string[]
+}
 
+export interface Message {
+    messageBody: string;
+    playerId: number;
+}
+
+export interface MessageReturn {
+    messages: Message[];
 }

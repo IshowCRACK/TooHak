@@ -127,7 +127,8 @@ export const createQuizSession = (authUserId: number, quizId: number, autoStartN
     metadata: {
       imgUrl: 'Some thumbnail url.com.au',
       ...quiz
-    } // todo: Add thumbnail to whoever doing it.
+    }, // todo: Add thumbnail to whoever doing it.
+    messages: []
   };
 
   return quizSession;
