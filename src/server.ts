@@ -324,13 +324,16 @@ app.get('/v1/admin/quiz/:quizId/session/:sessionId', (req: Request, res: Respons
   res.status(200).json(response);
 });
 
-// VIEW CHAT //
+// CHAT //
 
 app.get('/v1/player/:playerId/chat', (req: Request, res: Response) => {
   const playerId: number = parseInt(req.params.playerId);
   const response = viewChat(playerId);
 
   res.status(200).json(response);
+});
+
+app.post('/v1/player/:playerId/chat', (req: Request, res: Response) => {
 });
 
 /// /////////////////////////////// V2 ROUTES /////////////////////////////////////
