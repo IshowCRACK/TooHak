@@ -1,6 +1,9 @@
 import request, { HttpVerb } from 'sync-request';
-
-import { AdminQuizCreate, AdminQuizListReturn, ErrorObj, Jwt, OkObj, AdminQuizInfo, OkSessionObj, QuestionBody, QuizQuestionCreate, AdminQuestionDuplicate, QuizTrashReturn, QuizSession, PlayerReturn, PlayerQuestionInfoReturn, MessageReturn } from '../../interfaces/interfaces';
+import {
+  AdminQuizCreate, AdminQuizListReturn, ErrorObj, Jwt, OkObj, AdminQuizInfo, OkSessionObj, QuestionBody,
+  QuizQuestionCreate, AdminQuestionDuplicate, QuizTrashReturn, QuizSession, PlayerReturn, PlayerQuestionInfoReturn,
+  MessageReturn
+} from '../../interfaces/interfaces';
 import { getUrl } from '../helper';
 
 const URL: string = getUrl();
@@ -141,4 +144,8 @@ export const viewChatHandler = (playerId: number): MessageReturn | ErrorObj => {
 
 export const pushChatForViewChatHandler = (playerId: number, sessionId: number, messageBody: string): MessageReturn => {
   return requestHelper('POST', 'tempPushMessage', { playerId, sessionId, messageBody });
+};
+
+export const sendChatHandler = (playerId: number, messageBody: string): OkObj | ErrorObj => {
+  return requestHelper('POST', `v1/player/${playerId}/chat`, { messageBody });
 };
