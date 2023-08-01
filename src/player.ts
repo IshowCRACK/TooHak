@@ -111,4 +111,169 @@ export function playerQuestionInfo(playerId: number, questionPosition: number) {
   return questionInfoReturn;
 }
 
+export function playerSubmitAnswer(answerIds: Array<number>, playerId: number, questionPosition: number): OkObj {
+  const data = getData();
+  // no playerId
+  if (playerId > data.maxPlayerId || playerId <= 0) {
+    throw HTTPError(400, 'player ID does not exist');
+  }
+
+  // find session
+  let thisSession: QuizSessionAdmin;
+  for (const session of data.quizSessions) {
+    const playerInfo = session.playerInfo;
+    for (const player of playerInfo) {
+      if (player.playerId === playerId) {
+        thisSession = session;
+      }
+    }
+  }
+  // console.log(thisSession)
+
+  // find numQuestions by finding authuserId
+  const authUserId = thisSession.authUserId;
+  const quiz = data.quizzes.find((quiz) => quiz.adminQuizId === thisSession.authUserId);
+
+
+  if (quiz.numQuestions < questionPosition) {
+    throw HTTPError(400, 'Question position is not valid for the session this player is in');
+  }
+
+
+  if (thisSession.atQuestion !== questionPosition && thisSession.atQuestion !== 0) {
+    throw HTTPError(400, 'Session is not currently on this question');
+  }  
+
+  if (answerIds === []){
+    throw HTTPError(400, 'Less than 1 answer ID was submitted');
+
+  }
+  if (thisSession.state !== States.QUESTION_OPEN) {
+    throw HTTPError(400, 'The question is not open for answers');
+  }
+  const sessionIndex: number = data.quizSessions.indexOf(thisSession);
+  const questionAnswers: Answer[] = data.quizSessions[sessionIndex].metadata.questions[questionPosition - 1].answers
+  const question: Answer[] = data.quizSessions[sessionIndex].metadata.questions[questionPosition - 1]
+
+  console.log('questionsAnswers', questionAnswers)
+  const answerIdsArray = questionAnswers.map((question: Question) => question.answerId);
+  console.log('answerIds:', answerIds );
+  console.log('answerIdsArray:', answerIdsArray);
+
+  const answerIdsArraySet: Set<number> = new Set(questionAnswers.map(answer => answer.answerId));
+  if (!(answerIds.every((num: number) => answerIdsArraySet.has(num)))) {
+    throw HTTPError(400, 'Answer IDs are not valid for this particular question');
+  }
+
+  if (hasDuplicates(answerIds) === true) {
+    throw HTTPError(400, 'Duplicate Answers not allowed');
+  }
+
+  // Check if the player has already submitted an answer for this question
+  const existingPlayerAnswerIndex = thisSession.playerAnswers.findIndex(
+    (answer) => answer.playerId === playerId && answer.questionId === question.questionId
+  );
+
+  // Record the time of submission
+  const submissionTime = Math.round(Date.now() / 1000);
+  
+  const correctAnswerIds = question.answers
+  .filter((answer) => answer.correct)
+  .map((answer) => answer.answerId);
+
+  console.log('correctAnswerIds:', correctAnswerIds);
+
+  const isCorrect: boolean = isAnswersCorrect(correctAnswerIds, answerIds )
+  console.log('thisSession.playerAnswers BEFORE', thisSession.playerAnswers)
+
+  if (existingPlayerAnswerIndex !== -1) {
+    // Player has already submitted an answer for this question, update the existing answer
+    thisSession.playerAnswers[existingPlayerAnswerIndex].answerIds = answerIds;
+    thisSession.playerAnswers[existingPlayerAnswerIndex].submissionTime = submissionTime;
+    thisSession.playerAnswers[existingPlayerAnswerIndex].isCorrect = isCorrect;
+    setData();
+
+  } else {
+    // Player is submitting a new answer for this question
+    // Add the new player's answer to the session
+    thisSession.playerAnswers.push({
+      playerId: playerId,
+      questionId: question.questionId,
+      answerIds: answerIds,
+      submissionTime: submissionTime,
+      isCorrect: isCorrect ,
+    });
+    console.log('thisSession.playerAnswers AFTER',thisSession.playerAnswers)
+
+    setData();
+    // console.log(getData().quizSessions[sessionIndex].playerAnswers);
+
+  }
+  return {};
+}
+
+export function getQuestionResults(playerId: number, questionPosition: number): OkObj {
+  const data = getData();
+  // no playerId
+  if (playerId > data.maxPlayerId || playerId <= 0) {
+    throw HTTPError(400, 'player ID does not exist');
+  }
+
+  // find session
+  let thisSession: QuizSessionAdmin;
+  for (const session of data.quizSessions) {
+    const playerInfo = session.playerInfo;
+    for (const player of playerInfo) {
+      if (player.playerId === playerId) {
+        thisSession = session;
+      }
+    }
+  }
+  // find numQuestions by finding authuserId
+  const authUserId = thisSession.authUserId;
+  const quiz = data.quizzes.find((quiz) => quiz.adminQuizId === thisSession.authUserId);
+
+
+  if (quiz.numQuestions < questionPosition) {
+    throw HTTPError(400, 'Question position is not valid for the session this player is in');
+  }
+
+
+  if (thisSession.atQuestion !== questionPosition && thisSession.atQuestion !== 0) {
+    throw HTTPError(400, 'Session is not currently on this question');
+  }  
+
+  if (answerIds === []){
+    throw HTTPError(400, 'Less than 1 answer ID was submitted');
+
+  }
+  if (thisSession.state !== States.ANSWER_SHOW) {
+    throw HTTPError(400, 'The question is not open for results');
+  }
+  const sessionIndex: number = data.quizSessions.indexOf(thisSession);
+  const question: Question = data.quizSessions[sessionIndex].metadata.questions[questionPosition]
+
+  // Create an array of objects containing answer IDs of correct answers
+  const correctAnswerIds = defaultQuestionBody2.answers
+    .filter(answer => answer.correct)
+    .map(answer => answer.answerId);
+
+  // Create questionCorrectBreakdown array
+  const questionCorrectBreakdown = correctAnswerIds.map(answerId => { 
+    const playersCorrect = playersWhoGotItCorrect
+      .filter(player => player.answerId === answerId)
+      .map(player => player.name);
+  
+    return { answerId, playersCorrect };
+  });
+
+
+  return {
+      questionId: question.questionId,
+      questionCorrectBreakdown: questionCorrectBreakdown, 
+      averageAnswerTime: 45,
+      percentCorrect: 54
+    };
+}
+  
 
