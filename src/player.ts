@@ -113,7 +113,6 @@ export function playerQuestionInfo(playerId: number, questionPosition: number) {
 export function playerSubmitAnswer(answerIds: Array<number>, playerId: number, questionPosition: number): OkObj {
   const data = getData();
   // no playerId
-  console.log('getData', data);
   if (playerId > data.maxPlayerId || playerId <= 0) {
     throw HTTPError(400, 'player ID does not exist');
   }
@@ -128,7 +127,6 @@ export function playerSubmitAnswer(answerIds: Array<number>, playerId: number, q
       }
     }
   }
-  // console.log(thisSession)
 
   // find numQuestions by finding authuserId
   const quiz = data.quizzes.find((quiz) => quiz.adminQuizId === thisSession.authUserId);
@@ -152,12 +150,6 @@ export function playerSubmitAnswer(answerIds: Array<number>, playerId: number, q
   const answerIdsArray = questionAnswers.map((question: Answer) => question.answerId);
   const question: Question = data.quizSessions[sessionIndex].metadata.questions[questionPosition - 1];
   const playerName: string = data.quizSessions[sessionIndex].playerInfo.find((info) => info.playerId === playerId).name;
-  console.log('playerName', playerName);
-
-  console.log('questionsAnswers', questionAnswers);
-  console.log('answerIds:', answerIds);
-  console.log('answerIdsArray:', answerIdsArray);
-
   const answerIdsArraySet: Set<number> = new Set(questionAnswers.map(answer => answer.answerId));
   if (!(answerIds.every((num: number) => answerIdsArraySet.has(num)))) {
     throw HTTPError(400, 'Answer IDs are not valid for this particular question');
@@ -177,17 +169,12 @@ export function playerSubmitAnswer(answerIds: Array<number>, playerId: number, q
 
   // Record the time of submission
   const submissionTime = Math.round(Date.now() / 1000) - questionOpenTime;
-  console.log('questionOpenTime:', questionOpenTime);
-  console.log('submissionTime:', submissionTime);
 
   const correctAnswerIds = question.answers
     .filter((answer) => answer.correct)
     .map((answer) => answer.answerId);
 
-  console.log('correctAnswerIds:', correctAnswerIds);
-
   const isCorrect: boolean = isAnswersCorrect(correctAnswerIds, answerIds);
-  console.log('thisSession.playerAnswers BEFORE', thisSession.playerAnswers);
 
   if (existingPlayerAnswerIndex !== -1) {
     // Player has already submitted an answer for this question, update the existing answer
@@ -206,10 +193,8 @@ export function playerSubmitAnswer(answerIds: Array<number>, playerId: number, q
       submissionTime: submissionTime,
       isCorrect: isCorrect,
     });
-    console.log('thisSession.playerAnswers AFTER', thisSession.playerAnswers);
 
     setData(data);
-    // console.log(getData().quizSessions[sessionIndex].playerAnswers);
   }
   return {};
 }
@@ -254,11 +239,9 @@ export function getQuestionResults(playerId: number, questionPosition: number): 
     .map((answer) => answer.answerId);
   // Create questionCorrectBreakdown array
   const questionCorrectBreakdown: QuestionCorrectBreakdown[] = getQuestionCorrectBreakdown(playerAnswer, question.questionId, correctAnswerIds);
-  console.log('questionCorrectBreakdown', questionCorrectBreakdown);
 
   // Average answer time
   const averageAnswerTime: number = questionAverageAnswerTime(playerAnswer, question.questionId);
-  console.log('averageAnswerTime', averageAnswerTime);
 
   const percentCorrect: number = questionPercentageCorrect(playerAnswer, question.questionId);
 
