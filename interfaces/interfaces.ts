@@ -36,12 +36,14 @@ export interface QuizSessionAdmin extends QuizSession {
     countdownTimer: ReturnType<typeof setTimeout> | undefined; // Timer for question countdown
     questionTimer: ReturnType<typeof setTimeout> | undefined; // Timer for question countdown
     playerAnswers: PlayerAnswer[]
+    questionOpenTime: number
 }
 
 export interface PlayerAnswer {
     playerId: number;
+    name: string,
     questionId: number;
-    answerIds: number;
+    answerIds: number[];
     submissionTime: number;
     isCorrect: boolean;
 }
@@ -297,4 +299,17 @@ export interface QuestionAnswer {
     answerId: number,
     answer: string,
     colour: string
+}
+
+export interface getQuestionResultsReturn {
+    questionId: number,
+    questionCorrectBreakdown: QuestionCorrectBreakdown[],
+    averageAnswerTime: number,
+    percentCorrect: number,
+}
+
+export interface QuestionCorrectBreakdown {
+    answerId: number,
+    playersCorrect: string[]
+
 }

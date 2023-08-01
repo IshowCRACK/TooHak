@@ -122,6 +122,7 @@ export const createQuizSession = (authUserId: number, quizId: number, autoStartN
     state: States.LOBBY,
     atQuestion: 0,
     playerAnswers: [],
+    questionOpenTime: 0,
     players: [],
     metadata: {
       imgUrl: 'Some thumbnail url.com.au',

@@ -589,6 +589,7 @@ export function updateQuizSessionState(quizId: number, sessionId: number, jwt: J
         // Start the countdown timer
         quizSession.countdownTimer = setTimeout(() => {
           quizSession.state = States.QUESTION_OPEN;
+          quizSession.questionOpenTime = Math.round(Date.now() / 1000);
           quizSession.atQuestion = quizSession.atQuestion + 1;
 
           setData(data);

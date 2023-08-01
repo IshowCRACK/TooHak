@@ -322,7 +322,7 @@ app.get('/v1/player/:playerId/question/:questionPosition', (req: Request, res: R
 app.put('/v1/player/:playerId/question/:questionPosition/answer', (req: Request, res: Response) => {
   const playerId = parseInt(req.params.playerId);
   const questionPosition = parseInt(req.params.questionPosition);
-  const { answerIds }  = req.body;
+  const { answerIds } = req.body;
 
   const response = playerSubmitAnswer(answerIds, playerId, questionPosition);
   res.status(200).json(response);
@@ -508,8 +508,6 @@ app.post('/v1/player/join', (req: Request, res: Response) => {
   const response = playerJoin(sessionId, name);
   res.status(200).json(response);
 });
-
-
 
 // ====================================================================
 //  ================= WORK IS DONE ABOVE THIS LINE ===================

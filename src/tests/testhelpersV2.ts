@@ -42,7 +42,7 @@ export const playerQuestionInfoHelper = (playerId: number, questionPosition: num
 };
 
 export const playerSubmitAnswerHandler = (answerIds: Array<number>, playerId: number, questionPosition: number): OkObj | ErrorObj => {
-  return requestHelper('PUT', `v1/player/${playerId}/question/${questionPosition}/answer`, {answerIds});
+  return requestHelper('PUT', `v1/player/${playerId}/question/${questionPosition}/answer`, { answerIds });
 };
 
 export const getQuestionResultsHandler = (playerId: number, questionPosition: number): OkObj | ErrorObj => {
@@ -133,4 +133,3 @@ export const quizTransferHandlerV2 = (jwt: Jwt, email: string, quizId: number): 
 export const playerJoinHelper = (sessionId: number, name: string): PlayerReturn | ErrorObj => {
   return requestHelper('POST', 'v1/player/join', { sessionId, name });
 };
-

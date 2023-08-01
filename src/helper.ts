@@ -1,4 +1,4 @@
-import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer, Question, User, States, Actions, QuizSession } from '../interfaces/interfaces';
+import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer, Question, User, States, Actions, QuestionCorrectBreakdown, PlayerAnswer } from '../interfaces/interfaces';
 import { getData } from './dataStore';
 import { adminQuizList } from './quiz';
 import { checkJwtValid, jwtToToken } from './token';
@@ -524,7 +524,7 @@ export function getNumber() {
   return numbers.join('');
 }
 
-//checks of duplicates in an array
+// checks of duplicates in an array
 export function hasDuplicates(answerIds: number[]): boolean {
   const numberSet: Set<number> = new Set();
 
@@ -538,7 +538,7 @@ export function hasDuplicates(answerIds: number[]): boolean {
   return false; // No duplicates found
 }
 
-//checks if answer ids are valid for specific question
+// checks if answer ids are valid for specific question
 export function areAnswerIdsValid(questionAnswers: number[], answerIds: number[]): boolean {
   return answerIds.every((num: number) => questionAnswers.includes(num));
 }
@@ -559,5 +559,67 @@ export function isAnswersCorrect(correctAnswerIds: number[], answerIds: number[]
   return isEqual;
 }
 
+export function getQuestionCorrectBreakdown(
+  playerAnswers: PlayerAnswer[],
+  questionId: number,
+  correctAnswerIds: number[]
+): QuestionCorrectBreakdown[] {
+  // Filter correct answers for the specified questionId and those that are actually correct
+  const correctAnswers: PlayerAnswer[] = playerAnswers.filter(
+    (answer) => answer.questionId === questionId && answer.isCorrect
+  );
 
+  // Create an object to store the players who chose each correct option
+  const groupedCorrectAnswers: { [answerId: number]: string[] } = {};
 
+  for (const answer of correctAnswers) {
+    // Ensure that answerIds is an array before iterating over it
+    if (!Array.isArray(answer.answerIds)) {
+      continue; // Skip this iteration if answerIds is not an array
+    }
+
+    for (const answerId of answer.answerIds) {
+      if (groupedCorrectAnswers[answerId]) {
+        groupedCorrectAnswers[answerId].push(answer.name);
+      } else {
+        groupedCorrectAnswers[answerId] = [answer.name];
+      }
+    }
+  }
+
+  // Create the final QuestionCorrectBreakdown array based on correctAnswerIds
+  const questionCorrectBreakdown: QuestionCorrectBreakdown[] = correctAnswerIds.map((answerId) => ({
+    answerId,
+    playersCorrect: groupedCorrectAnswers[answerId] || [], // Set to an empty array if no players chose this correct answer
+  }));
+
+  return questionCorrectBreakdown;
+}
+
+export function questionAverageAnswerTime(playerAnswers: PlayerAnswer[], questionId: number): number {
+  const answersForQuestion = playerAnswers.filter((answer) => answer.questionId === questionId);
+
+  if (answersForQuestion.length === 0) {
+    return 0; // No answers for the question, return 0 as the average time
+  }
+
+  const totalAnswerTime = answersForQuestion.reduce((sum, answer) => sum + answer.submissionTime, 0);
+  const averageTime = totalAnswerTime / answersForQuestion.length;
+
+  return averageTime;
+}
+
+export function questionPercentageCorrect(playerAnswers: PlayerAnswer[], questionId: number): number {
+  const answersForQuestion = playerAnswers.filter((answer) => answer.questionId === questionId);
+
+  if (answersForQuestion.length === 0) {
+    return 0; // No answers for the question, return 0 as the percentage correct
+  }
+
+  const totalSubmissions = answersForQuestion.length;
+  const correctSubmissions = answersForQuestion.filter((answer) => answer.isCorrect).length;
+
+  const percentageCorrect = (correctSubmissions / totalSubmissions) * 100;
+
+  return percentageCorrect;
+}
