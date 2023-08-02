@@ -306,6 +306,8 @@ export interface QuestionAnswer {
 export interface Message {
     messageBody: string;
     playerId: number;
+    playerName: string;
+    timeSent: number;
 }
 
 export interface MessageReturn {
@@ -322,5 +324,4 @@ export interface getQuestionResultsReturn {
 export interface QuestionCorrectBreakdown {
     answerId: number,
     playersCorrect: string[]
-
 }
