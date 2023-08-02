@@ -44,8 +44,6 @@ export function sendChat(playerId: number, messageBody: string): OkObj {
   };
 
   data.quizSessions[data.quizSessions.indexOf(session)].messages.push(message);
-  // const sessionIndex = data.quizSessions.indexOf(session);
-  // data.quizSessions[sessionIndex].messages.push(message);
 
   return {};
 }
