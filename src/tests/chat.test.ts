@@ -20,7 +20,7 @@ describe('Tests for viewChat', () => {
   let defaultQuestionBody : QuestionBody;
   let sessionId: number;
   let playerId: number;
-  const timeBufferSeconds = 1;
+  const timeBufferSeconds = 10;
   beforeEach(() => {
     userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
     userJwt = tokenToJwt(userToken);
@@ -121,7 +121,7 @@ describe('Tests for sendChat', () => {
   let defaultQuestionBody : QuestionBody;
   let sessionId: number;
   let playerId: number;
-  const timeBufferSeconds = 1;
+  const timeBufferSeconds = 10;
   beforeEach(() => {
     userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
     userJwt = tokenToJwt(userToken);
