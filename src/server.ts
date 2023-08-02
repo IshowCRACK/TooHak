@@ -15,7 +15,7 @@ import { getData } from './dataStore';
 import { quizCreateQuestion, adminQuizDelete, quizDuplicateQuestion, quizMoveQuestion, quizUpdateQuestion } from './question';
 import { quizCreateQuestionV2, deleteQuestionV2, quizUpdateQuestionV2 } from './questionV2';
 import { playerJoin, playerQuestionInfo, playerSubmitAnswer, getQuestionResults } from './player';
-import { viewChat, tempSend, sendChat } from './chat';
+import { viewChat, sendChat } from './chat';
 
 // Set up web app
 const app = express();
@@ -43,17 +43,6 @@ app.get('/echo', (req: Request, res: Response) => {
   const data = req.query.echo as string;
   return res.json(echo(data));
 });
-
-// TESTING PURPOSES ONLY FOR VIEWCHAT - TEMPORARY ARRANGEMENT
-
-app.post('/tempPushMessage', (req: Request, res: Response) => {
-  const { playerId, sessionId, messageBody } = req.body;
-  const response = tempSend(sessionId, playerId, messageBody);
-
-  res.json(response);
-});
-
-// WILL BE REMOVED SHORTLY - AREEQ
 
 app.post('/v1/admin/auth/register', (req: Request, res: Response) => {
   const { email, password, nameFirst, nameLast } = req.body;

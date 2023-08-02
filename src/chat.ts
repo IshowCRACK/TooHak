@@ -15,16 +15,6 @@ export function viewChat(playerId: number): MessageReturn {
   };
 }
 
-export function tempSend(sessionId: number, playerId: number, messageBody: string): OkObj {
-  const data = getData();
-  const session = data.quizSessions.find((session) => session.sessionId === sessionId);
-  session.messages.push({ messageBody: messageBody, playerId: playerId });
-
-  return {
-
-  };
-}
-
 export function sendChat(playerId: number, messageBody: string): OkObj {
   const data = getData();
   const session = data.quizSessions.find((session) => session.playerInfo.find((player) => player.playerId === playerId));
@@ -37,15 +27,17 @@ export function sendChat(playerId: number, messageBody: string): OkObj {
   }
   // THIS WILL BE IMPLEMENTED IN ANOTHER BRANCH AFTER THIS - I WROTE SO I DONT FORGET HEHE
   // const player = session.playerInfo.find((player) => player.playerId === playerId);
+  const timeSent = Math.round(Date.now() / 1000);
+  const player = session.playerInfo.find((player) => player.playerId === playerId);
 
   const message: Message = {
     messageBody: messageBody,
-    playerId: playerId
+    playerId: playerId,
+    playerName: player.name,
+    timeSent: timeSent
   };
 
   data.quizSessions[data.quizSessions.indexOf(session)].messages.push(message);
-  // const sessionIndex = data.quizSessions.indexOf(session);
-  // data.quizSessions[sessionIndex].messages.push(message);
 
   return {};
 }
