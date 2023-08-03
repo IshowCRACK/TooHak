@@ -1235,8 +1235,6 @@ describe('Tests for View Active and Inactive Sessions', () => {
   let quizId: number;
   let defaultQuestionBody : QuestionBody;
   let sessionId: number;
-  let playerId: number;
-  const timeBufferSeconds = 10;
   beforeEach(() => {
     userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
     userJwt = tokenToJwt(userToken);
@@ -1276,7 +1274,7 @@ describe('Tests for View Active and Inactive Sessions', () => {
     };
     createQuizQuestionHandlerV2(quizId, userJwt, defaultQuestionBody);
     sessionId = (startSessionQuiz(userJwt, 30, quizId) as OkSessionObj).sessionId;
-    playerId = (playerJoinHelper(sessionId, 'peahead') as PlayerReturn).playerId;
+    playerJoinHelper(sessionId, 'peahead') as PlayerReturn;
   });
 
   test('One Active session', () => {
@@ -1307,5 +1305,5 @@ describe('Tests for View Active and Inactive Sessions', () => {
         session2Id
       ]
     });
-  })
+  });
 });
