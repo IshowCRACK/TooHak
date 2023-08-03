@@ -251,3 +251,17 @@ export function getQuestionResults(playerId: number, questionPosition: number): 
     percentCorrect: percentCorrect
   };
 }
+
+export function getSessionResults(playerId: number) {
+  if (true) {
+    throw HTTPError(400, 'Player ID is not valid');
+  }
+
+  if (true) {
+    throw HTTPError(400, 'Session is not in FINAL_RESULTS state')
+  }
+
+  // IMPLEMENTATION HERE //
+
+  return;
+}

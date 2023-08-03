@@ -325,3 +325,13 @@ export interface QuestionCorrectBreakdown {
     answerId: number,
     playersCorrect: string[]
 }
+
+export interface UsersRankedByScore {
+    name: string;
+    score: number;
+}
+
+export interface GetSessionResultsReturn {
+    usersRankedByScore: UsersRankedByScore[];
+    questionResults: getQuestionResultsReturn[];
+}

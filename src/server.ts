@@ -336,6 +336,10 @@ app.get('/v1/player/:playerId/question/:questionPosition/results', (req: Request
   res.status(200).json(response);
 });
 
+app.get('/v1/player/:playerId/results', (req: Request, res: Response) => {
+  // IMPLEMENTATION HERE //
+});
+
 app.post('/v1/player/:playerId/chat', (req: Request, res: Response) => {
   const playerId: number = parseInt(req.params.playerId);
   const { messageBody } = req.body;

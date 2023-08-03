@@ -876,3 +876,9 @@ describe('playerSubmistAnswer', () => {
     });
   });
 });
+
+describe('TESTs for getSessionResults', () => {
+  describe('Unsuccessful tests', () => {
+    test('player ID does not ');
+  });
+});

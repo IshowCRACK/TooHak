@@ -2,7 +2,8 @@ import request, { HttpVerb } from 'sync-request';
 import {
   AdminQuizCreate, AdminQuizListReturn, ErrorObj, Jwt, OkObj, AdminQuizInfo, OkSessionObj, QuestionBody,
   QuizQuestionCreate, AdminQuestionDuplicate, QuizTrashReturn, QuizSession, PlayerReturn, PlayerQuestionInfoReturn,
-  MessageReturn
+  MessageReturn,
+  GetSessionResultsReturn
 } from '../../interfaces/interfaces';
 import { getUrl } from '../helper';
 
@@ -48,6 +49,18 @@ export const playerSubmitAnswerHandler = (answerIds: Array<number>, playerId: nu
 export const getQuestionResultsHandler = (playerId: number, questionPosition: number): OkObj | ErrorObj => {
   return requestHelper('GET', `v1/player/${playerId}/question/${questionPosition}/results`, {});
 };
+
+export const viewChatHandler = (playerId: number): MessageReturn | ErrorObj => {
+  return requestHelper('GET', `v1/player/${playerId}/chat`, {});
+};
+
+export const sendChatHandler = (playerId: number, messageBody: string): OkObj | ErrorObj => {
+  return requestHelper('POST', `v1/player/${playerId}/chat`, { messageBody });
+};
+
+export const getSessionResultsHandler = (playerId: number): GetSessionResultsReturn | ErrorObj => {
+  return requestHelper('GET', `v1/player/${playerId}/results`, {});
+}
 
 //  ////////////////////  MODIFIED ITR3 ////////////////////////////////////
 export const logoutUserHandlerV2 = (jwt: Jwt) => {
@@ -136,16 +149,4 @@ export const playerJoinHelper = (sessionId: number, name: string): PlayerReturn 
 
 export const playerQuestionInfoHelper = (playerId: number, questionPosition: number): PlayerQuestionInfoReturn | ErrorObj => {
   return requestHelper('GET', `v1/player/${playerId}/question/${questionPosition}`, {});
-};
-
-export const viewChatHandler = (playerId: number): MessageReturn | ErrorObj => {
-  return requestHelper('GET', `v1/player/${playerId}/chat`, {});
-};
-
-export const pushChatForViewChatHandler = (playerId: number, sessionId: number, messageBody: string): MessageReturn => {
-  return requestHelper('POST', 'tempPushMessage', { playerId, sessionId, messageBody });
-};
-
-export const sendChatHandler = (playerId: number, messageBody: string): OkObj | ErrorObj => {
-  return requestHelper('POST', `v1/player/${playerId}/chat`, { messageBody });
 };
