@@ -14,7 +14,7 @@ import { formatError } from './helper';
 import { getData } from './dataStore';
 import { quizCreateQuestion, adminQuizDelete, quizDuplicateQuestion, quizMoveQuestion, quizUpdateQuestion } from './question';
 import { quizCreateQuestionV2, deleteQuestionV2, quizUpdateQuestionV2 } from './questionV2';
-import { playerJoin, playerQuestionInfo, playerSubmitAnswer, getQuestionResults } from './player';
+import { playerJoin, playerQuestionInfo, playerSubmitAnswer, getQuestionResults, getPlayerStatus } from './player';
 import { viewChat, tempSend, sendChat } from './chat';
 
 // Set up web app
@@ -534,6 +534,12 @@ app.get('/v1/player/:playerId/question/:questionPosition', (req: Request, res: R
   const questionPosition = parseInt(req.params.questionPosition);
   const response = playerQuestionInfo(playerId, questionPosition);
   console.log(response);
+  res.status(200).json(response);
+});
+
+app.get('/v1/player/:playerId', (req: Request, res: Response) => {
+  const playerId = parseInt(req.params.playerId);
+  const response = getPlayerStatus(playerId);
   res.status(200).json(response);
 });
 

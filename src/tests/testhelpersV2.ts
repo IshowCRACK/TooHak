@@ -149,3 +149,8 @@ export const pushChatForViewChatHandler = (playerId: number, sessionId: number, 
 export const sendChatHandler = (playerId: number, messageBody: string): OkObj | ErrorObj => {
   return requestHelper('POST', `v1/player/${playerId}/chat`, { messageBody });
 };
+
+export const playerStatusHelper = (playerId: number): OkObj | ErrorObj => {
+  return requestHelper('GET', `v1/player/${playerId}`, { playerId });
+};
+

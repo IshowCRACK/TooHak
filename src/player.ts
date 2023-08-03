@@ -251,3 +251,46 @@ export function getQuestionResults(playerId: number, questionPosition: number): 
     percentCorrect: percentCorrect
   };
 }
+
+/**
+  * Get player status
+  *
+  * @param {number} playerId
+  *
+  * @returns {{state, numQuestions, atQuestion} | {error: string}}
+*/
+export function getPlayerStatus (playerId: number) {
+  const data = getData();
+  const found = data.quizSessions.find((session) => session.playerInfo.find((player) => player.playerId === playerId));
+  if (!found) {
+    throw HTTPError(400, 'Player Id does not exit');
+  }
+
+  // find session
+  let thisSession: QuizSessionAdmin;
+  for (const session of data.quizSessions) {
+    const playerInfo = session.playerInfo;
+    for (const player of playerInfo) {
+      if (player.playerId === playerId) {
+        thisSession = session;
+      }
+    }
+  }
+
+  // find numQuestions by finding authuserId
+  const authUserId = thisSession.authUserId;
+  const quiz = data.quizzes.find((quiz) => quiz.adminQuizId === thisSession.authUserId);
+  const quizId = quiz.quizId;
+  const token: Token = {
+    sessionId: thisSession.sessionId.toString(),
+    userId: authUserId
+  };
+  const jwt = tokenToJwt(token);
+  const status = getSessionStatus(quizId, thisSession.sessionId, jwt) as QuizSession;
+
+  return {
+    state: status.state,
+    numQuestions: quiz.numQuestions,
+    atQuestion: thisSession.atQuestion,
+  };
+}

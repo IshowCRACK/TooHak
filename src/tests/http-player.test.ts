@@ -1,7 +1,8 @@
-import { AdminQuizCreate, Jwt, QuestionBody, Token, OkSessionObj, QuizQuestionCreate, PlayerReturn, QuizSession, getQuestionResultsReturn } from '../../interfaces/interfaces';
-import { clearUsers, registerUser } from './iter2tests/testHelpersv1';
-import { RequestCreateQuizV2, createQuizQuestionHandlerV2, startSessionQuiz, playerJoinHelper, updateQuizSessionStateHandler, getSessionStatusHandler, playerQuestionInfoHelper, playerSubmitAnswerHandler, getQuestionResultsHandler } from './testhelpersV2';
+import { AdminQuizCreate, Jwt, QuestionBody, Token, OkSessionObj, QuizQuestionCreate, PlayerReturn, QuizSession, ErrorObj, getQuestionResultsReturn, AdminQuizInfo } from '../../interfaces/interfaces';
+import { clearUsers, registerUser, createQuizQuestionHandler } from './iter2tests/testHelpersv1';
+import { RequestCreateQuizV2, createQuizQuestionHandlerV2, createQuizThumbnailHandler,  infoQuizV2, startSessionQuiz, playerJoinHelper, updateQuizSessionStateHandler, getSessionStatusHandler, playerQuestionInfoHelper, playerSubmitAnswerHandler, getQuestionResultsHandler, playerStatusHelper } from './testhelpersV2';
 import { tokenToJwt } from '../token';
+import { getPlayerStatus } from '../player';
 
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -873,6 +874,76 @@ describe('playerSubmistAnswer', () => {
       ]);
       expect((getQuestionResultsHandler(playerId, 2) as getQuestionResultsReturn).averageAnswerTime).toBeLessThanOrEqual(1);
       expect((getQuestionResultsHandler(playerId, 2) as getQuestionResultsReturn).percentCorrect).toEqual(50);
+    });
+  });
+});
+
+
+
+describe('Get Player Status', () => {
+  let userJwt: Jwt;
+  let userToken: Token;
+  let quizId: number;
+  let sessionId: number | OkSessionObj;
+  let playerId: PlayerReturn;
+  const defaultQuestionBody = {
+    question: 'What content is Russia in?',
+    duration: 1,
+    points: 1,
+    answers: [
+      {
+        answerId: 0,
+        answer: 'Asia',
+        colour: 'Red',
+        correct: true
+      },
+      {
+        answerId: 1,
+        answer: 'North America',
+        colour: 'Blue',
+        correct: false
+      },
+      {
+        answerId: 2,
+        answer: 'South America',
+        colour: 'Green',
+        correct: false
+      },
+      {
+        answerId: 3,
+        answer: 'Africa',
+        colour: 'Yellow',
+        correct: false
+      }
+    ]
+  };
+  beforeEach(() => {
+    userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    userJwt = tokenToJwt(userToken);
+    quizId = (RequestCreateQuizV2(userJwt, 'Countries of the world', 'Quiz on all countries') as AdminQuizCreate).quizId;
+    createQuizThumbnailHandler(userJwt, quizId, 'https://thumbs.dreamstime.com/z/tracks-snow-3356163.jpg');
+    createQuizQuestionHandler(quizId, userJwt, defaultQuestionBody);  
+    sessionId = (startSessionQuiz(userJwt, 30, quizId) as OkSessionObj).sessionId;
+    createQuizQuestionHandlerV2(quizId, userJwt, defaultQuestionBody) as QuizQuestionCreate;
+    sessionId = startSessionQuiz(userJwt, 30, quizId) as OkSessionObj;
+    playerId = playerJoinHelper(sessionId.sessionId, 'John Doe') as PlayerReturn;
+    
+  });
+
+  describe('Successful case', () => {
+    test('success', () => {
+      const playerStatus = getPlayerStatus(playerId.playerId);
+      expect(playerStatus).toStrictEqual({ 
+        state: "LOBBY",
+        numQuestions: (infoQuizV2(userJwt, quizId) as AdminQuizInfo).numQuestions,
+        atQuestion: 0,
+       });
+    });
+  });
+ 
+  describe('Unsuccessful case', () => {
+    test('PlayerId does not exist', () => {
+      expect(playerStatusHelper(playerId.playerId + 1)).toStrictEqual({ error: 'Player Id does not exit' });
     });
   });
 });
