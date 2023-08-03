@@ -2,7 +2,7 @@ import request, { HttpVerb } from 'sync-request';
 import {
   AdminQuizCreate, AdminQuizListReturn, ErrorObj, Jwt, OkObj, AdminQuizInfo, OkSessionObj, QuestionBody,
   QuizQuestionCreate, AdminQuestionDuplicate, QuizTrashReturn, QuizSession, PlayerReturn, PlayerQuestionInfoReturn,
-  MessageReturn
+  MessageReturn, ActiveInactiveSession
 } from '../../interfaces/interfaces';
 import { getUrl } from '../helper';
 
@@ -49,6 +49,9 @@ export const getQuestionResultsHandler = (playerId: number, questionPosition: nu
   return requestHelper('GET', `v1/player/${playerId}/question/${questionPosition}/results`, {});
 };
 
+export const viewSessionsHandler = (quizId: number, jwt: Jwt): ActiveInactiveSession => {
+  return requestHelper('GET', `v1/admin/quiz/${quizId}/sessions`, {}, jwt);
+};
 //  ////////////////////  MODIFIED ITR3 ////////////////////////////////////
 export const logoutUserHandlerV2 = (jwt: Jwt) => {
   return requestHelper('POST', 'v2/admin/auth/logout', {}, jwt);

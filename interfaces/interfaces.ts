@@ -325,3 +325,8 @@ export interface QuestionCorrectBreakdown {
     answerId: number,
     playersCorrect: string[]
 }
+
+export interface ActiveInactiveSession {
+    activeSessions: number[],
+    inactiveSessions: number[];
+}
