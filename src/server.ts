@@ -386,7 +386,6 @@ app.post('/v2/admin/quiz/:quizId/restore', (req: Request, res: Response) => {
 app.delete('/v2/admin/quiz/trash/empty', (req: Request, res: Response) => {
   const token: string = req.header('token') as string;
   const quizIdsInput = req.query.quizIds as string;
-  console.log(quizIdsInput);
   const quizIdsString = convertStringToArray(quizIdsInput);
   const quizIds = quizIdsString.map((item: string) => parseInt(item));
   const response = adminQuizEmptyTrash({ token: token }, quizIds);

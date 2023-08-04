@@ -11,6 +11,13 @@ afterEach(() => {
   clearUsers();
 });
 
+const someRandomToken: Token = {
+  sessionId: '100',
+  userId: 234
+};
+
+const exampleJwt: Jwt = tokenToJwt(someRandomToken);
+
 // TEST FOR QUESTION CREATE //
 describe('Tests related to creating a Quiz Question', () => {
   let userToken: Token;
@@ -57,6 +64,18 @@ describe('Tests related to creating a Quiz Question', () => {
   });
 
   describe('Unsuccessful Tests', () => {
+    test('Token is not a valid structure', () => {
+      expect(createQuizQuestionHandlerV2(quizId, { token: 'some Token' }, defaultQuestionBody)).toEqual({
+        error: 'Token is not a valid structure'
+      });
+    });
+
+    test('Token not for currently logged in session', () => {
+      expect(createQuizQuestionHandlerV2(quizId, exampleJwt, defaultQuestionBody)).toEqual(
+        { error: 'Token not for currently logged in session' }
+      );
+    });
+
     test('QuizId does not refer to valid quiz', () => {
       expect(createQuizQuestionHandlerV2(5, userJwt, defaultQuestionBody)).toEqual({
         error: 'Quiz ID does not refer to a valid quiz'
@@ -287,6 +306,18 @@ describe('Tests to update question', () => {
   });
 
   describe('Unsuccessful Tests', () => {
+    test('Token is not a valid structure', () => {
+      expect(updateQuizV2({ token: 'some Token' }, defaultQuestionBody, 0, questionId)).toEqual({
+        error: 'Token is not a valid structure'
+      });
+    });
+
+    test('Token not for currently logged in session', () => {
+      expect(updateQuizV2(exampleJwt, defaultQuestionBody, 0, questionId)).toEqual(
+        { error: 'Token not for currently logged in session' }
+      );
+    });
+
     test('QuizId does not refer to valid quiz', () => {
       expect(updateQuizV2(userJwt, defaultQuestionBody, -1, questionId)).toEqual({
         error: 'Quiz ID does not refer to a valid quiz'
@@ -479,6 +510,12 @@ describe('Tests for adminQuizDelete', () => {
   });
 
   describe('Unsuccessful Tests', () => {
+    test('Token is not a valid structure', () => {
+      expect(deleteQuestionV2({ token: 'some Token' }, quizId, 0)).toEqual({
+        error: 'Token is not a valid structure'
+      });
+    });
+
     test('token not for currently logged in session', () => {
       const exampleToken: Token = {
         sessionId: '',

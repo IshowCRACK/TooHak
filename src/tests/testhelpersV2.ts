@@ -5,6 +5,9 @@ import {
   MessageReturn, ActiveInactiveSession, PlayerStatusReturn
 } from '../../interfaces/interfaces';
 import config from './../config.json';
+import jsonwebtoken from 'jsonwebtoken';
+
+const SECRET_KEY = 'secret';
 
 export function getUrl(): string {
   const PORT: number = parseInt(process.env.PORT || config.port);
@@ -16,6 +19,12 @@ export function getUrl(): string {
 export function formatError(errorObj: ErrorObj) {
   return { error: errorObj.error };
 }
+
+export const objToJwt = (obj: object): Jwt => {
+  return {
+    token: jsonwebtoken.sign(obj, SECRET_KEY) as string
+  };
+};
 
 const URL: string = getUrl();
 

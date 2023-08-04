@@ -1,5 +1,6 @@
 import { AdminUserDetailsReturn, ErrorObj, Jwt, Token, AdminUserDetails } from '../../../interfaces/interfaces';
-import { objToJwt, tokenToJwt } from '../../token';
+import { tokenToJwt } from '../../token';
+import { objToJwt } from '../testhelpersV2';
 // IMPORTING ALL WRAPPER FUNCTIONS
 import { checkTokenValid, clearUsers, loginUser, logoutUserHandler, registerUser, getUser, updateUserDetailsPassword, updateDetailsAuthHandler } from './testHelpersv1';
 
@@ -19,6 +20,12 @@ describe('adminAuthRegister tests', () => {
   });
 
   describe('Unsuccessful register - names', () => {
+    test('Check if null', () => {
+      expect(registerUser(null, null, null, null)).toEqual({
+        error: 'All sections should be filled'
+      });
+    });
+
     test('Check unsuccessful first name - null input', () => {
       const res: Token | ErrorObj = registerUser('good.email@gmail.com', 'Password123', '', 'Jones');
       const expectedResult = {
@@ -348,7 +355,7 @@ describe('adminUserUpdateDetails test', () => {
         sessionId: '4',
         userId: 12,
       };
-      const userDetails = getUser(tokenToJwt(jwt2)) as ErrorObj;
+      const userDetails = updateDetailsAuthHandler(tokenToJwt(jwt2), '', '', '') as ErrorObj;
       const expectedResult: ErrorObj = { error: 'Token not for currently logged in session' };
       expect(userDetails).toStrictEqual(expectedResult);
     });

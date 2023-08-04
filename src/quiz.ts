@@ -88,11 +88,6 @@ export function adminQuizRemove (jwt: Jwt, quizId: number): OkObj | ErrorAndStat
   const deletedQuiz = data.quizzes[quizIndex];
   const user = data.users[userIndex];
 
-  if (!user.deletedQuizzes) {
-    // Initialize deletedQuizzes array if it doesn't exist
-    user.deletedQuizzes = [];
-  }
-
   user.deletedQuizzes.push(deletedQuiz);
   data.quizzes.splice(quizIndex, 1);
   setData(data);
@@ -361,7 +356,6 @@ export function adminQuizRestore(jwt: Jwt, quizId: number): OkObj | ErrorAndStat
 
 // Permanently clears 'deletedQuizzes'
 export function adminQuizEmptyTrash(jwt: Jwt, quizIds: number[]): OkObj | ErrorAndStatusCode {
-  // todo: ask about if theres an error, you don't delete any of them
   // Check valid structure
   if (!checkTokenValidStructure(jwt)) {
     throw HTTPError(401, 'Token is not a valid structure');
@@ -486,6 +480,8 @@ export function quizStartSession(jwt: Jwt, autoStartNum: number, quizId: number)
 export function createQuizThumbnail(jwt: Jwt, quizId: number, imgUrl: string) {
   const data = getData();
 
+  console.log(imgUrl);
+
   if (!checkTokenValidStructure(jwt)) {
     throw HTTPError(401, 'Token is not a valid structure');
   }
@@ -579,7 +575,7 @@ export function updateQuizSessionState(quizId: number, sessionId: number, jwt: J
     throw HTTPError(400, 'Action CANNOT be applied to current state');
   }
   let questionDuration: number;
-  const countdownDuration = 1;
+  const countdownDuration = 0.1;
   const questionCount: number = quizSession.metadata.numQuestions;
 
   switch (action) {
