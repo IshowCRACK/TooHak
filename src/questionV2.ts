@@ -1,9 +1,10 @@
-import { ErrorAndStatusCode, Jwt, QuestionBody, Token, Quiz, OkObj, Question } from '../interfaces/interfaces';
+import { ErrorAndStatusCode, Jwt, QuestionBody, Token, Quiz, OkObj, Question, QuizSession } from '../interfaces/interfaces';
 import {
   checkAnswerHasTrueValue, checkAnswerLengthValid, checkQuestionAnswerNonDuplicate, checkQuizAndUserIdValid, checkQuizIdValid,
-  checkTokenValidSession, checkTokenValidStructure, createQuestionId, getTotalDuration, checkQuestionIdValid, checkQuestionIdIsValidInQuiz
+  checkTokenValidSession, checkTokenValidStructure, createQuestionId, getTotalDuration, checkQuestionIdValid, checkQuestionIdIsValidInQuiz,
 } from './helper';
 import { jwtToToken } from './token';
+import { getSessionStatus } from './quiz';
 import { getData, setData } from './dataStore';
 import HTTPError from 'http-errors';
 import isURL from 'is-url';
@@ -209,14 +210,16 @@ export function deleteQuestionV2(jwt: Jwt, quizId: number, questionId: number): 
     throw HTTPError(400, 'Quiz ID does not refer to a valid question within this quiz');
   }
 
-  /*
+  const sesh = data.quizSessions.find((sess) => sess.authUserId === quiz.adminQuizId);
+  if (sesh !== undefined) {
+    const status = getSessionStatus(quizId, sesh.sessionId, jwt) as QuizSession;
 
-                NEED TO IMPLEMENT: All sessions for this quiz must be in END state ,
-
-        USE THE GET SESSION STATUS FUNCTION TO ERROR CHECK WHEN WE FINSIH THAT FUNCTION
-
-        */
-
+    if (status.state !== 'END') {
+      throw HTTPError(400, 'All sessions for this quiz must be in END state');
+    }
+  } else {
+    throw HTTPError(403, 'Token not for currently logged in session');
+  }
   const quizIndex: number = data.quizzes.indexOf(quiz);
   let questionIndex: number;
   for (const question of data.quizzes[quizIndex].questions) {

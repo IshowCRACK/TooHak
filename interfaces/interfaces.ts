@@ -288,6 +288,11 @@ export interface QuizTrashItemReturn {
 export interface PlayerReturn {
     playerId: number;
 }
+export interface PlayerStatusReturn {
+        state: States;
+        numQuestion: number;
+        atQuestion: number;
+}
 
 export interface PlayerQuestionInfoReturn {
     questionId: number,

@@ -2,7 +2,7 @@ import request, { HttpVerb } from 'sync-request';
 import {
   AdminQuizCreate, AdminQuizListReturn, ErrorObj, Jwt, OkObj, AdminQuizInfo, OkSessionObj, QuestionBody,
   QuizQuestionCreate, AdminQuestionDuplicate, QuizTrashReturn, QuizSession, PlayerReturn, PlayerQuestionInfoReturn,
-  MessageReturn, ActiveInactiveSession
+  MessageReturn, ActiveInactiveSession, PlayerStatusReturn
 } from '../../interfaces/interfaces';
 import { getUrl } from '../helper';
 
@@ -135,6 +135,9 @@ export const quizTransferHandlerV2 = (jwt: Jwt, email: string, quizId: number): 
 
 export const playerJoinHelper = (sessionId: number, name: string): PlayerReturn | ErrorObj => {
   return requestHelper('POST', 'v1/player/join', { sessionId, name });
+};
+export const playerStatusHelper = (playerId: number): PlayerStatusReturn | ErrorObj => {
+  return requestHelper('GET', `v1/player/${playerId}`, {});
 };
 
 export const playerQuestionInfoHelper = (playerId: number, questionPosition: number): PlayerQuestionInfoReturn | ErrorObj => {
