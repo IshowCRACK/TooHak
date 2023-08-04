@@ -49,7 +49,9 @@ export function playerJoin(sessionId: number, name: string) {
 
   return { playerId: playerId };
 }
-
+export function playerStatus(playerId: number) {
+  return;
+}
 export function playerQuestionInfo(playerId: number, questionPosition: number) {
   const data = getData();
   // no playerId
