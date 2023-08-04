@@ -4,7 +4,27 @@ import {
   QuizQuestionCreate, AdminQuestionDuplicate, QuizTrashReturn, QuizSession, PlayerReturn, PlayerQuestionInfoReturn,
   MessageReturn, ActiveInactiveSession, PlayerStatusReturn
 } from '../../interfaces/interfaces';
-import { getUrl } from '../helper';
+import config from './../config.json';
+import jsonwebtoken from 'jsonwebtoken';
+
+const SECRET_KEY = 'secret';
+
+export function getUrl(): string {
+  const PORT: number = parseInt(process.env.PORT || config.port);
+  const HOST: string = process.env.IP || 'localhost';
+  const URL: string = 'http://' + HOST + ':' + PORT.toString() + '/';
+  return URL;
+}
+
+export function formatError(errorObj: ErrorObj) {
+  return { error: errorObj.error };
+}
+
+export const objToJwt = (obj: object): Jwt => {
+  return {
+    token: jsonwebtoken.sign(obj, SECRET_KEY) as string
+  };
+};
 
 const URL: string = getUrl();
 
@@ -47,6 +67,14 @@ export const playerSubmitAnswerHandler = (answerIds: Array<number>, playerId: nu
 
 export const getQuestionResultsHandler = (playerId: number, questionPosition: number): OkObj | ErrorObj => {
   return requestHelper('GET', `v1/player/${playerId}/question/${questionPosition}/results`, {});
+};
+
+export const getFinalQuizResultsHandler = (quizId: number, sessionId: number, jwt: Jwt) => {
+  return requestHelper('GET', `v1/admin/quiz/${quizId}/session/${sessionId}/results`, {}, jwt);
+};
+
+export const getFinalQuizResultsCSVHandler = (quizId: number, sessionId: number, jwt: Jwt) => {
+  return requestHelper('GET', `v1/admin/quiz/${quizId}/session/${sessionId}/results/csv`, {}, jwt);
 };
 
 export const viewSessionsHandler = (quizId: number, jwt: Jwt): ActiveInactiveSession => {
@@ -125,7 +153,7 @@ export const trashRestoreQuizHandlerV2 = (jwt: Jwt, quizId: number): OkObj | Err
   return requestHelper('POST', `v2/admin/quiz/${quizId}/restore`, {}, jwt);
 };
 
-export const emptyTrashHandlerV2 = (jwt: Jwt, quizIds: number[]): OkObj | ErrorObj => {
+export const emptyTrashHandlerV2 = (jwt: Jwt, quizIds: string): OkObj | ErrorObj => {
   return requestHelper('DELETE', 'v2/admin/quiz/trash/empty', { quizIds }, jwt);
 };
 

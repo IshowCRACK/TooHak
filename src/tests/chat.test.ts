@@ -177,6 +177,10 @@ describe('Tests for sendChat', () => {
     test('Chat length greater than 100 characters', () => {
       expect(sendChatHandler(10, '')).toStrictEqual({ error: 'Player ID is not valid' });
     });
+
+    test('Invalid chat length', () => {
+      expect(sendChatHandler(playerId, '')).toStrictEqual({ error: 'Message body is less than 1 character or greater than 100 characters' });
+    });
   });
 
   describe('Successful Attempts', () => {

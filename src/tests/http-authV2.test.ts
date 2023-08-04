@@ -1,8 +1,8 @@
 import { AdminUserDetailsReturn, ErrorObj, Jwt, Token, AdminUserDetails } from '../../interfaces/interfaces';
-import { objToJwt, tokenToJwt } from '../token';
+import { tokenToJwt } from '../token';
 // IMPORTING ALL WRAPPER FUNCTIONS
 import { clearUsers, loginUser, registerUser } from './iter2tests/testHelpersv1';
-import { getUserV2, logoutUserHandlerV2, updateDetailsAuthHandlerV2, updateUserDetailsPasswordV2 } from './testhelpersV2';
+import { getUserV2, logoutUserHandlerV2, objToJwt, updateDetailsAuthHandlerV2, updateUserDetailsPasswordV2 } from './testhelpersV2';
 
 // TESTS FOR REGISTER //
 beforeEach(() => {
@@ -12,6 +12,7 @@ beforeEach(() => {
 afterEach(() => {
   clearUsers();
 });
+
 //  ///////////////////// NEW ITR3  ////////////////////////////////////////
 
 //  ////////////////////  MODIFIED ITR3 ////////////////////////////////////
@@ -89,6 +90,12 @@ describe('adminUserDetailsV2 test', () => {
   });
 
   describe('Unsuccessful retrieval of user details', () => {
+    test('Token is not a valid structure', () => {
+      expect(getUserV2({ token: 'some token' })).toEqual({
+        error: 'Token is not a valid structure'
+      });
+    });
+
     test('User does not exist', () => {
       const jwt2: Token = {
         sessionId: '',
@@ -185,6 +192,12 @@ describe('adminUserUpdateDetailsV2 test', () => {
       const change = updateDetailsAuthHandlerV2(jwt, 'JohnSmith123gmail.com', 'Johnny', 'Smithy');
       expect(change).toStrictEqual({ error: 'Invalid email or email is already in use' });
     });
+
+    test('Email is already used', () => {
+      registerUser('JaneAusten@gmail.com', 'Password123', 'John', 'Smith');
+      const change = updateDetailsAuthHandlerV2(jwt, 'JaneAusten@gmail.com', 'Johnny', 'Smithy');
+      expect(change).toStrictEqual({ error: 'Invalid email or email is already in use' });
+    });
     test('First name is not valid', () => {
       const change = updateDetailsAuthHandlerV2(jwt, 'JohnSmith123@gmail.com', 'Johnny123', 'Smithy');
       expect(change).toStrictEqual({ error: 'Name can only contain alphanumeric symbols' });
@@ -213,6 +226,12 @@ describe('adminUserUpdateDetailsPassword test', () => {
     beforeEach(() => {
       const token = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
       jwt = tokenToJwt(token);
+    });
+
+    test('Token is invalid', () => {
+      expect(updateUserDetailsPasswordV2({ token: 'erfesiugh' }, '', '')).toEqual({
+        error: 'Token is not a valid structure'
+      });
     });
 
     test('Token does not exit', () => {

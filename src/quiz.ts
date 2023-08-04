@@ -1,12 +1,12 @@
 import {
   Data, AdminQuizListReturn, AdminQuizList, Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj,
-  AdminQuizInfo, User, Quiz, QuizTrashReturn, Token, States, Actions, QuizSession, QuizMetadata, ActiveInactiveSession
+  AdminQuizInfo, User, Quiz, QuizTrashReturn, Token, States, Actions, UserScore, QuestionResult, FinalQuizResults, QuizSession, QuizMetadata, ActiveInactiveSession, FinalResultCsvReturn
 } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkQuizAndUserIdValid, checkQuizIdValid, checkQuizNameUsed,
   checkTokenValidStructure, checkTokenValidSession, checkNameUsedInQuiz, checkQuizIdAndUserIdValidAndTrash,
-  checkQuizIdValidAndTrash, createQuizId, checkMaxNumSessions, checkQuizHasQuestions, isActionValid
+  checkQuizIdValidAndTrash, createQuizId, checkMaxNumSessions, checkQuizHasQuestions, isActionValid, rankUserByScore, getQuestionResultsHelper, checkAllQuizzesInEndState
 } from './helper';
 import { createQuizSession, jwtToToken } from './token';
 import HTTPError from 'http-errors';
@@ -67,6 +67,10 @@ export function adminQuizRemove (jwt: Jwt, quizId: number): OkObj | ErrorAndStat
     throw HTTPError(403, 'Token not for currently logged in session');
   }
 
+  if (!checkAllQuizzesInEndState(quizId)) {
+    throw HTTPError(400, 'Not all sessions in quiz are in end state');
+  }
+
   const authUserId: number = jwtToToken(jwt).userId;
 
   // Quiz ID does not refer to a valid quiz
@@ -83,11 +87,6 @@ export function adminQuizRemove (jwt: Jwt, quizId: number): OkObj | ErrorAndStat
   const quizIndex = data.quizzes.findIndex((quiz) => quiz.quizId === quizId);
   const deletedQuiz = data.quizzes[quizIndex];
   const user = data.users[userIndex];
-
-  if (!user.deletedQuizzes) {
-    // Initialize deletedQuizzes array if it doesn't exist
-    user.deletedQuizzes = [];
-  }
 
   user.deletedQuizzes.push(deletedQuiz);
   data.quizzes.splice(quizIndex, 1);
@@ -357,7 +356,6 @@ export function adminQuizRestore(jwt: Jwt, quizId: number): OkObj | ErrorAndStat
 
 // Permanently clears 'deletedQuizzes'
 export function adminQuizEmptyTrash(jwt: Jwt, quizIds: number[]): OkObj | ErrorAndStatusCode {
-  // todo: ask about if theres an error, you don't delete any of them
   // Check valid structure
   if (!checkTokenValidStructure(jwt)) {
     throw HTTPError(401, 'Token is not a valid structure');
@@ -482,6 +480,8 @@ export function quizStartSession(jwt: Jwt, autoStartNum: number, quizId: number)
 export function createQuizThumbnail(jwt: Jwt, quizId: number, imgUrl: string) {
   const data = getData();
 
+  console.log(imgUrl);
+
   if (!checkTokenValidStructure(jwt)) {
     throw HTTPError(401, 'Token is not a valid structure');
   }
@@ -575,7 +575,7 @@ export function updateQuizSessionState(quizId: number, sessionId: number, jwt: J
     throw HTTPError(400, 'Action CANNOT be applied to current state');
   }
   let questionDuration: number;
-  const countdownDuration = 1;
+  const countdownDuration = 0.1;
   const questionCount: number = quizSession.metadata.numQuestions;
 
   switch (action) {
@@ -694,6 +694,47 @@ export function getSessionStatus(quizId: number, sessionId: number, jwt: Jwt): Q
   return quizSessionReturn;
 }
 
+export function getFinalQuizResults(quizId: number, sessionId: number, jwt: Jwt): FinalQuizResults {
+  if (!checkTokenValidStructure(jwt)) {
+    throw HTTPError(401, 'Token is not a valid structure');
+  }
+
+  if (!checkTokenValidSession(jwt)) {
+    throw HTTPError(403, 'Token not for currently logged in session');
+  }
+
+  if (!checkQuizIdValid(quizId)) {
+    throw HTTPError(400, 'Quiz ID does not refer to a valid quiz');
+  }
+
+  if (!checkQuizAndUserIdValid(quizId, jwtToToken(jwt).userId)) {
+    throw HTTPError(400, 'Quiz ID does not refer to a quiz that this user owns');
+  }
+
+  const data = getData();
+  const quizSession = data.quizSessions.find(
+    (session) => session.sessionId === sessionId && session.metadata.quizId === quizId
+  );
+
+  // If the quiz session is not found, return an error
+  if (!quizSession) {
+    throw HTTPError(400, 'Invalid quiz session or session not found');
+  }
+
+  if (quizSession.state !== States.END) {
+    throw HTTPError(400, 'Session is not in FINAL_RESULTS state');
+  }
+
+  const userScoreRanked: UserScore[] = rankUserByScore(quizSession);
+
+  const questionResults: QuestionResult[] = getQuestionResultsHelper(quizSession);
+
+  return {
+    usersRankedByScore: userScoreRanked,
+    questionResults: questionResults
+  };
+}
+
 export function viewSessions(jwt: Jwt, quizId: number): ActiveInactiveSession {
   const data = getData();
 
@@ -713,4 +754,40 @@ export function viewSessions(jwt: Jwt, quizId: number): ActiveInactiveSession {
   }
 
   return sessions;
+}
+
+export function getFinalQuizResultsCsv(quizId: number, sessionId: number, jwt: Jwt): FinalResultCsvReturn {
+  if (!checkTokenValidStructure(jwt)) {
+    throw HTTPError(401, 'Token is not a valid structure');
+  }
+
+  if (!checkTokenValidSession(jwt)) {
+    throw HTTPError(403, 'Token not for currently logged in session');
+  }
+
+  if (!checkQuizIdValid(quizId)) {
+    throw HTTPError(400, 'Quiz ID does not refer to a valid quiz');
+  }
+
+  if (!checkQuizAndUserIdValid(quizId, jwtToToken(jwt).userId)) {
+    throw HTTPError(400, 'Quiz ID does not refer to a quiz that this user owns');
+  }
+
+  const data = getData();
+  const quizSession = data.quizSessions.find(
+    (session) => session.sessionId === sessionId && session.metadata.quizId === quizId
+  );
+
+  // If the quiz session is not found, return an error
+  if (!quizSession) {
+    throw HTTPError(400, 'Invalid quiz session or session not found');
+  }
+
+  if (quizSession.state !== States.END) {
+    throw HTTPError(400, 'Session is not in FINAL_RESULTS state');
+  }
+
+  return {
+    url: 'http://google.com/some/path/image.csv'
+  };
 }

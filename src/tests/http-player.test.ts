@@ -484,7 +484,7 @@ describe('playerSubmistAnswer', () => {
   describe('Unsuccessful ', () => {
     test('PlayerId does not exist', async () => {
       updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
-      await delay(1100);
+      await delay(200);
       // Now state is QUESTION_OPEN
       expect(playerSubmitAnswerHandler([0], -99, 0)).toStrictEqual({
         error: 'player ID does not exist'
@@ -493,7 +493,7 @@ describe('playerSubmistAnswer', () => {
 
     test('Question position is not valid for the session this player is in', async () => {
       updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
-      await delay(1100);
+      await delay(200);
       expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_OPEN');
       expect(playerSubmitAnswerHandler([0], playerId, 20)).toStrictEqual({
         error: 'Question position is not valid for the session this player is in'
@@ -502,7 +502,7 @@ describe('playerSubmistAnswer', () => {
 
     test('If session is not currently on this question', async () => {
       updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
-      await delay(1100);
+      await delay(200);
       expect(playerSubmitAnswerHandler([0], playerId, 2)).toStrictEqual({
         error: 'Session is not yet currently up to this question'
       });
@@ -510,7 +510,7 @@ describe('playerSubmistAnswer', () => {
 
     test('invalid answer Ids', async () => {
       updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
-      await delay(1100);
+      await delay(200);
       expect(playerSubmitAnswerHandler([-99, 80], playerId, 1)).toStrictEqual({
         error: 'Answer IDs are not valid for this particular question'
       });
@@ -518,7 +518,7 @@ describe('playerSubmistAnswer', () => {
 
     test('duplicate answer Ids', async () => {
       updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
-      await delay(1100);
+      await delay(200);
       expect(playerSubmitAnswerHandler([0, 0], playerId, 1)).toStrictEqual({
         error: 'Duplicate Answers not allowed'
       });
@@ -539,13 +539,13 @@ describe('playerSubmistAnswer', () => {
   describe('Successful', () => {
     test('Success 1 round', async () => {
       updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
-      await delay(1000);
+      await delay(200);
       expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_OPEN');
-      await delay(700); // submission time after question opens
+      await delay(300); // submission time after question opens
       expect(playerSubmitAnswerHandler([0], playerId, 1)).toStrictEqual({
 
       });
-      await delay(800);
+      await delay(1000);
       expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_CLOSE');
       updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER');
       expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('ANSWER_SHOW');
@@ -577,13 +577,13 @@ describe('playerSubmistAnswer', () => {
 
     test('Success 2 round & successful multiple correct answers', async () => {
       updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
-      await delay(1100);
+      await delay(200);
       playerSubmitAnswerHandler([0], playerId, 1);
       await delay(1100);
       updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER');
 
       updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
-      await delay(1000);
+      await delay(200);
       expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_OPEN');
       await delay(500);
       expect(playerSubmitAnswerHandler([0, 1], playerId, 2)).toStrictEqual({
@@ -633,14 +633,14 @@ describe('playerSubmistAnswer', () => {
 
     test('Success 2 rounds of incorrect answers', async () => {
       updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
-      await delay(1000);
+      await delay(200);
       await delay(400);
       playerSubmitAnswerHandler([3], playerId, 1);
       await delay(1100);
       updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER');
 
       updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
-      await delay(1100);
+      await delay(200);
       expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_OPEN');
       expect(playerSubmitAnswerHandler([0, 3], playerId, 2)).toStrictEqual({
 
@@ -713,14 +713,13 @@ describe('playerSubmistAnswer', () => {
 
     test('Success 1 correct, 1 incorrect', async () => {
       updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
-      await delay(1000);
-      await delay(800);
+      await delay(200);
       playerSubmitAnswerHandler([0], playerId, 1);
       await delay(1100);
       updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'GO_TO_ANSWER');
 
       updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
-      await delay(1100);
+      await delay(200);
       expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_OPEN');
       await delay(700);
       expect(playerSubmitAnswerHandler([1, 2], playerId, 2)).toStrictEqual({
@@ -793,11 +792,9 @@ describe('playerSubmistAnswer', () => {
     });
     test('More complex, 2 players play through quiz', async () => {
       updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
-      await delay(1000);
-      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_OPEN');
-      await delay(300);
-      playerSubmitAnswerHandler([1, 3], playerId, 1);
       await delay(200);
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_OPEN');
+      playerSubmitAnswerHandler([1, 3], playerId, 1);
       playerSubmitAnswerHandler([0], playerId2, 1);
       await delay(1100);
       expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_CLOSE');
@@ -827,11 +824,9 @@ describe('playerSubmistAnswer', () => {
       expect((getQuestionResultsHandler(playerId, 1) as getQuestionResultsReturn).averageAnswerTime).toBeLessThanOrEqual(1);
       expect((getQuestionResultsHandler(playerId, 1) as getQuestionResultsReturn).percentCorrect).toEqual(50);
       updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
-      await delay(1000);
-      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_OPEN');
-      await delay(500);
-      playerSubmitAnswerHandler([0, 3], playerId2, 2);
       await delay(200);
+      expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_OPEN');
+      playerSubmitAnswerHandler([0, 3], playerId2, 2);
       playerSubmitAnswerHandler([0, 1], playerId, 2);
       await delay(1100);
       expect((getSessionStatusHandler(quizId, sessionId, userJwt) as QuizSession).state).toEqual('QUESTION_CLOSE');

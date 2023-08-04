@@ -1,23 +1,13 @@
-import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer, Question, User, States, Actions, QuestionCorrectBreakdown, PlayerAnswer } from '../interfaces/interfaces';
+import { AdminQuizList, Token, Jwt, Quiz, Answer, Question, User, States, Actions, QuestionCorrectBreakdown, PlayerAnswer, QuizSessionAdmin, UserScore, QuestionDetailsHelper, QuestionResult } from '../interfaces/interfaces';
 import { getData } from './dataStore';
 import { adminQuizList } from './quiz';
 import { checkJwtValid, jwtToToken } from './token';
-import config from './config.json';
 import crypto from 'crypto';
 import randomstring from 'randomstring';
 
 /**
  * -------------------------------------- HELPERS FUNCTIONS-----------------------------------------------
  */
-
-export const getUrl = (): string => {
-  const PORT: number = parseInt(process.env.PORT || config.port);
-  const HOST: string = process.env.IP || 'localhost';
-  const URL: string = 'http://' + HOST + ':' + PORT.toString() + '/';
-  return URL;
-};
-
-export const formatError = (errorObj: ErrorObj) => { return { error: errorObj.error }; };
 
 /**
   * Function looks at the characters used in first name/last name
@@ -55,23 +45,6 @@ export function checkAlphanumeric(name: string): boolean {
   }
 
   return true;
-}
-
-/**
-  * Check if the userId is valid and exists
-  *
-  * @param {number} authUserId - the id you are checking is valid or not
-  *
-  * @returns {boolean} - returns true if userId is valid, false otherwise
- */
-export function checkAuthUserIdValid (authUserId: number): boolean {
-  const data = getData();
-
-  for (const user of data.users) {
-    if (user.authUserId === authUserId) return true;
-  }
-
-  return false;
 }
 
 /**
@@ -154,135 +127,6 @@ export function emailAlreadyUsed(email: string, authUserId: number): boolean {
 }
 
 /**
-  * Gets ALL the user details, as 'adminUserDetails' does not return all properties of 'User'
-  * @param {number} authUserId - A unique Id for the user who owns the quiz
-  *
-  * @returns {users: Array<{
-  *   authUserId: integer,
-  *   nameFirst: string,
-  *   nameLast: string,
-  *   email: string,
-  *   password: string,
-  *   numSuccessLogins: integer,
-  *   numFailedPasswordsSinceLastLogin: integer,
-  * }>} - Array of objects
-  */
-export function adminUserALLDetails(authUserId: number): AdminUserALLDetailsReturn {
-  const data = getData();
-
-  for (const user of data.users) {
-    if (user.authUserId === authUserId) {
-      return {
-        user: {
-          authUserId: user.authUserId,
-          nameFirst: user.nameFirst,
-          nameLast: user.nameLast,
-          email: user.email,
-          password: user.password,
-          numSuccessLogins: user.numSuccessLogins,
-          numFailedPasswordsSinceLastLogin: user.numFailedPasswordsSinceLastLogin,
-          deletedQuizzes: user.deletedQuizzes,
-          prevPassword: user.prevPassword
-        }
-      };
-    }
-  }
-  return {
-    error: 'User does not exist',
-  };
-}
-
-/**
-  * Gets ALL the user details, as 'adminUserDetails' does not return all properties of 'User'
-  * @param {number} authUserId - A unique Id for the user who owns the quiz
-  *
-  * @returns {{quizzes: Array<{
-  *   quizId: number;
-  *   adminQuizId: number;
-  *   name: string;
-  *   timeCreated: number;
-  *   timeLastEdited: number;
-  *   description: string;
-  * }>} | {error: string}} - An array of quizzes and its details
-  *
-  */
-// export function adminQuizALLDetails(quizId: number): Quiz {
-//   const data = getData();
-
-//   for (const quiz of data.quizzes) {
-//     if (quiz.quizId === quizId) {
-//       return {
-//         quizzes: {
-//           quizId: quiz.quizId,
-//           adminQuizId: quiz.adminQuizId,
-//           name: quiz.name,
-//           timeCreated: quiz.timeCreated,
-//           timeLastEdited: quiz.timeLastEdited,
-//           description: quiz.description,
-//           numQuestions: quiz.numQuestions,
-//           questions: quiz.questions,
-//           duration: quiz.duration,
-//           imgUrl: quiz.imgUrl
-//         }
-//       };
-//     }
-//   }
-//   return {
-//     error: 'Quiz does not exist',
-//   };
-// }
-
-/**
- * Checks if the user owns a quiz globally
- *
- * @param {number} authUserId -User's unique ID
- * @param {number} quizId - quiz unique ID
- *
- * @returns {boolean} - Returns true if User owns quiz, otherwise false
- */
-export function checkALLQuizOwnership(authUserId: number, quizId: number): boolean {
-  const data = getData();
-
-  // Check if the quizId exists in quizzes
-  const quizExistsInQuizzes = data.quizzes.some((quiz) => quiz.quizId === quizId);
-
-  // Check if the quizId exists in the user's deletedQuizzes
-  const user = data.users.find((user) => user.authUserId === authUserId);
-  const quizExistsInDeletedQuizzes = user.deletedQuizzes.some((quiz) => quiz.quizId === quizId);
-
-  // Check if the user owns the quiz
-  if (
-    (quizExistsInQuizzes || quizExistsInDeletedQuizzes) &&
-    (quizExistsInQuizzes && data.quizzes.find((quiz) => quiz.quizId === quizId).adminQuizId !== authUserId)
-  ) {
-    return false; // User does not own the quiz
-  }
-
-  return true; // User owns the quiz
-}
-
-/**
- * Checks if the quizId exists globally
- *
- * @param {number} quizId - quiz unique id
- *
- * @returns {boolean} - Returns true if User owns quiz, otherwise false
- */
-export function checkQuizIdExistsGlobally(quizId: number): boolean {
-  const data = getData();
-  // Check if the quizId exists in the quizzes array
-  const quizExistsInQuizzes = data.quizzes.some((quiz) => quiz.quizId === quizId);
-
-  // Check if the quizId exists in the deletedQuizzes array of any user
-  const quizExistsInDeletedQuizzes = data.users.some((user) =>
-    user.deletedQuizzes.some((quiz) => quiz.quizId === quizId)
-  );
-
-  // Return true if the quizId exists in either array, false otherwise
-  return quizExistsInQuizzes || quizExistsInDeletedQuizzes;
-}
-
-/**
  * Checks for error: 401 Token is not a valid structure
  * @param {Jwt} jwt - token unique id
  *
@@ -311,14 +155,6 @@ export function checkTokenValidSession(jwt: Jwt): boolean {
     return false;
   }
   return true;
-}
-
-export function getQuiz(quizId: number): Quiz {
-  const data = getData();
-  const res = data.quizzes.find((quiz: Quiz) => quiz.quizId === quizId
-  );
-
-  return res;
 }
 
 export function getTotalDuration(quiz: Quiz): number {
@@ -538,11 +374,6 @@ export function hasDuplicates(answerIds: number[]): boolean {
   return false; // No duplicates found
 }
 
-// checks if answer ids are valid for specific question
-export function areAnswerIdsValid(questionAnswers: number[], answerIds: number[]): boolean {
-  return answerIds.every((num: number) => questionAnswers.includes(num));
-}
-
 export function isAnswersCorrect(correctAnswerIds: number[], answerIds: number[]): boolean {
   // Check if both arrays have the same length
   if (correctAnswerIds.length !== answerIds.length) {
@@ -622,4 +453,169 @@ export function questionPercentageCorrect(playerAnswers: PlayerAnswer[], questio
   const percentageCorrect = (correctSubmissions / totalSubmissions) * 100;
 
   return percentageCorrect;
+}
+
+export function convertStringToArray(s: string): string[] {
+  if (s.length === 2) return [];
+
+  s = s.substring(1, s.length - 1);
+  const sArr: string[] = s.split(',');
+  return sArr;
+}
+
+export function rankUserByScore(session: QuizSessionAdmin): UserScore[] {
+  const playerScoreMap = new Map<string, number>();
+  const questionDetailMap = new Map<number, QuestionDetailsHelper>();
+
+  for (const playerName of session.players) {
+    playerScoreMap.set(playerName, 0);
+  }
+
+  for (const question of session.metadata.questions) {
+    const answerId = [];
+    for (const answer of question.answers) {
+      if (answer.correct) answerId.push(answer.answerId);
+    }
+
+    questionDetailMap.set(question.questionId, {
+      numAnswered: 1,
+      correctAnswers: answerId,
+      points: question.points
+    });
+  }
+
+  for (const ans of session.playerAnswers) {
+    // If the players answers is same as what is expected
+
+    const questionDetails = questionDetailMap.get(ans.questionId);
+
+    if (compareArray(questionDetails.correctAnswers, ans.answerIds)) {
+      playerScoreMap.set(
+        ans.name,
+        playerScoreMap.get(ans.name) + Number((questionDetails.points / questionDetails.numAnswered).toFixed(1))
+      );
+      // number of people answered increases by 1 to deduct score
+      questionDetails.numAnswered++;
+      questionDetailMap.set(ans.questionId, questionDetails);
+    }
+  }
+
+  // Sort by score
+
+  const entries = Array.from(playerScoreMap.entries());
+
+  entries.sort((a, b) => b[1] - a[1]);
+
+  const sortedArray: UserScore[] = entries.map(entry => {
+    const [key, value] = entry;
+    return {
+      name: key,
+      score: value
+    };
+  });
+
+  return sortedArray;
+}
+
+export function compareArray(arr1: number[], arr2: number[]): boolean {
+  if (arr1.length !== arr2.length) return false;
+
+  arr1 = arr1.sort();
+  arr2 = arr2.sort();
+
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+export function getQuestionResultsHelper(session: QuizSessionAdmin): QuestionResult[] {
+  const questionResultMap = new Map<number, QuestionResult>();
+  const questionDetailMap = new Map<number, QuestionDetailsHelper>();
+
+  for (const question of session.metadata.questions) {
+    const answerId = [];
+    for (const answer of question.answers) {
+      if (answer.correct) answerId.push(answer.answerId);
+    }
+
+    questionDetailMap.set(question.questionId, {
+      numAnswered: 1,
+      correctAnswers: answerId,
+      points: question.points
+    });
+  }
+
+  for (const question of session.metadata.questions) {
+    const answer = questionDetailMap.get(question.questionId);
+    const questionCorrectBreakdown: QuestionCorrectBreakdown[] = [];
+    for (const answerId of answer.correctAnswers) {
+      const questionCorrectBreakdownItem: QuestionCorrectBreakdown = {
+        answerId: answerId,
+        playersCorrect: []
+      };
+
+      questionCorrectBreakdown.push(questionCorrectBreakdownItem);
+    }
+
+    questionResultMap.set(question.questionId, {
+      questionId: question.questionId,
+      questionCorrectBreakdown: questionCorrectBreakdown,
+      averageAnswerTime: 0,
+      percentCorrect: 0
+    });
+  }
+
+  // Going through each player answer and adding it into results
+  for (const ans of session.playerAnswers) {
+    const questionResults = questionResultMap.get(ans.questionId);
+
+    const questionDetails = questionDetailMap.get(ans.questionId);
+
+    if (compareArray(ans.answerIds, questionDetails.correctAnswers)) {
+      questionResults.percentCorrect++;
+    }
+
+    questionResults.averageAnswerTime += ans.submissionTime;
+
+    for (const answerId of ans.answerIds) {
+      // if one of the answers player submitted is correct
+      if (questionDetails.correctAnswers.indexOf(answerId) !== -1) {
+        const questionCorrect: QuestionCorrectBreakdown = questionResults.questionCorrectBreakdown.find((item: QuestionCorrectBreakdown) => item.answerId === answerId);
+        questionCorrect.playersCorrect.push(ans.name);
+      }
+    }
+
+    // questionResultMap.set(ans.questionId, questionResults);
+  }
+
+  const numPlayers: number = session.playerInfo.length;
+
+  const output: QuestionResult[] = [];
+
+  for (const question of session.metadata.questions) {
+    const questionId = question.questionId;
+    const questionResults = questionResultMap.get(questionId);
+
+    questionResults.averageAnswerTime = Math.round(questionResults.averageAnswerTime) / numPlayers;
+    questionResults.percentCorrect = Math.round(questionResults.percentCorrect / numPlayers * 100);
+
+    // questionResultMap.set(questionId, questionResults);
+    output.push(questionResults);
+  }
+
+  return output;
+}
+
+export function checkAllQuizzesInEndState(quizId: number) {
+  const data = getData();
+
+  for (const session of data.quizSessions) {
+    if (session.metadata.quizId === quizId && session.state !== States.END) return false;
+  }
+
+  return true;
 }

@@ -651,19 +651,6 @@ describe('Empty Trash', () => {
   });
 
   describe('Unsuccessful tests', () => {
-    test('Token is not a valid structure', () => {
-      expect(trashRestoreQuizHandler({ token: 'some token' }, quizId2)).toEqual({
-        error: 'Token is not a valid structure'
-      });
-    });
-
-    test('User is not logged in', () => {
-      logoutUserHandler(userJwt2);
-      expect(trashRestoreQuizHandler(userJwt2, quizId2)).toEqual({
-        error: 'Provided token is valid structure, but is not for a currently logged in session'
-      });
-    });
-
     test('One more more Quiz IDs is not valid', () => {
       expect(emptyTrashHandler(userJwt, [quizId, quizId2, quizId2 + 4])).toEqual({
         error: 'One or more of the Quiz IDs is not a valid quiz'

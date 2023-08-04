@@ -5,7 +5,6 @@ import { getData } from './dataStore';
 export function viewChat(playerId: number): MessageReturn {
   const data = getData();
   const session = data.quizSessions.find((session) => session.playerInfo.find((player) => player.playerId === playerId));
-  console.log(session);
   if (!session) {
     throw HTTPError(400, 'Player ID is not valid');
   }

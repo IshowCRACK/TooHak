@@ -62,19 +62,9 @@ export const addTokenToSession = (newToken: Token): void => {
 // Gets token from sessions datastore from a userId. If not available, then creates a new one
 export const getTokenLogin = (userId: number): Token => {
   const data = getData();
-  let token = data.session.find((token: Token) => token.userId === userId);
-
-  if (token === undefined) {
-    token = createToken(userId);
-  }
+  const token = data.session.find((token: Token) => token.userId === userId);
 
   return token;
-};
-
-export const objToJwt = (obj: object): Jwt => {
-  return {
-    token: jsonwebtoken.sign(obj, SECRET_KEY) as string
-  };
 };
 
 export const checkJwtValid = (jwt: Jwt) => {
