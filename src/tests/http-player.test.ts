@@ -29,7 +29,7 @@ describe('PlayerJoin', () => {
     quizId = (RequestCreateQuizV2(userJwt, 'Countries of the world', 'Quiz on all countries') as AdminQuizCreate).quizId;
     defaultQuestionBody = {
       question: 'What content is Russia in?',
-      duration: 5,
+      duration: 0.1,
       points: 1,
       answers: [
         {
@@ -126,7 +126,7 @@ describe('PlayerQuestionInfo', () => {
     quizId = (RequestCreateQuizV2(userJwt, 'Countries of the world', 'Quiz on all countries') as AdminQuizCreate).quizId;
     defaultQuestionBody2 = {
       question: 'What content is Japan in?',
-      duration: 5,
+      duration: 0.1,
       points: 1,
       answers: [
         {
@@ -158,7 +158,7 @@ describe('PlayerQuestionInfo', () => {
     };
     defaultQuestionBody1 = {
       question: 'What content is Russia in?',
-      duration: 5,
+      duration: 0.1,
       points: 1,
       answers: [
         {
@@ -234,7 +234,7 @@ describe('PlayerQuestionInfo', () => {
         {
           questionId: questionId1.questionId,
           question: 'What content is Russia in?',
-          duration: 5,
+          duration: 0.1,
           thumbnailUrl: 'https://static.vecteezy.com/system/resources/previews/001/204/011/original/soccer-ball-png.png',
           points: 1,
           answers: [
@@ -892,7 +892,7 @@ describe('Get Player Status', () => {
     quizId = (RequestCreateQuizV2(userJwt, 'Countries of the world', 'Quiz on all countries') as AdminQuizCreate).quizId;
     defaultQuestionBody = {
       question: 'What content is Russia in?',
-      duration: 5,
+      duration: 0.1,
       points: 1,
       answers: [
         {
