@@ -157,7 +157,6 @@ export function checkTokenValidSession(jwt: Jwt): boolean {
   return true;
 }
 
-
 export function getTotalDuration(quiz: Quiz): number {
   let totalDuration = 0;
   for (const question of quiz.questions) {
@@ -485,12 +484,10 @@ export function rankUserByScore(session: QuizSessionAdmin): UserScore[] {
     });
   }
 
-
   for (const ans of session.playerAnswers) {
     // If the players answers is same as what is expected
 
     const questionDetails = questionDetailMap.get(ans.questionId);
-  
 
     if (compareArray(questionDetails.correctAnswers, ans.answerIds)) {
       playerScoreMap.set(
@@ -516,7 +513,6 @@ export function rankUserByScore(session: QuizSessionAdmin): UserScore[] {
       score: value
     };
   });
-
 
   return sortedArray;
 }
@@ -617,9 +613,8 @@ export function getQuestionResultsHelper(session: QuizSessionAdmin): QuestionRes
 export function checkAllQuizzesInEndState(quizId: number) {
   const data = getData();
 
- 
-  for (let session of data.quizSessions) {
-    if (session.metadata.quizId == quizId && session.state != States.END) return false;
+  for (const session of data.quizSessions) {
+    if (session.metadata.quizId === quizId && session.state !== States.END) return false;
   }
 
   return true;

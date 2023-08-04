@@ -4,7 +4,7 @@ import { registerUser, clearUsers, createQuizQuestionHandler } from './iter2test
 import {
   RequestCreateQuizV2, RequestRemoveQuizV2, infoQuizV2, listQuizV2, logoutUserHandlerV2, startSessionQuiz, updateNameQuizV2,
   createQuizThumbnailHandler, updateQuizSessionStateHandler, getSessionStatusHandler, updateDescriptionQuizV2, viewQuizTrashHandlerV2,
-  trashRestoreQuizHandlerV2, emptyTrashHandlerV2, quizTransferHandlerV2, createQuizQuestionHandlerV2, playerJoinHelper, getFinalQuizResultsHandler, playerSubmitAnswerHandler
+  trashRestoreQuizHandlerV2, emptyTrashHandlerV2, quizTransferHandlerV2, createQuizQuestionHandlerV2, playerJoinHelper, getFinalQuizResultsHandler, playerSubmitAnswerHandler, viewSessionsHandler
 } from './testhelpersV2';
 
 function delay(ms: number): Promise<void> {
@@ -1430,55 +1430,133 @@ describe('Get Final Quiz', () => {
 
       updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'END');
 
-
       getFinalQuizResultsHandler(quizId, sessionId, userJwt);
 
-    //   .toEqual(expect.objectContaining(
-    //     {
-    //       usersRankedByScore: [
-    //         {
-    //           name: "John Doe",
-    //           score: 12.3
+      //   .toEqual(expect.objectContaining(
+      //     {
+      //       usersRankedByScore: [
+      //         {
+      //           name: "John Doe",
+      //           score: 12.3
 
-    //         },
-    //         {
-    //           name: "Titus Cha",
-    //           score: 7
-    //         },
-    //         {
-    //           name: "John Smith",
-    //           score: 3.5
-    //         }
-    //       ],
-    //       questionResults: [
-    //         {
-    //           questionId: 0,
-    //           questionCorrectBreakdown: [
-    //             {
-    //               answerId: 0,
-    //               playersCorrect: ["John Doe", "Titus Cha"]
-    //             },
-    //             {
-    //               answerId: 1,
-    //               playersCorrect: ["John Doe"]
-    //             }
-    //           ],
-    //           percentCorrect: 33,
-    //        },
-    //         {
-    //           questionId: 1,
-    //           questionCorrectBreakdown: [
-    //             {
-    //               answerId: 0,
-    //               playersCorrect: ["Titus Cha", "John Smith", "John Doe"]
-    //             }
-    //           ],
-    //           percentCorrect: 100,
-    //         }
-    //       ],
+      //         },
+      //         {
+      //           name: "Titus Cha",
+      //           score: 7
+      //         },
+      //         {
+      //           name: "John Smith",
+      //           score: 3.5
+      //         }
+      //       ],
+      //       questionResults: [
+      //         {
+      //           questionId: 0,
+      //           questionCorrectBreakdown: [
+      //             {
+      //               answerId: 0,
+      //               playersCorrect: ["John Doe", "Titus Cha"]
+      //             },
+      //             {
+      //               answerId: 1,
+      //               playersCorrect: ["John Doe"]
+      //             }
+      //           ],
+      //           percentCorrect: 33,
+      //        },
+      //         {
+      //           questionId: 1,
+      //           questionCorrectBreakdown: [
+      //             {
+      //               answerId: 0,
+      //               playersCorrect: ["Titus Cha", "John Smith", "John Doe"]
+      //             }
+      //           ],
+      //           percentCorrect: 100,
+      //         }
+      //       ],
 
     //   })
     // );
+    });
+  });
+});
+
+describe('Tests for View Active and Inactive Sessions', () => {
+  let userJwt: Jwt;
+  let userToken: Token;
+  let quizId: number;
+  let defaultQuestionBody : QuestionBody;
+  let sessionId: number;
+  beforeEach(() => {
+    userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    userJwt = tokenToJwt(userToken);
+
+    quizId = (RequestCreateQuizV2(userJwt, 'Countries of the world', 'Quiz on all countries') as AdminQuizCreate).quizId;
+    defaultQuestionBody = {
+      question: 'What content is Russia in?',
+      duration: 0.1,
+      points: 1,
+      answers: [
+        {
+          answerId: 0,
+          answer: 'Asia',
+          colour: 'Red',
+          correct: true
+        },
+        {
+          answerId: 1,
+          answer: 'North America',
+          colour: 'Blue',
+          correct: false
+        },
+        {
+          answerId: 2,
+          answer: 'South America',
+          colour: 'Green',
+          correct: false
+        },
+        {
+          answerId: 3,
+          answer: 'Africa',
+          colour: 'Yellow',
+          correct: false
+        }
+      ],
+      thumbnailUrl: 'https://static.vecteezy.com/system/resources/previews/001/204/011/original/soccer-ball-png.png'
+    };
+    createQuizQuestionHandlerV2(quizId, userJwt, defaultQuestionBody);
+    sessionId = (startSessionQuiz(userJwt, 30, quizId) as OkSessionObj).sessionId;
+    playerJoinHelper(sessionId, 'peahead') as PlayerReturn;
+  });
+
+  test('One Active session', () => {
+    expect(viewSessionsHandler(quizId, userJwt)).toStrictEqual({
+      activeSessions: [
+        sessionId
+      ],
+      inactiveSessions: []
+    });
+  });
+  test('One Inactive session', () => {
+    updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'END');
+    expect(viewSessionsHandler(quizId, userJwt)).toStrictEqual({
+      activeSessions: [],
+      inactiveSessions: [
+        sessionId
+      ]
+    });
+  });
+  test('One Active and one inactive session', () => {
+    const session2Id = (startSessionQuiz(userJwt, 30, quizId) as OkSessionObj).sessionId;
+    updateQuizSessionStateHandler(quizId, session2Id, userJwt, 'END');
+    expect(viewSessionsHandler(quizId, userJwt)).toStrictEqual({
+      activeSessions: [
+        sessionId
+      ],
+      inactiveSessions: [
+        session2Id
+      ]
     });
   });
 });

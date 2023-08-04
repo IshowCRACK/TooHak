@@ -8,13 +8,13 @@ import YAML from 'yaml';
 import sui from 'swagger-ui-express';
 import fs from 'fs';
 import { adminAuthRegister, adminAuthLogin, adminAuthLogout, adminUserDetails, adminUpdateUserDetails, adminUpdateUserPassword } from './auth';
-import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash, adminQuizRestore, adminQuizEmptyTrash, quizStartSession, createQuizThumbnail, updateQuizSessionState, getSessionStatus, getFinalQuizResults } from './quiz';
+import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash, adminQuizRestore, adminQuizEmptyTrash, quizStartSession, createQuizThumbnail, updateQuizSessionState, getSessionStatus, viewSessions, getFinalQuizResults } from './quiz';
 import { clear } from './other';
-import { convertStringToArray, formatError } from './helper';
+import { convertStringToArray } from './helper';
 import { getData } from './dataStore';
 import { quizCreateQuestion, adminQuizDelete, quizDuplicateQuestion, quizMoveQuestion, quizUpdateQuestion } from './question';
 import { quizCreateQuestionV2, deleteQuestionV2, quizUpdateQuestionV2 } from './questionV2';
-import { playerJoin, playerQuestionInfo, playerSubmitAnswer, getQuestionResults } from './player';
+import { playerJoin, playerQuestionInfo, playerSubmitAnswer, getQuestionResults, playerStatus } from './player';
 import { viewChat, sendChat } from './chat';
 
 // Set up web app
@@ -226,6 +226,14 @@ app.post('/v1/admin/quiz/:quizId/thumbnail', (req: Request, res: Response) => {
   const { imgUrl } = req.body;
 
   const response = createQuizThumbnail({ token: token }, quizId, imgUrl);
+  res.status(200).json(response);
+});
+
+app.get('/v1/admin/quiz/:quizId/sessions', (req: Request, res: Response) => {
+  const token: string = req.header('token') as string;
+  const quizId = parseInt(req.params.quizId);
+
+  const response = viewSessions({ token: token }, quizId);
   res.status(200).json(response);
 });
 
@@ -452,6 +460,12 @@ app.put('/v2/admin/quiz/:quizId/question/:questionId', (req: Request, res: Respo
 app.post('/v1/player/join', (req: Request, res: Response) => {
   const { sessionId, name } = req.body;
   const response = playerJoin(sessionId, name);
+  res.status(200).json(response);
+});
+
+app.get('/v1/player/:playerId', (req: Request, res: Response) => {
+  const playerId = parseInt(req.params.playerId);
+  const response = playerStatus(playerId);
   res.status(200).json(response);
 });
 

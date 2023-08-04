@@ -287,6 +287,11 @@ export interface QuizTrashItemReturn {
 export interface PlayerReturn {
     playerId: number;
 }
+export interface PlayerStatusReturn {
+        state: States;
+        numQuestion: number;
+        atQuestion: number;
+}
 
 export interface PlayerQuestionInfoReturn {
     questionId: number,
@@ -346,4 +351,9 @@ export interface QuestionDetailsHelper {
     numAnswered: number;
     correctAnswers: number[];
     points: number;
+}
+
+export interface ActiveInactiveSession {
+    activeSessions: number[],
+    inactiveSessions: number[];
 }

@@ -1,6 +1,6 @@
 import {
   Data, AdminQuizListReturn, AdminQuizList, Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj,
-  AdminQuizInfo, User, Quiz, QuizTrashReturn, Token, States, Actions, UserScore, QuestionResult, FinalQuizResults, QuizSession, QuizMetadata
+  AdminQuizInfo, User, Quiz, QuizTrashReturn, Token, States, Actions, UserScore, QuestionResult, FinalQuizResults, QuizSession, QuizMetadata, ActiveInactiveSession
 } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
@@ -737,4 +737,25 @@ export function getFinalQuizResults(quizId: number, sessionId: number, jwt: Jwt)
     usersRankedByScore: userScoreRanked,
     questionResults: questionResults
   };
+}
+
+export function viewSessions(jwt: Jwt, quizId: number): ActiveInactiveSession {
+  const data = getData();
+
+  const sessions: ActiveInactiveSession = {
+    activeSessions: [],
+    inactiveSessions: [],
+  };
+
+  for (const quizSession of data.quizSessions) {
+    if (quizSession.metadata.quizId === quizId) {
+      if (quizSession.state === States.END) {
+        sessions.inactiveSessions.push(quizSession.sessionId);
+      } else {
+        sessions.activeSessions.push(quizSession.sessionId);
+      }
+    }
+  }
+
+  return sessions;
 }

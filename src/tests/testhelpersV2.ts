@@ -2,7 +2,7 @@ import request, { HttpVerb } from 'sync-request';
 import {
   AdminQuizCreate, AdminQuizListReturn, ErrorObj, Jwt, OkObj, AdminQuizInfo, OkSessionObj, QuestionBody,
   QuizQuestionCreate, AdminQuestionDuplicate, QuizTrashReturn, QuizSession, PlayerReturn, PlayerQuestionInfoReturn,
-  MessageReturn
+  MessageReturn, ActiveInactiveSession, PlayerStatusReturn
 } from '../../interfaces/interfaces';
 import config from './../config.json';
 
@@ -11,12 +11,11 @@ export function getUrl(): string {
   const HOST: string = process.env.IP || 'localhost';
   const URL: string = 'http://' + HOST + ':' + PORT.toString() + '/';
   return URL;
-};
+}
 
-export function formatError(errorObj: ErrorObj)  {
-   return { error: errorObj.error };
- };
-
+export function formatError(errorObj: ErrorObj) {
+  return { error: errorObj.error };
+}
 
 const URL: string = getUrl();
 
@@ -65,6 +64,9 @@ export const getFinalQuizResultsHandler = (quizId: number, sessionId: number, jw
   return requestHelper('GET', `v1/admin/quiz/${quizId}/session/${sessionId}/results`, {}, jwt);
 };
 
+export const viewSessionsHandler = (quizId: number, jwt: Jwt): ActiveInactiveSession => {
+  return requestHelper('GET', `v1/admin/quiz/${quizId}/sessions`, {}, jwt);
+};
 //  ////////////////////  MODIFIED ITR3 ////////////////////////////////////
 export const logoutUserHandlerV2 = (jwt: Jwt) => {
   return requestHelper('POST', 'v2/admin/auth/logout', {}, jwt);
@@ -148,6 +150,9 @@ export const quizTransferHandlerV2 = (jwt: Jwt, email: string, quizId: number): 
 
 export const playerJoinHelper = (sessionId: number, name: string): PlayerReturn | ErrorObj => {
   return requestHelper('POST', 'v1/player/join', { sessionId, name });
+};
+export const playerStatusHelper = (playerId: number): PlayerStatusReturn | ErrorObj => {
+  return requestHelper('GET', `v1/player/${playerId}`, {});
 };
 
 export const playerQuestionInfoHelper = (playerId: number, questionPosition: number): PlayerQuestionInfoReturn | ErrorObj => {

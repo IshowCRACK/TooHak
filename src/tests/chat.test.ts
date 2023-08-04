@@ -28,7 +28,7 @@ describe('Tests for viewChat', () => {
     quizId = (RequestCreateQuizV2(userJwt, 'Countries of the world', 'Quiz on all countries') as AdminQuizCreate).quizId;
     defaultQuestionBody = {
       question: 'What content is Russia in?',
-      duration: 5,
+      duration: 0.1,
       points: 1,
       answers: [
         {
@@ -129,7 +129,7 @@ describe('Tests for sendChat', () => {
     quizId = (RequestCreateQuizV2(userJwt, 'Countries of the world', 'Quiz on all countries') as AdminQuizCreate).quizId;
     defaultQuestionBody = {
       question: 'What content is Russia in?',
-      duration: 5,
+      duration: 0.1,
       points: 1,
       answers: [
         {

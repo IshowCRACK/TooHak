@@ -1,6 +1,6 @@
 import { AdminQuizCreate, Jwt, QuestionBody, Token, OkSessionObj, QuizQuestionCreate, PlayerReturn, QuizSession, getQuestionResultsReturn } from '../../interfaces/interfaces';
 import { clearUsers, registerUser } from './iter2tests/testHelpersv1';
-import { RequestCreateQuizV2, createQuizQuestionHandlerV2, startSessionQuiz, playerJoinHelper, updateQuizSessionStateHandler, getSessionStatusHandler, playerQuestionInfoHelper, playerSubmitAnswerHandler, getQuestionResultsHandler } from './testhelpersV2';
+import { RequestCreateQuizV2, createQuizQuestionHandlerV2, startSessionQuiz, playerJoinHelper, updateQuizSessionStateHandler, getSessionStatusHandler, playerQuestionInfoHelper, playerSubmitAnswerHandler, getQuestionResultsHandler, playerStatusHelper } from './testhelpersV2';
 import { tokenToJwt } from '../token';
 
 function delay(ms: number): Promise<void> {
@@ -29,7 +29,7 @@ describe('PlayerJoin', () => {
     quizId = (RequestCreateQuizV2(userJwt, 'Countries of the world', 'Quiz on all countries') as AdminQuizCreate).quizId;
     defaultQuestionBody = {
       question: 'What content is Russia in?',
-      duration: 5,
+      duration: 0.1,
       points: 1,
       answers: [
         {
@@ -126,7 +126,7 @@ describe('PlayerQuestionInfo', () => {
     quizId = (RequestCreateQuizV2(userJwt, 'Countries of the world', 'Quiz on all countries') as AdminQuizCreate).quizId;
     defaultQuestionBody2 = {
       question: 'What content is Japan in?',
-      duration: 5,
+      duration: 0.1,
       points: 1,
       answers: [
         {
@@ -158,7 +158,7 @@ describe('PlayerQuestionInfo', () => {
     };
     defaultQuestionBody1 = {
       question: 'What content is Russia in?',
-      duration: 5,
+      duration: 0.1,
       points: 1,
       answers: [
         {
@@ -234,7 +234,7 @@ describe('PlayerQuestionInfo', () => {
         {
           questionId: questionId1.questionId,
           question: 'What content is Russia in?',
-          duration: 5,
+          duration: 0.1,
           thumbnailUrl: 'https://static.vecteezy.com/system/resources/previews/001/204/011/original/soccer-ball-png.png',
           points: 1,
           answers: [
@@ -873,6 +873,82 @@ describe('playerSubmistAnswer', () => {
       ]);
       expect((getQuestionResultsHandler(playerId, 2) as getQuestionResultsReturn).averageAnswerTime).toBeLessThanOrEqual(1);
       expect((getQuestionResultsHandler(playerId, 2) as getQuestionResultsReturn).percentCorrect).toEqual(50);
+    });
+  });
+});
+
+describe('Get Player Status', () => {
+  let userJwt: Jwt;
+  let userToken: Token;
+  let quizId: number;
+  let defaultQuestionBody : QuestionBody;
+  let sessionId: OkSessionObj;
+  let playerId: PlayerReturn;
+
+  beforeEach(() => {
+    userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    userJwt = tokenToJwt(userToken);
+
+    quizId = (RequestCreateQuizV2(userJwt, 'Countries of the world', 'Quiz on all countries') as AdminQuizCreate).quizId;
+    defaultQuestionBody = {
+      question: 'What content is Russia in?',
+      duration: 0.1,
+      points: 1,
+      answers: [
+        {
+          answerId: 0,
+          answer: 'Asia',
+          colour: 'Red',
+          correct: true
+        },
+        {
+          answerId: 1,
+          answer: 'North America',
+          colour: 'Blue',
+          correct: false
+        },
+        {
+          answerId: 2,
+          answer: 'South America',
+          colour: 'Green',
+          correct: false
+        },
+        {
+          answerId: 3,
+          answer: 'Africa',
+          colour: 'Yellow',
+          correct: false
+        }
+      ],
+      thumbnailUrl: 'https://static.vecteezy.com/system/resources/previews/001/204/011/original/soccer-ball-png.png'
+    };
+    createQuizQuestionHandlerV2(quizId, userJwt, defaultQuestionBody);
+    sessionId = startSessionQuiz(userJwt, 30, quizId) as OkSessionObj;
+    playerId = playerJoinHelper(sessionId.sessionId, 'Jane Doe') as PlayerReturn;
+  });
+  test('Unsuccessful - player ID does not exist', () => {
+    expect(playerStatusHelper(playerId.playerId + 1)).toStrictEqual({
+      error: 'player ID does not exist'
+    });
+  });
+  test('Successful Cases', () => {
+    expect(playerStatusHelper(playerId.playerId)).toStrictEqual({
+      state: 'LOBBY',
+      numQuestions: 1,
+      atQuestion: 0,
+    });
+    updateQuizSessionStateHandler(quizId, sessionId.sessionId, userJwt, 'NEXT_QUESTION');
+    expect(playerStatusHelper(playerId.playerId)).toStrictEqual({
+      state: 'QUESTION_COUNTDOWN',
+      numQuestions: 1,
+      atQuestion: 0,
+    });
+
+    updateQuizSessionStateHandler(quizId, sessionId.sessionId, userJwt, 'END');
+    expect(playerStatusHelper(playerId.playerId)).toStrictEqual({
+      state: 'END',
+      numQuestions: 1,
+      atQuestion: 0,
     });
   });
 });

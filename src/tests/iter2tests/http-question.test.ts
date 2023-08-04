@@ -23,7 +23,7 @@ describe('Tests related to creating a Quiz Question', () => {
 
     defaultQuestionBody = {
       question: 'What content is Russia in?',
-      duration: 5,
+      duration: 0.1,
       points: 1,
       answers: [
         {
@@ -202,7 +202,7 @@ describe('Quiz Duplicate', () => {
     timeBufferSeconds = 20;
     defaultQuestionBody = {
       question: 'What content is Russia in?',
-      duration: 5,
+      duration: 0.1,
       points: 1,
       answers: [
         {
@@ -304,7 +304,7 @@ describe('Tests for adminQuizDelete', () => {
 
     defaultQuestionBody = {
       question: 'What continent is Russia in?',
-      duration: 5,
+      duration: 0.1,
       points: 1,
       answers: [
         {
@@ -381,7 +381,7 @@ describe('Tests for quizMoveQuestion', () => {
 
     defaultQuestionBody = {
       question: 'What continent is Russia in?',
-      duration: 5,
+      duration: 0.1,
       points: 1,
       answers: [
         {
@@ -413,7 +413,7 @@ describe('Tests for quizMoveQuestion', () => {
 
     secondQuestionBody = {
       question: 'What continent is Australia in?',
-      duration: 5,
+      duration: 0.1,
       points: 1,
       answers: [
         {
@@ -515,7 +515,7 @@ describe('Tests to update question', () => {
 
     beforeQuestionBody = {
       question: 'What continent is China in?',
-      duration: 5,
+      duration: 0.1,
       points: 1,
       answers: [
         {
@@ -546,7 +546,7 @@ describe('Tests to update question', () => {
     };
     defaultQuestionBody = {
       question: 'What continent is Russia in?',
-      duration: 5,
+      duration: 0.1,
       points: 1,
       answers: [
         {

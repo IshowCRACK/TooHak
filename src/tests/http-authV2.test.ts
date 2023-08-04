@@ -187,10 +187,9 @@ describe('adminUserUpdateDetailsV2 test', () => {
     });
 
     test('Email is already used', () => {
-      registerUser('JaneAusten@gmail.com', 'Password123', 'John', 'Smith')
+      registerUser('JaneAusten@gmail.com', 'Password123', 'John', 'Smith');
       const change = updateDetailsAuthHandlerV2(jwt, 'JaneAusten@gmail.com', 'Johnny', 'Smithy');
       expect(change).toStrictEqual({ error: 'Invalid email or email is already in use' });
-
     });
     test('First name is not valid', () => {
       const change = updateDetailsAuthHandlerV2(jwt, 'JohnSmith123@gmail.com', 'Johnny123', 'Smithy');
