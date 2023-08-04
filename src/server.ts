@@ -14,7 +14,7 @@ import { formatError } from './helper';
 import { getData } from './dataStore';
 import { quizCreateQuestion, adminQuizDelete, quizDuplicateQuestion, quizMoveQuestion, quizUpdateQuestion } from './question';
 import { quizCreateQuestionV2, deleteQuestionV2, quizUpdateQuestionV2 } from './questionV2';
-import { playerJoin, playerQuestionInfo, playerSubmitAnswer, getQuestionResults,playerStatus } from './player';
+import { playerJoin, playerQuestionInfo, playerSubmitAnswer, getQuestionResults, playerStatus } from './player';
 import { viewChat, sendChat } from './chat';
 
 // Set up web app

@@ -50,7 +50,41 @@ export function playerJoin(sessionId: number, name: string) {
   return { playerId: playerId };
 }
 export function playerStatus(playerId: number) {
-  return;
+  const data = getData();
+
+  // no playerId
+  if (playerId > data.maxPlayerId || playerId <= 0) {
+    throw HTTPError(400, 'player ID does not exist');
+  }
+
+  // find session
+  let thisSession: QuizSessionAdmin;
+  for (const session of data.quizSessions) {
+    const playerInfo = session.playerInfo;
+    for (const player of playerInfo) {
+      if (player.playerId === playerId) {
+        thisSession = session;
+      }
+    }
+  }
+
+  // find numQuestions by finding authuserId
+  const authUserId = thisSession.authUserId;
+  const quiz = data.quizzes.find((quiz) => quiz.adminQuizId === thisSession.authUserId);
+
+  const quizId = quiz.quizId;
+  const token: Token = {
+    sessionId: thisSession.sessionId.toString(),
+    userId: authUserId
+  };
+  const jwt = tokenToJwt(token);
+  const status = getSessionStatus(quizId, thisSession.sessionId, jwt) as QuizSession;
+
+  return {
+    state: status.state,
+    numQuestions: quiz.numQuestions,
+    atQuestion: thisSession.atQuestion,
+  };
 }
 export function playerQuestionInfo(playerId: number, questionPosition: number) {
   const data = getData();

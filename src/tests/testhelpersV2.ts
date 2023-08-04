@@ -137,7 +137,7 @@ export const playerJoinHelper = (sessionId: number, name: string): PlayerReturn 
   return requestHelper('POST', 'v1/player/join', { sessionId, name });
 };
 export const playerStatusHelper = (playerId: number): PlayerStatusReturn | ErrorObj => {
-  return requestHelper('GET', 'v1/player/${playerId}', {});
+  return requestHelper('GET', `v1/player/${playerId}`, {});
 };
 
 export const playerQuestionInfoHelper = (playerId: number, questionPosition: number): PlayerQuestionInfoReturn | ErrorObj => {

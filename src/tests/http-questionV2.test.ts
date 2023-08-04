@@ -1,6 +1,6 @@
-import { AdminQuizCreate, ErrorObj, Jwt, QuestionBody, QuizQuestionCreate, Token, AdminQuizInfo, AdminQuestionDuplicate } from '../../interfaces/interfaces';
+import { AdminQuizCreate, ErrorObj, Jwt, QuestionBody, QuizQuestionCreate, Token, AdminQuizInfo, AdminQuestionDuplicate, OkSessionObj } from '../../interfaces/interfaces';
 import { clearUsers, registerUser } from './iter2tests/testHelpersv1';
-import { RequestCreateQuizV2, infoQuizV2, moveQuestionV2, deleteQuestionV2, duplicateQuizV2, logoutUserHandlerV2, createQuizQuestionHandlerV2, updateQuizV2 } from './testhelpersV2';
+import { RequestCreateQuizV2, infoQuizV2, moveQuestionV2, deleteQuestionV2, duplicateQuizV2, logoutUserHandlerV2, createQuizQuestionHandlerV2, updateQuizV2, startSessionQuiz, updateQuizSessionStateHandler } from './testhelpersV2';
 import { tokenToJwt } from '../token';
 
 beforeEach(() => {
@@ -475,6 +475,7 @@ describe('Tests for adminQuizDelete', () => {
       ],
       thumbnailUrl: 'https://static.vecteezy.com/system/resources/previews/001/204/011/original/soccer-ball-png.png'
     };
+    startSessionQuiz(userJwt, 30, quizId) as OkSessionObj;
   });
 
   describe('Unsuccessful Tests', () => {
@@ -495,21 +496,22 @@ describe('Tests for adminQuizDelete', () => {
       expect(deleteQuestionV2(tokenToJwt(token2), 0, 0)).toStrictEqual({ error: 'Quiz ID does not refer to a quiz that this user owns' });
     });
 
+    test('All sessions for this quiz must be in END state', () => {
+      createQuizQuestionHandlerV2(quizId, userJwt, defaultQuestionBody);
+      startSessionQuiz(userJwt, 1, quizId) as OkSessionObj;
+      expect(deleteQuestionV2(userJwt, quizId, 0)).toStrictEqual({ error: 'All sessions for this quiz must be in END state' });
+    });
+
     test('quizId does not refer to a valid question within the quiz', () => {
       expect(deleteQuestionV2(userJwt, quizId, 0)).toStrictEqual({ error: 'Quiz ID does not refer to a valid question within this quiz' });
     });
-    /*
-
-                NEED TO ADD TESTS: All sessions for this quiz must be in END state ,
-
-                USE THE GET SESSION STATUS FUNCTION TO ERROR CHECK WHEN WE FINSIH THAT FUNCTION
-
-        */
   });
 
   describe('Successful Tests', () => {
     test('Successfully deleted question', () => {
       createQuizQuestionHandlerV2(quizId, userJwt, defaultQuestionBody);
+      const sessionId = startSessionQuiz(userJwt, 1, quizId) as OkSessionObj;
+      updateQuizSessionStateHandler(quizId, sessionId.sessionId, userJwt, 'END');
       expect(deleteQuestionV2(userJwt, quizId, 0)).toStrictEqual({});
     });
   });

@@ -877,7 +877,6 @@ describe('playerSubmistAnswer', () => {
   });
 });
 
-
 describe('Get Player Status', () => {
   let userJwt: Jwt;
   let userToken: Token;
@@ -928,27 +927,28 @@ describe('Get Player Status', () => {
     playerId = playerJoinHelper(sessionId.sessionId, 'Jane Doe') as PlayerReturn;
   });
   test('Unsuccessful - player ID does not exist', () => {
-    expect(playerStatusHelper(playerId.playerId+1)).toStrictEqual({
+    expect(playerStatusHelper(playerId.playerId + 1)).toStrictEqual({
       error: 'player ID does not exist'
-    }); 
-   });
-   test('Successful Cases', () => {
-    expect(playerStatusHelper(playerId.playerId)).toStrictEqual({ 
-      state: "LOBBY",
+    });
+  });
+  test('Successful Cases', () => {
+    expect(playerStatusHelper(playerId.playerId)).toStrictEqual({
+      state: 'LOBBY',
       numQuestions: 1,
       atQuestion: 0,
-   });
-   updateQuizSessionStateHandler(quizId, sessionId.sessionId, userJwt, 'NEXT_QUESTION');
-   expect(playerStatusHelper(playerId.playerId)).toStrictEqual({ 
-    state: "QUESTION_OPEN",
-    numQuestions: 1,
-    atQuestion: 1,
- });
- updateQuizSessionStateHandler(quizId, sessionId.sessionId, userJwt, 'END');
- expect(playerStatusHelper(playerId.playerId)).toStrictEqual({ 
-  state: "END",
-  numQuestions: 1,
-  atQuestion: 1,
-});
+    });
+    updateQuizSessionStateHandler(quizId, sessionId.sessionId, userJwt, 'NEXT_QUESTION');
+    expect(playerStatusHelper(playerId.playerId)).toStrictEqual({
+      state: 'QUESTION_COUNTDOWN',
+      numQuestions: 1,
+      atQuestion: 0,
+    });
+
+    updateQuizSessionStateHandler(quizId, sessionId.sessionId, userJwt, 'END');
+    expect(playerStatusHelper(playerId.playerId)).toStrictEqual({
+      state: 'END',
+      numQuestions: 1,
+      atQuestion: 0,
+    });
   });
 });
