@@ -1,6 +1,6 @@
 import {
   Data, AdminQuizListReturn, AdminQuizList, Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj,
-  AdminQuizInfo, User, Quiz, QuizTrashReturn, Token, States, Actions, UserScore, QuestionResult, FinalQuizResults, QuizSession, QuizMetadata, ActiveInactiveSession
+  AdminQuizInfo, User, Quiz, QuizTrashReturn, Token, States, Actions, UserScore, QuestionResult, FinalQuizResults, QuizSession, QuizMetadata, ActiveInactiveSession, FinalResultCsvReturn
 } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
@@ -758,4 +758,40 @@ export function viewSessions(jwt: Jwt, quizId: number): ActiveInactiveSession {
   }
 
   return sessions;
+}
+
+export function getFinalQuizResultsCsv(quizId: number, sessionId: number, jwt: Jwt): FinalResultCsvReturn {
+  if (!checkTokenValidStructure(jwt)) {
+    throw HTTPError(401, 'Token is not a valid structure');
+  }
+
+  if (!checkTokenValidSession(jwt)) {
+    throw HTTPError(403, 'Token not for currently logged in session');
+  }
+
+  if (!checkQuizIdValid(quizId)) {
+    throw HTTPError(400, 'Quiz ID does not refer to a valid quiz');
+  }
+
+  if (!checkQuizAndUserIdValid(quizId, jwtToToken(jwt).userId)) {
+    throw HTTPError(400, 'Quiz ID does not refer to a quiz that this user owns');
+  }
+
+  const data = getData();
+  const quizSession = data.quizSessions.find(
+    (session) => session.sessionId === sessionId && session.metadata.quizId === quizId
+  );
+
+  // If the quiz session is not found, return an error
+  if (!quizSession) {
+    throw HTTPError(400, 'Invalid quiz session or session not found');
+  }
+
+  if (quizSession.state !== States.END) {
+    throw HTTPError(400, 'Session is not in FINAL_RESULTS state');
+  }
+
+  return {
+    url: 'http://google.com/some/path/image.csv'
+  };
 }

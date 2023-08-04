@@ -4,7 +4,7 @@ import { registerUser, clearUsers, createQuizQuestionHandler } from './iter2test
 import {
   RequestCreateQuizV2, RequestRemoveQuizV2, infoQuizV2, listQuizV2, logoutUserHandlerV2, startSessionQuiz, updateNameQuizV2,
   createQuizThumbnailHandler, updateQuizSessionStateHandler, getSessionStatusHandler, updateDescriptionQuizV2, viewQuizTrashHandlerV2,
-  trashRestoreQuizHandlerV2, emptyTrashHandlerV2, quizTransferHandlerV2, createQuizQuestionHandlerV2, playerJoinHelper, getFinalQuizResultsHandler, playerSubmitAnswerHandler, viewSessionsHandler
+  trashRestoreQuizHandlerV2, emptyTrashHandlerV2, quizTransferHandlerV2, createQuizQuestionHandlerV2, playerJoinHelper, getFinalQuizResultsHandler, playerSubmitAnswerHandler, viewSessionsHandler, getFinalQuizResultsCSVHandler
 } from './testhelpersV2';
 
 function delay(ms: number): Promise<void> {
@@ -1557,6 +1557,158 @@ describe('Tests for View Active and Inactive Sessions', () => {
       inactiveSessions: [
         session2Id
       ]
+    });
+  });
+});
+
+describe('Get Final Quiz CSV', () => {
+  let userJwt: Jwt;
+  let userToken: Token;
+  let userToken2: Token;
+  let userJwt2: Jwt;
+  let quizId: number;
+  let defaultQuestionBody1 : QuestionBody;
+  let defaultQuestionBody2 : QuestionBody;
+  let sessionId: number;
+  let playerId: number;
+  let playerId2: number;
+  let playerId3: number;
+
+  beforeEach(() => {
+    userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    userJwt = tokenToJwt(userToken);
+    userToken2 = registerUser('JaneAusten@gmail.com', 'Password123', 'Jane', 'Austen') as Token;
+    userJwt2 = tokenToJwt(userToken2);
+
+    quizId = (RequestCreateQuizV2(userJwt, 'Countries of the world', 'Quiz on all countries') as AdminQuizCreate).quizId;
+    defaultQuestionBody1 = {
+      question: 'What content is Japan in?',
+      duration: 1,
+      points: 10,
+      answers: [
+        {
+          answerId: 0,
+          answer: 'Asia',
+          colour: 'Red',
+          correct: true
+        },
+        {
+          answerId: 1,
+          answer: 'continent of Asia',
+          colour: 'Blue',
+          correct: true
+        },
+        {
+          answerId: 2,
+          answer: 'South America',
+          colour: 'Green',
+          correct: false
+        },
+        {
+          answerId: 3,
+          answer: 'Africa',
+          colour: 'Yellow',
+          correct: false
+        }
+      ],
+      thumbnailUrl: 'https://static.vecteezy.com/system/resources/previews/001/204/011/original/soccer-ball-png.png'
+    };
+    defaultQuestionBody2 = {
+      question: 'What content is Russia in?',
+      duration: 1,
+      points: 7,
+      answers: [
+        {
+          answerId: 0,
+          answer: 'Asia',
+          colour: 'Red',
+          correct: true
+        },
+        {
+          answerId: 1,
+          answer: 'North America',
+          colour: 'Blue',
+          correct: false
+        },
+        {
+          answerId: 2,
+          answer: 'South America',
+          colour: 'Green',
+          correct: false
+        },
+        {
+          answerId: 3,
+          answer: 'Africa',
+          colour: 'Yellow',
+          correct: false
+        }
+      ],
+      thumbnailUrl: 'https://static.vecteezy.com/system/resources/previews/001/204/011/original/soccer-ball-png.png'
+    };
+    createQuizQuestionHandlerV2(quizId, userJwt, defaultQuestionBody1) as QuizQuestionCreate;
+    createQuizQuestionHandlerV2(quizId, userJwt, defaultQuestionBody2) as QuizQuestionCreate;
+    sessionId = (startSessionQuiz(userJwt, 30, quizId) as OkSessionObj).sessionId;
+    playerId = (playerJoinHelper(sessionId, 'John Doe') as PlayerReturn).playerId;
+    playerId2 = (playerJoinHelper(sessionId, 'Titus Cha') as PlayerReturn).playerId;
+    playerId3 = (playerJoinHelper(sessionId, 'John Smith') as PlayerReturn).playerId;
+  });
+
+  describe('Unsuccessful Tests', () => {
+    test('Quiz ID does not refer to a valid quiz', () => {
+      expect(getFinalQuizResultsCSVHandler(quizId + 3, sessionId, userJwt)).toEqual(
+        { error: 'Quiz ID does not refer to a valid quiz' }
+      );
+    });
+
+    test('Quiz ID does not refer to a valid quiz that this user owns', () => {
+      expect(getFinalQuizResultsCSVHandler(quizId, sessionId, userJwt2)).toEqual({
+        error: 'Quiz ID does not refer to a quiz that this user owns'
+      });
+    });
+
+    test('Session Id does not refer to a valid session within this quiz', () => {
+      expect(getFinalQuizResultsCSVHandler(quizId, -100, userJwt)).toEqual({
+        error: 'Invalid quiz session or session not found'
+      });
+    });
+
+    test('Session is not in FINAL_RESULTS state', () => {
+      expect(getFinalQuizResultsCSVHandler(quizId, sessionId, userJwt)).toEqual({
+        error: 'Session is not in FINAL_RESULTS state'
+      });
+    });
+  });
+
+  describe('Successful cases', () => {
+    test('No answer has been submitted', () => {
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'END');
+      expect(getFinalQuizResultsCSVHandler(quizId, sessionId, userJwt)).toEqual({
+        url: 'http://google.com/some/path/image.csv'
+      });
+    });
+
+    test('Big test case', async () => {
+      // First question - playyer 1 got it correct only
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
+      await delay(200);
+      playerSubmitAnswerHandler([0, 1], playerId, 1);
+      playerSubmitAnswerHandler([0], playerId2, 1);
+      await delay(1000);
+
+      // Second question - player 2 got it correct first
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
+      await delay(200);
+      playerSubmitAnswerHandler([0], playerId2, 2);
+      playerSubmitAnswerHandler([0], playerId3, 2);
+      playerSubmitAnswerHandler([0], playerId, 2);
+
+      await delay(1000);
+
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'END');
+
+      expect(getFinalQuizResultsCSVHandler(quizId, sessionId, userJwt)).toEqual({
+        url: 'http://google.com/some/path/image.csv'
+      });
     });
   });
 });

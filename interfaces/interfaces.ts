@@ -357,3 +357,7 @@ export interface ActiveInactiveSession {
     activeSessions: number[],
     inactiveSessions: number[];
 }
+
+export interface FinalResultCsvReturn {
+    url: string;
+}

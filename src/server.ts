@@ -8,7 +8,7 @@ import YAML from 'yaml';
 import sui from 'swagger-ui-express';
 import fs from 'fs';
 import { adminAuthRegister, adminAuthLogin, adminAuthLogout, adminUserDetails, adminUpdateUserDetails, adminUpdateUserPassword } from './auth';
-import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash, adminQuizRestore, adminQuizEmptyTrash, quizStartSession, createQuizThumbnail, updateQuizSessionState, getSessionStatus, viewSessions, getFinalQuizResults } from './quiz';
+import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash, adminQuizRestore, adminQuizEmptyTrash, quizStartSession, createQuizThumbnail, updateQuizSessionState, getSessionStatus, viewSessions, getFinalQuizResults, getFinalQuizResultsCsv } from './quiz';
 import { clear } from './other';
 import { convertStringToArray } from './helper';
 import { getData } from './dataStore';
@@ -481,6 +481,14 @@ app.get('/v1/admin/quiz/:quizId/session/:sessionId/results', (req: Request, res:
   const sessionId = parseInt(req.params.sessionId);
   const token: string = req.header('token') as string;
   const response = getFinalQuizResults(quizId, sessionId, { token: token });
+  res.status(200).json(response);
+});
+
+app.get('/v1/admin/quiz/:quizId/session/:sessionId/results/csv', (req: Request, res: Response) => {
+  const quizId = parseInt(req.params.quizId);
+  const sessionId = parseInt(req.params.sessionId);
+  const token: string = req.header('token') as string;
+  const response = getFinalQuizResultsCsv(quizId, sessionId, { token: token });
   res.status(200).json(response);
 });
 

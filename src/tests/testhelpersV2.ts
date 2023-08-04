@@ -64,6 +64,10 @@ export const getFinalQuizResultsHandler = (quizId: number, sessionId: number, jw
   return requestHelper('GET', `v1/admin/quiz/${quizId}/session/${sessionId}/results`, {}, jwt);
 };
 
+export const getFinalQuizResultsCSVHandler = (quizId: number, sessionId: number, jwt: Jwt) => {
+  return requestHelper('GET', `v1/admin/quiz/${quizId}/session/${sessionId}/results/csv`, {}, jwt);
+};
+
 export const viewSessionsHandler = (quizId: number, jwt: Jwt): ActiveInactiveSession => {
   return requestHelper('GET', `v1/admin/quiz/${quizId}/sessions`, {}, jwt);
 };
