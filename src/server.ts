@@ -8,9 +8,9 @@ import YAML from 'yaml';
 import sui from 'swagger-ui-express';
 import fs from 'fs';
 import { adminAuthRegister, adminAuthLogin, adminAuthLogout, adminUserDetails, adminUpdateUserDetails, adminUpdateUserPassword } from './auth';
-import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash, adminQuizRestore, adminQuizEmptyTrash, quizStartSession, createQuizThumbnail, updateQuizSessionState, getSessionStatus } from './quiz';
+import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash, adminQuizRestore, adminQuizEmptyTrash, quizStartSession, createQuizThumbnail, updateQuizSessionState, getSessionStatus, getFinalQuizResults } from './quiz';
 import { clear } from './other';
-import { formatError } from './helper';
+import { convertStringToArray, formatError } from './helper';
 import { getData } from './dataStore';
 import { quizCreateQuestion, adminQuizDelete, quizDuplicateQuestion, quizMoveQuestion, quizUpdateQuestion } from './question';
 import { quizCreateQuestionV2, deleteQuestionV2, quizUpdateQuestionV2 } from './questionV2';
@@ -442,7 +442,9 @@ app.post('/v2/admin/quiz/:quizId/restore', (req: Request, res: Response) => {
 
 app.delete('/v2/admin/quiz/trash/empty', (req: Request, res: Response) => {
   const token: string = req.header('token') as string;
-  const quizIdsString = req.query.quizIds as string[];
+  const quizIdsInput = req.query.quizIds as string;
+  console.log(quizIdsInput);
+  const quizIdsString = convertStringToArray(quizIdsInput);
   const quizIds = quizIdsString.map((item: string) => parseInt(item));
   const response = adminQuizEmptyTrash({ token: token }, quizIds);
 
@@ -522,8 +524,17 @@ app.get('/v1/player/:playerId/question/:questionPosition', (req: Request, res: R
   const playerId = parseInt(req.params.playerId);
   const questionPosition = parseInt(req.params.questionPosition);
   const response = playerQuestionInfo(playerId, questionPosition);
-  console.log(response);
   res.status(200).json(response);
+});
+
+app.get('/v1/admin/quiz/:quizId/session/:sessionId/results', (req: Request, res: Response) => {
+  const quizId = parseInt(req.params.quizId);
+  const sessionId = parseInt(req.params.sessionId);
+  const token: string = req.header('token') as string;
+  const response = getFinalQuizResults(quizId, sessionId, {token: token});
+  res.status(200).json(response);
+
+
 });
 
 // ====================================================================

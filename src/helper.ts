@@ -623,3 +623,11 @@ export function questionPercentageCorrect(playerAnswers: PlayerAnswer[], questio
 
   return percentageCorrect;
 }
+
+export function convertStringToArray(s: string): string[] {
+  if (s.length == 2) return [];
+
+  s = s.substring(1, s.length - 1);
+  let sArr: string[] = s.split(",");
+  return sArr;
+}

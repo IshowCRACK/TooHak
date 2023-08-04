@@ -693,3 +693,7 @@ export function getSessionStatus(quizId: number, sessionId: number, jwt: Jwt): Q
   };
   return quizSessionReturn;
 }
+
+export function getFinalQuizResults(quizId: number, sessionId: number, jwt: Jwt) {
+  throw HTTPError(400, 'Quiz is wrong');
+}

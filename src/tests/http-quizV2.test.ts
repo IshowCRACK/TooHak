@@ -1,10 +1,10 @@
-import { ErrorObj, Token, AdminQuizCreate, Jwt, OkObj, AdminQuizInfo, OkSessionObj, QuizSession } from '../../interfaces/interfaces';
+import { ErrorObj, Token, AdminQuizCreate, Jwt, OkObj, AdminQuizInfo, OkSessionObj, QuizSession, QuizQuestionCreate, PlayerReturn, QuestionBody } from '../../interfaces/interfaces';
 import { tokenToJwt } from '../token';
 import { registerUser, clearUsers, createQuizQuestionHandler } from './iter2tests/testHelpersv1';
 import {
   RequestCreateQuizV2, RequestRemoveQuizV2, infoQuizV2, listQuizV2, logoutUserHandlerV2, startSessionQuiz, updateNameQuizV2,
   createQuizThumbnailHandler, updateQuizSessionStateHandler, getSessionStatusHandler, updateDescriptionQuizV2, viewQuizTrashHandlerV2,
-  trashRestoreQuizHandlerV2, emptyTrashHandlerV2, quizTransferHandlerV2
+  trashRestoreQuizHandlerV2, emptyTrashHandlerV2, quizTransferHandlerV2, createQuizQuestionHandlerV2, playerJoinHelper, getFinalQuizResultsHandler, playerSubmitAnswerHandler
 } from './testhelpersV2';
 
 function delay(ms: number): Promise<void> {
@@ -1130,17 +1130,17 @@ describe('Empty Quiz Trash', () => {
     });
 
     test('One more more Quiz IDs is not valid', () => {
-      expect(emptyTrashHandlerV2(userJwt, [quizId, quizId2, quizId2 + 4])).toEqual({
+      expect(emptyTrashHandlerV2(userJwt, JSON.stringify([quizId, quizId2, quizId2 + 4]))).toEqual({
         error: 'One or more of the Quiz IDs is not a valid quiz'
       });
     });
 
     test('One or more Quiz IDs refer to a quiz this current user doesnt own', () => {
-      expect(emptyTrashHandlerV2(userJwt2, [quizId, quizId2])).toEqual({
+      expect(emptyTrashHandlerV2(userJwt2, JSON.stringify([quizId, quizId2]))).toEqual({
         error: 'One or more of the Quiz IDs refers to a quiz that this current user does not own'
       });
 
-      expect(emptyTrashHandlerV2(userJwt2, [quizId, quizId3])).toEqual({
+      expect(emptyTrashHandlerV2(userJwt2, JSON.stringify([quizId, quizId3]))).toEqual({
         error: 'One or more of the Quiz IDs refers to a quiz that this current user does not own'
       });
     });
@@ -1148,7 +1148,7 @@ describe('Empty Quiz Trash', () => {
     test('One or more of the Quiz IDs is not currently in the trash', () => {
       trashRestoreQuizHandlerV2(userJwt, quizId);
 
-      expect(emptyTrashHandlerV2(userJwt, [quizId, quizId2])).toEqual({
+      expect(emptyTrashHandlerV2(userJwt, JSON.stringify([quizId, quizId2]))).toEqual({
         error: 'One or more of the Quiz IDs is not currently in the trash'
       });
     });
@@ -1156,12 +1156,12 @@ describe('Empty Quiz Trash', () => {
 
   describe('Successful Tests', () => {
     test('One user', () => {
-      expect(emptyTrashHandlerV2(userJwt2, [quizId3])).toEqual({});
+      expect(emptyTrashHandlerV2(userJwt2, JSON.stringify([quizId3]))).toEqual({});
     });
 
     test('Multiple Users', () => {
-      expect(emptyTrashHandlerV2(userJwt2, [quizId3])).toEqual({});
-      expect(emptyTrashHandlerV2(userJwt, [quizId, quizId2])).toEqual({});
+      expect(emptyTrashHandlerV2(userJwt2, JSON.stringify([quizId3]))).toEqual({});
+      expect(emptyTrashHandlerV2(userJwt, JSON.stringify([quizId, quizId2]))).toEqual({});
     });
   });
 });
@@ -1226,5 +1226,228 @@ describe('Transfer Quiz', () => {
       expect(quizTransferHandlerV2(userJwt2, 'JohnSmith@gmail.com', quizId)).toEqual({});
       expect(quizTransferHandlerV2(userJwt2, 'JohnSmith@gmail.com', quizId2)).toEqual({});
     });
+  });
+});
+
+describe('Get Final Quiz', () => {
+  let userJwt: Jwt;
+  let userToken: Token;
+  let userToken2: Token;
+  let userJwt2: Jwt;
+  let quizId: number;
+  let defaultQuestionBody1 : QuestionBody;
+  let defaultQuestionBody2 : QuestionBody;
+  let sessionId: number;
+  let playerId: number;
+  let playerId2: number;
+  let playerId3: number;
+
+  beforeEach(() => {
+    userToken = registerUser('JohnSmith@gmail.com', 'Password123', 'John', 'Smith') as Token;
+    userJwt = tokenToJwt(userToken);
+    userToken2 = registerUser('JaneAusten@gmail.com', 'Password123', 'Jane', 'Austen') as Token;
+    userJwt2 = tokenToJwt(userToken2);
+
+    quizId = (RequestCreateQuizV2(userJwt, 'Countries of the world', 'Quiz on all countries') as AdminQuizCreate).quizId;
+    defaultQuestionBody1 = {
+      question: 'What content is Japan in?',
+      duration: 1,
+      points: 10,
+      answers: [
+        {
+          answerId: 0,
+          answer: 'Asia',
+          colour: 'Red',
+          correct: true
+        },
+        {
+          answerId: 1,
+          answer: 'continent of Asia',
+          colour: 'Blue',
+          correct: true
+        },
+        {
+          answerId: 2,
+          answer: 'South America',
+          colour: 'Green',
+          correct: false
+        },
+        {
+          answerId: 3,
+          answer: 'Africa',
+          colour: 'Yellow',
+          correct: false
+        }
+      ],
+      thumbnailUrl: 'https://static.vecteezy.com/system/resources/previews/001/204/011/original/soccer-ball-png.png'
+    };
+    defaultQuestionBody2 = {
+      question: 'What content is Russia in?',
+      duration: 1,
+      points: 7,
+      answers: [
+        {
+          answerId: 0,
+          answer: 'Asia',
+          colour: 'Red',
+          correct: true
+        },
+        {
+          answerId: 1,
+          answer: 'North America',
+          colour: 'Blue',
+          correct: false
+        },
+        {
+          answerId: 2,
+          answer: 'South America',
+          colour: 'Green',
+          correct: false
+        },
+        {
+          answerId: 3,
+          answer: 'Africa',
+          colour: 'Yellow',
+          correct: false
+        }
+      ],
+      thumbnailUrl: 'https://static.vecteezy.com/system/resources/previews/001/204/011/original/soccer-ball-png.png'
+    };
+    createQuizQuestionHandlerV2(quizId, userJwt, defaultQuestionBody1) as QuizQuestionCreate;
+    createQuizQuestionHandlerV2(quizId, userJwt, defaultQuestionBody2) as QuizQuestionCreate;
+    sessionId = (startSessionQuiz(userJwt, 30, quizId) as OkSessionObj).sessionId;
+    playerId = (playerJoinHelper(sessionId, 'John Doe') as PlayerReturn).playerId;
+    playerId2 = (playerJoinHelper(sessionId, 'Titus Cha') as PlayerReturn).playerId;
+    playerId3 = (playerJoinHelper(sessionId, 'John Smith') as PlayerReturn).playerId;
+
+  });
+
+  describe('Unsuccessful Tests', () => {
+    test('Quiz ID does not refer to a valid quiz', () => {
+      expect(getFinalQuizResultsHandler(quizId + 3, sessionId, userJwt)).toEqual(
+        {error: 'Quiz ID does not refer to a valid quiz'}
+      );
+    });
+
+    test('Quiz ID does not refer to a valid quiz that this user owns', () => {
+      expect(getFinalQuizResultsHandler(quizId, sessionId, userJwt2)).toEqual({
+        error: 'Quiz ID does not refer to a quiz that this user owns'
+      });
+    })
+
+    test('Session Id does not refer to a valid session within this quiz', () =>{
+      expect(getFinalQuizResultsHandler(quizId, -100, userJwt)).toEqual({
+        error: 'Session Id does refer to a valid session within this quiz'
+      });
+    });
+
+    test('Session is not in FINAL_RESULTS state', () => {
+      expect(getFinalQuizResultsHandler(quizId, sessionId, userJwt)).toEqual({
+        error: 'Session is not in FINAL_RESULTS state'
+      });
+    });
+  });
+
+  describe('Successful cases', () => {
+    test('No answer has been submitted', () => {
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'END');
+      expect(getFinalQuizResultsHandler(quizId, sessionId, userJwt)).toEqual(
+        {
+          usersRankedByScore: [
+            {
+              name: "John Doe",
+              score: 0
+            },
+            {
+              name: "Titus Cha",
+              score: 0
+            },
+            {
+              name: "John Smith",
+              score: 0
+            }
+          ],
+          questionResults: [
+            {
+              questionId: 0,
+              playersCorrect: [
+
+              ]
+            }
+          ],
+          averageAnswerTime: 0,
+          percentCorrect: 0
+        }
+      );
+    });
+
+    test('Big test case', async () => {
+
+      // First question - playyer 1 got it correct only
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
+      await delay(900);
+      playerSubmitAnswerHandler([0,1], playerId, 1);
+      playerSubmitAnswerHandler([0], playerId2, 1);
+      await delay(1000);
+
+      // Second question - player 2 got it correct first
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'NEXT_QUESTION');
+      await delay(900);
+      playerSubmitAnswerHandler([0], playerId2, 1);
+      playerSubmitAnswerHandler([0], playerId3, 2);
+      playerSubmitAnswerHandler([0], playerId, 2);
+
+      await delay(1000);
+
+      updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'END');
+
+      expect(getFinalQuizResultsHandler(quizId, sessionId,userJwt)).toEqual(expect.objectContaining(        
+        {
+          "usersRankedByScore": [
+            {
+              name: "John Doe",
+              points: 12.3
+
+            },
+            {
+              name: "Titus Cha",
+              points: 7
+            },
+            {
+              name: "John Smith",
+              points: 3.5
+            }
+          ],
+          "questionResults": [
+            {
+              "questionId": 1,
+              "questionCorrectBreakdown": [
+                {
+                  answerId: 0,
+                  playersCorrect: [
+                    "John Doe"
+                  ]
+                }
+              ]
+            },
+            {
+              "questionId": 2,
+              "questionCorrectBreakdown": [
+                {
+                  answerId: 0,
+                  playersCorrect: [
+                    "Titus Cha",
+                    "John Smith",
+                    "John Doe"
+                  ]
+                }
+              ]
+            },
+
+          ]
+
+      }));
+    });
+    
   });
 });

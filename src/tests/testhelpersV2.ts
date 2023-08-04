@@ -49,6 +49,10 @@ export const getQuestionResultsHandler = (playerId: number, questionPosition: nu
   return requestHelper('GET', `v1/player/${playerId}/question/${questionPosition}/results`, {});
 };
 
+export const getFinalQuizResultsHandler = (quizId: number, sessionId: number, jwt: Jwt) => {
+  return requestHelper('GET', `v1/admin/quiz/${quizId}/session/${sessionId}/results`, {}, jwt);
+}
+
 //  ////////////////////  MODIFIED ITR3 ////////////////////////////////////
 export const logoutUserHandlerV2 = (jwt: Jwt) => {
   return requestHelper('POST', 'v2/admin/auth/logout', {}, jwt);
@@ -122,7 +126,7 @@ export const trashRestoreQuizHandlerV2 = (jwt: Jwt, quizId: number): OkObj | Err
   return requestHelper('POST', `v2/admin/quiz/${quizId}/restore`, {}, jwt);
 };
 
-export const emptyTrashHandlerV2 = (jwt: Jwt, quizIds: number[]): OkObj | ErrorObj => {
+export const emptyTrashHandlerV2 = (jwt: Jwt, quizIds: string): OkObj | ErrorObj => {
   return requestHelper('DELETE', 'v2/admin/quiz/trash/empty', { quizIds }, jwt);
 };
 
