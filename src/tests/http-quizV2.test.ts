@@ -632,6 +632,14 @@ describe('Quiz RemoveV2', () => {
       res = RequestRemoveQuizV2(tokenToJwt(token0), quizId2);
       expect(res).toStrictEqual({ error: 'Quiz ID does not refer to a quiz that this user owns' });
     });
+
+    test('Not all quizzes are in end state', () => {
+      createQuizQuestionHandler(quizId0, tokenToJwt(token0), defaultQuestionBody);
+      startSessionQuiz(tokenToJwt(token0), 30, quizId0);
+      expect(RequestRemoveQuizV2(tokenToJwt(token0), quizId0)).toEqual({
+        error: 'Not all sessions in quiz are in end state'
+      });
+    });
   });
 });
 
@@ -1155,6 +1163,10 @@ describe('Empty Quiz Trash', () => {
   });
 
   describe('Successful Tests', () => {
+    test('No user', () => {
+      expect(emptyTrashHandlerV2(userJwt2, JSON.stringify([]))).toEqual({});
+    });
+
     test('One user', () => {
       expect(emptyTrashHandlerV2(userJwt2, JSON.stringify([quizId3]))).toEqual({});
     });
@@ -1418,54 +1430,55 @@ describe('Get Final Quiz', () => {
 
       updateQuizSessionStateHandler(quizId, sessionId, userJwt, 'END');
 
-      console.log(getFinalQuizResultsHandler(quizId, sessionId, userJwt));
 
-      //   expect(getFinalQuizResultsHandler(quizId, sessionId, userJwt)).toEqual(expect.objectContaining(
-      //     {
-      //       usersRankedByScore: [
-      //         {
-      //           name: "John Doe",
-      //           score: 12.3
+      getFinalQuizResultsHandler(quizId, sessionId, userJwt);
 
-      //         },
-      //         {
-      //           name: "Titus Cha",
-      //           score: 7
-      //         },
-      //         {
-      //           name: "John Smith",
-      //           score: 3.5
-      //         }
-      //       ],
-      //       questionResults: [
-      //         {
-      //           questionId: 0,
-      //           questionCorrectBreakdown: [
-      //             {
-      //               answerId: 0,
-      //               playersCorrect: ["John Doe", "Titus Cha"]
-      //             },
-      //             {
-      //               answerId: 1,
-      //               playersCorrect: ["John Doe"]
-      //             }
-      //           ],
-      //           percentCorrect: 33,
-      //        },
-      //         {
-      //           questionId: 1,
-      //           questionCorrectBreakdown: [
-      //             {
-      //               answerId: 0,
-      //               playersCorrect: ["Titus Cha", "John Smith", "John Doe"]
-      //             }
-      //           ],
-      //           percentCorrect: 100,
-      //         }
-      //       ],
+    //   .toEqual(expect.objectContaining(
+    //     {
+    //       usersRankedByScore: [
+    //         {
+    //           name: "John Doe",
+    //           score: 12.3
 
-    //     })
-    //   );
+    //         },
+    //         {
+    //           name: "Titus Cha",
+    //           score: 7
+    //         },
+    //         {
+    //           name: "John Smith",
+    //           score: 3.5
+    //         }
+    //       ],
+    //       questionResults: [
+    //         {
+    //           questionId: 0,
+    //           questionCorrectBreakdown: [
+    //             {
+    //               answerId: 0,
+    //               playersCorrect: ["John Doe", "Titus Cha"]
+    //             },
+    //             {
+    //               answerId: 1,
+    //               playersCorrect: ["John Doe"]
+    //             }
+    //           ],
+    //           percentCorrect: 33,
+    //        },
+    //         {
+    //           questionId: 1,
+    //           questionCorrectBreakdown: [
+    //             {
+    //               answerId: 0,
+    //               playersCorrect: ["Titus Cha", "John Smith", "John Doe"]
+    //             }
+    //           ],
+    //           percentCorrect: 100,
+    //         }
+    //       ],
+
+    //   })
+    // );
     });
   });
 });

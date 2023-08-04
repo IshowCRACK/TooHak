@@ -1,7 +1,8 @@
 import request from 'sync-request';
 import { AdminQuizCreate, AdminQuizListReturn, AdminUserDetailsReturn, ErrorObj, Jwt, OkObj, Token, AdminQuizInfo, AdminQuestionDuplicate, QuizTrashReturn, QuestionBody, QuizQuestionCreate } from '../../../interfaces/interfaces';
 import { jwtToToken } from '../../token';
-import { getUrl } from '../../helper';
+import config from './../../config.json';
+import { getUrl } from '../testhelpersV2';
 
 const URL: string = getUrl();
 

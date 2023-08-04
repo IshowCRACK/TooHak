@@ -6,7 +6,7 @@ import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkQuizAndUserIdValid, checkQuizIdValid, checkQuizNameUsed,
   checkTokenValidStructure, checkTokenValidSession, checkNameUsedInQuiz, checkQuizIdAndUserIdValidAndTrash,
-  checkQuizIdValidAndTrash, createQuizId, checkMaxNumSessions, checkQuizHasQuestions, isActionValid, rankUserByScore, getQuestionResultsHelper
+  checkQuizIdValidAndTrash, createQuizId, checkMaxNumSessions, checkQuizHasQuestions, isActionValid, rankUserByScore, getQuestionResultsHelper, checkAllQuizzesInEndState
 } from './helper';
 import { createQuizSession, jwtToToken } from './token';
 import HTTPError from 'http-errors';
@@ -65,6 +65,10 @@ export function adminQuizRemove (jwt: Jwt, quizId: number): OkObj | ErrorAndStat
   // Check if valid for active sessions
   if (!checkTokenValidSession(jwt)) {
     throw HTTPError(403, 'Token not for currently logged in session');
+  }
+
+  if (!checkAllQuizzesInEndState(quizId)) {
+    throw HTTPError(400, 'Not all sessions in quiz are in end state');
   }
 
   const authUserId: number = jwtToToken(jwt).userId;

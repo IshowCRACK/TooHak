@@ -1,23 +1,13 @@
-import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer, Question, User, States, Actions, QuestionCorrectBreakdown, PlayerAnswer, QuizSessionAdmin, UserScore, QuestionDetailsHelper, QuestionResult } from '../interfaces/interfaces';
+import { AdminQuizList, Token, Jwt, Quiz, Answer, Question, User, States, Actions, QuestionCorrectBreakdown, PlayerAnswer, QuizSessionAdmin, UserScore, QuestionDetailsHelper, QuestionResult } from '../interfaces/interfaces';
 import { getData } from './dataStore';
 import { adminQuizList } from './quiz';
 import { checkJwtValid, jwtToToken } from './token';
-import config from './config.json';
 import crypto from 'crypto';
 import randomstring from 'randomstring';
 
 /**
  * -------------------------------------- HELPERS FUNCTIONS-----------------------------------------------
  */
-
-export const getUrl = (): string => {
-  const PORT: number = parseInt(process.env.PORT || config.port);
-  const HOST: string = process.env.IP || 'localhost';
-  const URL: string = 'http://' + HOST + ':' + PORT.toString() + '/';
-  return URL;
-};
-
-export const formatError = (errorObj: ErrorObj) => { return { error: errorObj.error }; };
 
 /**
   * Function looks at the characters used in first name/last name
@@ -55,23 +45,6 @@ export function checkAlphanumeric(name: string): boolean {
   }
 
   return true;
-}
-
-/**
-  * Check if the userId is valid and exists
-  *
-  * @param {number} authUserId - the id you are checking is valid or not
-  *
-  * @returns {boolean} - returns true if userId is valid, false otherwise
- */
-export function checkAuthUserIdValid (authUserId: number): boolean {
-  const data = getData();
-
-  for (const user of data.users) {
-    if (user.authUserId === authUserId) return true;
-  }
-
-  return false;
 }
 
 /**
@@ -154,135 +127,6 @@ export function emailAlreadyUsed(email: string, authUserId: number): boolean {
 }
 
 /**
-  * Gets ALL the user details, as 'adminUserDetails' does not return all properties of 'User'
-  * @param {number} authUserId - A unique Id for the user who owns the quiz
-  *
-  * @returns {users: Array<{
-  *   authUserId: integer,
-  *   nameFirst: string,
-  *   nameLast: string,
-  *   email: string,
-  *   password: string,
-  *   numSuccessLogins: integer,
-  *   numFailedPasswordsSinceLastLogin: integer,
-  * }>} - Array of objects
-  */
-export function adminUserALLDetails(authUserId: number): AdminUserALLDetailsReturn {
-  const data = getData();
-
-  for (const user of data.users) {
-    if (user.authUserId === authUserId) {
-      return {
-        user: {
-          authUserId: user.authUserId,
-          nameFirst: user.nameFirst,
-          nameLast: user.nameLast,
-          email: user.email,
-          password: user.password,
-          numSuccessLogins: user.numSuccessLogins,
-          numFailedPasswordsSinceLastLogin: user.numFailedPasswordsSinceLastLogin,
-          deletedQuizzes: user.deletedQuizzes,
-          prevPassword: user.prevPassword
-        }
-      };
-    }
-  }
-  return {
-    error: 'User does not exist',
-  };
-}
-
-/**
-  * Gets ALL the user details, as 'adminUserDetails' does not return all properties of 'User'
-  * @param {number} authUserId - A unique Id for the user who owns the quiz
-  *
-  * @returns {{quizzes: Array<{
-  *   quizId: number;
-  *   adminQuizId: number;
-  *   name: string;
-  *   timeCreated: number;
-  *   timeLastEdited: number;
-  *   description: string;
-  * }>} | {error: string}} - An array of quizzes and its details
-  *
-  */
-// export function adminQuizALLDetails(quizId: number): Quiz {
-//   const data = getData();
-
-//   for (const quiz of data.quizzes) {
-//     if (quiz.quizId === quizId) {
-//       return {
-//         quizzes: {
-//           quizId: quiz.quizId,
-//           adminQuizId: quiz.adminQuizId,
-//           name: quiz.name,
-//           timeCreated: quiz.timeCreated,
-//           timeLastEdited: quiz.timeLastEdited,
-//           description: quiz.description,
-//           numQuestions: quiz.numQuestions,
-//           questions: quiz.questions,
-//           duration: quiz.duration,
-//           imgUrl: quiz.imgUrl
-//         }
-//       };
-//     }
-//   }
-//   return {
-//     error: 'Quiz does not exist',
-//   };
-// }
-
-/**
- * Checks if the user owns a quiz globally
- *
- * @param {number} authUserId -User's unique ID
- * @param {number} quizId - quiz unique ID
- *
- * @returns {boolean} - Returns true if User owns quiz, otherwise false
- */
-export function checkALLQuizOwnership(authUserId: number, quizId: number): boolean {
-  const data = getData();
-
-  // Check if the quizId exists in quizzes
-  const quizExistsInQuizzes = data.quizzes.some((quiz) => quiz.quizId === quizId);
-
-  // Check if the quizId exists in the user's deletedQuizzes
-  const user = data.users.find((user) => user.authUserId === authUserId);
-  const quizExistsInDeletedQuizzes = user.deletedQuizzes.some((quiz) => quiz.quizId === quizId);
-
-  // Check if the user owns the quiz
-  if (
-    (quizExistsInQuizzes || quizExistsInDeletedQuizzes) &&
-    (quizExistsInQuizzes && data.quizzes.find((quiz) => quiz.quizId === quizId).adminQuizId !== authUserId)
-  ) {
-    return false; // User does not own the quiz
-  }
-
-  return true; // User owns the quiz
-}
-
-/**
- * Checks if the quizId exists globally
- *
- * @param {number} quizId - quiz unique id
- *
- * @returns {boolean} - Returns true if User owns quiz, otherwise false
- */
-export function checkQuizIdExistsGlobally(quizId: number): boolean {
-  const data = getData();
-  // Check if the quizId exists in the quizzes array
-  const quizExistsInQuizzes = data.quizzes.some((quiz) => quiz.quizId === quizId);
-
-  // Check if the quizId exists in the deletedQuizzes array of any user
-  const quizExistsInDeletedQuizzes = data.users.some((user) =>
-    user.deletedQuizzes.some((quiz) => quiz.quizId === quizId)
-  );
-
-  // Return true if the quizId exists in either array, false otherwise
-  return quizExistsInQuizzes || quizExistsInDeletedQuizzes;
-}
-
-/**
  * Checks for error: 401 Token is not a valid structure
  * @param {Jwt} jwt - token unique id
  *
@@ -313,13 +157,6 @@ export function checkTokenValidSession(jwt: Jwt): boolean {
   return true;
 }
 
-export function getQuiz(quizId: number): Quiz {
-  const data = getData();
-  const res = data.quizzes.find((quiz: Quiz) => quiz.quizId === quizId
-  );
-
-  return res;
-}
 
 export function getTotalDuration(quiz: Quiz): number {
   let totalDuration = 0;
@@ -538,11 +375,6 @@ export function hasDuplicates(answerIds: number[]): boolean {
   return false; // No duplicates found
 }
 
-// checks if answer ids are valid for specific question
-export function areAnswerIdsValid(questionAnswers: number[], answerIds: number[]): boolean {
-  return answerIds.every((num: number) => questionAnswers.includes(num));
-}
-
 export function isAnswersCorrect(correctAnswerIds: number[], answerIds: number[]): boolean {
   // Check if both arrays have the same length
   if (correctAnswerIds.length !== answerIds.length) {
@@ -653,16 +485,12 @@ export function rankUserByScore(session: QuizSessionAdmin): UserScore[] {
     });
   }
 
-  console.log('SESSION');
-  console.log(session);
 
   for (const ans of session.playerAnswers) {
     // If the players answers is same as what is expected
 
     const questionDetails = questionDetailMap.get(ans.questionId);
-    console.log('YAAAA');
-    console.log(questionDetails);
-    console.log(ans);
+  
 
     if (compareArray(questionDetails.correctAnswers, ans.answerIds)) {
       playerScoreMap.set(
@@ -689,9 +517,7 @@ export function rankUserByScore(session: QuizSessionAdmin): UserScore[] {
     };
   });
 
-  console.log('YEEE');
-  console.log(playerScoreMap);
-  console.log(questionDetailMap);
+
   return sortedArray;
 }
 
@@ -786,4 +612,15 @@ export function getQuestionResultsHelper(session: QuizSessionAdmin): QuestionRes
   }
 
   return output;
+}
+
+export function checkAllQuizzesInEndState(quizId: number) {
+  const data = getData();
+
+ 
+  for (let session of data.quizSessions) {
+    if (session.metadata.quizId == quizId && session.state != States.END) return false;
+  }
+
+  return true;
 }

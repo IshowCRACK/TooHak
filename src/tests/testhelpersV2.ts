@@ -4,7 +4,19 @@ import {
   QuizQuestionCreate, AdminQuestionDuplicate, QuizTrashReturn, QuizSession, PlayerReturn, PlayerQuestionInfoReturn,
   MessageReturn
 } from '../../interfaces/interfaces';
-import { getUrl } from '../helper';
+import config from './../config.json';
+
+export function getUrl(): string {
+  const PORT: number = parseInt(process.env.PORT || config.port);
+  const HOST: string = process.env.IP || 'localhost';
+  const URL: string = 'http://' + HOST + ':' + PORT.toString() + '/';
+  return URL;
+};
+
+export function formatError(errorObj: ErrorObj)  {
+   return { error: errorObj.error };
+ };
+
 
 const URL: string = getUrl();
 
