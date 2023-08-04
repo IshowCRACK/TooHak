@@ -8,7 +8,7 @@ import YAML from 'yaml';
 import sui from 'swagger-ui-express';
 import fs from 'fs';
 import { adminAuthRegister, adminAuthLogin, adminAuthLogout, adminUserDetails, adminUpdateUserDetails, adminUpdateUserPassword } from './auth';
-import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash, adminQuizRestore, adminQuizEmptyTrash, quizStartSession, createQuizThumbnail, updateQuizSessionState, getSessionStatus } from './quiz';
+import { adminQuizCreate, adminQuizRemove, adminQuizList, adminQuizInfo, adminQuizTransfer, adminQuizNameUpdate, adminQuizDescriptionUpdate, quizTrash, adminQuizRestore, adminQuizEmptyTrash, quizStartSession, createQuizThumbnail, updateQuizSessionState, getSessionStatus, viewSessions } from './quiz';
 import { clear } from './other';
 import { formatError } from './helper';
 import { getData } from './dataStore';
@@ -291,6 +291,14 @@ app.post('/v1/admin/quiz/:quizId/thumbnail', (req: Request, res: Response) => {
   const { imgUrl } = req.body;
 
   const response = createQuizThumbnail({ token: token }, quizId, imgUrl);
+  res.status(200).json(response);
+});
+
+app.get('/v1/admin/quiz/:quizId/sessions', (req: Request, res: Response) => {
+  const token: string = req.header('token') as string;
+  const quizId = parseInt(req.params.quizId);
+
+  const response = viewSessions({ token: token }, quizId);
   res.status(200).json(response);
 });
 
