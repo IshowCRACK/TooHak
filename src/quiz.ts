@@ -1,12 +1,12 @@
 import {
   Data, AdminQuizListReturn, AdminQuizList, Jwt, ErrorAndStatusCode, AdminQuizCreate, OkObj,
-  AdminQuizInfo, User, Quiz, QuizTrashReturn, Token, States, Actions, QuizSession, QuizMetadata
+  AdminQuizInfo, User, Quiz, QuizTrashReturn, Token, States, Actions, UserScore, QuestionResult, FinalQuizResults, QuizSession, QuizMetadata
 } from '../interfaces/interfaces';
 import { getData, setData } from './dataStore';
 import {
   checkAlphanumeric, checkQuizAndUserIdValid, checkQuizIdValid, checkQuizNameUsed,
   checkTokenValidStructure, checkTokenValidSession, checkNameUsedInQuiz, checkQuizIdAndUserIdValidAndTrash,
-  checkQuizIdValidAndTrash, createQuizId, checkMaxNumSessions, checkQuizHasQuestions, isActionValid
+  checkQuizIdValidAndTrash, createQuizId, checkMaxNumSessions, checkQuizHasQuestions, isActionValid, rankUserByScore, getQuestionResultsHelper
 } from './helper';
 import { createQuizSession, jwtToToken } from './token';
 import HTTPError from 'http-errors';
@@ -694,6 +694,43 @@ export function getSessionStatus(quizId: number, sessionId: number, jwt: Jwt): Q
   return quizSessionReturn;
 }
 
-export function getFinalQuizResults(quizId: number, sessionId: number, jwt: Jwt) {
-  throw HTTPError(400, 'Quiz is wrong');
+export function getFinalQuizResults(quizId: number, sessionId: number, jwt: Jwt): FinalQuizResults {
+  if (!checkTokenValidStructure(jwt)) {
+    throw HTTPError(401, 'Token is not a valid structure');
+  }
+
+  if (!checkTokenValidSession(jwt)) {
+    throw HTTPError(403, 'Token not for currently logged in session');
+  }
+
+  if (!checkQuizIdValid(quizId)) {
+    throw HTTPError(400, 'Quiz ID does not refer to a valid quiz');
+  }
+
+  if (!checkQuizAndUserIdValid(quizId, jwtToToken(jwt).userId)) {
+    throw HTTPError(400, 'Quiz ID does not refer to a quiz that this user owns');
+  }
+
+  const data = getData();
+  const quizSession = data.quizSessions.find(
+    (session) => session.sessionId === sessionId && session.metadata.quizId === quizId
+  );
+
+  // If the quiz session is not found, return an error
+  if (!quizSession) {
+    throw HTTPError(400, 'Invalid quiz session or session not found');
+  }
+
+  if (quizSession.state !== States.END) {
+    throw HTTPError(400, 'Session is not in FINAL_RESULTS state');
+  }
+
+  const userScoreRanked: UserScore[] = rankUserByScore(quizSession);
+
+  const questionResults: QuestionResult[] = getQuestionResultsHelper(quizSession);
+
+  return {
+    usersRankedByScore: userScoreRanked,
+    questionResults: questionResults
+  };
 }

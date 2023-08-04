@@ -33,8 +33,8 @@ export interface QuizSessionAdmin extends QuizSession, Chat {
     authUserId: number;
     playerInfo: Player[];
     autoStartNum: number;
-    countdownTimer: ReturnType<typeof setTimeout> | undefined; // Timer for question countdown
-    questionTimer: ReturnType<typeof setTimeout> | undefined; // Timer for question countdown
+    countdownTimer?: ReturnType<typeof setTimeout> | undefined; // Timer for question countdown
+    questionTimer?: ReturnType<typeof setTimeout> | undefined; // Timer for question countdown
     playerAnswers: PlayerAnswer[]
     questionOpenTime: number
 }
@@ -99,6 +99,7 @@ export interface QuizMetadata extends AdminQuizInfo {
     imgUrl: string;
 }
 export interface AdminQuizInfo {
+    adminQuizId?: number;
     quizId: number;
     name: string;
     timeCreated: number;
@@ -321,7 +322,30 @@ export interface getQuestionResultsReturn {
     percentCorrect: number,
 }
 
+export interface FinalQuizResults {
+    usersRankedByScore: UserScore[];
+    questionResults: QuestionResult[];
+}
+
+export interface UserScore {
+    name: string;
+    score: number;
+}
+
+export interface QuestionResult {
+    questionId: number;
+    questionCorrectBreakdown: QuestionCorrectBreakdown[];
+    averageAnswerTime: number;
+    percentCorrect: number;
+}
+
 export interface QuestionCorrectBreakdown {
-    answerId: number,
-    playersCorrect: string[]
+    answerId: number;
+    playersCorrect: string[];
+}
+
+export interface QuestionDetailsHelper {
+    numAnswered: number;
+    correctAnswers: number[];
+    points: number;
 }

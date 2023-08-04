@@ -531,10 +531,8 @@ app.get('/v1/admin/quiz/:quizId/session/:sessionId/results', (req: Request, res:
   const quizId = parseInt(req.params.quizId);
   const sessionId = parseInt(req.params.sessionId);
   const token: string = req.header('token') as string;
-  const response = getFinalQuizResults(quizId, sessionId, {token: token});
+  const response = getFinalQuizResults(quizId, sessionId, { token: token });
   res.status(200).json(response);
-
-
 });
 
 // ====================================================================

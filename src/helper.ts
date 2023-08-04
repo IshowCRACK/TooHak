@@ -1,4 +1,4 @@
-import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer, Question, User, States, Actions, QuestionCorrectBreakdown, PlayerAnswer } from '../interfaces/interfaces';
+import { AdminQuizList, AdminUserALLDetailsReturn, ErrorObj, Token, Jwt, Quiz, Answer, Question, User, States, Actions, QuestionCorrectBreakdown, PlayerAnswer, QuizSessionAdmin, UserScore, QuestionDetailsHelper, QuestionResult } from '../interfaces/interfaces';
 import { getData } from './dataStore';
 import { adminQuizList } from './quiz';
 import { checkJwtValid, jwtToToken } from './token';
@@ -625,9 +625,165 @@ export function questionPercentageCorrect(playerAnswers: PlayerAnswer[], questio
 }
 
 export function convertStringToArray(s: string): string[] {
-  if (s.length == 2) return [];
+  if (s.length === 2) return [];
 
   s = s.substring(1, s.length - 1);
-  let sArr: string[] = s.split(",");
+  const sArr: string[] = s.split(',');
   return sArr;
+}
+
+export function rankUserByScore(session: QuizSessionAdmin): UserScore[] {
+  const playerScoreMap = new Map<string, number>();
+  const questionDetailMap = new Map<number, QuestionDetailsHelper>();
+
+  for (const playerName of session.players) {
+    playerScoreMap.set(playerName, 0);
+  }
+
+  for (const question of session.metadata.questions) {
+    const answerId = [];
+    for (const answer of question.answers) {
+      if (answer.correct) answerId.push(answer.answerId);
+    }
+
+    questionDetailMap.set(question.questionId, {
+      numAnswered: 1,
+      correctAnswers: answerId,
+      points: question.points
+    });
+  }
+
+  console.log('SESSION');
+  console.log(session);
+
+  for (const ans of session.playerAnswers) {
+    // If the players answers is same as what is expected
+
+    const questionDetails = questionDetailMap.get(ans.questionId);
+    console.log('YAAAA');
+    console.log(questionDetails);
+    console.log(ans);
+
+    if (compareArray(questionDetails.correctAnswers, ans.answerIds)) {
+      playerScoreMap.set(
+        ans.name,
+        playerScoreMap.get(ans.name) + Number((questionDetails.points / questionDetails.numAnswered).toFixed(1))
+      );
+      // number of people answered increases by 1 to deduct score
+      questionDetails.numAnswered++;
+      questionDetailMap.set(ans.questionId, questionDetails);
+    }
+  }
+
+  // Sort by score
+
+  const entries = Array.from(playerScoreMap.entries());
+
+  entries.sort((a, b) => b[1] - a[1]);
+
+  const sortedArray: UserScore[] = entries.map(entry => {
+    const [key, value] = entry;
+    return {
+      name: key,
+      score: value
+    };
+  });
+
+  console.log('YEEE');
+  console.log(playerScoreMap);
+  console.log(questionDetailMap);
+  return sortedArray;
+}
+
+export function compareArray(arr1: number[], arr2: number[]): boolean {
+  if (arr1.length !== arr2.length) return false;
+
+  arr1 = arr1.sort();
+  arr2 = arr2.sort();
+
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+export function getQuestionResultsHelper(session: QuizSessionAdmin): QuestionResult[] {
+  const questionResultMap = new Map<number, QuestionResult>();
+  const questionDetailMap = new Map<number, QuestionDetailsHelper>();
+
+  for (const question of session.metadata.questions) {
+    const answerId = [];
+    for (const answer of question.answers) {
+      if (answer.correct) answerId.push(answer.answerId);
+    }
+
+    questionDetailMap.set(question.questionId, {
+      numAnswered: 1,
+      correctAnswers: answerId,
+      points: question.points
+    });
+  }
+
+  for (const question of session.metadata.questions) {
+    const answer = questionDetailMap.get(question.questionId);
+    const questionCorrectBreakdown: QuestionCorrectBreakdown[] = [];
+    for (const answerId of answer.correctAnswers) {
+      const questionCorrectBreakdownItem: QuestionCorrectBreakdown = {
+        answerId: answerId,
+        playersCorrect: []
+      };
+
+      questionCorrectBreakdown.push(questionCorrectBreakdownItem);
+    }
+
+    questionResultMap.set(question.questionId, {
+      questionId: question.questionId,
+      questionCorrectBreakdown: questionCorrectBreakdown,
+      averageAnswerTime: 0,
+      percentCorrect: 0
+    });
+  }
+
+  // Going through each player answer and adding it into results
+  for (const ans of session.playerAnswers) {
+    const questionResults = questionResultMap.get(ans.questionId);
+
+    const questionDetails = questionDetailMap.get(ans.questionId);
+
+    if (compareArray(ans.answerIds, questionDetails.correctAnswers)) {
+      questionResults.percentCorrect++;
+    }
+
+    questionResults.averageAnswerTime += ans.submissionTime;
+
+    for (const answerId of ans.answerIds) {
+      // if one of the answers player submitted is correct
+      if (questionDetails.correctAnswers.indexOf(answerId) !== -1) {
+        const questionCorrect: QuestionCorrectBreakdown = questionResults.questionCorrectBreakdown.find((item: QuestionCorrectBreakdown) => item.answerId === answerId);
+        questionCorrect.playersCorrect.push(ans.name);
+      }
+    }
+
+    // questionResultMap.set(ans.questionId, questionResults);
+  }
+
+  const numPlayers: number = session.playerInfo.length;
+
+  const output: QuestionResult[] = [];
+
+  for (const question of session.metadata.questions) {
+    const questionId = question.questionId;
+    const questionResults = questionResultMap.get(questionId);
+
+    questionResults.averageAnswerTime = Math.round(questionResults.averageAnswerTime) / numPlayers;
+    questionResults.percentCorrect = Math.round(questionResults.percentCorrect / numPlayers * 100);
+
+    // questionResultMap.set(questionId, questionResults);
+    output.push(questionResults);
+  }
+
+  return output;
 }

@@ -51,7 +51,7 @@ export const getQuestionResultsHandler = (playerId: number, questionPosition: nu
 
 export const getFinalQuizResultsHandler = (quizId: number, sessionId: number, jwt: Jwt) => {
   return requestHelper('GET', `v1/admin/quiz/${quizId}/session/${sessionId}/results`, {}, jwt);
-}
+};
 
 //  ////////////////////  MODIFIED ITR3 ////////////////////////////////////
 export const logoutUserHandlerV2 = (jwt: Jwt) => {
