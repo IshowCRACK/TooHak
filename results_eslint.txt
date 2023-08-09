@@ -1,0 +1,110 @@
+
+interfaces/interfaces.ts
+    3:12  error  'User' was used before it was defined                           no-use-before-define
+    4:14  error  'Quiz' was used before it was defined                           no-use-before-define
+    5:14  error  'Token' was used before it was defined                          no-use-before-define
+    6:19  error  'QuizSessionAdmin' was used before it was defined               no-use-before-define
+    7:15  error  'MetaData' was used before it was defined                       no-use-before-define
+   23:21  error  'Quiz' was used before it was defined                           no-use-before-define
+   31:43  error  'QuizSession' was used before it was defined                    no-use-before-define
+   31:56  error  'Chat' was used before it was defined                           no-use-before-define
+   38:20  error  'PlayerAnswer' was used before it was defined                   no-use-before-define
+   52:12  error  'States' was used before it was defined                         no-use-before-define
+   55:15  error  'QuizMetadata' was used before it was defined                   no-use-before-define
+   59:15  error  'Message' was used before it was defined                        no-use-before-define
+   63:12  error  Strings must use singlequote                                    quotes
+   64:25  error  Strings must use singlequote                                    quotes
+   65:20  error  Strings must use singlequote                                    quotes
+   66:21  error  Strings must use singlequote                                    quotes
+   67:18  error  Strings must use singlequote                                    quotes
+   68:20  error  Strings must use singlequote                                    quotes
+   69:10  error  Strings must use singlequote                                    quotes
+   73:21  error  Strings must use singlequote                                    quotes
+   74:20  error  Strings must use singlequote                                    quotes
+   75:27  error  Strings must use singlequote                                    quotes
+   76:11  error  Strings must use singlequote                                    quotes
+   93:31  error  'AdminQuizInfo' was used before it was defined                  no-use-before-define
+   98:39  error  'AdminQuizInfo' was used before it was defined                  no-use-before-define
+  109:16  error  'Question' was used before it was defined                       no-use-before-define
+  113:35  error  'QuestionBody' was used before it was defined                   no-use-before-define
+  122:14  error  'Answer' was used before it was defined                         no-use-before-define
+  133:1   error  More than 1 blank line not allowed                              no-multiple-empty-lines
+  134:25  error  Trailing spaces not allowed                                     no-trailing-spaces
+  140:10  error  'Jwt' was used before it was defined                            no-use-before-define
+  145:12  error  'Jwt' was used before it was defined                            no-use-before-define
+  145:16  error  Strings must use singlequote                                    quotes
+  153:18  error  An empty interface is equivalent to `{}`                        @typescript-eslint/no-empty-interface
+  154:1   error  Trailing spaces not allowed                                     no-trailing-spaces
+  165:48  error  'AdminQuizDescriptionUpdate' was used before it was defined     no-use-before-define
+  166:37  error  'AdminQuizRemove' was used before it was defined                no-use-before-define
+  167:37  error  'AdminQuizCreate' was used before it was defined                no-use-before-define
+  168:35  error  'AdminQuizList' was used before it was defined                  no-use-before-define
+  169:41  error  'AdminQuizNameUpdate' was used before it was defined            no-use-before-define
+  171:36  error  'AdminAuthLogin' was used before it was defined                 no-use-before-define
+  172:39  error  'AdminAuthRegister' was used before it was defined              no-use-before-define
+  173:38  error  'AdminUserDetails' was used before it was defined               no-use-before-define
+  174:51  error  'AdminupdateDetailsAuthHandler' was used before it was defined  no-use-before-define
+  175:45  error  'AdminUpdateUserPassword' was used before it was defined        no-use-before-define
+  176:38  error  'AdminQuizRestore' was used before it was defined               no-use-before-define
+  177:41  error  'AdminQuizEmptyTrash' was used before it was defined            no-use-before-define
+  178:39  error  'AdminQuizTransfer' was used before it was defined              no-use-before-define
+  185:18  error  An empty interface is equivalent to `{}`                        @typescript-eslint/no-empty-interface
+  189:18  error  An empty interface is equivalent to `{}`                        @typescript-eslint/no-empty-interface
+  193:18  error  An empty interface is equivalent to `{}`                        @typescript-eslint/no-empty-interface
+  197:18  error  An empty interface is equivalent to `{}`                        @typescript-eslint/no-empty-interface
+  201:18  error  An empty interface is equivalent to `{}`                        @typescript-eslint/no-empty-interface
+  202:1   error  Trailing spaces not allowed                                     no-trailing-spaces
+  205:18  error  An empty interface is equivalent to `{}`                        @typescript-eslint/no-empty-interface
+  206:1   error  Trailing spaces not allowed                                     no-trailing-spaces
+  210:2   error  Trailing spaces not allowed                                     no-trailing-spaces
+  221:1   error  More than 1 blank line not allowed                              no-multiple-empty-lines
+  222:18  error  An empty interface is equivalent to `{}`                        @typescript-eslint/no-empty-interface
+  254:18  error  An empty interface is equivalent to `{}`                        @typescript-eslint/no-empty-interface
+  258:18  error  An empty interface is equivalent to `{}`                        @typescript-eslint/no-empty-interface
+  262:18  error  An empty interface is equivalent to `{}`                        @typescript-eslint/no-empty-interface
+  280:14  error  'QuizTrashItemReturn' was used before it was defined            no-use-before-define
+  302:14  error  'QuestionAnswer' was used before it was defined                 no-use-before-define
+  323:31  error  'QuestionCorrectBreakdown' was used before it was defined       no-use-before-define
+  329:25  error  'UserScore' was used before it was defined                      no-use-before-define
+  330:22  error  'QuestionResult' was used before it was defined                 no-use-before-define
+  340:31  error  'QuestionCorrectBreakdown' was used before it was defined       no-use-before-define
+  363:2   error  Newline required at end of file but not found                   eol-last
+
+src/auth.ts
+  0:0  passing  No linting issues  success
+
+src/chat.ts
+  0:0  passing  No linting issues  success
+
+src/dataStore.ts
+  0:0  passing  No linting issues  success
+
+src/echo.ts
+  0:0  passing  No linting issues  success
+
+src/helper.ts
+  0:0  passing  No linting issues  success
+
+src/other.ts
+  0:0  passing  No linting issues  success
+
+src/player.ts
+  0:0  passing  No linting issues  success
+
+src/question.ts
+  0:0  passing  No linting issues  success
+
+src/questionV2.ts
+  0:0  passing  No linting issues  success
+
+src/quiz.ts
+  0:0  passing  No linting issues  success
+
+src/server.ts
+  0:0  passing  No linting issues  success
+
+src/token.ts
+  0:0  passing  No linting issues  success
+
+✖ 69 problems (69 errors, 0 warnings)
+  20 errors, 0 warnings potentially fixable with the `--fix` option.
